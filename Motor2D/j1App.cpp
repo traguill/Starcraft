@@ -18,7 +18,6 @@
 #include "j1WowMenu.h"
 #include "j1App.h"
 
-#include "Brofiler\Brofiler.h"
 
 
 // Constructor
@@ -157,7 +156,7 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
-	BROFILER_CATEGORY("Update", Profiler::Color::Aqua)
+	//BROFILER_CATEGORY("Update", Profiler::Color::Aqua)
 
 	bool ret = true;
 	PrepareUpdate();

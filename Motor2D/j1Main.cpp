@@ -10,9 +10,8 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-#include "Brofiler\Brofiler.h"
-
-#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
+//#include "Brofiler\Brofiler.h"
+//#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 enum MainState
 {
@@ -38,7 +37,7 @@ int main(int argc, char* args[])
 	while(state != EXIT)
 	{
 		//DON'T CHANGE THIS LINE (NEED IT FOR BROFILER)
-		BROFILER_FRAME("Starcraft3")
+		//BROFILER_FRAME("Starcraft3")
 
 		switch(state)
 		{
