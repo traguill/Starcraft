@@ -8,7 +8,6 @@
 #include "j1Window.h"
 #include "j1Map.h"
 //#include "j1PathFinding.h"
-#include "j1Gui.h"
 #include "j1Scene.h"
 #include "j1UIManager.h"
 
@@ -33,21 +32,6 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	if(App->map->Load("iso_walk.tmx") == true)
-	{
-		int w, h;
-		uchar* data = NULL;
-		//if(App->map->CreateWalkabilityMap(w, h, &data))
-			//App->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
-
-	debug_tex = App->tex->Load("maps/path2.png");
-
-	// TODO 3: Create the image (rect {485, 829, 328, 103}) and the text "Hello World" as UI elements
-	App->ui->CreateLabel("Hello World", 328, 103);
-	App->ui->CreateImage("textures/test.png", 0, 0);
 
 	return true;
 }
@@ -56,81 +40,12 @@ bool j1Scene::Start()
 bool j1Scene::PreUpdate()
 {
 
-	// debug pathfing ------------------
-	static iPoint origin;
-	static bool origin_selected = false;
-
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-
-	if(App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if(origin_selected == true)
-		{
-			//App->pathfinding->CreatePath(origin, p);
-			origin_selected = false;
-		}
-		else
-		{
-			origin = p;
-			origin_selected = true;
-		}
-	}
-
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	// Gui ---
-	
-	// -------
-	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		App->LoadGame("save_game.xml");
-
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
-
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += floor(200.0f * dt);
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= floor(200.0f * dt);
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += floor(200.0f * dt);
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= floor(200.0f * dt);
-
-	App->map->Draw();
-
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera.x, y - App->render->camera.y);
-	
-
-	//App->win->SetTitle(title.GetString());
-
-	// Debug pathfinding ------------------------------
-	//int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-	p = App->map->MapToWorld(p.x, p.y);
-
-	App->render->Blit(debug_tex, p.x, p.y);
-
-	//const vector<iPoint>* path = App->pathfinding->GetLastPath();
-
-	/*for(uint i = 0; i < path->size(); ++i)
-	{
-		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
-		App->render->Blit(debug_tex, pos.x, pos.y);
-	}*/
 
 	return true;
 }

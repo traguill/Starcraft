@@ -3,6 +3,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
+#include "memleaks.h"
 
 // This is needed here because SDL redefines main function
 // do not add any other libraries here, instead put them in their modules
@@ -28,6 +29,7 @@ j1App* App = NULL;
 
 int main(int argc, char* args[])
 {
+	ReportMemoryLeaks();
 
 	LOG("Engine starting ... %d");
 
@@ -113,6 +115,8 @@ int main(int argc, char* args[])
 	}
 
 	LOG("... Bye! :)\n");
+
+	
 
 	// Dump memory leaks
 	return result;

@@ -7,9 +7,6 @@
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
 
-
-//#include "Brofiler\Brofiler.h"
-
 using namespace std;
 
 // Modules
@@ -24,7 +21,6 @@ class j1Map;
 //class j1PathFinding;
 class j1Fonts;
 class j1UIManager;
-class j1WowMenu;
 
 class j1App
 {
@@ -100,7 +96,6 @@ public:
 	//j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
 	j1UIManager*		ui = NULL;
-	j1WowMenu*			wow = NULL;
 
 private:
 
@@ -127,6 +122,6 @@ private:
 	int					capped_ms = -1;
 };
 
-extern j1App* App; // No student is asking me about that ... odd :-S
+extern j1App* App; 
 
 #endif

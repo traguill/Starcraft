@@ -15,7 +15,6 @@
 //#include "j1Pathfinding.h"
 #include "j1Fonts.h"
 #include "j1UIManager.h"
-#include "j1WowMenu.h"
 #include "j1App.h"
 
 
@@ -36,7 +35,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	ui = new j1UIManager();
-	wow = new j1WowMenu();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -52,7 +50,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// scene last
 	AddModule(scene);
-	//AddModule(wow);
 
 	AddModule(ui);
 
@@ -156,7 +153,6 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
-	//BROFILER_CATEGORY("Update", Profiler::Color::Aqua)
 
 	bool ret = true;
 	PrepareUpdate();

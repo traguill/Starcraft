@@ -81,7 +81,6 @@
   <ItemGroup>
     <ClCompile Include="j1FileSystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
-    <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
@@ -92,7 +91,6 @@
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1UIManager.cpp" />
-    <ClCompile Include="j1WowMenu.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
@@ -107,15 +105,14 @@
   <ItemGroup>
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />
-    <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Timer.h" />
-    <ClInclude Include="j1WowMenu.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
+    <ClInclude Include="memleaks.h" />
     <ClInclude Include="p2Log.h" />
     <ClInclude Include="j1App.h" />
     <ClInclude Include="p2Defs.h" />
