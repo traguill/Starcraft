@@ -8,6 +8,7 @@
 	
   <renderer>
     <vsync value="true"/>
+    <camera speed="200" offset_x="30" offset_y="30" />
   </renderer>
 
   <font>

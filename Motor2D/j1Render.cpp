@@ -3,6 +3,8 @@
 #include "j1App.h"
 #include "j1Window.h"
 #include "j1Render.h"
+#include "j1Input.h"
+#include "AdvancedMath.h"
 
 #define VSYNC true
 
@@ -46,6 +48,10 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.h = App->win->screen_surface->h;
 		camera.x = 0;
 		camera.y = 0;
+
+		camera_speed = config.child("camera").attribute("speed").as_int(2);
+		offset_x = config.child("camera").attribute("offset_x").as_int(20);
+		offset_y = config.child("camera").attribute("offset_y").as_int(15);
 	}
 
 	return ret;
@@ -64,6 +70,20 @@ bool j1Render::Start()
 bool j1Render::PreUpdate()
 {
 	SDL_RenderClear(renderer);
+	return true;
+}
+
+bool j1Render::Update(float dt)
+{
+	if (transitioning == true)
+		DoTransition();
+	else
+
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+			camera.x = camera.y = 0; //Spacebar centers the camera to the reset point
+		else
+			CursorMovement(dt);
+
 	return true;
 }
 
@@ -250,4 +270,47 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
+}
+
+void j1Render::CursorMovement(float dt)
+{
+	int mouse_x, mouse_y;
+	App->input->GetMousePosition(mouse_x, mouse_y);
+
+	//Move camera LEFT
+	if (mouse_x  < offset_x)
+	{
+		camera.x += dt * camera_speed;
+	}
+	//Move camera RIGHT
+	if (mouse_x > camera.w - offset_x)
+	{
+		camera.x -= dt * camera_speed;
+	}
+	//Move camera UP
+	if (mouse_y < offset_y)
+	{
+		camera.y += dt * camera_speed;
+	}
+	//Move camera DOWN
+	if (mouse_y > camera.h - offset_y)
+	{
+		camera.y -= dt * camera_speed;
+	}
+}
+
+void j1Render::SetTransition(int x, int y)
+{
+	transitioning = true;
+	end_point.x = x;
+	end_point.y = y;
+}
+
+void j1Render::DoTransition()
+{
+	camera.x = lerp(camera.x, end_point.x, 0.05f);
+	camera.y = lerp(camera.y, end_point.y, 0.05f);
+
+	if (camera.x == end_point.x && camera.y == end_point.y)
+		transitioning = false;
 }

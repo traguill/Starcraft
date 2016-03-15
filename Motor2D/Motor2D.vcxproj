@@ -103,6 +103,7 @@
     <ClCompile Include="UILabel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdvancedMath.h" />
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Map.h" />

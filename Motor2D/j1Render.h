@@ -22,6 +22,7 @@ public:
 
 	// Called each loop iteration
 	bool PreUpdate();
+	bool Update(float dt);
 	bool PostUpdate();
 
 	// Called before quitting
@@ -45,12 +46,30 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	//Set a transition to a point
+	void SetTransition(int x, int y);
+
+private:
+
+	void CursorMovement(float dt);
+	void DoTransition();
+
 public:
 
 	SDL_Renderer*	renderer;
 	SDL_Rect		camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
+
+private:
+	int		camera_speed;
+
+	//Ofsset of the cursor to move the camera
+	int		offset_x;
+	int		offset_y;
+
+	bool transitioning = false;
+	iPoint end_point;
 };
 
 #endif // __j1RENDER_H__
