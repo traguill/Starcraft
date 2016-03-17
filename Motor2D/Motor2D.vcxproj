@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -104,10 +105,12 @@
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIInputBox.cpp" />
     <ClCompile Include="UILabel.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdvancedMath.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Building.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameScene.h" />
@@ -137,6 +140,7 @@
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIInputBox.h" />
     <ClInclude Include="UILabel.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="IterateList.snippet" />

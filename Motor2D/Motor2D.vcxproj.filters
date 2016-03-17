@@ -76,6 +76,12 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Desenvolupament  ========\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Desenvolupament  ========\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Desenvolupament  ========\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h">
@@ -170,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Desenvolupament  ========\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Desenvolupament  ========\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Desenvolupament  ========\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

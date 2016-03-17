@@ -18,9 +18,9 @@ bool Entity::Update(float dt)
 	return true;
 }
 
-bool Entity::Draw()
+void Entity::Draw()
 {
-	return true;
+	
 }
 
 bool Entity::CleanUp()

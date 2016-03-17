@@ -25,11 +25,17 @@ public:
 	virtual bool Update(float dt);
 	// Called before quitting
 
-	virtual bool Draw();
+	virtual void Draw();
 
 	virtual bool CleanUp();
 
 private:
+
+	SDL_Texture* texture;
+	p2Point<uint> pos;
+	SDL_Rect* collider;
+	bool selected;
+	int life;
 
 };
 
