@@ -52,7 +52,6 @@ bool j1Scene::Update(float dt)
 	{
 		int x, y;
 		App->input->GetMousePosition(x,y);
-		App->audio->PlayFx(sound, x, y);
 	}
 	
 
