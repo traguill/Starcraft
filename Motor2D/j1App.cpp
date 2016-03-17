@@ -15,6 +15,7 @@
 //#include "j1Pathfinding.h"
 #include "j1Fonts.h"
 #include "j1UIManager.h"
+#include "EntityManager.h"
 #include "j1App.h"
 #include "GameScene.h"
 
@@ -37,6 +38,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	ui = new j1UIManager();
 	game_scene = new GameScene();
+	entity = new j1EntityManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -49,13 +51,14 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//AddModule(pathfinding);
 	AddModule(font);
 	
+	
 
 	// scene last
 	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
 	AddModule(game_scene);
 
 	AddModule(ui);
-
+	AddModule(entity);
 	// render last to swap buffer
 	AddModule(render);
 

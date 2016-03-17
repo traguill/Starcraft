@@ -21,6 +21,7 @@ class j1Map;
 //class j1PathFinding;
 class j1Fonts;
 class j1UIManager;
+class j1EntityManager;
 
 class GameScene;
 
@@ -98,6 +99,7 @@ public:
 	//j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
 	j1UIManager*		ui = NULL;
+	j1EntityManager*	entity = NULL;
 	GameScene*			game_scene = NULL;
 
 private:
