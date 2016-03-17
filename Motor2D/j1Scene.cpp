@@ -32,6 +32,8 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
+	tex = App->tex->Load("textures/test.png");
+	sound = App->audio->LoadFx("audio/music/leroy_jenkins.ogg");
 	
 	return true;
 }
@@ -46,7 +48,15 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	{
+		int x, y;
+		App->input->GetMousePosition(x,y);
+		App->audio->PlayFx(sound, x, y);
+	}
 	
+
+	App->render->Blit(tex, 300, 300);
 	return true;
 }
 

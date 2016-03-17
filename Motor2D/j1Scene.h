@@ -33,8 +33,8 @@ public:
 	bool CleanUp();
 
 private:
-
-	
+	SDL_Texture* tex;
+	uint sound;
 
 };
 

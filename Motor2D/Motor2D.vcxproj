@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Main.cpp" />
@@ -104,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdvancedMath.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Map.h" />

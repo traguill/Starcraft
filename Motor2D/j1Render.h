@@ -67,6 +67,9 @@ private:
 	//Ofsset of the cursor to move the camera
 	int		offset_x;
 	int		offset_y;
+	
+	int limit_x;
+	int limit_y;
 
 	bool transitioning = false;
 	iPoint end_point;

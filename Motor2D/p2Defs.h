@@ -65,4 +65,8 @@ inline const char* const PATH(const char* folder, const char* file)
 #define PERF_START(timer) timer.Start()
 #define PERF_PEEK(timer) LOG("%s took %f ms", __FUNCTION__, timer.ReadMs())
 
+//Angles
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 #endif

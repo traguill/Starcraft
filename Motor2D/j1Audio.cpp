@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1FileSystem.h"
 #include "j1Audio.h"
+#include "j1Render.h"
 
 #include "SDL/include/SDL.h"
 #include "SDL_mixer\include\SDL_mixer.h"
@@ -174,7 +175,10 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 		list<Mix_Chunk*>::iterator i = fx.begin();
 		advance(i, id - 1);
 		Mix_PlayChannel(-1, (*i), repeat);
+
+		ret = true;
 	}
 
 	return ret;
 }
+

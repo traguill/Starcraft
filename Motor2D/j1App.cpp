@@ -16,6 +16,7 @@
 #include "j1Fonts.h"
 #include "j1UIManager.h"
 #include "j1App.h"
+#include "GameScene.h"
 
 
 
@@ -35,6 +36,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	ui = new j1UIManager();
+	game_scene = new GameScene();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -49,7 +51,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	
 
 	// scene last
-	AddModule(scene);
+	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
+	AddModule(game_scene);
 
 	AddModule(ui);
 
@@ -227,7 +230,7 @@ void j1App::FinishUpdate()
 	static char title[256];
 	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu ",
 			  avg_fps, last_frame_ms, frames_on_last_update, dt, seconds_since_startup, frame_count);
-	App->win->SetTitle(title);
+	//App->win->SetTitle(title);
 
 	if(capped_ms > 0 && last_frame_ms < capped_ms)
 	{

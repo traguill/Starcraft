@@ -67,6 +67,9 @@
     <ClCompile Include="UIInputBox.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="AdvancedMath.h">
       <Filter>Programacio 2 ===========</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Desenvolupament  ========\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

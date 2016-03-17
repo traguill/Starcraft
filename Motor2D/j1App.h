@@ -22,6 +22,8 @@ class j1Map;
 class j1Fonts;
 class j1UIManager;
 
+class GameScene;
+
 class j1App
 {
 public:
@@ -96,6 +98,7 @@ public:
 	//j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
 	j1UIManager*		ui = NULL;
+	GameScene*			game_scene = NULL;
 
 private:
 

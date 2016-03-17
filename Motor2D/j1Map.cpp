@@ -38,11 +38,11 @@ void j1Map::Draw()
 	{
 		MapLayer* layer = *i;
 
-		if (layer->properties.Get("Nodraw") != 0)
+		/*if (layer->properties.Get("Nodraw") != 0)
 		{
 			++i;
 			continue;
-		}
+		}*/
 			
 
 		for (int y = 0; y < data.height; ++y)
@@ -57,7 +57,10 @@ void j1Map::Draw()
 					SDL_Rect r = tileset->GetTileRect(tile_id);
 					iPoint pos = MapToWorld(x, y);
 
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					SDL_Rect cam = App->render->camera;
+
+					if (- cam.x < pos.x + r.w && - cam.x + cam.w > pos.x && -cam.y < pos.y + r.w && cam.h + -cam.y > pos.y)
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 		}

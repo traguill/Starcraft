@@ -8,7 +8,7 @@
 	
   <renderer>
     <vsync value="true"/>
-    <camera speed="200" offset_x="30" offset_y="30" />
+    <camera speed="500" offset_x="30" offset_y="30" limit_x="-2816" limit_y="-3072"/>
   </renderer>
 
   <font>
@@ -29,6 +29,7 @@
 
   <file_system>
     <path>data.zip</path>
+    <path>game_data.zip</path>
   </file_system>
 
   <map>

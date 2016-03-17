@@ -52,6 +52,8 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera_speed = config.child("camera").attribute("speed").as_int(2);
 		offset_x = config.child("camera").attribute("offset_x").as_int(20);
 		offset_y = config.child("camera").attribute("offset_y").as_int(15);
+		limit_x = config.child("camera").attribute("limit_x").as_int(-2816);
+		limit_y = config.child("camera").attribute("limit_y").as_int(-3072);
 	}
 
 	return ret;
@@ -83,6 +85,10 @@ bool j1Render::Update(float dt)
 			camera.x = camera.y = 0; //Spacebar centers the camera to the reset point
 		else
 			CursorMovement(dt);
+
+	static char title[256];
+	sprintf_s(title, 256, "Camera x: %i y: %i", camera.x, camera.y);
+	App->win->SetTitle(title);
 
 	return true;
 }
@@ -297,6 +303,12 @@ void j1Render::CursorMovement(float dt)
 	{
 		camera.y -= dt * camera_speed;
 	}
+
+	//Limits
+	if (camera.x > 0)			camera.x = 0;
+	if (camera.x < limit_x)		camera.x = limit_x;
+	if (camera.y > 0)			camera.y = 0;
+	if (camera.y < limit_y)		camera.y = limit_y;
 }
 
 void j1Render::SetTransition(int x, int y)
