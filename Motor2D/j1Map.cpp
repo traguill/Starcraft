@@ -43,11 +43,17 @@ void j1Map::Draw()
 			++i;
 			continue;
 		}*/
-			
 
-		for (int y = 0; y < data.height; ++y)
+		SDL_Rect cam = App->render->camera;
+
+		iPoint begin, end;
+
+		begin = App->map->WorldToMap(-cam.x, -cam.y);
+		end = App->map->WorldToMap((-cam.x) + cam.w, (-cam.y) + cam.h);
+			
+		for (int y = begin.y; y <= end.y; ++y)
 		{
-			for (int x = 0; x < data.width; ++x)
+			for (int x = begin.x; x <= end.x; ++x)
 			{
 				int tile_id = layer->Get(x, y);
 				if (tile_id > 0)
@@ -59,8 +65,7 @@ void j1Map::Draw()
 
 					SDL_Rect cam = App->render->camera;
 
-					if (- cam.x < pos.x + r.w && - cam.x + cam.w > pos.x && -cam.y < pos.y + r.w && cam.h + -cam.y > pos.y)
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 		}
