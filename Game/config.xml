@@ -2,8 +2,8 @@
 
 <config>
   <app framerate_cap="">
-    <title>Pathfinding Test</title>
-    <organization>UPC</organization>
+    <title>Starcraft Commandos</title>
+    <organization>SheepnDreams</organization>
   </app>
 	
   <renderer>
@@ -28,7 +28,6 @@
   </window>
 
   <file_system>
-    <path>data.zip</path>
     <path>game_data.zip</path>
   </file_system>
 
