@@ -35,6 +35,7 @@ bool j1EntityManager::Awake(pugi::xml_node& conf)
 bool j1EntityManager::Start()
 {
 	bool ret = true;
+	marine_texture = App->tex->Load("sprites/marine.png");
 
 	return ret;
 }
@@ -42,21 +43,34 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMousePosition(p.x, p.y);
+		friendly_units.insert(pair<string, Unit*>("Jimmy", CreateUnit(p.x, p.y, marine_texture, MARINE)));
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMousePosition(p.x, p.y);
+		friendly_units.insert(pair<string, Unit*>("Thom", CreateUnit(p.x, p.y, marine_texture, MARINE)));
+	}
 	return true;
 }
 
 bool j1EntityManager::Update(float dt)
 {
-	map<string, Entity*>::iterator it = friendly_units.begin();
+	map<string, Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
 		(*it).second->Update(dt);
+		it++;
 	}
 
 	list<Entity*>::iterator i = hostile_enities.begin();
 	while (i != hostile_enities.end())
 	{
 		(*i)->Update(dt);
+		i++;
 	}
 
 	return true;
@@ -65,16 +79,18 @@ bool j1EntityManager::Update(float dt)
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
-	map<string, Entity*>::iterator it = friendly_units.begin();
+	map<string, Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
 		(*it).second->Draw();
+		it++;
 	}
 
 	list<Entity*>::iterator i = hostile_enities.begin();
 	while (i != hostile_enities.end())
 	{
 		(*i)->Draw();
+		i++;
 	}
 
 	return true;
@@ -83,4 +99,16 @@ bool j1EntityManager::PostUpdate()
 bool j1EntityManager::CleanUp()
 {
 	return true;
+}
+
+Unit* j1EntityManager::CreateUnit(int x, int y, SDL_Texture* t, UNIT_TYPE type)
+{
+	Unit* ret = new Unit;
+
+	ret->pos.x = x;
+	ret->pos.y = y;
+	ret->texture = t;
+	ret->type = type;
+
+	return ret;
 }

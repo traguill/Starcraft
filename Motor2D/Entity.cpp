@@ -13,9 +13,8 @@ Entity::~Entity()
 {}
 
 // Called before render is available
-bool Entity::Update(float dt)
+void Entity::Update(float dt)
 {
-	return true;
 }
 
 void Entity::Draw()

@@ -9,12 +9,10 @@ using namespace std;
 
 class j1Module;
 
-enum UNIT_TYPE
-{
-};
-
 class Entity
 {
+	friend class j1EntityManager;	//Provisional
+
 public:
 
 	Entity();
@@ -22,14 +20,14 @@ public:
 	// Entity
 	virtual ~Entity();
 
-	virtual bool Update(float dt);
+	virtual void Update(float dt);
 	// Called before quitting
 
 	virtual void Draw();
 
 	virtual bool CleanUp();
 
-private:
+protected:
 
 	SDL_Texture* texture;
 	p2Point<uint> pos;

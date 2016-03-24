@@ -1,4 +1,3 @@
-
 #ifndef __UNIT_H__
 #define __UNIT_H__
 
@@ -8,15 +7,31 @@
 #include <vector>
 
 
-enum TYPE{ MARINE, FIREBAT, GHOST, MEDIC, OBSERVER, ENGINEER, SHIP, GOLIATH, TANK, VALKYRIE };
-enum STATE{IDLE, MOVE, ATTACK};
+enum UNIT_TYPE{ 
+	MARINE, 
+	FIREBAT, 
+	GHOST, 
+	MEDIC, 
+	OBSERVER, 
+	ENGINEER, 
+	SHIP, 
+	GOLIATH, 
+	TANK, 
+	VALKYRIE };
+
+enum UNIT_STATE{
+	UNIT_IDLE, 
+	UNIT_MOVE,
+	UNIT_ATTACK
+};
 
 class Unit : public Entity
 {
+	friend class j1EntityManager;	//Provisional
 
 public:
 
-	bool Update(float dt);
+	void Update(float dt);
 	void Draw();
 
 private:
@@ -29,8 +44,8 @@ private:
 	Entity* target;
 	std::vector<iPoint> path;
 	bool costume;
-	TYPE type;
-	STATE state;
+	UNIT_TYPE type;
+	UNIT_STATE state;
 
 };
 #endif

@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "Entity.h"
+#include "Unit.h"
 #include <map>
 
 using namespace std;
@@ -36,11 +37,14 @@ public:
 
 private:
 
+	Unit* CreateUnit(int x, int y, SDL_Texture* t, UNIT_TYPE type);
+	SDL_Texture* marine_texture;
+
 
 public:
 	//the key could be a int
 	//Entity* must be Unit*
-	map<string, Entity*> friendly_units; 
+	map<string, Unit*> friendly_units; 
 	list<Entity*> hostile_enities;
 
 };
