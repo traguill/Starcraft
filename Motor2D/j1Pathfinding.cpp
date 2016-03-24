@@ -1,11 +1,15 @@
-
-
-/*#include "p2Defs.h"
+#include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1PathFinding.h"
 
-j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH),width(0), height(0)
+
+j1PathFinding::j1PathFinding() :
+j1Module(),
+map(NULL),
+last_path(DEFAULT_PATH_LENGTH),
+width(0),
+height(0)
 {
 	name.append("pathfinding");
 }
@@ -14,6 +18,24 @@ j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_L
 j1PathFinding::~j1PathFinding()
 {
 	RELEASE_ARRAY(map);
+}
+
+// Called before render is available
+bool j1PathFinding::Awake(pugi::xml_node&)
+{
+	LOG("Init Pathfinding library");
+	bool ret = true;
+
+	return ret;
+}
+
+// Called before the first frame
+bool j1PathFinding::Start()
+{
+	LOG("Start pathfinding");
+	bool ret = true;
+
+	return ret;
 }
 
 // Called before quitting
@@ -26,7 +48,7 @@ bool j1PathFinding::CleanUp()
 	return true;
 }
 
-// Sets up the walkability map
+// Set the map to do the pathfinding
 void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 {
 	this->width = width;
@@ -37,79 +59,68 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 	memcpy(map, data, width*height);
 }
 
-// Utility: return true if pos is inside the map boundaries
 bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 {
-	return (pos.x >= 0 && pos.x <= (int)width &&
-			pos.y >= 0 && pos.y <= (int)height);
+	return (pos.x >= 0 && pos.x <= width &&
+		pos.y >= 0 && pos.y <= height);
 }
 
-// Utility: returns true is the tile is walkable
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
-// Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
-	if(CheckBoundaries(pos))
+	if (CheckBoundaries(pos))
 		return map[(pos.y*width) + pos.x];
 
 	return INVALID_WALK_CODE;
 }
 
-// To request all tiles involved in the last generated path
 const vector<iPoint>* j1PathFinding::GetLastPath() const
 {
 	return &last_path;
 }
 
 // PathList ------------------------------------------------------------------------
-// Looks for a node in this list and returns it's list node or NULL==end list iterator (check this)
-// ---------------------------------------------------------------------------------
-list<PathNode*>::const_iterator PathList::Find(const iPoint& point) const
+list<PathNode>::iterator PathList::Find(const iPoint& point) 
 {
-	list<PathNode*>::const_iterator i = list_n.begin();
+	list<PathNode>::iterator i = list_nodes.begin();
 
-	while (i != list_n.end())
+	while (i != list_nodes.end())
 	{
-		if ((*i)->pos == point)
-			return i;
-		++i;
-	}
-
-	return list_n.end();
-}
-
-// PathList ------------------------------------------------------------------------
-// Returns the Pathnode with lowest score in this list or NULL if empty
-// ---------------------------------------------------------------------------------
-list<PathNode*>::const_iterator PathList::GetNodeLowestScore() const
-{
-	list<PathNode*>::const_iterator ret = list_n.end();
-	int min = 65535;
-
-	list<PathNode*>::reverse_iterator i = list_n.rbegin();
-
-	while (i != list_n.rend())
-	{
-		if ((*i)->Score() < min)
+		if (i->pos == point)
 		{
-			min = (*i)->Score();
-			ret = (i+1).base(); //TODO: may cause problems if i is and end iterator
+			return i;
 		}
 		++i;
 	}
 
-	
+	return list_nodes.end();
+}
+
+list<PathNode>::iterator PathList::GetNodeLowestScore() 
+{
+	list<PathNode>::iterator ret = list_nodes.end();
+	int min = 65535;
+	list<PathNode>::iterator i = list_nodes.begin();
+
+	while (i != list_nodes.end())
+	{
+		if (i->Score() < min)
+		{
+			min = i->Score();
+			ret = i;
+		}
+		++i;
+	}
+
 	return ret;
 }
 
 // PathNode -------------------------------------------------------------------------
-// Convenient constructors
-// ----------------------------------------------------------------------------------
 PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
 {}
 
@@ -119,66 +130,134 @@ PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(
 PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
 {}
 
-// PathNode -------------------------------------------------------------------------
-// Fills a list (PathList) of all valid adjacent pathnodes
-// ----------------------------------------------------------------------------------
-uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
+uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path_finder) const
 {
 	iPoint cell;
-	uint before = list_to_fill.list_n.size();
+	uint before = list_to_fill.list_nodes.size();
 
 	// north
 	cell.create(pos.x, pos.y + 1);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list_n.push_back(&PathNode(-1, -1, cell, this));
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list_n.push_back(&PathNode(-1, -1, cell, this));
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list_n.push_back(&PathNode(-1, -1, cell, this));
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list_n.push_back(&PathNode(-1, -1, cell, this));
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
-	return list_to_fill.list_n.size();
+	return list_to_fill.list_nodes.size();
 }
 
-// PathNode -------------------------------------------------------------------------
-// Calculates this tile score
-// ----------------------------------------------------------------------------------
 int PathNode::Score() const
 {
 	return g + h;
 }
 
-// PathNode -------------------------------------------------------------------------
-// Calculate the F for a specific destination tile
-// ----------------------------------------------------------------------------------
 int PathNode::CalculateF(const iPoint& destination)
 {
 	g = parent->g + 1;
-	h = pos.DistanceTo(destination);
+	//h = pos.DistanceManhattan(destination);
+	h = pos.DistanceNoSqrt(destination);
 
 	return g + h;
 }
 
-// ----------------------------------------------------------------------------------
-// Actual A* algorithm: return number of steps in the creation of the path or -1 ----
-// ----------------------------------------------------------------------------------
+// Actual A* algorithm -----------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
 	int ret = -1;
+	int iterations = 0;
 
-	// Nice try :)
+	if (IsWalkable(origin) && IsWalkable(destination))
+	{
+		PathList open;
+		PathList closed;
+		PathList adjacent;
+
+		// Start pushing the origin in the open list
+		open.list_nodes.push_back(PathNode(0, 0, origin, NULL));
+
+		// Iterate while we have open destinations to visit
+		do
+		{
+			// Move the lowest score cell from open list to the closed list
+			list<PathNode>::iterator lowest = open.GetNodeLowestScore();
+			closed.list_nodes.push_back(*lowest);
+			iPoint pos = lowest->pos;
+			open.list_nodes.erase(lowest);
+			list<PathNode>::iterator node = closed.Find(pos);
+
+
+			// If destination was added, we are done!
+			if (node->pos == destination)
+			{
+				last_path.clear();
+				// Backtrack to create the final path
+				const PathNode* path_node = &(*node);
+
+				while (path_node)
+				{
+					last_path.push_back(path_node->pos);
+					path_node = path_node->parent;
+				}
+
+				iPoint* start = &last_path[0];
+				iPoint* end = &last_path[last_path.size() - 1];
+
+				while (start < end)
+					SWAP(*start++, *end--);
+				
+				ret = last_path.size();
+				LOG("Created path of %d steps in %d iterations", ret, iterations);
+				break;
+			}
+
+			// Fill a list with all adjacent nodes
+			adjacent.list_nodes.clear();
+			node->FindWalkableAdjacents(adjacent, this);
+
+
+			list<PathNode>::iterator i = adjacent.list_nodes.begin();
+
+			while (i != adjacent.list_nodes.end())
+			{
+				if (closed.Find(i->pos) != closed.list_nodes.end())
+					continue;
+
+				list<PathNode>::iterator adjacent_in_open = open.Find(i->pos);
+
+				if (adjacent_in_open == open.list_nodes.end())
+				{
+					i->CalculateF(destination);
+					open.list_nodes.push_back(*i);
+				}
+				else
+				{
+					if (adjacent_in_open->g > i->g + 1)
+					{
+						adjacent_in_open->parent = i->parent;
+						adjacent_in_open->CalculateF(destination);
+					}
+				}
+				++i;
+			}
+
+			
+			
+
+			++iterations;
+		} while (open.list_nodes.size() > 0);
+	}
 
 	return ret;
 }
-
-*/

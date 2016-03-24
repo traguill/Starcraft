@@ -2,6 +2,7 @@
 #define __j1MAP_H__
 
 #include <list>
+#include <map>
 #include "PugiXml/src/pugixml.hpp"
 #include "j1Module.h"
 
@@ -109,31 +110,31 @@ public:
 	bool Awake(pugi::xml_node& conf);
 
 	// Called each loop iteration
-	void Draw();
+	void Draw(int id);
 
 	// Called before quitting
 	bool CleanUp();
 
-	// Load new map
-	bool Load(const char* path);
+	// Load new map and get the id of the map
+	bool Load(const char* path,uint &id);
 
-	iPoint MapToWorld(int x, int y) const;
-	iPoint WorldToMap(int x, int y) const;
-	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+	iPoint MapToWorld(int x, int y, uint map_id);
+	iPoint WorldToMap(int x, int y, uint map_id);
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer,uint map_id) const;
 
 private:
 
-	bool LoadMap();
+	bool LoadMap(MapData* data);
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	TileSet* GetTilesetFromTileId(int id) const;
+	TileSet* GetTilesetFromTileId(int id, uint map_id)const;
 
 public:
 
-	MapData data;
+	map<uint, MapData*> maps;
 
 private:
 

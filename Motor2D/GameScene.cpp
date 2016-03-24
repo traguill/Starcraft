@@ -32,7 +32,9 @@ bool GameScene::Awake()
 // Called before the first frame
 bool GameScene::Start()
 {
-	App->map->Load("game_map.tmx");
+
+	App->map->Load("game_map.tmx", map_id);
+	App->map->Load("collision.tmx", collider_id);
 
 	return true;
 }
@@ -47,7 +49,8 @@ bool GameScene::PreUpdate()
 // Called each loop iteration
 bool GameScene::Update(float dt)
 {
-	App->map->Draw();
+	App->map->Draw(map_id);
+	App->map->Draw(collider_id);
 	return true;
 }
 
