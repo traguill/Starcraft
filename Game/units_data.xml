@@ -1,0 +1,23 @@
+<units>
+
+  <unit TYPE="MARINE">
+    <texture_path value="sprites/marine.png"/>
+    <life value="10" />
+    <speed value="10" />
+    <damage value="10" />
+    <vision value="10" />
+    <range value="10" />
+    <cool value="10" />
+  </unit>
+
+  <unit TYPE="GHOST">
+    <texture_path value="sprites/marine.png"/>
+    <life value="100" />
+    <speed value="100" />
+    <damage value="100" />
+    <vision value="100" />
+    <range value="100" />
+    <cool value="100" />
+  </unit>
+  
+</units>

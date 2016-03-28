@@ -35,10 +35,24 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+public:
+
+	Unit* CreateUnit(UNIT_TYPE type, int x, int y);
+	
+private:
+	bool LoadUnitsInfo();
+
+	string UnitTypeToString(UNIT_TYPE type)const;
+	UNIT_TYPE UnitTypeToEnum(string type)const;
+
+	//DEBUG
+	void PrintUnitDatabase()const;
+
 private:
 
-	Unit* CreateUnit(int x, int y, SDL_Texture* t, UNIT_TYPE type);
-	SDL_Texture* marine_texture;
+	//Unit base to clone to create new units
+	string units_file_path;
+	map<string, Unit*>	units_database;
 
 
 public:

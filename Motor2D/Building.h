@@ -13,7 +13,7 @@ enum TYPE{CENTER,FACTORY,TURRET,BUNKER,TOWER};
 class Building : public Entity
 {
 public:
-	bool Update(float dt);
+	void Update(float dt);
 	void Draw();
 
 private:

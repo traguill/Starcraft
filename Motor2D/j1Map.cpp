@@ -225,9 +225,13 @@ bool j1Map::CleanUp()
 
 		map_it->second->layers.clear();
 
+		//delete MapData
+		delete map_it->second;
+
 		++map_it;
 	}
 
+	maps.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -529,12 +533,6 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, uint m
 	{
 
 		MapLayer* layer = *i;
-
-		if (layer->properties.Get("Navigation", 0) == 0)
-		{
-			++i;
-			continue;
-		}
 			
 		
 		uchar* map = new uchar[layer->width*layer->height];

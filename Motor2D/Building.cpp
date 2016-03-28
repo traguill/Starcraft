@@ -4,9 +4,9 @@
 #include "Building.h"
 
 
-bool Building::Update(float dt)
+void Building::Update(float dt)
 {
-	return true;
+	
 }
 
 void Building::Draw()

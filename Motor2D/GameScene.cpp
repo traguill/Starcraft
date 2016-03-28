@@ -7,7 +7,7 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-//#include "j1PathFinding.h"
+#include "j1PathFinding.h"
 #include "GameScene.h"
 #include "j1UIManager.h"
 
@@ -32,9 +32,21 @@ bool GameScene::Awake()
 // Called before the first frame
 bool GameScene::Start()
 {
-
+	//Load Map
 	App->map->Load("game_map.tmx", map_id);
-	App->map->Load("collision.tmx", collider_id);
+
+	//Load collision map
+	if (App->map->Load("collision.tmx", collider_id) == true)
+	{
+		int width, height;
+		uchar* buffer = NULL;
+		App->map->CreateWalkabilityMap(width, height, &buffer, collider_id);
+
+		App->pathfinding->SetMap(width, height, buffer);
+		RELEASE_ARRAY(buffer);
+	}
+
+	
 
 	return true;
 }

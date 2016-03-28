@@ -35,4 +35,8 @@
     <folder>maps/</folder>
   </map>
 
+  <entity_manager>
+    <units_path value="units_data.xml"/>
+  </entity_manager>
+
 </config>
