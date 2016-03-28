@@ -46,27 +46,61 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		iPoint p;  App->input->GetMousePosition(p.x, p.y);
-		friendly_units.insert(pair<string, Unit*>("Jimmy", CreateUnit(GHOST, p.x, p.y)));
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_DOWN)
-	{
-		iPoint p;  App->input->GetMousePosition(p.x, p.y);
-		friendly_units.insert(pair<string, Unit*>("Thom", CreateUnit(MARINE, p.x, p.y)));
-	}
 	return true;
 }
 
 bool j1EntityManager::Update(float dt)
 {
-	map<string, Unit*>::iterator it = friendly_units.begin();
+	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		friendly_units.push_back(CreateUnit(GHOST, p.x, p.y));
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		friendly_units.push_back(CreateUnit(MARINE, p.x, p.y));
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		list<Unit*>::iterator it = selected_units.begin();
+		while (it != selected_units.end())
+		{
+			(*it)->selected = false;
+
+			it++;
+		}
+
+		selected_units.clear();
+		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		iPoint p; App->input->GetMouseWorld(p.x, p.y);
+		selection_rect.w = p.x - selection_rect.x;
+		selection_rect.h = p.y - selection_rect.y;
+
+		list<Unit*>::iterator it = friendly_units.begin();
+		while (it != friendly_units.end())
+		{
+			if ((*it)->pos.PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
+			{
+				selected_units.push_back((*it));
+				(*it)->selected = true;
+			}
+
+			it++;
+		}
+	}
+
+	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
-		(*it).second->Update(dt);
-		(*it).second->Draw();
+		(*it)->Update(dt);
+		(*it)->Draw();
 		it++;
 	}
 
@@ -98,10 +132,10 @@ bool j1EntityManager::CleanUp()
 	}
 	units_database.clear();
 
-	map<string, Unit*>::iterator it_fu = friendly_units.begin();
+	list<Unit*>::iterator it_fu = friendly_units.begin();
 	while (it_fu != friendly_units.end())
 	{
-		delete it_fu->second;
+		delete *it_fu;
 		++it_fu;
 	}
 	friendly_units.clear();

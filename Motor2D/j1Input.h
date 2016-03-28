@@ -66,6 +66,7 @@ public:
 
 	// Get mouse / axis position
 	void GetMousePosition(int &x, int &y);
+	void GetMouseWorld(int &x, int &y);
 	void GetMouseMotion(int& x, int& y);
 
 	void StartGetText(const int position)

@@ -45,6 +45,7 @@ private:
 	Entity* target;
 	std::vector<iPoint> path;
 	bool costume;
+	bool selected = false;
 	UNIT_TYPE type;
 	UNIT_STATE state;
 

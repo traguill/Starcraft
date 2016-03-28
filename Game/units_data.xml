@@ -11,7 +11,7 @@
   </unit>
 
   <unit TYPE="GHOST">
-    <texture_path value="sprites/marine.png"/>
+    <texture_path value="sprites/ghost.png"/>
     <life value="100" />
     <speed value="100" />
     <damage value="100" />

@@ -54,12 +54,16 @@ private:
 	string units_file_path;
 	map<string, Unit*>	units_database;
 
+	//Select units
+	SDL_Rect selection_rect;
+
 
 public:
 	//the key could be a int
 	//Entity* must be Unit*
-	map<string, Unit*> friendly_units; 
+	list<Unit*> friendly_units;
 	list<Entity*> hostile_enities;
+	list<Unit*> selected_units;
 
 };
 

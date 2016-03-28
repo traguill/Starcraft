@@ -32,7 +32,6 @@ protected:
 	SDL_Texture* texture;
 	p2Point<uint> pos;
 	SDL_Rect* collider;
-	bool selected;
 	int life;
 
 };
