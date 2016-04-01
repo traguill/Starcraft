@@ -3,15 +3,12 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
-#include "j1Fonts.h"
 #include "j1Input.h"
 #include "EntityManager.h"
-#include "UILabel.h"
-#include "UIImage.h"
-#include "UIButton.h"
-#include "j1Window.h"
-#include "UIInputBox.h"
 #include "j1FileSystem.h"
+#include "j1Pathfinding.h"
+#include "j1Map.h"
+#include "GameScene.h"
 
 
 j1EntityManager::j1EntityManager() : j1Module()
@@ -51,6 +48,8 @@ bool j1EntityManager::PreUpdate()
 
 bool j1EntityManager::Update(float dt)
 {
+	//Create units
+	//DEBUG-----------------------------------------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
@@ -62,44 +61,20 @@ bool j1EntityManager::Update(float dt)
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		friendly_units.push_back(CreateUnit(MARINE, p.x, p.y));
 	}
+	//------------------------------------------------------------------------------
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		list<Unit*>::iterator it = selected_units.begin();
-		while (it != selected_units.end())
-		{
-			(*it)->selected = false;
+	//Check units selection
+	SelectUnits();
 
-			it++;
-		}
-
-		selected_units.clear();
-		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-	{
-		iPoint p; App->input->GetMouseWorld(p.x, p.y);
-		selection_rect.w = p.x - selection_rect.x;
-		selection_rect.h = p.y - selection_rect.y;
-
-		list<Unit*>::iterator it = friendly_units.begin();
-		while (it != friendly_units.end())
-		{
-			if ((*it)->pos.PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
-			{
-				selected_units.push_back((*it));
-				(*it)->selected = true;
-			}
-
-			it++;
-		}
-	}
+	//Asign unit movement
+	SetMovement();
 
 	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
-		(*it)->Update(dt);
+		if (App->game_scene->GamePaused() == false)
+			(*it)->Update(dt);
+		
 		(*it)->Draw();
 		it++;
 	}
@@ -107,7 +82,9 @@ bool j1EntityManager::Update(float dt)
 	list<Entity*>::iterator i = hostile_enities.begin();
 	while (i != hostile_enities.end())
 	{
-		(*i)->Update(dt);
+		if (App->game_scene->GamePaused() == false)
+			(*i)->Update(dt);
+		
 		(*i)->Draw();
 		i++;
 	}
@@ -241,6 +218,105 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 	if (type == "VALKYRIE") return VALKYRIE;
 
 	return MARINE; //Should return empty type
+}
+
+void j1EntityManager::SelectUnits()
+{
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		list<Unit*>::iterator it = selected_units.begin();
+		while (it != selected_units.end())
+		{
+			(*it)->selected = false;
+
+			it++;
+		}
+
+		selected_units.clear();
+		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		iPoint p; App->input->GetMouseWorld(p.x, p.y);
+		selection_rect.w = p.x - selection_rect.x;
+		selection_rect.h = p.y - selection_rect.y;
+
+		list<Unit*>::iterator it = friendly_units.begin();
+		while (it != friendly_units.end())
+		{
+			if ((*it)->pos.PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
+			{
+				selected_units.push_back((*it));
+				(*it)->selected = true;
+			}
+
+			it++;
+		}
+	}
+}
+
+void j1EntityManager::SetMovement()
+{
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+	{
+		if (selected_units.size() > 0)
+		{
+			list<Unit*>::iterator unit = selected_units.begin();
+
+			int min_x, max_x, min_y, max_y;
+			min_x = max_x = (*unit)->pos.x;
+			min_y = max_y = (*unit)->pos.x;
+
+			while (unit != selected_units.end())
+			{
+				if ((*unit)->pos.x < min_x)  min_x =(*unit)->pos.x;
+				if ((*unit)->pos.x > max_x)  max_x =(*unit)->pos.x;
+				if ((*unit)->pos.y < min_y)  min_y =(*unit)->pos.y;
+				if ((*unit)->pos.y > max_y)  max_y =(*unit)->pos.y;
+				++unit;
+			}
+
+			iPoint upper_left = App->map->WorldToMap(min_x, min_y, 2);
+			iPoint bottom_right = App->map->WorldToMap(max_x, max_y, 2);
+
+			SDL_Rect move_rec;
+			move_rec.x = upper_left.x;
+			move_rec.y = upper_left.y;
+			move_rec.w = bottom_right.x - upper_left.x;
+			move_rec.h = bottom_right.y - upper_left.y;
+
+			iPoint center(move_rec.x + (move_rec.w / 2), move_rec.y + (move_rec.h / 2));
+
+			int mouse_x, mouse_y;
+			App->input->GetMouseWorld(mouse_x, mouse_y);
+			iPoint destination(App->map->WorldToMap(mouse_x, mouse_y, 2));
+			App->pathfinding->CreatePath(center, destination);
+
+			vector<iPoint> path = *App->pathfinding->GetLastPath();
+
+			list<Unit*>::iterator unit_p = selected_units.begin();
+			while (unit_p != selected_units.end())
+			{
+				iPoint unit_pos_tile(App->map->WorldToMap((*unit_p)->pos.x, (*unit_p)->pos.y, 2));
+				iPoint dst_center(unit_pos_tile.x - center.x, unit_pos_tile.y - center.y);
+
+				vector<iPoint> unit_path;
+
+				vector<iPoint>::iterator path_it = path.begin();
+				while (path_it != path.end())
+				{
+					unit_path.push_back(iPoint(path_it->x + dst_center.x, path_it->y + dst_center.y));
+					++path_it;
+				}
+
+				(*unit_p)->SetPath(unit_path);
+				++unit_p;
+			}
+
+		}
+	}
 }
 
 //CREATES -----------------------------------------------------------------------------------------------------

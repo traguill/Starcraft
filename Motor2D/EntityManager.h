@@ -40,6 +40,10 @@ public:
 	Unit* CreateUnit(UNIT_TYPE type, int x, int y);
 	
 private:
+
+	void SelectUnits();
+	void SetMovement();
+
 	bool LoadUnitsInfo();
 
 	string UnitTypeToString(UNIT_TYPE type)const;

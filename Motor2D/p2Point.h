@@ -136,6 +136,18 @@ public:
 
 		return ret;
 	}
+
+	int Sign(float value)const
+	{
+		return (value >= 0) ? 1 : -1;
+	}
+
+	void Normalize()
+	{
+		float module = sqrt(x * x + y * y);
+		x = x / module;
+		y = y / module;
+	}
 };
 
 typedef p2Point<int> iPoint;

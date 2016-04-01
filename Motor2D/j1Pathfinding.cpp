@@ -232,7 +232,10 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			while (i != adjacent.list_nodes.end())
 			{
 				if (closed.Find(i->pos) != closed.list_nodes.end())
+				{
+					++i;
 					continue;
+				}
 
 				list<PathNode>::iterator adjacent_in_open = open.Find(i->pos);
 

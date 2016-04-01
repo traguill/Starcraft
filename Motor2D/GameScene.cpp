@@ -46,7 +46,7 @@ bool GameScene::Start()
 		RELEASE_ARRAY(buffer);
 	}
 
-	
+	game_paused = false;
 
 	return true;
 }
@@ -62,7 +62,14 @@ bool GameScene::PreUpdate()
 bool GameScene::Update(float dt)
 {
 	App->map->Draw(map_id);
-	App->map->Draw(collider_id);
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT)
+		App->map->Draw(collider_id);
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		game_paused = !game_paused;
+
+
 	return true;
 }
 
@@ -83,4 +90,10 @@ bool GameScene::CleanUp()
 	LOG("Freeing Game Scene");
 
 	return true;
+}
+
+
+bool GameScene::GamePaused()const
+{
+	return game_paused;
 }

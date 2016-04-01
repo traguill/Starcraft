@@ -32,10 +32,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool GamePaused()const;
+
 private:
 
 	uint map_id; //Drawable map
 	uint collider_id;
+
+	bool game_paused;
 
 };
 

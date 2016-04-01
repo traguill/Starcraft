@@ -5,6 +5,7 @@
 #include "j1Render.h"
 #include "j1Input.h"
 #include "AdvancedMath.h"
+#include "j1Map.h"
 
 #define VSYNC true
 
@@ -88,7 +89,10 @@ bool j1Render::Update(float dt)
 			CursorMovement(dt);
 
 	static char title[256];
-	sprintf_s(title, 256, "Camera x: %i y: %i", camera.x, camera.y);
+	int mouse_x, mouse_y;
+	App->input->GetMouseWorld(mouse_x, mouse_y);
+	iPoint pos = App->map->WorldToMap(mouse_x, mouse_y, 2);
+	sprintf_s(title, 256, "Tile x: %i y: %i", pos.x, pos.y);
 	App->win->SetTitle(title);
 
 	return true;

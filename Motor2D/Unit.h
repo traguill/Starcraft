@@ -32,8 +32,19 @@ class Unit : public Entity
 
 public:
 
+	Unit();
+	Unit(Unit* u);
+
+
 	void Update(float dt);
 	void Draw();
+
+	void SetPath(vector<iPoint> _path);
+
+private:
+
+	void Move(float dt);
+	void GetDirection();
 
 private:
 
@@ -43,11 +54,17 @@ private:
 	uint range;
 	uint cool;
 	Entity* target;
-	std::vector<iPoint> path;
+	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
 	UNIT_TYPE type;
 	UNIT_STATE state;
+
+
+	//Pathfinding
+	fPoint direction;
+	bool has_destination = false;
+	iPoint	dst_point;
 
 };
 #endif

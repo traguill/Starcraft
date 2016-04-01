@@ -30,7 +30,7 @@ public:
 protected:
 
 	SDL_Texture* texture;
-	p2Point<uint> pos;
+	iPoint pos;
 	SDL_Rect* collider;
 	int life;
 
