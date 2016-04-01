@@ -46,7 +46,12 @@ bool GameScene::Start()
 		RELEASE_ARRAY(buffer);
 	}
 
-	
+	//UI TESTS
+	App->ui->CreateImage({ 0, 94, 599, 155 }, 21, 325);
+	//
+	//Not able to use anything with labels, missing font;
+	//----------App->ui->CreateLabel("hola", 100, 100);
+	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
 
 	return true;
 }

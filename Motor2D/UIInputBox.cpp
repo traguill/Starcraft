@@ -9,14 +9,14 @@
 UIInputBox::UIInputBox() : UIEntity()
 {}
 
-UIInputBox::UIInputBox(const char* txt, const int x, const int y, const char* path) : UIEntity()
+UIInputBox::UIInputBox(const char* txt, const int x, const int y, SDL_Rect section) : UIEntity()
 {
 
 	type = INPUT_BOX;
 	interactable = true;
 	
 	text = new UILabel(txt, 0, 0);
-	background = new UIImage(path, 0 - DELAY_INPUT, 0 - DELAY_INPUT);
+	background = new UIImage(section, 0 - DELAY_INPUT, 0 - DELAY_INPUT);
 
 	text->SetParent(this);
 	background->SetParent(this);
@@ -87,4 +87,3 @@ void UIInputBox::DrawCursor(int position)
 	App->render->DrawQuad(cursor, 255, 255, 255, 255);
 
 }
-

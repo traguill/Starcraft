@@ -20,7 +20,7 @@ public:
 
 	UIButton();
 
-	UIButton(const char* _text, const int x, const int y, const char* path_idle = NULL, const char* path_pressed = NULL, const char* path_hover = NULL);
+	UIButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover);
 
 	// Destructor
 	virtual ~UIButton();
@@ -35,9 +35,9 @@ private:
 	void GetState(); //Sets the state of the button (idle, pressed, hover)
 
 private:
-	SDL_Texture* idle;
-	SDL_Texture* pressed;
-	SDL_Texture* hover;
+	SDL_Rect idle;
+	SDL_Rect pressed;
+	SDL_Rect hover;
 public:
 	UILabel		text;
 	BUTTON_STATE state;

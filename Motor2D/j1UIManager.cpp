@@ -15,7 +15,7 @@
 
 j1UIManager::j1UIManager() : j1Module()
 {
-	name.append("UIManager");
+	name.append("gui");
 	debug = false;
 }
 
@@ -111,14 +111,14 @@ bool j1UIManager::CleanUp()
 }
 
 // const getter for atlas
-const SDL_Texture* j1UIManager::GetAtlas() const
+SDL_Texture* j1UIManager::GetAtlas() const
 {
 	return atlas;
 }
 
 // class UIManager ---------------------------------------------------
 
-UILabel* j1UIManager::CreateLabel(const char* text,const int x,const int y, j1Module* listener)
+UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, j1Module* listener)
 {
 	UILabel* label = new UILabel(text, x, y);
 	label->listener = listener;
@@ -127,41 +127,32 @@ UILabel* j1UIManager::CreateLabel(const char* text,const int x,const int y, j1Mo
 	return label;
 }
 
-UIImage* j1UIManager::CreateImage(const char* path, const int x, const int y, j1Module* listener)
+UIImage* j1UIManager::CreateImage(SDL_Rect _section, const int x, const int y, j1Module* listener)
 {
-	UIImage* img = new UIImage(path, x, y);
+	UIImage* img = new UIImage(_section, x, y);
 	img->listener = listener;
 	gui_elements.push_back(img);
 
 	return img;
 }
 
-UIImage* j1UIManager::CreateImage(SDL_Texture* tex, const int x, const int y, j1Module* listener)
+UIButton* j1UIManager::CreateButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover, j1Module* listener)
 {
-	UIImage* img = new UIImage(tex, x, y);
-	img->listener = listener;
-	gui_elements.push_back(img);
-
-	return img;
-}
-
-UIButton* j1UIManager::CreateButton(const char* _text, const int x, const int y, const char* path_idle, const char* path_pressed, const char* path_hover, j1Module* listener)
-{
-	UIButton* button = new UIButton(_text, x, y, path_idle, path_pressed, path_hover);
+	UIButton* button = new UIButton(_text, x, y, section_idle, section_pressed, section_hover);
 	button->listener = listener;
 	gui_elements.push_back(button);
 
 	return button;
 }
 
-UIInputBox* j1UIManager::CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener)
+/*UIInputBox* j1UIManager::CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener)
 {
-	UIInputBox* ibox = new UIInputBox(text, x, y, path);
-	ibox->listener = listener;
-	gui_elements.push_back(ibox);
+UIInputBox* ibox = new UIInputBox(text, x, y, path);
+ibox->listener = listener;
+gui_elements.push_back(ibox);
 
-	return ibox;
-}
+return ibox;
+}*/
 
 UIEntity* j1UIManager::GetMouseHover() const
 {
@@ -216,7 +207,7 @@ void j1UIManager::SetNextFocus()
 	unsigned int min_x, min_y;
 	App->win->GetWindowSize(min_x, min_y);
 	int win_x = min_x;
-	
+
 	int focus_x, focus_y;
 	if (focus != NULL)
 		focus->GetScreenPos(focus_x, focus_y);
