@@ -13,7 +13,7 @@ public:
 
 	UIInputBox();
 
-	UIInputBox(const char* txt, const int x, const int y, const char* path = NULL);
+	UIInputBox(const char* txt, const int x, const int y, SDL_Rect section);
 
 	// Destructor
 	virtual ~UIInputBox();

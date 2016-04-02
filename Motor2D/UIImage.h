@@ -10,8 +10,7 @@ public:
 
 	UIImage();
 
-	UIImage(const char* path, const int x, const int y);
-	UIImage(SDL_Texture* tex, const int x, const int y);
+	UIImage(SDL_Rect section, const int x, const int y);
 
 	// Destructor
 	virtual ~UIImage();
@@ -21,10 +20,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void LoadTexture(const char* path);
-
 private:
-	SDL_Texture* texture;
+	SDL_Rect section;
 
 };
 

@@ -40,17 +40,16 @@ public:
 	// TODO 2: Create the factory methods
 	// Gui creation functions
 
-	const SDL_Texture* GetAtlas() const;
+	SDL_Texture* GetAtlas() const;
 
 	//Creators ------------------------------------------------------------------------------------------------
 	UILabel* CreateLabel(const char* text, const int x, const int y, j1Module* listener = NULL);
 
-	UIImage* CreateImage(const char* path, const int x, const int y, j1Module* listener = NULL);
-	UIImage* CreateImage(SDL_Texture* tex, const int x, const int y, j1Module* listener = NULL);
+	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, j1Module* listener = NULL);
 
-	UIButton* CreateButton(const char* _text, const int x, const int y, const char* path_idle = NULL, const char* path_pressed = NULL, const char* path_hover = NULL, j1Module* listener = NULL);
+	UIButton* CreateButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover, j1Module* listener = NULL);
 
-	UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
+	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
 	//Functions ---------------------------------------------------------------------------------------------------
 	UIEntity* GetMouseHover()const;
 

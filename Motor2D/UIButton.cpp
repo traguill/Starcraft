@@ -3,6 +3,7 @@
 #include "j1Textures.h"
 #include "j1Render.h"
 #include "UILabel.h"
+#include "j1UIManager.h"
 
 UIButton::UIButton() : UIEntity()
 {
@@ -11,7 +12,7 @@ UIButton::UIButton() : UIEntity()
 	interactable = true;
 }
 
-UIButton::UIButton(const char* _text, const int x, const int y, const char* path_idle, const char* path_pressed, const char* path_hover) : UIEntity()
+UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover) : UIEntity()
 {
 	type = BUTTON;
 	interactable = true;
@@ -21,15 +22,11 @@ UIButton::UIButton(const char* _text, const int x, const int y, const char* path
 	rect.x = x;
 	rect.y = y;
 
-	idle = App->tex->Load(path_idle);
+	idle = section_idle;
+	pressed = section_pressed;
+	hover = section_hover;
 
-	if (path_pressed)
-		pressed = App->tex->Load(path_pressed);
-	if (path_hover)
-		hover = App->tex->Load(path_hover);
 	text.SetParent(this);
-	SDL_QueryTexture(idle, NULL, NULL, &rect.w, &rect.h);
-
 }
 
 
@@ -46,19 +43,15 @@ bool UIButton::Update(float dt)
 
 	int x, y;
 	GetScreenPos(x, y);
-	
-	if (state == IDLE)
-		App->render->Blit(idle, x , y);
-	if (state == PRESSED)
-		App->render->Blit(pressed, x , y);
-	if (state == HOVER)
-		App->render->Blit(hover, x , y);
 
-	/*SDL_Rect button_rec = GetScreenRect();
-	SDL_Rect t = text.GetLocalRect();
-	x = button_rec.x + (button_rec.w / 2 - t.w / 2);
-	y = button_rec.y + (button_rec.h / 2 - t.h / 2);
-	App->render->Blit(text.texture, x, y);*/
+	if (state == IDLE)
+		App->render->Blit(App->ui->GetAtlas(), x, y, &idle);
+	if (state == PRESSED)
+		App->render->Blit(App->ui->GetAtlas(), x, y, &pressed);
+	if (state == HOVER)
+		App->render->Blit(App->ui->GetAtlas(), x, y, &hover);
+
+
 
 	text.Update(dt);
 
@@ -69,13 +62,6 @@ bool UIButton::Update(float dt)
 bool UIButton::CleanUp()
 {
 	bool ret = true;
-
-	if (idle)
-		App->tex->UnLoad(idle);
-	if (pressed)
-		App->tex->UnLoad(pressed);
-	if (hover)
-		App->tex->UnLoad(hover);
 
 	text.CleanUp();
 
