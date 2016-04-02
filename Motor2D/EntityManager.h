@@ -44,6 +44,8 @@ private:
 	void SelectUnits();
 	void SetMovement();
 
+	void CalculateMovementRect();
+
 	bool LoadUnitsInfo();
 
 	string UnitTypeToString(UNIT_TYPE type)const;
@@ -61,6 +63,11 @@ private:
 	//Select units
 	SDL_Rect selection_rect;
 
+	//Movement rectangle of selected units (world)
+	SDL_Rect move_rec;
+	iPoint center;
+
+	bool debug;
 
 public:
 	//the key could be a int

@@ -41,6 +41,8 @@ private:
 
 	bool game_paused;
 
+	bool debug;
+
 };
 
 #endif // __GAME_SCENE_H__

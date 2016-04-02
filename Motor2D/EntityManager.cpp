@@ -37,6 +37,10 @@ bool j1EntityManager::Start()
 
 	LoadUnitsInfo();
 
+	debug = false;
+
+	move_rec.x = move_rec.y = move_rec.w = move_rec.h = 0;
+
 	return ret;
 }
 
@@ -61,6 +65,15 @@ bool j1EntityManager::Update(float dt)
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		friendly_units.push_back(CreateUnit(MARINE, p.x, p.y));
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
+
+	if (debug)
+	{
+		//App->render->DrawQuad(move_rec, 255, 255, 0, 255, false, true); Doesn't follow the units when move
+	}
+		
 	//------------------------------------------------------------------------------
 
 	//Check units selection
@@ -244,6 +257,7 @@ void j1EntityManager::SelectUnits()
 		selection_rect.h = p.y - selection_rect.y;
 
 		list<Unit*>::iterator it = friendly_units.begin();
+
 		while (it != friendly_units.end())
 		{
 			if ((*it)->pos.PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
@@ -263,36 +277,14 @@ void j1EntityManager::SetMovement()
 	{
 		if (selected_units.size() > 0)
 		{
-			list<Unit*>::iterator unit = selected_units.begin();
-
-			int min_x, max_x, min_y, max_y;
-			min_x = max_x = (*unit)->pos.x;
-			min_y = max_y = (*unit)->pos.x;
-
-			while (unit != selected_units.end())
-			{
-				if ((*unit)->pos.x < min_x)  min_x =(*unit)->pos.x;
-				if ((*unit)->pos.x > max_x)  max_x =(*unit)->pos.x;
-				if ((*unit)->pos.y < min_y)  min_y =(*unit)->pos.y;
-				if ((*unit)->pos.y > max_y)  max_y =(*unit)->pos.y;
-				++unit;
-			}
-
-			iPoint upper_left = App->map->WorldToMap(min_x, min_y, 2);
-			iPoint bottom_right = App->map->WorldToMap(max_x, max_y, 2);
-
-			SDL_Rect move_rec;
-			move_rec.x = upper_left.x;
-			move_rec.y = upper_left.y;
-			move_rec.w = bottom_right.x - upper_left.x;
-			move_rec.h = bottom_right.y - upper_left.y;
-
-			iPoint center(move_rec.x + (move_rec.w / 2), move_rec.y + (move_rec.h / 2));
+			CalculateMovementRect();
 
 			int mouse_x, mouse_y;
 			App->input->GetMouseWorld(mouse_x, mouse_y);
 			iPoint destination(App->map->WorldToMap(mouse_x, mouse_y, 2));
-			App->pathfinding->CreatePath(center, destination);
+			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
+
+			App->pathfinding->CreatePath(center_map, destination);
 
 			vector<iPoint> path = *App->pathfinding->GetLastPath();
 
@@ -300,7 +292,7 @@ void j1EntityManager::SetMovement()
 			while (unit_p != selected_units.end())
 			{
 				iPoint unit_pos_tile(App->map->WorldToMap((*unit_p)->pos.x, (*unit_p)->pos.y, 2));
-				iPoint dst_center(unit_pos_tile.x - center.x, unit_pos_tile.y - center.y);
+				iPoint dst_center(unit_pos_tile.x - center_map.x, unit_pos_tile.y - center_map.y);
 
 				vector<iPoint> unit_path;
 
@@ -317,6 +309,40 @@ void j1EntityManager::SetMovement()
 
 		}
 	}
+}
+
+void j1EntityManager::CalculateMovementRect()
+{
+	//Values to create rectangle
+	int min_x, max_x, min_y, max_y;
+	min_x = max_x = min_y = max_y = -1;
+
+	list<Unit*>::iterator it = selected_units.begin();
+
+	while (it != selected_units.end())
+	{
+		//First time
+		if (max_x == -1)
+		{
+			min_x = max_x = (*it)->pos.x;
+			min_y = max_y = (*it)->pos.y;
+		}
+
+		if ((*it)->pos.x < min_x)  min_x = (*it)->pos.x;
+		if ((*it)->pos.x > max_x)  max_x = (*it)->pos.x;
+		if ((*it)->pos.y < min_y)  min_y = (*it)->pos.y;
+		if ((*it)->pos.y > max_y)  max_y = (*it)->pos.y;
+
+		++it;
+	}
+
+	move_rec.x = min_x;
+	move_rec.y = min_y;
+	move_rec.w = max_x - min_x;
+	move_rec.h = max_y - min_y;
+
+	center.x = move_rec.x + (move_rec.w / 2);
+	center.y = move_rec.y + (move_rec.h / 2);
 }
 
 //CREATES -----------------------------------------------------------------------------------------------------

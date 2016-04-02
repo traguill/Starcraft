@@ -46,6 +46,7 @@ bool GameScene::Start()
 		RELEASE_ARRAY(buffer);
 	}
 
+	debug = false;
 	game_paused = false;
 
 	return true;
@@ -63,7 +64,9 @@ bool GameScene::Update(float dt)
 {
 	App->map->Draw(map_id);
 
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
+	if (debug)
 		App->map->Draw(collider_id);
 
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
