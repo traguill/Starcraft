@@ -2,6 +2,8 @@
 
   <unit TYPE="MARINE">
     <texture_path value="sprites/marine.png"/>
+    <width value="24" />
+    <height value="32" />
     <life value="10" />
     <speed value="10" />
     <damage value="10" />
@@ -12,6 +14,8 @@
 
   <unit TYPE="GHOST">
     <texture_path value="sprites/ghost.png"/>
+    <width value="24" />
+    <height value="32" />
     <life value="100" />
     <speed value="100" />
     <damage value="100" />

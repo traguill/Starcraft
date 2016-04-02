@@ -13,13 +13,19 @@ Unit::Unit() : Entity()
 
 Unit::Unit(Unit* u) : Entity()
 {
+	texture = u->texture;
 	speed = u->speed;
 	damage = u->damage;
 	vision = u->vision;
 	range = u->range;
 	cool = u->cool;
 	type = u->type;
+	width = u->width;
+	height = u->height;
 
+	//TODO: declare widht & height colliders
+	collider.w = width;
+	collider.h = width;
 }
 
 
@@ -32,15 +38,17 @@ void Unit::Update(float dt)
 
 void Unit::Draw()
 {
+	iPoint draw_pos = GetDrawPosition();
 	SDL_Rect r;
-	r.x = pos.x;
-	r.y = pos.y;
-	r.w = 24;
-	r.h = 32;
+	r.x = draw_pos.x;
+	r.y = draw_pos.y;
+	r.w = width;
+	r.h = height;
 	if (selected == true)
 		App->render->DrawQuad(r, 0, 255, 0, 255, false, true);
 
-	App->render->Blit(texture, pos.x, pos.y, NULL);
+	App->render->Blit(texture, draw_pos.x, draw_pos.y, NULL);
+
 }
 
 void Unit::Move(float dt)
@@ -58,11 +66,13 @@ void Unit::Move(float dt)
 			}
 		
 		
-		
-		pos.x += direction.x * (speed * dt);
-		pos.y += direction.y * (speed * dt);
+		iPoint unit_pos = GetPosition();
+		unit_pos.x +=  direction.x * (speed * dt);
+		unit_pos.y += direction.y * (speed * dt);
 
-		iPoint map_pos = App->map->WorldToMap(pos.x, pos.y, 2);
+		SetPosition(unit_pos.x, unit_pos.y);
+
+		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 
 		iPoint distance(dst_point.x - map_pos.x, dst_point.y - map_pos.y);
 
@@ -90,7 +100,9 @@ void Unit::GetDirection()
 		dst_point = path.front();
 		path.erase(path.begin());
 
-		iPoint map_pos = App->map->WorldToMap(pos.x, pos.y, 2);
+		iPoint unit_pos = GetPosition();
+
+		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 
 		if (map_pos == dst_point)
 		{

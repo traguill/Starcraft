@@ -173,6 +173,8 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->range = unit.child("range").attribute("value").as_int();
 		unit_db->cool = unit.child("cool").attribute("value").as_int();
 		unit_db->type = UnitTypeToEnum(unit.attribute("TYPE").as_string());
+		unit_db->width = unit.child("width").attribute("value").as_int();
+		unit_db->height = unit.child("height").attribute("value").as_int();
 
 		units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 	}
@@ -191,6 +193,8 @@ void j1EntityManager::PrintUnitDatabase()const
 	{
 
 		LOG("UNIT: %s --------------------", (*i).first.c_str());
+
+		LOG("Width: %i, Height: %i", (*i).second->width, (*i).second->height);
 		LOG("Life: %i", (*i).second->life);
 		LOG("Speed: %i", (*i).second->speed);
 		LOG("Damage: %i", (*i).second->damage);
@@ -353,9 +357,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y)
 
 	if (it != units_database.end())
 	{
-		Unit* unit = new Unit(*it->second);
-		unit->pos.x = x;
-		unit->pos.y = y;
+		Unit* unit = new Unit(it->second);
+		unit->SetPosition(x, y);
 
 		return unit;
 	}
