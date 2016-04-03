@@ -5,7 +5,7 @@
     <width value="24" />
     <height value="32" />
     <life value="10" />
-    <speed value="10" />
+    <speed value="100" />
     <damage value="10" />
     <vision value="10" />
     <range value="10" />

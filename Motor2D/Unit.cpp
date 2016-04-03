@@ -61,14 +61,14 @@ void Unit::Move(float dt)
 			while (p_it != path.end())
 			{
 				iPoint vec_pos = App->map->MapToWorld((*p_it).x, (*p_it).y, 2);
-				App->render->DrawQuad({ vec_pos.x, vec_pos.y, 8, 8 }, 0, 0, 255, 255, false, true);
+				App->render->DrawQuad({ vec_pos.x, vec_pos.y, 8, 8 }, 0, 0, 255, 100, true, true);
 				p_it++;
 			}
 		
 		
 		iPoint unit_pos = GetPosition();
-		unit_pos.x +=  direction.x * (speed * dt);
-		unit_pos.y += direction.y * (speed * dt);
+		unit_pos.x +=  (direction.x * speed) * dt;
+		unit_pos.y +=  (direction.y * speed) * dt;
 
 		SetPosition(unit_pos.x, unit_pos.y);
 
@@ -78,12 +78,12 @@ void Unit::Move(float dt)
 
 		if (distance.Sign(distance.x) != direction.Sign(direction.x) || distance.Sign(distance.y) != direction.Sign(direction.y))
 		{
-			GetDirection();
+			SetDirection();
 		}
 	}
 	else
 	{
-		GetDirection();
+		SetDirection();
 	}
 }
 
@@ -93,7 +93,7 @@ void Unit::SetPath(vector<iPoint> _path)
 	state = UNIT_MOVE;
 }
 
-void Unit::GetDirection()
+void Unit::SetDirection()
 {
 	if (path.size() != 0)
 	{
@@ -104,9 +104,9 @@ void Unit::GetDirection()
 
 		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 
-		if (map_pos == dst_point)
+		if (map_pos == dst_point) //Avoid starting tile (direction would be (0,0) )
 		{
-			GetDirection();
+			SetDirection(); 
 			return;
 		}
 
@@ -122,4 +122,11 @@ void Unit::GetDirection()
 		has_destination = false;
 		state = UNIT_IDLE;
 	}
+}
+
+iPoint Unit::GetDirection()const
+{
+	iPoint ret(round(direction.x), round(direction.y));
+
+	return ret;
 }

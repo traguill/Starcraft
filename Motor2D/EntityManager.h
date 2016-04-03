@@ -6,6 +6,9 @@
 #include "Unit.h"
 #include <map>
 
+#define COLLISION_DISTANCE	15
+#define COLLIDER_MAP 2
+
 using namespace std;
 
 // ---------------------------------------------------
@@ -41,15 +44,22 @@ public:
 	
 private:
 
-	void SelectUnits();
-	void SetMovement();
-
-	void CalculateMovementRect();
-
+	//Load data
 	bool LoadUnitsInfo();
-
 	string UnitTypeToString(UNIT_TYPE type)const;
 	UNIT_TYPE UnitTypeToEnum(string type)const;
+
+	//Selection
+	void SelectUnits();
+
+	//Pathfinding
+	void SetMovement();
+	void CalculateMovementRect();
+
+	//Collisions
+	void CheckCollisions(); //Only between units
+	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
+	void SeparateUnits(Unit* unit_a, Unit* unit_b);
 
 	//DEBUG
 	void PrintUnitDatabase()const;
@@ -61,6 +71,8 @@ private:
 	map<string, Unit*>	units_database;
 
 	//Select units
+	iPoint select_start;
+	iPoint select_end;
 	SDL_Rect selection_rect;
 
 	//Movement rectangle of selected units (world)
@@ -70,10 +82,10 @@ private:
 	bool debug;
 
 public:
-	//the key could be a int
-	//Entity* must be Unit*
+	//Need another list for buildings
+
 	list<Unit*> friendly_units;
-	list<Entity*> hostile_enities;
+	list<Unit*> enemy_units;
 	list<Unit*> selected_units;
 
 };

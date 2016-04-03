@@ -76,12 +76,14 @@ bool j1EntityManager::Update(float dt)
 		
 	//------------------------------------------------------------------------------
 
-	//Check units selection
+	//Basic logic
 	SelectUnits();
 
-	//Asign unit movement
 	SetMovement();
+	
+	CheckCollisions();
 
+	//Update lists
 	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
@@ -92,8 +94,8 @@ bool j1EntityManager::Update(float dt)
 		it++;
 	}
 
-	list<Entity*>::iterator i = hostile_enities.begin();
-	while (i != hostile_enities.end())
+	list<Unit*>::iterator i = enemy_units.begin();
+	while (i != enemy_units.end())
 	{
 		if (App->game_scene->GamePaused() == false)
 			(*i)->Update(dt);
@@ -130,13 +132,13 @@ bool j1EntityManager::CleanUp()
 	}
 	friendly_units.clear();
 
-	list<Entity*>::iterator it_en = hostile_enities.begin();
-	while (it_en != hostile_enities.end())
+	list<Unit*>::iterator it_en = enemy_units.begin();
+	while (it_en != enemy_units.end())
 	{
 		delete *it_en;
 		++it_en;
 	}
-	hostile_enities.clear();
+	enemy_units.clear();
 
 	return true;
 }
@@ -251,20 +253,27 @@ void j1EntityManager::SelectUnits()
 		}
 
 		selected_units.clear();
-		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
+		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
-		iPoint p; App->input->GetMouseWorld(p.x, p.y);
-		selection_rect.w = p.x - selection_rect.x;
-		selection_rect.h = p.y - selection_rect.y;
+		App->input->GetMouseWorld(select_end.x, select_end.y);
+		
+		(select_start.x < select_end.x) ? selection_rect.x = select_start.x : selection_rect.x = select_end.x;
+		(select_start.y < select_end.y) ? selection_rect.y = select_start.y : selection_rect.y = select_end.y;
+		iPoint down_right;
+		(select_start.x > select_end.x) ? down_right.x = select_start.x : down_right.x = select_end.x;
+		(select_start.y > select_end.y) ? down_right.y = select_start.y : down_right.y = select_end.y;
+
+		selection_rect.w = down_right.x - selection_rect.x;
+		selection_rect.h = down_right.y - selection_rect.y;
 
 		list<Unit*>::iterator it = friendly_units.begin();
 
 		while (it != friendly_units.end())
 		{
-			if ((*it)->pos.PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
+			if ((*it)->GetPosition().PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
 			{
 				selected_units.push_back((*it));
 				(*it)->selected = true;
@@ -288,14 +297,20 @@ void j1EntityManager::SetMovement()
 			iPoint destination(App->map->WorldToMap(mouse_x, mouse_y, 2));
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			App->pathfinding->CreatePath(center_map, destination);
+			if (App->pathfinding->CreatePath(center_map, destination) == -1)
+			{
+				LOG("Impossible to create path");
+				return;
+			}
 
 			vector<iPoint> path = *App->pathfinding->GetLastPath();
 
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
-				iPoint unit_pos_tile(App->map->WorldToMap((*unit_p)->pos.x, (*unit_p)->pos.y, 2));
+				iPoint unit_pos = (*unit_p)->GetPosition();
+				iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
+
 				iPoint dst_center(unit_pos_tile.x - center_map.x, unit_pos_tile.y - center_map.y);
 
 				vector<iPoint> unit_path;
@@ -325,17 +340,18 @@ void j1EntityManager::CalculateMovementRect()
 
 	while (it != selected_units.end())
 	{
+		iPoint unit_pos = (*it)->GetPosition();
 		//First time
 		if (max_x == -1)
 		{
-			min_x = max_x = (*it)->pos.x;
-			min_y = max_y = (*it)->pos.y;
+			min_x = max_x = unit_pos.x;
+			min_y = max_y = unit_pos.y;
 		}
 
-		if ((*it)->pos.x < min_x)  min_x = (*it)->pos.x;
-		if ((*it)->pos.x > max_x)  max_x = (*it)->pos.x;
-		if ((*it)->pos.y < min_y)  min_y = (*it)->pos.y;
-		if ((*it)->pos.y > max_y)  max_y = (*it)->pos.y;
+		if (unit_pos.x < min_x)  min_x = unit_pos.x;
+		if (unit_pos.x > max_x)  max_x = unit_pos.x;
+		if (unit_pos.y < min_y)  min_y = unit_pos.y;
+		if (unit_pos.y > max_y)  max_y = unit_pos.y;
 
 		++it;
 	}
@@ -347,6 +363,90 @@ void j1EntityManager::CalculateMovementRect()
 
 	center.x = move_rec.x + (move_rec.w / 2);
 	center.y = move_rec.y + (move_rec.h / 2);
+}
+
+void j1EntityManager::CheckCollisions()
+{
+	CheckCollisionsLists(friendly_units, friendly_units);
+	CheckCollisionsLists(friendly_units, enemy_units);
+	CheckCollisionsLists(enemy_units, enemy_units);
+}
+
+void j1EntityManager::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
+{
+	list<Unit*>::iterator unit_a = list_a.begin();
+	int count_a = 1;
+
+	while (unit_a != list_a.end())
+	{
+		list<Unit*>::iterator unit_b = list_b.begin();
+		int count_b = 1;
+		while (unit_b != list_b.end())
+		{
+			if (count_a >= count_b)	//Avoids duplicate searches
+			{
+				++count_b;
+				++unit_b;
+				continue;
+			}
+
+			if ((*unit_a)->GetPosition().DistanceTo((*unit_b)->GetPosition()) <= COLLISION_DISTANCE)
+			{
+				if ((*unit_a)->state == UNIT_MOVE && (*unit_b)->state != UNIT_MOVE)
+					SeparateUnits(*unit_a, *unit_b);
+
+				if ((*unit_b)->state == UNIT_MOVE && (*unit_a)->state != UNIT_MOVE)
+					SeparateUnits(*unit_b, *unit_a);
+			}
+			++count_b;
+			++unit_b;
+		}
+		++count_a;
+		++unit_a;
+	}
+}
+
+void j1EntityManager::SeparateUnits(Unit* unit_a, Unit* unit_b)
+{
+	//Ignore collisions between TWO moving units
+	//No one is moving (Can really happen?)
+
+	iPoint direction = unit_a->GetDirection();
+	iPoint move_to(0, 0);
+
+	bool direction_found = false;
+	int iterations = 0; //Max 8 iterations (directions)
+
+	while (direction_found == false && iterations < 8)
+	{
+		//Move to direction + 1/4
+		if (direction.x == 1 && direction.y == 0) move_to = { 2, 2 };
+		if (direction.x == 1 && direction.y == 1) move_to = { 0, 2 };
+		if (direction.x == 0 && direction.y == 1) move_to = { -2, 2 };
+		if (direction.x == -1 && direction.y == 1) move_to = { -2, 0 };
+		if (direction.x == -1 && direction.y == 0) move_to = { -2, -2 };
+		if (direction.x == -1 && direction.y == -1) move_to = { 0, -2 };
+		if (direction.x == 0 && direction.y == -1) move_to = { 2, -2 };
+		if (direction.x == 1 && direction.y == -1) move_to = { 2, 0 };
+
+		iPoint unit_tile = App->map->WorldToMap(unit_b->GetPosition().x, unit_b->GetPosition().y, COLLIDER_MAP);
+
+		if (App->pathfinding->IsWalkable(unit_tile + move_to) == true)
+		{
+			//Create path for idle unit
+			if (App->pathfinding->CreatePath(unit_tile, unit_tile + move_to) != -1)
+			{
+				unit_b->SetPath(*App->pathfinding->GetLastPath());
+			}
+			direction_found = true;
+		}
+		else
+		{
+			direction = move_to;
+			++iterations;
+		}
+	}
+	
 }
 
 //CREATES -----------------------------------------------------------------------------------------------------
