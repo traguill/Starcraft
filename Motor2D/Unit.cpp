@@ -5,6 +5,9 @@
 #include "j1Render.h"
 #include "j1Map.h"
 #include "EntityManager.h"
+#include "j1Input.h"
+#include "j1Window.h"
+#include "math.h"
 
 
 Unit::Unit() : Entity()
@@ -115,11 +118,18 @@ void Unit::Move(float dt)
 				App->render->DrawQuad({ vec_pos.x, vec_pos.y, 8, 8 }, 0, 0, 255, 100, true, true);
 				p_it++;
 			}
-		
-		
+
 		iPoint unit_pos = GetPosition();
-		unit_pos.x +=  (direction.x * speed) * dt;
-		unit_pos.y +=  (direction.y * speed) * dt;
+		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
+
+		float_pos.x += direction.x * speed * 0.016;
+		float_pos.y += direction.y * speed * 0.016;
+
+		float_pos.x = roundf(float_pos.x);
+		float_pos.y = roundf(float_pos.y);
+
+		unit_pos.x = float_pos.x;
+		unit_pos.y = float_pos.y;
 
 		SetPosition(unit_pos.x, unit_pos.y);
 
