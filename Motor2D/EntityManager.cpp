@@ -41,6 +41,13 @@ bool j1EntityManager::Start()
 
 	move_rec.x = move_rec.y = move_rec.w = move_rec.h = 0;
 
+	//Debug
+	jimmy = CreateUnit(MARINE, 200, 300);
+	leroy_jenkins = CreateUnit(MARINE, 220, 300);
+
+	friendly_units.push_back(jimmy);
+	friendly_units.push_back(leroy_jenkins);
+
 	return ret;
 }
 
@@ -72,6 +79,13 @@ bool j1EntityManager::Update(float dt)
 	if (debug)
 	{
 		//App->render->DrawQuad(move_rec, 255, 255, 0, 255, false, true); Doesn't follow the units when move
+	}
+
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	{
+		leroy_jenkins->state = UNIT_ATTACK;
+		leroy_jenkins->target = jimmy;
 	}
 		
 	//------------------------------------------------------------------------------
@@ -112,6 +126,16 @@ bool j1EntityManager::Update(float dt)
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
+	list<Unit*>::iterator i = units_to_remove.begin();
+
+	while (i != units_to_remove.end())
+	{
+		list<Unit*>::iterator unit_to_remove = i;
+		++i;
+		DestroyUnit((*unit_to_remove));
+	}
+
+	units_to_remove.clear();
 
 	return true;
 }
@@ -143,6 +167,40 @@ bool j1EntityManager::CleanUp()
 	enemy_units.clear();
 
 	return true;
+}
+
+void j1EntityManager::RemoveUnit(Unit* _unit)
+{
+	if (_unit != NULL)
+		units_to_remove.push_back(_unit);
+}
+
+void j1EntityManager::DestroyUnit(Unit* _unit)
+{
+	list<Unit*>::iterator f_unit = friendly_units.begin();
+
+	while (f_unit != friendly_units.end())
+	{
+		if (*f_unit == _unit)
+		{
+			friendly_units.erase(f_unit);
+			return;
+		}
+		++f_unit;
+	}
+
+	list<Unit*>::iterator e_unit = enemy_units.begin();
+
+	while (e_unit != enemy_units.end())
+	{
+		if (*e_unit == _unit)
+		{
+			enemy_units.erase(e_unit);
+			return;
+		}
+		++e_unit;
+	}
+
 }
 
 bool j1EntityManager::LoadUnitsInfo()

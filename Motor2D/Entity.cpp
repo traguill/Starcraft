@@ -53,3 +53,5 @@ iPoint Entity::GetDrawPosition()
 
 	return sprite.position;
 }
+
+

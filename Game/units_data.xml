@@ -4,12 +4,12 @@
     <texture_path value="sprites/marine.png"/>
     <width value="24" />
     <height value="32" />
-    <life value="10" />
+    <life value="100" />
     <speed value="100" />
-    <damage value="10" />
+    <damage value="30" />
     <vision value="10" />
     <range value="10" />
-    <cool value="10" />
+    <cool value="1" />
   </unit>
 
   <unit TYPE="GHOST">

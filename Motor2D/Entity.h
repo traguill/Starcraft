@@ -35,6 +35,7 @@ public:
 	SDL_Rect GetCollider();
 	iPoint GetDrawPosition();
 
+
 protected:
 
 	Sprite sprite;

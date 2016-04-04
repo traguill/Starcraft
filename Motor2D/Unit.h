@@ -23,7 +23,8 @@ enum UNIT_TYPE{
 enum UNIT_STATE{
 	UNIT_IDLE, 
 	UNIT_MOVE,
-	UNIT_ATTACK
+	UNIT_ATTACK,
+	UNIT_DIE
 };
 
 class Unit : public Entity
@@ -49,7 +50,10 @@ public:
 private:
 
 	void Move(float dt);
+	void Attack(float dt);
 	void SetDirection();
+
+	Unit* ApplyDamage(uint dmg); //Applies damage to himself and returns NULL if killed, if not returns himself
 
 private:
 
@@ -58,7 +62,7 @@ private:
 	uint vision;
 	uint range;
 	uint cool;
-	Entity* target;
+	Unit* target;
 	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
@@ -70,6 +74,9 @@ private:
 	fPoint direction;
 	bool has_destination = false;
 	iPoint	dst_point;
+
+	//Attacking
+	float cool_timer = 0;
 
 };
 #endif

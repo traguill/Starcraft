@@ -4,6 +4,7 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Map.h"
+#include "EntityManager.h"
 
 
 Unit::Unit() : Entity()
@@ -19,6 +20,7 @@ Unit::Unit(Unit* u) : Entity()
 	vision = u->vision;
 	range = u->range;
 	cool = u->cool;
+	life = u->life;
 	type = u->type;
 	width = u->width;
 	height = u->height;
@@ -32,8 +34,22 @@ Unit::Unit(Unit* u) : Entity()
 
 void Unit::Update(float dt)
 {
-	if (state == UNIT_MOVE)
+	switch (state)
+	{
+	case UNIT_IDLE:
+		//Is this really necessary?
+		break;
+	case UNIT_MOVE:
 		Move(dt);
+		break;
+	case UNIT_ATTACK:
+		Attack(dt);
+		break;
+	case UNIT_DIE:
+		//Timer of the animation and delete the unit
+		App->entity->RemoveUnit(this);
+		break;
+	}
 }
 
 void Unit::Draw()
@@ -49,6 +65,41 @@ void Unit::Draw()
 
 	App->render->Blit(&sprite);
 
+}
+
+void Unit::Attack(float dt)
+{
+	if (target == NULL)
+	{
+		LOG("I've killed one enemy");
+		state = UNIT_IDLE;
+		return;
+	}
+
+	if (cool_timer >= cool)
+	{
+		target = target->ApplyDamage(damage);
+		cool_timer = 0;
+	}
+	else
+	{
+		cool_timer += dt;
+	}
+}
+
+Unit* Unit::ApplyDamage(uint dmg)
+{
+	life -= dmg;
+	LOG("Life: %i", life);
+
+	if (life < 0)
+	{
+		LOG("I'm dead!");
+		state = UNIT_DIE;
+		return NULL;
+	}
+	else
+		return this;
 }
 
 void Unit::Move(float dt)
