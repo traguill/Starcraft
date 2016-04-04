@@ -46,12 +46,24 @@ bool GameScene::Start()
 		RELEASE_ARRAY(buffer);
 	}
 
+
+	debug = false;
+	game_paused = false;
+
 	//UI TESTS
-	App->ui->CreateImage({ 0, 94, 599, 155 }, 21, 325);
+	App->ui->CreateImage({ 1, 194, 599, 155 }, 21, 325);
 	//
-	//Not able to use anything with labels, missing font;
+	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
+	vector<SDL_Rect> sections;
+	sections.push_back({ 1, 62, 20, 21 });
+	sections.push_back({ 22, 62, 20, 21 });
+	sections.push_back({ 43, 62, 20, 21 });
+	sections.push_back({ 64, 62, 20, 21 });
+	sections.push_back({ 85, 62, 20, 21 });
+	main_cur = App->ui->CreateCursor(sections, 0.08);
+	
 
 	return true;
 }
@@ -67,7 +79,16 @@ bool GameScene::PreUpdate()
 bool GameScene::Update(float dt)
 {
 	App->map->Draw(map_id);
-	App->map->Draw(collider_id);
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
+	if (debug)
+		App->map->Draw(collider_id);
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		game_paused = !game_paused;
+
+
 	return true;
 }
 
@@ -88,4 +109,10 @@ bool GameScene::CleanUp()
 	LOG("Freeing Game Scene");
 
 	return true;
+}
+
+
+bool GameScene::GamePaused()const
+{
+	return game_paused;
 }

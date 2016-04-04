@@ -82,6 +82,9 @@
     <ClCompile Include="Building.cpp">
       <Filter>Desenvolupament  ========\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="UICursor.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h">
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="Building.h">
       <Filter>Desenvolupament  ========\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="UICursor.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

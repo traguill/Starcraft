@@ -101,6 +101,7 @@
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UICursor.cpp" />
     <ClCompile Include="UIEntity.cpp" />
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIInputBox.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="j1UIManager.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UICursor.h" />
     <ClInclude Include="UIEntity.h" />
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIInputBox.h" />

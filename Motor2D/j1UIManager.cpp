@@ -11,6 +11,8 @@
 #include "UIButton.h"
 #include "j1Window.h"
 #include "UIInputBox.h"
+#include "UICursor.h"
+#include "EntityManager.h"
 
 
 j1UIManager::j1UIManager() : j1Module()
@@ -40,6 +42,8 @@ bool j1UIManager::Start()
 	bool ret = true;
 
 	atlas = App->tex->Load(atlas_file_name.data());
+
+	SDL_ShowCursor(SDL_DISABLE);
 
 	return ret;
 }
@@ -84,6 +88,21 @@ bool j1UIManager::Update(float dt)
 		}
 		++i;
 	}
+
+	//UIMASTER
+	/*
+	int ghost;
+	int marine;
+	
+	list<Unit*>::iterator units_i = App->entity->selected_units.begin();
+	while (units_i != App->entity->selected_units.end())
+	{
+		if ((*units_i)->GetType() == MARINE)
+			marine++;
+		if ((*units_i)->GetType() == GHOST)
+			ghost++;
+	}
+	*/
 
 	return ret;
 }
@@ -143,6 +162,15 @@ UIButton* j1UIManager::CreateButton(const char* _text, const int x, const int y,
 	gui_elements.push_back(button);
 
 	return button;
+}
+
+UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener)
+{
+	UICursor* cursor = new UICursor(sections, anim_speed);
+	cursor->listener = listener;
+	gui_elements.push_back(cursor);
+
+	return cursor;
 }
 
 /*UIInputBox* j1UIManager::CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener)

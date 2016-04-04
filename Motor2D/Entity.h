@@ -21,18 +21,29 @@ public:
 	virtual ~Entity();
 
 	virtual void Update(float dt);
-	// Called before quitting
 
 	virtual void Draw();
 
 	virtual bool CleanUp();
 
+	//Logic position
+	void SetPosition(int x, int y); 
+	iPoint GetPosition()const;  
+
+	SDL_Rect GetCollider();
+	iPoint GetDrawPosition();
+
 protected:
 
 	SDL_Texture* texture;
-	p2Point<uint> pos;
-	SDL_Rect* collider;
 	int life;
+
+	int width;
+	int height;
+
+	iPoint pos;
+	SDL_Rect collider;
+	iPoint logic_pos;
 
 };
 

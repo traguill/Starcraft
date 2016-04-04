@@ -140,8 +140,8 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
-	// south
-	cell.create(pos.x, pos.y - 1);
+	//north-east
+	cell.create(pos.x + 1, pos.y + 1);
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
@@ -150,8 +150,28 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
+	//south-east
+	cell.create(pos.x + 1, pos.y - 1);
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
+
+	// south
+	cell.create(pos.x, pos.y - 1);
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
+
+	//south-west
+	cell.create(pos.x - 1, pos.y - 1);
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
+	
 	// west
 	cell.create(pos.x - 1, pos.y);
+	if (path_finder->IsWalkable(cell))
+		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
+
+	//nord-west
+	cell.create(pos.x - 1, pos.y + 1);
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
@@ -232,7 +252,10 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			while (i != adjacent.list_nodes.end())
 			{
 				if (closed.Find(i->pos) != closed.list_nodes.end())
+				{
+					++i;
 					continue;
+				}
 
 				list<PathNode>::iterator adjacent_in_open = open.Find(i->pos);
 

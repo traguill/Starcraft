@@ -2,6 +2,7 @@
 #define __UIENTITY_H__
 
 #include "p2Point.h"
+#include "Animation.h"
 #include "SDL/include/SDL.h"
 #include <list>
 
@@ -14,7 +15,8 @@ enum GUI_TYPE
 	LABEL,
 	IMAGE,
 	BUTTON,
-	INPUT_BOX
+	INPUT_BOX,
+	CURSOR
 };
 
 enum GUI_EVENTS

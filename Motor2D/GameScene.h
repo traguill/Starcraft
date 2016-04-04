@@ -2,6 +2,7 @@
 #define __GAME_SCENE_H__
 
 #include "j1Module.h"
+#include "UICursor.h"
 
 struct SDL_Texture;
 
@@ -32,10 +33,20 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool GamePaused()const;
+
 private:
 
 	uint map_id; //Drawable map
 	uint collider_id;
+
+	bool game_paused;
+
+	bool debug;
+
+private:
+
+	UICursor* main_cur;
 
 };
 
