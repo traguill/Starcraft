@@ -48,8 +48,8 @@ SDL_Rect Entity::GetCollider()
 
 iPoint Entity::GetDrawPosition()
 {
-	pos.x = logic_pos.x - (collider.w / 2);
-	pos.y = logic_pos.y - (height - (collider.w / 2));
+	sprite.position.x = logic_pos.x - (collider.w / 2);
+	sprite.position.y = logic_pos.y - (height - (collider.w / 2));
 
-	return pos;
+	return sprite.position;
 }

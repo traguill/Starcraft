@@ -4,6 +4,9 @@
 #include "SDL/include/SDL.h"
 #include "p2Point.h"
 #include "j1Module.h"
+#include <list>
+
+struct Sprite;
 
 class j1Render : public j1Module
 {
@@ -39,6 +42,7 @@ public:
 
 	// Draw & Blit
 	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX) const;
+	void Blit(Sprite* _sprite);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
@@ -73,6 +77,8 @@ private:
 
 	bool transitioning = false;
 	iPoint end_point;
+
+	list<Sprite*> blit_sprites;
 };
 
 #endif // __j1RENDER_H__

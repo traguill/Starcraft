@@ -7,6 +7,15 @@
 struct SDL_Texture;
 struct SDL_Surface;
 
+struct Sprite
+{
+	iPoint		 position;
+	SDL_Texture* texture;
+	SDL_Rect	 rect;
+
+	//Something about animation should be placed here
+};
+
 class j1Textures : public j1Module
 {
 public:

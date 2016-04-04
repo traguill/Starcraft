@@ -104,6 +104,8 @@ bool j1EntityManager::Update(float dt)
 		i++;
 	}
 
+	//Sort 2 lists of elements
+
 	return true;
 }
 
@@ -167,7 +169,7 @@ bool j1EntityManager::LoadUnitsInfo()
 	for (unit = units.child("unit"); unit && ret; unit = unit.next_sibling("unit"))
 	{
 		Unit* unit_db = new Unit();
-		unit_db->texture = App->tex->Load(unit.child("texture_path").attribute("value").as_string());
+		unit_db->sprite.texture = App->tex->Load(unit.child("texture_path").attribute("value").as_string());
 		unit_db->life = unit.child("life").attribute("value").as_int();
 		unit_db->speed = unit.child("speed").attribute("value").as_int();
 		unit_db->damage = unit.child("damage").attribute("value").as_int();

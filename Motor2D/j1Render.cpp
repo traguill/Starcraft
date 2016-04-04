@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "AdvancedMath.h"
 #include "j1Map.h"
+#include "j1Textures.h"
 
 #define VSYNC true
 
@@ -88,6 +89,21 @@ bool j1Render::Update(float dt)
 		else
 			CursorMovement(dt);
 
+
+	//Sort Sprites and blit
+	blit_sprites.sort([](const Sprite* a, const Sprite* b) { return a->position.y < b->position.y; });
+
+	list<Sprite*>::iterator i = blit_sprites.begin();
+
+	while (i != blit_sprites.end())
+	{
+		Blit((*i)->texture, (*i)->position.x, (*i)->position.y);
+		++i;
+	}
+
+	blit_sprites.clear();
+
+
 	static char title[256];
 	int mouse_x, mouse_y;
 	App->input->GetMouseWorld(mouse_x, mouse_y);
@@ -160,6 +176,11 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
+
+void j1Render::Blit(Sprite* _sprite)
+{
+	blit_sprites.push_back(_sprite);
+}
 bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;

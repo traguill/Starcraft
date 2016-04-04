@@ -83,7 +83,6 @@ private:
 
 public:
 	//Need another list for buildings
-
 	list<Unit*> friendly_units;
 	list<Unit*> enemy_units;
 	list<Unit*> selected_units;

@@ -13,7 +13,7 @@ Unit::Unit() : Entity()
 
 Unit::Unit(Unit* u) : Entity()
 {
-	texture = u->texture;
+	sprite.texture = u->sprite.texture;
 	speed = u->speed;
 	damage = u->damage;
 	vision = u->vision;
@@ -47,7 +47,7 @@ void Unit::Draw()
 	if (selected == true)
 		App->render->DrawQuad(r, 0, 255, 0, 255, false, true);
 
-	App->render->Blit(texture, draw_pos.x, draw_pos.y, NULL);
+	App->render->Blit(&sprite);
 
 }
 

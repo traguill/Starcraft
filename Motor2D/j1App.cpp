@@ -58,10 +58,13 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(game_scene);
 
 	AddModule(entity);
-	AddModule(ui);
+	
 	
 	// render last to swap buffer
 	AddModule(render);
+
+	//Should be before render
+	AddModule(ui);
 
 	PERF_PEEK(ptimer);
 }

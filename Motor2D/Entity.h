@@ -2,12 +2,14 @@
 #define __ENTITY_H__
 
 #include "p2Point.h"
+#include "j1Textures.h"
 #include "SDL/include/SDL.h"
 #include <list>
 
 using namespace std;
 
 class j1Module;
+
 
 class Entity
 {
@@ -35,13 +37,13 @@ public:
 
 protected:
 
-	SDL_Texture* texture;
+	Sprite sprite;
 	int life;
 
 	int width;
 	int height;
 
-	iPoint pos;
+
 	SDL_Rect collider;
 	iPoint logic_pos;
 
