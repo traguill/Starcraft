@@ -129,9 +129,11 @@ iPoint Unit::GetDirection()const
 	iPoint ret(round(direction.x), round(direction.y));
 
 	return ret;
+
 }
 
 UNIT_TYPE Unit::GetType()const
 {
 	return type;
+
 }

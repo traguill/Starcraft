@@ -42,7 +42,9 @@ public:
 	void SetPath(vector<iPoint> _path);
 
 	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
+
 	UNIT_TYPE GetType()const;
+
 
 private:
 

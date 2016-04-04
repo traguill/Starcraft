@@ -65,6 +65,7 @@ bool GameScene::Start()
 	main_cur = App->ui->CreateCursor(sections, 0.08);
 	
 
+
 	return true;
 }
 
