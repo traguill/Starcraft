@@ -45,6 +45,8 @@ bool j1EntityManager::Start()
 	jimmy = CreateUnit(MARINE, 200, 300);
 	leroy_jenkins = CreateUnit(MARINE, 220, 300);
 
+	gui_cursor = App->tex->Load("gui/gui_atlas.png");
+
 	friendly_units.push_back(jimmy);
 	friendly_units.push_back(leroy_jenkins);
 
