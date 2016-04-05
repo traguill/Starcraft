@@ -8,6 +8,7 @@
 #include "j1FileSystem.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "j1UIManager.h"
 #include "GameScene.h"
 
 
@@ -321,7 +322,7 @@ void j1EntityManager::SelectUnits()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
 		App->input->GetMouseWorld(select_end.x, select_end.y);
-		
+
 		(select_start.x < select_end.x) ? selection_rect.x = select_start.x : selection_rect.x = select_end.x;
 		(select_start.y < select_end.y) ? selection_rect.y = select_start.y : selection_rect.y = select_end.y;
 		iPoint down_right;
@@ -333,6 +334,8 @@ void j1EntityManager::SelectUnits()
 
 		list<Unit*>::iterator it = friendly_units.begin();
 
+
+
 		while (it != friendly_units.end())
 		{
 			if ((*it)->GetPosition().PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
@@ -343,6 +346,7 @@ void j1EntityManager::SelectUnits()
 
 			it++;
 		}
+
 	}
 }
 

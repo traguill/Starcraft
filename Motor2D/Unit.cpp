@@ -65,7 +65,6 @@ void Unit::Draw()
 	r.h = height;
 	if (selected == true)
 	{
-		//App->render->DrawQuad(r, 0, 255, 0, 255, false, true);
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 	}

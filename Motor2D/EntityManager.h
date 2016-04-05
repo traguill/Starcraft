@@ -96,7 +96,7 @@ public:
 	list<Unit*> selected_units;
 	bool debug;
 
-
+	SDL_Texture* gui_cursor;
 
 	Unit* jimmy;
 	Unit* leroy_jenkins;
