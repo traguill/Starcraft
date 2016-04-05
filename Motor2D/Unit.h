@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include <vector>
 
+#define MOVE_RADIUS 8
 
 enum UNIT_TYPE{ 
 	MARINE, 

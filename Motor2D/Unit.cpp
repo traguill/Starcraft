@@ -115,6 +115,7 @@ void Unit::Move(float dt)
 {
 	if (has_destination)
 	{	
+		SetDirection();
 		//Print path
 		if (App->entity->debug)
 		{
@@ -131,33 +132,49 @@ void Unit::Move(float dt)
 		iPoint unit_pos = GetPosition();
 		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
 
-		float_pos.x += direction.x * speed * 0.016; // 0.016 must be dt, now is only for debugging
+		float_pos.x += (direction.x * speed) * dt; // 0.016 must be dt, now is only for debugging
 
-		float_pos.y += direction.y * speed * 0.016;
-
-		float_pos.x = roundf(float_pos.x);
-		float_pos.y = roundf(float_pos.y);
+		float_pos.y += (direction.y * speed) * dt;
 
 		unit_pos.x = float_pos.x;
 		unit_pos.y = float_pos.y;
 
 		SetPosition(unit_pos.x, unit_pos.y);
 
-		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
-
-		iPoint distance(dst_point.x - map_pos.x, dst_point.y - map_pos.y);
+		iPoint dst_world = App->map->MapToWorld(dst_point.x, dst_point.y, COLLIDER_MAP);
 
 		/*if (distance.x == distance.y == 0 && path.back().x > map_pos.x && path.back().y > map_pos.y)
 			SetDirection();*/
 
-		if (distance.Sign(distance.x) != direction.Sign(direction.x) || distance.Sign(distance.y) != direction.Sign(direction.y))
+		if (unit_pos.DistanceNoSqrt(dst_world) <= MOVE_RADIUS)
 		{
-			SetDirection();
+			if (path.size() != 0)
+			{
+				dst_point = path.front();
+				path.erase(path.begin());
+				SetDirection();
+			}
+			else
+			{
+				has_destination = false;
+				state = UNIT_IDLE;
+			}
+			
 		}
 	}
 	else
 	{
-		SetDirection();
+		if (path.size() != 0)
+		{
+			dst_point = path.front();
+			path.erase(path.begin());
+			SetDirection();
+		}
+		else
+		{
+			has_destination = false;
+			state = UNIT_IDLE;
+		}
 	}
 }
 
@@ -178,33 +195,31 @@ void Unit::SetPath(vector<iPoint> _path)
 
 void Unit::SetDirection()
 {
-	if (path.size() != 0)
-	{
-		dst_point = path.front();
-		path.erase(path.begin());
-
 		iPoint unit_pos = GetPosition();
 
 		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, COLLIDER_MAP);
 
 		if (map_pos == dst_point) //Avoid starting tile (direction would be (0,0) )
 		{
-			SetDirection(); 
+			if (path.size() > 0)
+			{
+				dst_point = path.front();
+				path.erase(path.begin());
+				SetDirection();
+			}
 			return;
 		}
 
-		direction.x = dst_point.x - map_pos.x;
-		direction.y = dst_point.y - map_pos.y;
+		iPoint dst_world = App->map->MapToWorld(dst_point.x, dst_point.y, COLLIDER_MAP);
+
+		direction.x = dst_world.x - unit_pos.x;
+		direction.y = dst_world.y - unit_pos.y;
 
 		direction.Normalize();
 
 		has_destination = true;
-	}
-	else
-	{
-		has_destination = false;
-		state = UNIT_IDLE;
-	}
+	
+	
 }
 
 iPoint Unit::GetDirection()const
