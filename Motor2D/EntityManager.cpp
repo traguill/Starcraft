@@ -367,6 +367,11 @@ void j1EntityManager::SetMovement()
 
 			vector<iPoint> path = *App->pathfinding->GetLastPath();
 
+			//DEBUG---------------------------------------
+			//if (destination.x - center_map.x > 0 && destination.y - center_map.y > 0)
+				//LOG("SOUTH EAST");
+			//DEBUG---------------------------------------
+
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
@@ -385,6 +390,7 @@ void j1EntityManager::SetMovement()
 				}
 
 				(*unit_p)->SetPath(unit_path);
+				(*unit_p)->CenterUnit();
 				++unit_p;
 			}
 

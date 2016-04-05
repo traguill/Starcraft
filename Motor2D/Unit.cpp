@@ -110,7 +110,8 @@ void Unit::Move(float dt)
 	if (has_destination)
 	{	
 		//Print path
-		
+		if (App->entity->debug)
+		{
 			vector<iPoint>::iterator p_it = path.begin();
 			while (p_it != path.end())
 			{
@@ -118,11 +119,12 @@ void Unit::Move(float dt)
 				App->render->DrawQuad({ vec_pos.x, vec_pos.y, 8, 8 }, 0, 0, 255, 100, true, true);
 				p_it++;
 			}
+		}
 
 		iPoint unit_pos = GetPosition();
 		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
 
-		float_pos.x += direction.x * speed * 0.016;
+		float_pos.x += direction.x * speed * 0.016; // 0.016 must be dt, now is only for debugging
 		float_pos.y += direction.y * speed * 0.016;
 
 		float_pos.x = roundf(float_pos.x);
@@ -137,6 +139,9 @@ void Unit::Move(float dt)
 
 		iPoint distance(dst_point.x - map_pos.x, dst_point.y - map_pos.y);
 
+		if (distance.x == distance.y == 0 && path.back().x > map_pos.x && path.back().y > map_pos.y)
+			SetDirection();
+
 		if (distance.Sign(distance.x) != direction.Sign(direction.x) || distance.Sign(distance.y) != direction.Sign(direction.y))
 		{
 			SetDirection();
@@ -148,9 +153,16 @@ void Unit::Move(float dt)
 	}
 }
 
-void Unit::SetPath(vector<iPoint> _path)
+void Unit::CenterUnit()
 {
-	path = _path;
+	iPoint new_position = GetPosition();
+	iPoint map_position = App->map->WorldToMap(new_position.x, new_position.y, 2);
+	new_position = App->map->MapToWorld(map_position.x, map_position.y, 2);
+	SetPosition(new_position.x, new_position.y);
+}
+
+void Unit::SetPath(vector<iPoint> _path)
+{	path = _path;
 	state = UNIT_MOVE;
 }
 
@@ -162,7 +174,6 @@ void Unit::SetDirection()
 		path.erase(path.begin());
 
 		iPoint unit_pos = GetPosition();
-
 		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 
 		if (map_pos == dst_point) //Avoid starting tile (direction would be (0,0) )

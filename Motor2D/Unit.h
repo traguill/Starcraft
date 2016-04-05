@@ -52,6 +52,7 @@ private:
 	void Move(float dt);
 	void Attack(float dt);
 	void SetDirection();
+	void CenterUnit();
 
 	Unit* ApplyDamage(uint dmg); //Applies damage to himself and returns NULL if killed, if not returns himself
 
