@@ -9,6 +9,7 @@ class UIImage;
 class UIEntity;
 class UIButton;
 class UIInputBox;
+class UICursor;
 
 // ---------------------------------------------------
 class j1UIManager : public j1Module
@@ -48,6 +49,8 @@ public:
 	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, j1Module* listener = NULL);
 
 	UIButton* CreateButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover, j1Module* listener = NULL);
+
+	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
 
 	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
 	//Functions ---------------------------------------------------------------------------------------------------

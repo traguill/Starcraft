@@ -4,6 +4,10 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Map.h"
+#include "EntityManager.h"
+#include "j1Input.h"
+#include "j1Window.h"
+#include "math.h"
 
 
 Unit::Unit() : Entity()
@@ -13,12 +17,13 @@ Unit::Unit() : Entity()
 
 Unit::Unit(Unit* u) : Entity()
 {
-	texture = u->texture;
+	sprite.texture = u->sprite.texture;
 	speed = u->speed;
 	damage = u->damage;
 	vision = u->vision;
 	range = u->range;
 	cool = u->cool;
+	life = u->life;
 	type = u->type;
 	width = u->width;
 	height = u->height;
@@ -32,8 +37,22 @@ Unit::Unit(Unit* u) : Entity()
 
 void Unit::Update(float dt)
 {
-	if (state == UNIT_MOVE)
+	switch (state)
+	{
+	case UNIT_IDLE:
+		//Is this really necessary?
+		break;
+	case UNIT_MOVE:
 		Move(dt);
+		break;
+	case UNIT_ATTACK:
+		Attack(dt);
+		break;
+	case UNIT_DIE:
+		//Timer of the animation and delete the unit
+		App->entity->RemoveUnit(this);
+		break;
+	}
 }
 
 void Unit::Draw()
@@ -47,8 +66,43 @@ void Unit::Draw()
 	if (selected == true)
 		App->render->DrawQuad(r, 0, 255, 0, 255, false, true);
 
-	App->render->Blit(texture, draw_pos.x, draw_pos.y, NULL);
+	App->render->Blit(&sprite);
 
+}
+
+void Unit::Attack(float dt)
+{
+	if (target == NULL)
+	{
+		LOG("I've killed one enemy");
+		state = UNIT_IDLE;
+		return;
+	}
+
+	if (cool_timer >= cool)
+	{
+		target = target->ApplyDamage(damage);
+		cool_timer = 0;
+	}
+	else
+	{
+		cool_timer += dt;
+	}
+}
+
+Unit* Unit::ApplyDamage(uint dmg)
+{
+	life -= dmg;
+	LOG("Life: %i", life);
+
+	if (life < 0)
+	{
+		LOG("I'm dead!");
+		state = UNIT_DIE;
+		return NULL;
+	}
+	else
+		return this;
 }
 
 void Unit::Move(float dt)
@@ -64,11 +118,18 @@ void Unit::Move(float dt)
 				App->render->DrawQuad({ vec_pos.x, vec_pos.y, 8, 8 }, 0, 0, 255, 100, true, true);
 				p_it++;
 			}
-		
-		
+
 		iPoint unit_pos = GetPosition();
-		unit_pos.x +=  (direction.x * speed) * dt;
-		unit_pos.y +=  (direction.y * speed) * dt;
+		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
+
+		float_pos.x += direction.x * speed * 0.016;
+		float_pos.y += direction.y * speed * 0.016;
+
+		float_pos.x = roundf(float_pos.x);
+		float_pos.y = roundf(float_pos.y);
+
+		unit_pos.x = float_pos.x;
+		unit_pos.y = float_pos.y;
 
 		SetPosition(unit_pos.x, unit_pos.y);
 
@@ -89,6 +150,7 @@ void Unit::Move(float dt)
 
 void Unit::SetPath(vector<iPoint> _path)
 {
+	has_destination = false;
 	path = _path;
 	state = UNIT_MOVE;
 }
@@ -102,7 +164,7 @@ void Unit::SetDirection()
 
 		iPoint unit_pos = GetPosition();
 
-		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
+		iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, COLLIDER_MAP);
 
 		if (map_pos == dst_point) //Avoid starting tile (direction would be (0,0) )
 		{
@@ -110,8 +172,10 @@ void Unit::SetDirection()
 			return;
 		}
 
-		direction.x = dst_point.x - map_pos.x;
-		direction.y = dst_point.y - map_pos.y;
+		iPoint world_dst = App->map->MapToWorld(dst_point.x, dst_point.y, COLLIDER_MAP);
+
+		direction.x = world_dst.x - unit_pos.x;
+		direction.y = world_dst.y - unit_pos.y;
 
 		direction.Normalize();
 
@@ -129,4 +193,11 @@ iPoint Unit::GetDirection()const
 	iPoint ret(round(direction.x), round(direction.y));
 
 	return ret;
+
+}
+
+UNIT_TYPE Unit::GetType()const
+{
+	return type;
+
 }

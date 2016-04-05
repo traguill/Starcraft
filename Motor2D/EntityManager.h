@@ -41,6 +41,8 @@ public:
 public:
 
 	Unit* CreateUnit(UNIT_TYPE type, int x, int y);
+
+	void RemoveUnit(Unit* _unit);
 	
 private:
 
@@ -61,6 +63,9 @@ private:
 	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
 	void SeparateUnits(Unit* unit_a, Unit* unit_b);
 
+	//Removing
+	void DestroyUnit(Unit* _unit);
+
 	//DEBUG
 	void PrintUnitDatabase()const;
 
@@ -79,14 +84,21 @@ private:
 	SDL_Rect move_rec;
 	iPoint center;
 
+	//Remove
+	list<Unit*> units_to_remove;
+
 	bool debug;
 
 public:
 	//Need another list for buildings
-
 	list<Unit*> friendly_units;
 	list<Unit*> enemy_units;
 	list<Unit*> selected_units;
+
+
+
+	Unit* jimmy;
+	Unit* leroy_jenkins;
 
 };
 

@@ -41,6 +41,13 @@ bool j1EntityManager::Start()
 
 	move_rec.x = move_rec.y = move_rec.w = move_rec.h = 0;
 
+	//Debug
+	jimmy = CreateUnit(MARINE, 200, 300);
+	leroy_jenkins = CreateUnit(MARINE, 220, 300);
+
+	friendly_units.push_back(jimmy);
+	friendly_units.push_back(leroy_jenkins);
+
 	return ret;
 }
 
@@ -73,6 +80,13 @@ bool j1EntityManager::Update(float dt)
 	{
 		//App->render->DrawQuad(move_rec, 255, 255, 0, 255, false, true); Doesn't follow the units when move
 	}
+
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	{
+		leroy_jenkins->state = UNIT_ATTACK;
+		leroy_jenkins->target = jimmy;
+	}
 		
 	//------------------------------------------------------------------------------
 
@@ -104,12 +118,24 @@ bool j1EntityManager::Update(float dt)
 		i++;
 	}
 
+	//Sort 2 lists of elements
+
 	return true;
 }
 
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
+	list<Unit*>::iterator i = units_to_remove.begin();
+
+	while (i != units_to_remove.end())
+	{
+		list<Unit*>::iterator unit_to_remove = i;
+		++i;
+		DestroyUnit((*unit_to_remove));
+	}
+
+	units_to_remove.clear();
 
 	return true;
 }
@@ -143,6 +169,40 @@ bool j1EntityManager::CleanUp()
 	return true;
 }
 
+void j1EntityManager::RemoveUnit(Unit* _unit)
+{
+	if (_unit != NULL)
+		units_to_remove.push_back(_unit);
+}
+
+void j1EntityManager::DestroyUnit(Unit* _unit)
+{
+	list<Unit*>::iterator f_unit = friendly_units.begin();
+
+	while (f_unit != friendly_units.end())
+	{
+		if (*f_unit == _unit)
+		{
+			friendly_units.erase(f_unit);
+			return;
+		}
+		++f_unit;
+	}
+
+	list<Unit*>::iterator e_unit = enemy_units.begin();
+
+	while (e_unit != enemy_units.end())
+	{
+		if (*e_unit == _unit)
+		{
+			enemy_units.erase(e_unit);
+			return;
+		}
+		++e_unit;
+	}
+
+}
+
 bool j1EntityManager::LoadUnitsInfo()
 {
 	bool ret = true;
@@ -167,7 +227,7 @@ bool j1EntityManager::LoadUnitsInfo()
 	for (unit = units.child("unit"); unit && ret; unit = unit.next_sibling("unit"))
 	{
 		Unit* unit_db = new Unit();
-		unit_db->texture = App->tex->Load(unit.child("texture_path").attribute("value").as_string());
+		unit_db->sprite.texture = App->tex->Load(unit.child("texture_path").attribute("value").as_string());
 		unit_db->life = unit.child("life").attribute("value").as_int();
 		unit_db->speed = unit.child("speed").attribute("value").as_int();
 		unit_db->damage = unit.child("damage").attribute("value").as_int();
@@ -295,15 +355,32 @@ void j1EntityManager::SetMovement()
 			int mouse_x, mouse_y;
 			App->input->GetMouseWorld(mouse_x, mouse_y);
 			iPoint destination(App->map->WorldToMap(mouse_x, mouse_y, 2));
+			LOG("X: %i", destination.x);
+			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			if (App->pathfinding->CreatePath(center_map, destination) == -1)
+			vector<iPoint> path;
+			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
-				LOG("Impossible to create path");
-				return;
+				//Create pathfinding;
+				path.clear();
+
+				if (App->pathfinding->CreatePath(center_map, destination) == -1)
+				{
+					LOG("Impossible to create path");
+					return;
+				}
+
+				path = *App->pathfinding->GetLastPath();
+			}
+			else
+			{
+				//Only one path
+				path.push_back(center_map);
+				path.push_back(destination);
 			}
 
-			vector<iPoint> path = *App->pathfinding->GetLastPath();
+			
 
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())

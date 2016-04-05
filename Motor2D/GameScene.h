@@ -2,6 +2,7 @@
 #define __GAME_SCENE_H__
 
 #include "j1Module.h"
+#include "UICursor.h"
 
 struct SDL_Texture;
 
@@ -42,6 +43,10 @@ private:
 	bool game_paused;
 
 	bool debug;
+
+private:
+
+	UICursor* main_cur;
 
 };
 

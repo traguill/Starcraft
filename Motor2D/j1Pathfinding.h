@@ -39,12 +39,15 @@ public:
 	bool IsWalkable(const iPoint& pos) const;
 	uchar GetTileAt(const iPoint& pos) const;
 
+	bool CreateLine(const iPoint& origin, const iPoint& destination);
+
 private:
 
 	uint width;
 	uint height;
 	uchar* map;
 	vector<iPoint> last_path;
+
 };
 
 struct PathList;

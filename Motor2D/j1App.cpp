@@ -57,10 +57,14 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
 	AddModule(game_scene);
 
-	AddModule(ui);
 	AddModule(entity);
+	
+	
 	// render last to swap buffer
 	AddModule(render);
+
+	//Should be before render
+	AddModule(ui);
 
 	PERF_PEEK(ptimer);
 }

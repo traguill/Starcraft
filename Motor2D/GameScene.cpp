@@ -51,11 +51,19 @@ bool GameScene::Start()
 	game_paused = false;
 
 	//UI TESTS
-	App->ui->CreateImage({ 0, 94, 599, 155 }, 21, 325);
+	App->ui->CreateImage({ 1, 194, 599, 155 }, 21, 325);
 	//
-	//Not able to use anything with labels, missing font;
+	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
+	vector<SDL_Rect> sections;
+	sections.push_back({ 1, 62, 20, 21 });
+	sections.push_back({ 22, 62, 20, 21 });
+	sections.push_back({ 43, 62, 20, 21 });
+	sections.push_back({ 64, 62, 20, 21 });
+	sections.push_back({ 85, 62, 20, 21 });
+	main_cur = App->ui->CreateCursor(sections, 0.08);
+	
 
 
 	return true;

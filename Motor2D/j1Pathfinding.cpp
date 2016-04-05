@@ -284,3 +284,65 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	return ret;
 }
+
+
+bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
+{
+	bool ret = true;
+
+	iPoint p1 = origin;
+	iPoint p2 = destination;
+
+	bool steep = (abs(p2.y - p1.y) > abs(p2.x - p1.x));
+
+	if (steep)
+	{
+		swap(p1.x, p1.y);
+		swap(p2.x, p2.y);
+	}
+
+	if (p1.x > p2.x)
+	{
+		swap(p1.x, p2.x);
+		swap(p1.y, p2.y);
+	}
+
+	int dx = p2.x - p1.x;
+	int dy = abs(p2.y - p1.y);
+
+	int error = dx / 2;
+	int ystep = (p1.y < p2.y) ? 1 : -1;
+	int y = p1.y;
+
+	const int max_x = p2.x;
+
+	for (int x = p1.x; x < max_x; x++)
+	{
+		if (steep)
+		{
+			if (IsWalkable(iPoint(y, x)) == false)
+				return false;
+			
+		}
+		else
+		{
+			if (IsWalkable(iPoint(x, y)) == false)
+				return false;
+			
+		}
+
+		error -= dy;
+		if (error < 0)
+		{
+			y += ystep;
+			error += dx;
+		}
+	}
+
+
+
+
+	return true;
+}
+
+
