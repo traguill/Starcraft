@@ -132,9 +132,11 @@ void Unit::Move(float dt)
 		iPoint unit_pos = GetPosition();
 		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
 
-		float_pos.x += (direction.x * speed) * dt; // 0.016 must be dt, now is only for debugging
-
+		float_pos.x += (direction.x * speed) * dt;
 		float_pos.y += (direction.y * speed) * dt;
+
+		float_pos.x = roundf(float_pos.x);
+		float_pos.y = roundf(float_pos.y);
 
 		unit_pos.x = float_pos.x;
 		unit_pos.y = float_pos.y;
@@ -142,9 +144,6 @@ void Unit::Move(float dt)
 		SetPosition(unit_pos.x, unit_pos.y);
 
 		iPoint dst_world = App->map->MapToWorld(dst_point.x, dst_point.y, COLLIDER_MAP);
-
-		/*if (distance.x == distance.y == 0 && path.back().x > map_pos.x && path.back().y > map_pos.y)
-			SetDirection();*/
 
 		if (unit_pos.DistanceNoSqrt(dst_world) <= MOVE_RADIUS)
 		{
