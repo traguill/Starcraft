@@ -87,15 +87,15 @@ private:
 	//Remove
 	list<Unit*> units_to_remove;
 
-	bool debug;
 
 public:
 	//Need another list for buildings
 	list<Unit*> friendly_units;
 	list<Unit*> enemy_units;
 	list<Unit*> selected_units;
+	bool debug;
 
-
+	SDL_Texture* gui_cursor;
 
 	Unit* jimmy;
 	Unit* leroy_jenkins;

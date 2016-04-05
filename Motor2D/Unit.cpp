@@ -64,7 +64,11 @@ void Unit::Draw()
 	r.w = width;
 	r.h = height;
 	if (selected == true)
-		App->render->DrawQuad(r, 0, 255, 0, 255, false, true);
+	{
+		SDL_Rect selected1{ 46, 48, 41, 43 };
+		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
+	}
+		
 
 	App->render->Blit(&sprite);
 
@@ -90,6 +94,8 @@ void Unit::Attack(float dt)
 	}
 }
 
+
+
 Unit* Unit::ApplyDamage(uint dmg)
 {
 	life -= dmg;
@@ -110,7 +116,8 @@ void Unit::Move(float dt)
 	if (has_destination)
 	{	
 		//Print path
-		
+		if (App->entity->debug)
+		{
 			vector<iPoint>::iterator p_it = path.begin();
 			while (p_it != path.end())
 			{
@@ -119,10 +126,13 @@ void Unit::Move(float dt)
 				p_it++;
 			}
 
+		}
+
 		iPoint unit_pos = GetPosition();
 		fPoint float_pos; float_pos.x = unit_pos.x, float_pos.y = unit_pos.y;
 
-		float_pos.x += direction.x * speed * 0.016;
+		float_pos.x += direction.x * speed * 0.016; // 0.016 must be dt, now is only for debugging
+
 		float_pos.y += direction.y * speed * 0.016;
 
 		float_pos.x = roundf(float_pos.x);
@@ -137,6 +147,9 @@ void Unit::Move(float dt)
 
 		iPoint distance(dst_point.x - map_pos.x, dst_point.y - map_pos.y);
 
+		/*if (distance.x == distance.y == 0 && path.back().x > map_pos.x && path.back().y > map_pos.y)
+			SetDirection();*/
+
 		if (distance.Sign(distance.x) != direction.Sign(direction.x) || distance.Sign(distance.y) != direction.Sign(direction.y))
 		{
 			SetDirection();
@@ -148,8 +161,16 @@ void Unit::Move(float dt)
 	}
 }
 
-void Unit::SetPath(vector<iPoint> _path)
+void Unit::CenterUnit()
 {
+	iPoint new_position = GetPosition();
+	iPoint map_position = App->map->WorldToMap(new_position.x, new_position.y, COLLIDER_MAP);
+	new_position = App->map->MapToWorld(map_position.x, map_position.y, COLLIDER_MAP);
+	SetPosition(new_position.x, new_position.y);
+}
+
+void Unit::SetPath(vector<iPoint> _path)
+{	
 	has_destination = false;
 	path = _path;
 	state = UNIT_MOVE;
@@ -172,10 +193,8 @@ void Unit::SetDirection()
 			return;
 		}
 
-		iPoint world_dst = App->map->MapToWorld(dst_point.x, dst_point.y, COLLIDER_MAP);
-
-		direction.x = world_dst.x - unit_pos.x;
-		direction.y = world_dst.y - unit_pos.y;
+		direction.x = dst_point.x - map_pos.x;
+		direction.y = dst_point.y - map_pos.y;
 
 		direction.Normalize();
 

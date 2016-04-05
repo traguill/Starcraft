@@ -63,15 +63,18 @@ private:
 
 private:
 
+	bool pressed_last_frame = false;
 	SDL_Texture* atlas;
 	string atlas_file_name;
 
 	list<UIEntity*>		gui_elements;
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
+	
 
 public:
 	bool debug;
+	SDL_Rect selection_rect;
 };
 
 #endif

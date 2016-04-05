@@ -8,6 +8,7 @@
 #include "j1FileSystem.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "j1UIManager.h"
 #include "GameScene.h"
 
 
@@ -44,6 +45,10 @@ bool j1EntityManager::Start()
 	//Debug
 	jimmy = CreateUnit(MARINE, 200, 300);
 	leroy_jenkins = CreateUnit(MARINE, 220, 300);
+
+
+	gui_cursor = App->tex->Load("gui/gui_atlas.png");
+
 
 	friendly_units.push_back(jimmy);
 	friendly_units.push_back(leroy_jenkins);
@@ -319,7 +324,7 @@ void j1EntityManager::SelectUnits()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
 		App->input->GetMouseWorld(select_end.x, select_end.y);
-		
+
 		(select_start.x < select_end.x) ? selection_rect.x = select_start.x : selection_rect.x = select_end.x;
 		(select_start.y < select_end.y) ? selection_rect.y = select_start.y : selection_rect.y = select_end.y;
 		iPoint down_right;
@@ -331,6 +336,8 @@ void j1EntityManager::SelectUnits()
 
 		list<Unit*>::iterator it = friendly_units.begin();
 
+
+
 		while (it != friendly_units.end())
 		{
 			if ((*it)->GetPosition().PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
@@ -341,6 +348,7 @@ void j1EntityManager::SelectUnits()
 
 			it++;
 		}
+
 	}
 }
 
@@ -382,6 +390,11 @@ void j1EntityManager::SetMovement()
 
 			
 
+			//DEBUG---------------------------------------
+			//if (destination.x - center_map.x > 0 && destination.y - center_map.y > 0)
+				//LOG("SOUTH EAST");
+			//DEBUG---------------------------------------
+
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
@@ -400,6 +413,7 @@ void j1EntityManager::SetMovement()
 				}
 
 				(*unit_p)->SetPath(unit_path);
+				(*unit_p)->CenterUnit();
 				++unit_p;
 			}
 
