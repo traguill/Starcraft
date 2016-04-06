@@ -1,11 +1,12 @@
 #ifndef __UNIT_H__
 #define __UNIT_H__
 
-
+#include "TacticalAI.h"
 #include "p2Defs.h"
 #include "p2Point.h"
 #include "Entity.h"
 #include <vector>
+#include <queue>
 
 #define MOVE_RADIUS 8
 
@@ -47,7 +48,7 @@ public:
 
 	UNIT_TYPE GetType()const;
 
-
+	uint GetRange()const;
 private:
 
 	void Move(float dt);
@@ -69,7 +70,9 @@ private:
 	bool costume;
 	bool selected = false;
 	UNIT_TYPE type;
+public:
 	UNIT_STATE state;
+	queue<UNIT_EVENT> events;
 
 
 	//Pathfinding

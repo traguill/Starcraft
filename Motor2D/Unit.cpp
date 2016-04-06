@@ -78,8 +78,7 @@ void Unit::Attack(float dt)
 {
 	if (target == NULL)
 	{
-		LOG("I've killed one enemy");
-		state = UNIT_IDLE;
+		App->tactical_ai->SetEvent(ENEMY_KILLED, this);
 		return;
 	}
 
@@ -98,6 +97,12 @@ void Unit::Attack(float dt)
 
 Unit* Unit::ApplyDamage(uint dmg)
 {
+	
+	if (state != UNIT_ATTACK)
+	{
+		App->tactical_ai->SetEvent(ATTACKED, this); // Lacking target
+	}
+
 	life -= dmg;
 	LOG("Life: %i", life);
 
@@ -156,7 +161,7 @@ void Unit::Move(float dt)
 			else
 			{
 				has_destination = false;
-				state = UNIT_IDLE;
+				App->tactical_ai->SetEvent(END_MOVING, this);
 			}
 			
 		}
@@ -233,4 +238,9 @@ UNIT_TYPE Unit::GetType()const
 {
 	return type;
 
+}
+
+uint Unit::GetRange()const
+{
+	return range;
 }

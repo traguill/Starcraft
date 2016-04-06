@@ -22,7 +22,7 @@ class j1PathFinding;
 class j1Fonts;
 class j1UIManager;
 class j1EntityManager;
-
+class TacticalAI;
 class GameScene;
 
 class j1App
@@ -101,6 +101,7 @@ public:
 	j1UIManager*		ui = NULL;
 	j1EntityManager*	entity = NULL;
 	GameScene*			game_scene = NULL;
+	TacticalAI*			tactical_ai = NULL;
 
 private:
 

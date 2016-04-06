@@ -18,7 +18,7 @@
 #include "EntityManager.h"
 #include "j1App.h"
 #include "GameScene.h"
-
+#include "TacticalAI.h"
 
 
 // Constructor
@@ -39,6 +39,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	ui = new j1UIManager();
 	game_scene = new GameScene();
 	entity = new j1EntityManager();
+	tactical_ai = new TacticalAI();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -51,7 +52,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(font);
 	
-	
 
 	// scene last
 	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
@@ -59,7 +59,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	AddModule(entity);
 	
-	
+	AddModule(tactical_ai);
+
 	// render last to swap buffer
 	AddModule(render);
 

@@ -85,6 +85,9 @@
     <ClCompile Include="UICursor.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="TacticalAI.cpp">
+      <Filter>Desenvolupament  ========\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h">
@@ -189,6 +192,9 @@
     <ClInclude Include="UICursor.h">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
+    <ClInclude Include="TacticalAI.h">
+      <Filter>Desenvolupament  ========\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programacio 2 ===========">
@@ -217,6 +223,9 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entity">
       <UniqueIdentifier>{d5221135-75cf-4449-9b0c-228fe1462ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\AI">
+      <UniqueIdentifier>{f62809b0-cf61-4099-bb54-9f3a09d7a6ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
