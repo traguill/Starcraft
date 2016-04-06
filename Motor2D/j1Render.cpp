@@ -7,6 +7,8 @@
 #include "AdvancedMath.h"
 #include "j1Map.h"
 #include "j1Textures.h"
+#include "j1UIManager.h"
+#include "UICursor.h"
 
 #define VSYNC true
 
@@ -312,26 +314,33 @@ void j1Render::CursorMovement(float dt)
 	int mouse_x, mouse_y;
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
+	// doesnt enter none if
+	App->ui->cursor_state = standart;
+
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
 	{
 		camera.x += dt * camera_speed;
+		App->ui->cursor_state = to_left;
 	}
 	//Move camera RIGHT
 	if (mouse_x > camera.w - offset_x)
 	{
 		camera.x -= dt * camera_speed;
+		App->ui->cursor_state = to_right;
 	}
 	//Move camera UP
 	if (mouse_y < offset_y)
 	{
 		camera.y += dt * camera_speed;
+		App->ui->cursor_state = up;
 	}
 	//Move camera DOWN
 	if (mouse_y > camera.h - offset_y)
 	{
 		camera.y -= dt * camera_speed;
-	}
+		App->ui->cursor_state = down;
+	}	
 
 	//Limits
 	if (camera.x > 0)			camera.x = 0;

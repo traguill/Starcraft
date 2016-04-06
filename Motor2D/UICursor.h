@@ -28,6 +28,10 @@ private:
 
 public:
 	Animation anim;
+	Animation down_cursor;
+	Animation up_cursor;
+	Animation right_cursor;
+	Animation left_cursor; // no hi ha al atlas
 };
 
 #endif
