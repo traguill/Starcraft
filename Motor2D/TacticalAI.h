@@ -6,6 +6,8 @@
 #include <map>
 #include <queue>
 
+#define DETECTION_RANGE 100
+
 enum UNIT_EVENT{
 END_MOVING,
 ATTACKED,
@@ -28,13 +30,20 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+	bool Update(float dt);
+
 	// Called before quitting
 	bool CleanUp();
 
 	void SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target = NULL);
 	
 private:
-	map<Unit*, queue<UNIT_EVENT>> unit_queue;
+
+	//Calculates the path to the target
+	bool CalculatePath(Unit* unit, Unit* target);
+
+	//Search near enemies and target them (enemy->friendly friendly->enemy)
+	bool SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list);
 };
 
 

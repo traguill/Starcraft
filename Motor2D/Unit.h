@@ -38,6 +38,8 @@ public:
 	Unit();
 	Unit(Unit* u);
 
+	~Unit();
+
 
 	void Update(float dt);
 	void Draw();
@@ -56,7 +58,7 @@ private:
 	void SetDirection();
 	void CenterUnit();
 
-	Unit* ApplyDamage(uint dmg); //Applies damage to himself and returns NULL if killed, if not returns himself
+	Unit* ApplyDamage(uint dmg,Unit* source); //Applies damage to himself and returns NULL if killed, if not returns himself
 
 private:
 
@@ -65,7 +67,6 @@ private:
 	uint vision;
 	uint range;
 	uint cool;
-	Unit* target;
 	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
@@ -73,7 +74,9 @@ private:
 public:
 	UNIT_STATE state;
 	queue<UNIT_EVENT> events;
+	Unit* target;
 
+	bool is_enemy;
 
 	//Pathfinding
 	fPoint direction;

@@ -5,7 +5,8 @@
 #include "j1FileSystem.h"
 #include "TacticalAI.h"
 #include "EntityManager.h"
-
+#include "j1Pathfinding.h"
+#include "j1Map.h"
 
 TacticalAI::TacticalAI() : j1Module()
 {
@@ -29,6 +30,48 @@ bool TacticalAI::CleanUp()
 	return true;
 }
 
+bool TacticalAI::Update(float dt)
+{
+
+
+	//Check every x seconds if one unit is close to another
+	list<Unit*>::iterator unit_a = App->entity->friendly_units.begin();
+	int count_a = 1;
+
+	while (unit_a != App->entity->friendly_units.end())
+	{
+		list<Unit*>::iterator unit_b = App->entity->enemy_units.begin();
+		int count_b = 1;
+		while (unit_b != App->entity->enemy_units.end())
+		{
+			if (count_a >= count_b)	//Avoids duplicate searches
+			{
+				++count_b;
+				++unit_b;
+				continue;
+			}
+
+			if ((*unit_a)->state != UNIT_DIE && (*unit_b)->state != UNIT_DIE)
+			{
+				if ((*unit_a)->GetPosition().DistanceTo((*unit_b)->GetPosition()) <= DETECTION_RANGE)
+				{
+					if ((*unit_a)->target == NULL)
+						SetEvent(ENEMY_TARGET, *unit_a, *unit_b);
+					if ((*unit_b)->target == NULL)
+						SetEvent(ENEMY_TARGET, *unit_b, *unit_a);
+				}
+			}
+			
+			++count_b;
+			++unit_b;
+		}
+		++count_a;
+		++unit_a;
+	}
+
+	return true;
+}
+
 
 void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 
@@ -38,17 +81,22 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	case ATTACKED:
 		if (target)
 		{
+			LOG("I've been attack");
 			SetEvent(ENEMY_TARGET, unit, target);
 		}
 		break;
 	case ENEMY_TARGET:
 		if (unit->GetPosition().DistanceTo(target->GetPosition()) < unit->GetRange())
 		{
+			LOG("I'm attacking");
+			unit->target = target;
 			unit->state = UNIT_ATTACK;
 		}
 		else
 		{
-			//Unit move to target
+			
+			CalculatePath(unit, target);
+			unit->target = target;
 			unit->events.push(ENEMY_TARGET);
 		}
 		break;
@@ -61,7 +109,7 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		{
 			UNIT_EVENT event = unit->events.front();
 			unit->events.pop();
-			SetEvent(event, unit, target);
+			SetEvent(event, unit, unit->target);
 		}
 
 		break;
@@ -70,23 +118,81 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		unit->state = UNIT_MOVE;
 		break;
 	case ENEMY_KILLED:
-		list<Unit*>::iterator i = App->entity->enemy_units.begin();
+		bool enemy_found;
 
-		while (i != App->entity->enemy_units.end())
+		if (unit->is_enemy == true)
 		{
-			if ((*i)->GetPosition().DistanceTo(unit->GetPosition()) < unit->GetRange())
-			{
-				SetEvent(ENEMY_TARGET, unit, (*i));
-				return;
-			}
-			++i;
+			enemy_found = SearchNearEnemyUnit(unit, App->entity->friendly_units);
 		}
+		else
+		{
+			enemy_found = SearchNearEnemyUnit(unit, App->entity->enemy_units);
+		}
+		
+		if (enemy_found == false)
+		{
+			LOG("I've killed one enemy and no one is near");
+			unit->state = UNIT_IDLE;
 
-		unit->state = UNIT_IDLE;
-
+		}
 		break;
 
 	}
 
 
+}
+
+bool TacticalAI::CalculatePath(Unit* unit, Unit* target)
+{
+	bool ret = true;
+
+	iPoint unit_map = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
+
+	iPoint target_map = App->map->WorldToMap(target->GetPosition().x, target->GetPosition().y, COLLIDER_MAP);
+
+	vector<iPoint> path;
+
+	if (App->pathfinding->CreateLine(unit_map, target_map) == true)
+	{
+		path.push_back(unit_map);
+		path.push_back(target_map);
+
+	}
+	else
+	{
+		//Create pathfinding
+		if (App->pathfinding->CreatePath(unit_map, target_map) == -1)
+		{
+			LOG("Impossible to create path");
+			return false;
+		}
+
+		path = *App->pathfinding->GetLastPath();
+	}
+
+	unit->SetPath(path);
+
+	return true; 
+}
+
+bool TacticalAI::SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list)
+{
+	bool ret = false;
+	list<Unit*>::iterator i = search_list.begin();
+
+	while (i != search_list.end())
+	{
+		if ((*i)->GetPosition().DistanceTo(unit->GetPosition()) < unit->GetRange()) //Change range by vision range and maybe start pathfinding
+		{
+			if ((*i)->state != UNIT_DIE)
+			{
+				LOG("I've killed one enemy and another is near");
+				SetEvent(ENEMY_TARGET, unit, (*i));
+				return true;
+			}	
+		}
+		++i;
+	}
+
+	return ret;
 }

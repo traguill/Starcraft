@@ -42,16 +42,7 @@ bool j1EntityManager::Start()
 
 	move_rec.x = move_rec.y = move_rec.w = move_rec.h = 0;
 
-	//Debug
-	jimmy = CreateUnit(MARINE, 200, 300);
-	leroy_jenkins = CreateUnit(MARINE, 220, 300);
-
-
 	gui_cursor = App->tex->Load("gui/gui_atlas.png");
-
-
-	friendly_units.push_back(jimmy);
-	friendly_units.push_back(leroy_jenkins);
 
 	return ret;
 }
@@ -59,6 +50,18 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
+
+	list<Unit*>::iterator i = units_to_remove.begin();
+
+	while (i != units_to_remove.end())
+	{
+		list<Unit*>::iterator unit_to_remove = i;
+		++i;
+		DestroyUnit((*unit_to_remove));
+	}
+
+	units_to_remove.clear();
+
 	return true;
 }
 
@@ -69,13 +72,19 @@ bool j1EntityManager::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		friendly_units.push_back(CreateUnit(GHOST, p.x, p.y));
+		CreateUnit(GHOST, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		friendly_units.push_back(CreateUnit(MARINE, p.x, p.y));
+		CreateUnit(MARINE, p.x, p.y, false);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(MARINE, p.x, p.y, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -86,20 +95,16 @@ bool j1EntityManager::Update(float dt)
 		//App->render->DrawQuad(move_rec, 255, 255, 0, 255, false, true); Doesn't follow the units when move
 	}
 
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
-	{
-		leroy_jenkins->state = UNIT_ATTACK;
-		leroy_jenkins->target = jimmy;
-	}
-		
 	//------------------------------------------------------------------------------
 
 	//Basic logic
 	SelectUnits();
 
-	SetMovement();
-	
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+	{
+		CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
+	}
+
 	CheckCollisions();
 
 	//Update lists
@@ -131,16 +136,7 @@ bool j1EntityManager::Update(float dt)
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
-	list<Unit*>::iterator i = units_to_remove.begin();
-
-	while (i != units_to_remove.end())
-	{
-		list<Unit*>::iterator unit_to_remove = i;
-		++i;
-		DestroyUnit((*unit_to_remove));
-	}
-
-	units_to_remove.clear();
+	
 
 	return true;
 }
@@ -182,6 +178,8 @@ void j1EntityManager::RemoveUnit(Unit* _unit)
 
 void j1EntityManager::DestroyUnit(Unit* _unit)
 {
+
+	//Destroy from friendly units
 	list<Unit*>::iterator f_unit = friendly_units.begin();
 
 	while (f_unit != friendly_units.end())
@@ -189,11 +187,26 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		if (*f_unit == _unit)
 		{
 			friendly_units.erase(f_unit);
+
+			list<Unit*>::iterator s_unit = selected_units.begin();
+			while (s_unit != selected_units.end())
+			{
+				if (*s_unit == _unit)
+				{
+					selected_units.erase(s_unit);
+					delete _unit;
+					return;
+				}
+				++s_unit;
+			}
+
+			delete _unit;
 			return;
 		}
 		++f_unit;
 	}
 
+	//Destroy from enemy units
 	list<Unit*>::iterator e_unit = enemy_units.begin();
 
 	while (e_unit != enemy_units.end())
@@ -201,6 +214,7 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		if (*e_unit == _unit)
 		{
 			enemy_units.erase(e_unit);
+			delete _unit;
 			return;
 		}
 		++e_unit;
@@ -336,8 +350,6 @@ void j1EntityManager::SelectUnits()
 
 		list<Unit*>::iterator it = friendly_units.begin();
 
-
-
 		while (it != friendly_units.end())
 		{
 			if ((*it)->GetPosition().PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
@@ -371,8 +383,6 @@ void j1EntityManager::SetMovement()
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;
-				path.clear();
-
 				if (App->pathfinding->CreatePath(center_map, destination) == -1)
 				{
 					LOG("Impossible to create path");
@@ -540,9 +550,36 @@ void j1EntityManager::SeparateUnits(Unit* unit_a, Unit* unit_b)
 	
 }
 
+void j1EntityManager::CheckUnderCursor()
+{
+	int mouse_x, mouse_y;
+	App->input->GetMouseWorld(mouse_x, mouse_y);
+	list<Unit*>::iterator i = enemy_units.begin();
+
+	while (i != enemy_units.end())
+	{
+		if (mouse_x >= (*i)->sprite.position.x && mouse_x <= (*i)->sprite.position.x + (*i)->width && mouse_y >= (*i)->sprite.position.y && mouse_y <= (*i)->sprite.position.y + (*i)->height)
+		{
+			//Selected units attack target
+			list<Unit*>::iterator sel_unit = selected_units.begin();
+			while (sel_unit != selected_units.end())
+			{
+				App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
+				++sel_unit;
+			}
+
+			return;
+		}
+		++i;
+	}
+
+	//Nothing under
+	SetMovement();
+}
+
 //CREATES -----------------------------------------------------------------------------------------------------
 
-Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y)
+Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 {
 	map<string, Unit*>::iterator it = units_database.find(UnitTypeToString(type));
 
@@ -550,6 +587,13 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y)
 	{
 		Unit* unit = new Unit(it->second);
 		unit->SetPosition(x, y);
+
+		unit->is_enemy = is_enemy;
+
+		if (is_enemy)
+			enemy_units.push_back(unit);
+		else
+			friendly_units.push_back(unit);
 
 		return unit;
 	}

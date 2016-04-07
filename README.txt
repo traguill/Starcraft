@@ -4,3 +4,4 @@
 - Spacebar: return cam initial position
 - F1 (pressed): Show/hide colliders
 - P: pause the game
+- N: Create enemy marine

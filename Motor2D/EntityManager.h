@@ -40,7 +40,7 @@ public:
 
 public:
 
-	Unit* CreateUnit(UNIT_TYPE type, int x, int y);
+	Unit* CreateUnit(UNIT_TYPE type, int x, int y,bool is_enemy);
 
 	void RemoveUnit(Unit* _unit);
 	
@@ -53,6 +53,7 @@ private:
 
 	//Selection
 	void SelectUnits();
+	void CheckUnderCursor();
 
 	//Pathfinding
 	void SetMovement();
@@ -96,9 +97,6 @@ public:
 	bool debug;
 
 	SDL_Texture* gui_cursor;
-
-	Unit* jimmy;
-	Unit* leroy_jenkins;
 
 };
 

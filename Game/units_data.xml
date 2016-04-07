@@ -6,9 +6,9 @@
     <height value="32" />
     <life value="100" />
     <speed value="100" />
-    <damage value="30" />
+    <damage value="10" />
     <vision value="10" />
-    <range value="10" />
+    <range value="80" />
     <cool value="1" />
   </unit>
 
@@ -21,7 +21,7 @@
     <damage value="100" />
     <vision value="100" />
     <range value="100" />
-    <cool value="100" />
+    <cool value="1" />
   </unit>
   
 </units>

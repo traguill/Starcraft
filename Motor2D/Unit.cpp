@@ -33,6 +33,11 @@ Unit::Unit(Unit* u) : Entity()
 	collider.h = width;
 }
 
+Unit::~Unit()
+{
+
+}
+
 
 
 void Unit::Update(float dt)
@@ -84,7 +89,7 @@ void Unit::Attack(float dt)
 
 	if (cool_timer >= cool)
 	{
-		target = target->ApplyDamage(damage);
+		target = target->ApplyDamage(damage, this);
 		cool_timer = 0;
 	}
 	else
@@ -95,18 +100,19 @@ void Unit::Attack(float dt)
 
 
 
-Unit* Unit::ApplyDamage(uint dmg)
+Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 {
 	
-	if (state != UNIT_ATTACK)
+	if (state != UNIT_ATTACK && state != UNIT_DIE)
 	{
-		App->tactical_ai->SetEvent(ATTACKED, this); // Lacking target
+		LOG("Someone attacked me!");
+		App->tactical_ai->SetEvent(ATTACKED, this, source); 
 	}
 
 	life -= dmg;
 	LOG("Life: %i", life);
 
-	if (life < 0)
+	if (life <= 0)
 	{
 		LOG("I'm dead!");
 		state = UNIT_DIE;
