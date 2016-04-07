@@ -418,6 +418,7 @@ void j1EntityManager::SetMovement()
 				//Create pathfinding;
 				path.clear();
 
+				//If you have some units selected & central point is not walkable--------------------------------
 				if (selected_units.size() > 1 && App->pathfinding->IsWalkable(center_map) == false)
 				{
 					list<Unit*>::iterator unit_p = selected_units.begin();
@@ -433,6 +434,7 @@ void j1EntityManager::SetMovement()
 					}
 					return;
 				}
+				//-----------------------------------------------------------------------------------------------
 
 				else if (App->pathfinding->CreatePath(center_map, destination) == -1)
 				{
@@ -442,6 +444,7 @@ void j1EntityManager::SetMovement()
 
 				path = *App->pathfinding->GetLastPath();
 			}
+
 			else
 			{
 				//Only one path
@@ -449,13 +452,38 @@ void j1EntityManager::SetMovement()
 				path.push_back(destination);
 			}
 
+			//Assign to each unit its path
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
-				AssignPath(*unit_p, path, &center_map);
+				iPoint unit_pos = (*unit_p)->GetPosition();
+				iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
+				iPoint rect_offset = unit_map_pos - center_map;
+				iPoint end_point = path.back() + rect_offset;
+
+				//Check if there is any collider in the path (copy of the center point of rect path)
+				if (App->pathfinding->CreateLine(unit_map_pos, end_point) == true)
+					AssignPath(*unit_p, path, &center_map);
+
+				else
+				{
+					//Check if the destination + rect_offset is valid
+					if (App->pathfinding->IsWalkable(end_point) == true)
+					{
+						//If it is, create a path to go there
+						if(App->pathfinding->CreatePath(unit_map_pos, end_point) != 1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+					}
+					
+					else
+					{
+						//If it doesn't, go to the mouse point
+						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+					}
+				}
 				++unit_p;
 			}
-
 		}
 	}
 }
