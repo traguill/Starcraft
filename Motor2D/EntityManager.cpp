@@ -89,12 +89,6 @@ bool j1EntityManager::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
-
-	if (debug)
-	{
-		//App->render->DrawQuad(move_rec, 255, 255, 0, 255, false, true); Doesn't follow the units when move
-	}
-
 	//------------------------------------------------------------------------------
 
 	//Basic logic
