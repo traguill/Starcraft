@@ -412,13 +412,29 @@ void j1EntityManager::SetMovement()
 			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			vector<iPoint> path;
+			vector<iPoint> path;//
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;
 				path.clear();
 
-				if (App->pathfinding->CreatePath(center_map, destination) == -1)
+				if (selected_units.size() > 1 && App->pathfinding->IsWalkable(center_map) == false)
+				{
+					list<Unit*>::iterator unit_p = selected_units.begin();
+					while (unit_p != selected_units.end())
+					{
+						iPoint unit_pos = (*unit_p)->GetPosition();
+						iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
+
+						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+
+						++unit_p;
+					}
+					return;
+				}
+
+				else if (App->pathfinding->CreatePath(center_map, destination) == -1)
 				{
 					LOG("Impossible to create path");
 					return;
@@ -433,32 +449,10 @@ void j1EntityManager::SetMovement()
 				path.push_back(destination);
 			}
 
-			
-
-			//DEBUG---------------------------------------
-			//if (destination.x - center_map.x > 0 && destination.y - center_map.y > 0)
-				//LOG("SOUTH EAST");
-			//DEBUG---------------------------------------
-
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
-				iPoint unit_pos = (*unit_p)->GetPosition();
-				iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
-
-				iPoint dst_center(unit_pos_tile.x - center_map.x, unit_pos_tile.y - center_map.y);
-
-				vector<iPoint> unit_path;
-
-				vector<iPoint>::iterator path_it = path.begin();
-				while (path_it != path.end())
-				{
-					unit_path.push_back(iPoint(path_it->x + dst_center.x, path_it->y + dst_center.y));
-					++path_it;
-				}
-
-				(*unit_p)->SetPath(unit_path);
-				(*unit_p)->CenterUnit();
+				AssignPath(*unit_p, path, &center_map);
 				++unit_p;
 			}
 
@@ -466,7 +460,31 @@ void j1EntityManager::SetMovement()
 	}
 }
 
-void j1EntityManager::CalculateMovementRect()
+void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center)
+{
+	iPoint unit_pos = unit->GetPosition();
+	iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
+	iPoint dst_center(0, 0);
+
+	if (center != NULL)
+	{
+		dst_center.x = unit_pos_tile.x - center->x;
+		dst_center.y = unit_pos_tile.y - center->y;
+	}
+
+	vector<iPoint> unit_path;
+	vector<iPoint>::iterator path_it = path.begin();
+	while (path_it != path.end())
+	{
+		unit_path.push_back(iPoint(path_it->x + dst_center.x, path_it->y + dst_center.y));
+		++path_it;
+	}
+
+	unit->SetPath(unit_path);
+	unit->CenterUnit();
+}
+
+void j1EntityManager::CalculateMovementRect()//
 {
 	//Values to create rectangle
 	int min_x, max_x, min_y, max_y;
