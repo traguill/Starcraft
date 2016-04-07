@@ -99,7 +99,7 @@ bool j1Render::Update(float dt)
 
 	while (i != blit_sprites.end())
 	{
-		Blit((*i)->texture, (*i)->position.x, (*i)->position.y);
+		Blit((*i)->texture, (*i)->position.x, (*i)->position.y, &(*i)->rect);
 		++i;
 	}
 

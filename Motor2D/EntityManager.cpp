@@ -243,6 +243,51 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->width = unit.child("width").attribute("value").as_int();
 		unit_db->height = unit.child("height").attribute("value").as_int();
 
+		//Animations
+		unit_db->up.frames.clear();
+		unit_db->down.frames.clear();
+		unit_db->right.frames.clear();
+		unit_db->left.frames.clear();
+		unit_db->up_right.frames.clear();
+		unit_db->down_right.frames.clear();
+		unit_db->up_left.frames.clear();
+		unit_db->down_left.frames.clear();
+
+		for (pugi::xml_node rect = unit.child("up").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("down").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("right").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("left").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("upright").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("downright").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("upleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("downleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+
+		unit_db->anim_speed = unit.child("animspeed").attribute("value").as_float();
+
 		units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 	}
 

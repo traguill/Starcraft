@@ -18,6 +18,8 @@ Unit::Unit() : Entity()
 Unit::Unit(Unit* u) : Entity()
 {
 	sprite.texture = u->sprite.texture;
+	sprite.rect.w = u->width;
+	sprite.rect.h = u->height;
 	speed = u->speed;
 	damage = u->damage;
 	vision = u->vision;
@@ -27,6 +29,27 @@ Unit::Unit(Unit* u) : Entity()
 	type = u->type;
 	width = u->width;
 	height = u->height;
+
+	//Animations
+	up = u->up;
+	up.speed = u->anim_speed;
+	down = u->down;
+	down.speed = u->anim_speed;
+	right = u->right;
+	right.speed = u->anim_speed;
+	left = u->left;
+	left.speed = u->anim_speed;
+	up_right = u->up_right;
+	up_right.speed = u->anim_speed;
+	down_right = u->down_right;
+	down_right.speed = u->anim_speed;
+	up_left = u->up_left;
+	up_left.speed = u->anim_speed;
+	down_left = u->down_left;
+	down_left.speed = u->anim_speed;
+
+	//Has to be updated inside update();
+	current_animation = &down;
 
 	//TODO: declare widht & height colliders
 	collider.w = width;
@@ -68,7 +91,10 @@ void Unit::Draw()
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 	}
-		
+	
+	//Animations
+	sprite.rect.x = current_animation->getCurrentFrame().x;
+	sprite.rect.y = current_animation->getCurrentFrame().y;
 
 	App->render->Blit(&sprite);
 
