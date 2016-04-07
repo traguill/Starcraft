@@ -45,6 +45,19 @@ bool j1UIManager::Start()
 
 	SDL_ShowCursor(SDL_DISABLE);
 
+	move_ui = App->tex->Load("gui/wireframes.png");
+	ui_icons = App->tex->Load("gui/cmdicons.png");
+	rects = App->tex->Load("gui/pcmdbtns.png");
+
+
+	vector<SDL_Rect> sections;
+	sections.push_back({ 1, 62, 20, 21 });
+	sections.push_back({ 22, 62, 20, 21 });
+	sections.push_back({ 43, 62, 20, 21 });
+	sections.push_back({ 64, 62, 20, 21 });
+	sections.push_back({ 85, 62, 20, 21 });
+	cursor = CreateCursor(sections, 0.08);
+
 	return ret;
 }
 
@@ -125,6 +138,10 @@ bool j1UIManager::Update(float dt)
 	}
 	*/
 
+	ShowUiUnits();
+
+	cursor->Update(dt);
+
 	return ret;
 }
 
@@ -189,7 +206,7 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 {
 	UICursor* cursor = new UICursor(sections, anim_speed);
 	cursor->listener = listener;
-	gui_elements.push_back(cursor);
+	//gui_elements.push_back(cursor);
 
 	return cursor;
 }
@@ -296,3 +313,188 @@ void j1UIManager::SetNextFocus()
 	}
 }
 
+void j1UIManager::ShowUiUnits()
+{
+	uint count = App->entity->selected_units.size();
+	list<Unit*>::iterator it = App->entity->selected_units.begin();
+	while (it != App->entity->selected_units.end())
+	{
+
+		iPoint pos;
+		pos.x = App->render->camera.x;
+		pos.y = App->render->camera.y;
+
+		uint x = 0; uint y = 0;
+
+		if (count == 1)
+		{
+			SDL_Rect s{ 252, 440, 27, 29 };
+			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
+
+			SDL_Rect s1{ 288, 440, 29, 29 };
+			App->render->Blit(ui_icons, 540 - pos.x, 365 - pos.y, &s1);
+
+			SDL_Rect s2{ 324, 440, 29, 29 };
+			App->render->Blit(ui_icons, 583 - pos.x, 365 - pos.y, &s2);
+
+			SDL_Rect s3{ 576, 475, 29, 29 };
+			App->render->Blit(ui_icons, 498 - pos.x, 405 - pos.y, &s3);
+
+
+
+
+
+			if ((*it)->GetType() == MARINE)
+			{
+				SDL_Rect s{ 102, 253, 51, 68 };
+				App->render->Blit(move_ui, 180 - pos.x, 405 - pos.y, &s);
+
+				SDL_Rect sma{ 357, 439, 30, 31 };
+				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sma);
+
+				SDL_Rect sma_weapon{ 1, 647, 31, 31 };
+				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sma_weapon);
+
+				SDL_Rect sma_armour{ 108, 578, 32, 32 };
+				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sma_armour);
+
+				CreateLabel("Marine", 330, 400);
+
+			}
+
+
+			if ((*it)->GetType() == GHOST)
+			{
+				SDL_Rect sg{ 362, 255, 51, 68 };
+				App->render->Blit(move_ui, 175 - pos.x, 400 - pos.y, &sg);
+
+				SDL_Rect sg_special{ 430, 440, 30, 32 };
+				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sg_special);
+
+				SDL_Rect sg_armour{ 108, 578, 32, 32 };
+				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sg_armour);
+
+				SDL_Rect sf_weapon{ 37, 647, 32, 32 };
+				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sf_weapon);
+			}
+
+
+			if ((*it)->GetType() == FIREBAT)
+			{
+				SDL_Rect sf_armour{ 108, 578, 32, 32 };
+				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sf_armour);
+
+				SDL_Rect sf_weapon{ 433, 647, 32, 32 };
+				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sf_weapon);
+			}
+
+			if ((*it)->GetType() == MEDIC)
+			{
+				SDL_Rect sm{ 572, 439, 35, 31 };
+				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sm);
+			}
+
+			if ((*it)->GetType() == OBSERVER)
+			{
+
+			}
+
+			if ((*it)->GetType() == ENGINEER)
+			{
+
+			}
+		}
+
+
+		if (count > 1)
+		{
+			SDL_Rect s{ 252, 440, 27, 29 };
+			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
+
+			SDL_Rect s1{ 288, 440, 29, 29 };
+			App->render->Blit(ui_icons, 540 - pos.x, 365 - pos.y, &s1);
+
+			SDL_Rect s2{ 324, 440, 29, 29 };
+			App->render->Blit(ui_icons, 583 - pos.x, 365 - pos.y, &s2);
+
+			SDL_Rect s3{ 576, 475, 29, 29 };
+			App->render->Blit(ui_icons, 498 - pos.x, 405 - pos.y, &s3);
+
+
+			list<Unit*>::iterator it2 = App->entity->selected_units.begin();
+			while (it2 != App->entity->selected_units.end())
+			{
+
+
+
+				if ((*it2)->GetType() == MARINE)
+				{
+					SDL_Rect square{ 1008, 72, 33, 34 };
+					App->render->Blit(rects, 175 - pos.x + x, 400 - pos.y + y, &square);
+
+					SDL_Rect sma{ 46, 3, 28, 36 };
+					App->render->Blit(move_ui, 178 - pos.x + x, 400 - pos.y + y, &sma);
+
+					x += 35;
+					if (x == 210)
+					{
+						y += 40;
+						x = 0;
+					}
+				}
+
+				if ((*it2)->GetType() == GHOST)
+				{
+					SDL_Rect square{ 1008, 72, 33, 34 };
+					App->render->Blit(rects, 175 - pos.x + x, 400 - pos.y + y, &square);
+
+					SDL_Rect sg{ 161, 4, 28, 33 };
+					App->render->Blit(move_ui, 178 - pos.x + x, 400 - pos.y + y, &sg);
+
+					x += 35;
+					if (x == 210)
+					{
+						y += 40;
+						x = 0;
+					}
+
+
+				}
+
+				if ((*it2)->GetType() == FIREBAT)
+				{
+
+				}
+
+				if ((*it2)->GetType() == MEDIC)
+				{
+
+				}
+
+				if ((*it2)->GetType() == OBSERVER)
+				{
+
+				}
+
+				if ((*it2)->GetType() == ENGINEER)
+				{
+
+				}
+
+				it2++;
+
+			}
+
+
+		}
+
+		it++;
+	}
+
+
+	/*if (App->entity->selected_units.empty() == true)
+	{
+
+	}*/
+
+}

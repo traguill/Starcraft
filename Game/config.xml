@@ -11,9 +11,9 @@
     <camera speed="500" offset_x="30" offset_y="30" limit_x="-3456" limit_y="-3616"/>
   </renderer>
 
-  <font>
+  <fonts>
     <default_font file="fonts/open_sans/OpenSans-Regular.ttf" size="12"/>
-  </font>
+  </fonts>
 
   <gui>
     <atlas file="gui/atlas.png"/>

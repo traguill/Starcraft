@@ -72,6 +72,8 @@ private:
 	//Utilities ------------------------------------------------------------------------------------------------------
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
 	void SetNextFocus(); //Sets the focus to the next element
+	void ShowUiUnits();
+
 
 private:
 
@@ -82,6 +84,15 @@ private:
 	list<UIEntity*>		gui_elements;
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
+
+
+	//ui unit sprites
+	SDL_Texture* ui_icons;
+	SDL_Texture* move_ui;
+	SDL_Texture* rects;
+
+	UICursor* cursor;
+
 	
 
 public:
