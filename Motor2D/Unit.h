@@ -60,6 +60,8 @@ private:
 
 	Unit* ApplyDamage(uint dmg,Unit* source); //Applies damage to himself and returns NULL if killed, if not returns himself
 
+	bool CheckTargetRange();
+
 private:
 
 	uint speed;

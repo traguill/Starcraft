@@ -35,39 +35,28 @@ bool TacticalAI::Update(float dt)
 
 
 	//Check every x seconds if one unit is close to another
-	list<Unit*>::iterator unit_a = App->entity->friendly_units.begin();
-	int count_a = 1;
+	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
 
-	while (unit_a != App->entity->friendly_units.end())
+	while (unit_f != App->entity->friendly_units.end())
 	{
-		list<Unit*>::iterator unit_b = App->entity->enemy_units.begin();
-		int count_b = 1;
-		while (unit_b != App->entity->enemy_units.end())
+		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
+		while (unit_e != App->entity->enemy_units.end())
 		{
-			if (count_a >= count_b)	//Avoids duplicate searches
+			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
 			{
-				++count_b;
-				++unit_b;
-				continue;
-			}
-
-			if ((*unit_a)->state != UNIT_DIE && (*unit_b)->state != UNIT_DIE)
-			{
-				if ((*unit_a)->GetPosition().DistanceTo((*unit_b)->GetPosition()) <= DETECTION_RANGE)
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
 				{
-					if ((*unit_a)->target == NULL)
-						SetEvent(ENEMY_TARGET, *unit_a, *unit_b);
-					if ((*unit_b)->target == NULL)
-						SetEvent(ENEMY_TARGET, *unit_b, *unit_a);
+					if ((*unit_f)->target == NULL)
+						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+					if ((*unit_e)->target == NULL)
+						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
 				}
 			}
-			
-			++count_b;
-			++unit_b;
+			++unit_e;
 		}
-		++count_a;
-		++unit_a;
+		++unit_f;
 	}
+	
 
 	return true;
 }

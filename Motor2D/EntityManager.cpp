@@ -172,6 +172,8 @@ void j1EntityManager::RemoveUnit(Unit* _unit)
 
 void j1EntityManager::DestroyUnit(Unit* _unit)
 {
+	//Remove the unit in the following lists if exists: friendly, enemy, selected
+	//Remove the pointer
 
 	//Destroy from friendly units
 	list<Unit*>::iterator f_unit = friendly_units.begin();

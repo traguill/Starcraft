@@ -65,6 +65,17 @@ Unit::~Unit()
 
 void Unit::Update(float dt)
 {
+	//Debug code
+	if (App->entity->debug)
+	{
+		//Paint range
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, range, 0, 0, 255, 255, true);
+
+		//Paint vision range
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, DETECTION_RANGE, 0, 255, 255, 255, true);
+	}
+
+
 	switch (state)
 	{
 	case UNIT_IDLE:
@@ -136,7 +147,10 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 	}
 
 	life -= dmg;
-	LOG("Life: %i", life);
+	if (is_enemy)
+		LOG("Life (enemy): %i", life);
+	else
+		LOG("Life (friend): %i", life);
 
 	if (life <= 0)
 	{
@@ -152,6 +166,10 @@ void Unit::Move(float dt)
 {
 	if (has_destination)
 	{	
+		if (target != NULL)
+		if (CheckTargetRange() == true)
+			return;
+
 		SetDirection();
 		//Print path
 		if (App->entity->debug)
@@ -275,4 +293,16 @@ UNIT_TYPE Unit::GetType()const
 uint Unit::GetRange()const
 {
 	return range;
+}
+
+bool Unit::CheckTargetRange()
+{
+	bool ret = false;
+	if (logic_pos.DistanceTo(target->GetPosition()) <= range) //Change for vision loaded in the xml NUNES TASK
+	{
+		App->tactical_ai->SetEvent(ENEMY_TARGET, this, target);
+		ret = true;
+	}
+
+	return ret;
 }
