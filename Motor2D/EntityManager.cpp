@@ -257,6 +257,51 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->width = unit.child("width").attribute("value").as_int();
 		unit_db->height = unit.child("height").attribute("value").as_int();
 
+		//Animations
+		unit_db->up.frames.clear();
+		unit_db->down.frames.clear();
+		unit_db->right.frames.clear();
+		unit_db->left.frames.clear();
+		unit_db->up_right.frames.clear();
+		unit_db->down_right.frames.clear();
+		unit_db->up_left.frames.clear();
+		unit_db->down_left.frames.clear();
+
+		for (pugi::xml_node rect = unit.child("up").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("down").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("right").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("left").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("upright").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("downright").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("upleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->up_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+		for (pugi::xml_node rect = unit.child("downleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
+		}
+
+		unit_db->anim_speed = unit.child("animspeed").attribute("value").as_float();
+
 		units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 	}
 
@@ -379,11 +424,35 @@ void j1EntityManager::SetMovement()
 			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			vector<iPoint> path;
+			vector<iPoint> path;//
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;
+
 				if (App->pathfinding->CreatePath(center_map, destination) == -1)
+
+				path.clear();
+
+				//If you have some units selected & central point is not walkable--------------------------------
+				if (selected_units.size() > 1 && App->pathfinding->IsWalkable(center_map) == false)
+				{
+					list<Unit*>::iterator unit_p = selected_units.begin();
+					while (unit_p != selected_units.end())
+					{
+						iPoint unit_pos = (*unit_p)->GetPosition();
+						iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
+
+						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+
+						++unit_p;
+					}
+					return;
+				}
+				//-----------------------------------------------------------------------------------------------
+
+				else if (App->pathfinding->CreatePath(center_map, destination) == -1)
+
 				{
 					LOG("Impossible to create path");
 					return;
@@ -391,6 +460,7 @@ void j1EntityManager::SetMovement()
 
 				path = *App->pathfinding->GetLastPath();
 			}
+
 			else
 			{
 				//Only one path
@@ -398,40 +468,67 @@ void j1EntityManager::SetMovement()
 				path.push_back(destination);
 			}
 
-			
-
-			//DEBUG---------------------------------------
-			//if (destination.x - center_map.x > 0 && destination.y - center_map.y > 0)
-				//LOG("SOUTH EAST");
-			//DEBUG---------------------------------------
-
+			//Assign to each unit its path
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
 				iPoint unit_pos = (*unit_p)->GetPosition();
-				iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
+				iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
+				iPoint rect_offset = unit_map_pos - center_map;
+				iPoint end_point = path.back() + rect_offset;
 
-				iPoint dst_center(unit_pos_tile.x - center_map.x, unit_pos_tile.y - center_map.y);
+				//Check if there is any collider in the path (copy of the center point of rect path)
+				if (App->pathfinding->CreateLine(unit_map_pos, end_point) == true)
+					AssignPath(*unit_p, path, &center_map);
 
-				vector<iPoint> unit_path;
-
-				vector<iPoint>::iterator path_it = path.begin();
-				while (path_it != path.end())
+				else
 				{
-					unit_path.push_back(iPoint(path_it->x + dst_center.x, path_it->y + dst_center.y));
-					++path_it;
+					//Check if the destination + rect_offset is valid
+					if (App->pathfinding->IsWalkable(end_point) == true)
+					{
+						//If it is, create a path to go there
+						if(App->pathfinding->CreatePath(unit_map_pos, end_point) != 1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+					}
+					
+					else
+					{
+						//If it doesn't, go to the mouse point
+						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
+							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+					}
 				}
-
-				(*unit_p)->SetPath(unit_path);
-				(*unit_p)->CenterUnit();
 				++unit_p;
 			}
-
 		}
 	}
 }
 
-void j1EntityManager::CalculateMovementRect()
+void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center)
+{
+	iPoint unit_pos = unit->GetPosition();
+	iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
+	iPoint dst_center(0, 0);
+
+	if (center != NULL)
+	{
+		dst_center.x = unit_pos_tile.x - center->x;
+		dst_center.y = unit_pos_tile.y - center->y;
+	}
+
+	vector<iPoint> unit_path;
+	vector<iPoint>::iterator path_it = path.begin();
+	while (path_it != path.end())
+	{
+		unit_path.push_back(iPoint(path_it->x + dst_center.x, path_it->y + dst_center.y));
+		++path_it;
+	}
+
+	unit->SetPath(unit_path);
+	unit->CenterUnit();
+}
+
+void j1EntityManager::CalculateMovementRect()//
 {
 	//Values to create rectangle
 	int min_x, max_x, min_y, max_y;

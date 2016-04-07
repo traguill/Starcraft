@@ -58,6 +58,7 @@ private:
 	//Pathfinding
 	void SetMovement();
 	void CalculateMovementRect();
+	void AssignPath(Unit* u, vector<iPoint> path, iPoint* center);
 
 	//Collisions
 	void CheckCollisions(); //Only between units

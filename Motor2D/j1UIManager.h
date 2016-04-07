@@ -11,6 +11,18 @@ class UIButton;
 class UIInputBox;
 class UICursor;
 
+enum state
+{
+	standart,
+	to_right,
+	to_left,
+	up,
+	down,
+	drag,
+	on_friendly_unit,
+	on_enemy_unit
+};
+
 // ---------------------------------------------------
 class j1UIManager : public j1Module
 {
@@ -75,6 +87,7 @@ private:
 public:
 	bool debug;
 	SDL_Rect selection_rect;
+	state cursor_state = standart;
 };
 
 #endif

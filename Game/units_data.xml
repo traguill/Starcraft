@@ -1,7 +1,7 @@
 <units>
 
   <unit TYPE="MARINE">
-    <texture_path value="sprites/marine.png"/>
+    <texture_path value="sprites/blue_marine.png"/>
     <width value="24" />
     <height value="32" />
     <life value="100" />
@@ -10,6 +10,95 @@
     <vision value="10" />
     <range value="80" />
     <cool value="1" />
+    <up>
+      <rect x="20" y="271"/>
+      <rect x="20" y="336"/>
+      <rect x="20" y="399"/>
+      <rect x="20" y="462"/>
+      <rect x="20" y="527"/>
+      <rect x="20" y="592"/>
+      <rect x="20" y="657"/>
+      <rect x="20" y="720"/>
+      <rect x="20" y="784"/>
+    </up>
+    <down>
+      <rect x="1043" y="271"/>
+      <rect x="1043" y="336"/>
+      <rect x="1043" y="399"/>
+      <rect x="1043" y="462"/>
+      <rect x="1043" y="527"/>
+      <rect x="1043" y="592"/>
+      <rect x="1043" y="657"/>
+      <rect x="1043" y="720"/>
+      <rect x="1043" y="784"/>
+    </down>
+    <right>
+      <rect x="532" y="271"/>
+      <rect x="532" y="336"/>
+      <rect x="532" y="399"/>
+      <rect x="532" y="462"/>
+      <rect x="532" y="527"/>
+      <rect x="532" y="592"/>
+      <rect x="532" y="657"/>
+      <rect x="532" y="720"/>
+      <rect x="532" y="784"/>
+    </right>
+    <left>
+      <rect x="595" y="271"/>
+      <rect x="595" y="336"/>
+      <rect x="595" y="399"/>
+      <rect x="595" y="462"/>
+      <rect x="595" y="527"/>
+      <rect x="595" y="592"/>
+      <rect x="595" y="657"/>
+      <rect x="595" y="720"/>
+      <rect x="595" y="784"/>
+    </left>
+    <upright>
+      <rect x="277" y="271"/>
+      <rect x="277" y="336"/>
+      <rect x="277" y="399"/>
+      <rect x="277" y="462"/>
+      <rect x="277" y="527"/>
+      <rect x="277" y="592"/>
+      <rect x="277" y="657"/>
+      <rect x="277" y="720"/>
+      <rect x="277" y="784"/>
+    </upright>
+    <downright>
+      <rect x="790" y="271"/>
+      <rect x="790" y="336"/>
+      <rect x="790" y="399"/>
+      <rect x="790" y="462"/>
+      <rect x="790" y="527"/>
+      <rect x="790" y="592"/>
+      <rect x="790" y="657"/>
+      <rect x="790" y="720"/>
+      <rect x="790" y="784"/>
+    </downright>
+    <upleft>
+      <rect x="339" y="271"/>
+      <rect x="339" y="336"/>
+      <rect x="339" y="399"/>
+      <rect x="339" y="462"/>
+      <rect x="339" y="527"/>
+      <rect x="339" y="592"/>
+      <rect x="339" y="657"/>
+      <rect x="339" y="720"/>
+      <rect x="339" y="784"/>
+    </upleft>
+    <downleft>
+      <rect x="852" y="271"/>
+      <rect x="852" y="336"/>
+      <rect x="852" y="399"/>
+      <rect x="852" y="462"/>
+      <rect x="852" y="527"/>
+      <rect x="852" y="592"/>
+      <rect x="852" y="657"/>
+      <rect x="852" y="720"/>
+      <rect x="852" y="784"/>
+    </downleft>
+    <animspeed value="0.06"/>
   </unit>
 
   <unit TYPE="GHOST">

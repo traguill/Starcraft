@@ -76,7 +76,24 @@ public:
 	queue<UNIT_EVENT> events;
 	Unit* target;
 
+
 	bool is_enemy;
+
+	//Animations
+	Animation up;
+	Animation down;
+	Animation right;
+	Animation left;
+	Animation up_right;
+	Animation down_right;
+	Animation up_left;
+	Animation down_left;
+
+	//Has to be updated inside update();
+	Animation* current_animation;
+	float anim_speed;
+	//Animation attack;
+
 
 	//Pathfinding
 	fPoint direction;
