@@ -17,7 +17,10 @@ enum state
 	to_right,
 	to_left,
 	up,
-	down
+	down,
+	drag,
+	on_friendly_unit,
+	on_enemy_unit
 };
 
 // ---------------------------------------------------
