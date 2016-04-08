@@ -164,6 +164,8 @@ bool j1UIManager::CleanUp()
 
 	gui_elements.clear();
 
+	delete cursor;
+
 	return ret;
 }
 
@@ -340,8 +342,15 @@ void j1UIManager::ShowUiUnits()
 			SDL_Rect s3{ 576, 475, 29, 29 };
 			App->render->Blit(ui_icons, 498 - pos.x, 405 - pos.y, &s3);
 
+			//GIRU: try switch instead of infinites if's
 
+			//switch((*it)->GetType())
+			//{ case MARINE:
 
+			//it works ;)
+
+			
+			//GIRU: all this magic numbers... Have to be loaded from xml doc. Create new structs to handle all this data
 
 
 			if ((*it)->GetType() == MARINE)

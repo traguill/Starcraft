@@ -109,6 +109,8 @@ bool GameScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
 
+	delete main_cur;
+
 	return true;
 }
 

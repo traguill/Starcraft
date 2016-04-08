@@ -112,7 +112,10 @@ bool UICursor::Update(float dt)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
-		App->render->Blit(App->entity->gui_cursor, rect.x - 20, rect.y - 19, new SDL_Rect{ 310, 48, 41, 43 });
+		//MARTI: dont' use operate new inside Blit method Blit(new SDL_Rect{x,y,w,h}) 
+		//DO NOT use magic numbers pls...
+		SDL_Rect section{ 310, 48, 41, 43 };
+		App->render->Blit(App->entity->gui_cursor, rect.x - 20, rect.y - 19, &section);
 	}
 
 	else

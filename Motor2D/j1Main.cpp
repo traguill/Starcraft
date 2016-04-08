@@ -29,7 +29,7 @@ j1App* App = NULL;
 
 int main(int argc, char* args[])
 {
-	ReportMemoryLeaks();
+	//ReportMemoryLeaks();
 
 	LOG("Engine starting ... %d");
 

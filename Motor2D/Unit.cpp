@@ -98,7 +98,7 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 Unit::~Unit()
 {
-
+	attacking_units.clear();
 }
 
 
