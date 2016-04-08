@@ -36,7 +36,7 @@ class Unit : public Entity
 public:
 
 	Unit();
-	Unit(Unit* u);
+	Unit(Unit* u, bool is_enemy);
 
 	~Unit();
 
@@ -57,6 +57,8 @@ private:
 	void Attack(float dt);
 	void SetDirection();
 	void CenterUnit();
+
+	void SetAnimation();
 
 	Unit* ApplyDamage(uint dmg,Unit* source); //Applies damage to himself and returns NULL if killed, if not returns himself
 

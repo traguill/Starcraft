@@ -39,6 +39,7 @@ public:
 protected:
 
 	Sprite sprite;
+	SDL_Texture* auxiliar_texture;
 	int life;
 
 	int width;

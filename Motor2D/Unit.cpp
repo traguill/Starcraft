@@ -15,9 +15,15 @@ Unit::Unit() : Entity()
 
 }
 
-Unit::Unit(Unit* u) : Entity()
+Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 {
-	sprite.texture = u->sprite.texture;
+	is_enemy = _is_enemy;
+
+	if (is_enemy)
+		sprite.texture = u->auxiliar_texture;
+	else
+		sprite.texture = u->sprite.texture;
+
 	sprite.rect.w = u->width;
 	sprite.rect.h = u->height;
 	speed = u->speed;
@@ -92,6 +98,8 @@ void Unit::Update(float dt)
 		App->entity->RemoveUnit(this);
 		break;
 	}
+
+	SetAnimation();
 }
 
 void Unit::Draw()
@@ -282,6 +290,53 @@ iPoint Unit::GetDirection()const
 
 	return ret;
 
+}
+
+void Unit::SetAnimation()
+{
+	float angle = atan(direction.y / direction.x) * RADTODEG;
+
+	float section = abs(angle / 45);
+
+	if (state == UNIT_MOVE)
+	{
+		if (direction.x >= 0 && direction.y >= 0)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &right;
+			if (section >= 0.5 && section <= 1.5)
+				current_animation = &down_right;
+			if (section >= 1.5 && section <= 2)
+				current_animation = &down;
+		}
+		else if (direction.x <= 0 && direction.y >= 0)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &left;
+			if (section >= 0.5 && section <= 1.5)
+				current_animation = &down_left;
+			if (section >= 1.5 && section <= 2)
+				current_animation = &down;
+		}
+		else if (direction.x <= 0 && direction.y <= 0)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &left;
+			if (section >= 0.5 && section <= 1.5)
+				current_animation = &up_left;
+			if (section >= 1.5 && section <= 2)
+				current_animation = &up;
+		}
+		else if (direction.x >= 0 && direction.y <= 0)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &right;
+			if (section >= 0.5 && section <= 1.5)
+				current_animation = &up_right;
+			if (section >= 1.5 && section <= 2)
+				current_animation = &up;
+		}
+	}
 }
 
 UNIT_TYPE Unit::GetType()const

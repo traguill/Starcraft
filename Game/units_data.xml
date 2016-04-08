@@ -2,6 +2,7 @@
 
   <unit TYPE="MARINE">
     <texture_path value="sprites/blue_marine.png"/>
+    <auxiliar_texture value="sprites/red_marine.png"/>
     <width value="24" />
     <height value="32" />
     <life value="100" />
@@ -98,7 +99,7 @@
       <rect x="852" y="720"/>
       <rect x="852" y="784"/>
     </downleft>
-    <animspeed value="0.06"/>
+    <animspeed value="0.1"/>
   </unit>
 
   <unit TYPE="GHOST">

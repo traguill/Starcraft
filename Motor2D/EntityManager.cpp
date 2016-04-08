@@ -243,6 +243,7 @@ bool j1EntityManager::LoadUnitsInfo()
 	{
 		Unit* unit_db = new Unit();
 		unit_db->sprite.texture = App->tex->Load(unit.child("texture_path").attribute("value").as_string());
+		unit_db->auxiliar_texture = App->tex->Load(unit.child("auxiliar_texture").attribute("value").as_string());
 		unit_db->life = unit.child("life").attribute("value").as_int();
 		unit_db->speed = unit.child("speed").attribute("value").as_int();
 		unit_db->damage = unit.child("damage").attribute("value").as_int();
@@ -678,10 +679,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 
 	if (it != units_database.end())
 	{
-		Unit* unit = new Unit(it->second);
+		Unit* unit = new Unit(it->second, is_enemy);
 		unit->SetPosition(x, y);
-
-		unit->is_enemy = is_enemy;
 
 		if (is_enemy)
 			enemy_units.push_back(unit);
