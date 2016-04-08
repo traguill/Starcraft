@@ -51,6 +51,10 @@ public:
 	UNIT_TYPE GetType()const;
 
 	uint GetRange()const;
+
+	void SetTarget(Unit* unit);
+
+	Unit* GetTarget();
 private:
 
 	void Move(float dt);
@@ -74,11 +78,14 @@ private:
 	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
+	Unit* target;
 	UNIT_TYPE type;
+
+	list<Unit*> attacking_units; //Units that are attacking me
 public:
 	UNIT_STATE state;
 	queue<UNIT_EVENT> events;
-	Unit* target;
+	
 
 
 	bool is_enemy;

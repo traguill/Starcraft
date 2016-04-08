@@ -46,10 +46,17 @@ bool TacticalAI::Update(float dt)
 			{
 				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
 				{
-					if ((*unit_f)->target == NULL)
+					if ((*unit_f)->GetTarget() == NULL)
+					{
+						LOG("Friend: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
-					if ((*unit_e)->target == NULL)
+					}
+					
+					if ((*unit_e)->GetTarget() == NULL)
+					{
+						LOG("Enemy: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
+					}
 				}
 			}
 			++unit_e;
@@ -70,22 +77,33 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	case ATTACKED:
 		if (target)
 		{
-			LOG("I've been attack");
+			if (unit->is_enemy)
+				LOG("(Enemy):  I've been attack");
+			else
+				LOG("(Friend): I've been attack");
 			SetEvent(ENEMY_TARGET, unit, target);
 		}
 		break;
 	case ENEMY_TARGET:
-		if (unit->GetPosition().DistanceTo(target->GetPosition()) < unit->GetRange())
+		if (unit->GetPosition().DistanceTo(target->GetPosition()) <= unit->GetRange())
 		{
-			LOG("I'm attacking");
-			unit->target = target;
+			if (unit->is_enemy)
+				LOG("(Enemy):  I'm going to attack");
+			else
+				LOG("(Friend): I'm going to attack");
+			
+			unit->SetTarget(target);
 			unit->state = UNIT_ATTACK;
 		}
 		else
 		{
-			
+			if (unit->is_enemy)
+				LOG("Enemy: I have a target to kill, I'm going to move closer");
+			else
+				LOG("Friend: I have a target to kill, I'm going to move closer");
+
 			CalculatePath(unit, target);
-			unit->target = target;
+			unit->SetTarget(target);
 			unit->events.push(ENEMY_TARGET);
 		}
 		break;
@@ -98,7 +116,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		{
 			UNIT_EVENT event = unit->events.front();
 			unit->events.pop();
-			SetEvent(event, unit, unit->target);
+			if (unit->GetTarget() == NULL)
+				unit->state = UNIT_IDLE;
+			else
+				SetEvent(event, unit, unit->GetTarget());
 		}
 
 		break;
@@ -120,7 +141,11 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		
 		if (enemy_found == false)
 		{
-			LOG("I've killed one enemy and no one is near");
+			if (unit->is_enemy)
+				LOG("(Enemy):  I've killed one enemy and no one is near");
+			else
+				LOG("(Friend): I've killed one enemy and no one is near");
+			
 			unit->state = UNIT_IDLE;
 
 		}
@@ -175,7 +200,10 @@ bool TacticalAI::SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list)
 		{
 			if ((*i)->state != UNIT_DIE)
 			{
-				LOG("I've killed one enemy and another is near");
+				if (unit->is_enemy)
+					LOG("Enemy: I've killed one enemy and another is near");
+				else
+					LOG("Friend: I've killed one enemy and another is near");
 				SetEvent(ENEMY_TARGET, unit, (*i));
 				return true;
 			}	

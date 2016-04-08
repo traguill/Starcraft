@@ -147,12 +147,24 @@ void Unit::Attack(float dt)
 
 Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 {
-	
-	if (state != UNIT_ATTACK && state != UNIT_DIE)
+	if (source->state == UNIT_DIE) //Just check this case, erase if never happens
 	{
-		LOG("Someone attacked me!");
-		App->tactical_ai->SetEvent(ATTACKED, this, source); 
+		LOG("A death unit is attacking me");
 	}
+
+	
+	if (state != UNIT_ATTACK)
+	{
+		if (state != UNIT_DIE)
+		{
+			if (is_enemy)
+				LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
+			else
+				LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
+			App->tactical_ai->SetEvent(ATTACKED, this, source);
+		}
+	}
+	
 
 	life -= dmg;
 	if (is_enemy)
@@ -162,7 +174,21 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 
 	if (life <= 0)
 	{
-		LOG("I'm dead!");
+		if (is_enemy)
+			LOG("Enemy: I'm dead!");
+		else
+			LOG("Friend: I'm dead!");
+
+		//Send attacking units that I'm death
+		list<Unit*>::iterator a_unit = attacking_units.begin();
+		while (a_unit != attacking_units.end())
+		{
+			(*a_unit)->target = NULL; 
+			++a_unit;
+		}
+		//Send target that I'm death
+		target->attacking_units.remove(this);
+
 		state = UNIT_DIE;
 		return NULL;
 	}
@@ -360,4 +386,19 @@ bool Unit::CheckTargetRange()
 	}
 
 	return ret;
+}
+
+void Unit::SetTarget(Unit* unit)
+{
+	if (unit != NULL)
+	{
+		target = unit;
+
+		unit->attacking_units.push_back(this);
+	}
+}
+
+Unit* Unit::GetTarget()
+{
+	return target;
 }

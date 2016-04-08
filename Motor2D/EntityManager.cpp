@@ -50,17 +50,22 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
-
-	list<Unit*>::iterator i = units_to_remove.begin();
-
-	while (i != units_to_remove.end())
+	if (units_to_remove.size() > 0)
 	{
-		list<Unit*>::iterator unit_to_remove = i;
-		++i;
-		DestroyUnit((*unit_to_remove));
-	}
+		LOG("(Manager): Some units need to be destroyed");
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+		list<Unit*>::iterator i = units_to_remove.begin();
 
-	units_to_remove.clear();
+		while (i != units_to_remove.end())
+		{
+			list<Unit*>::iterator unit_to_remove = i;
+			++i;
+			DestroyUnit((*unit_to_remove));
+		}
+
+		units_to_remove.clear();
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+	}
 
 	return true;
 }
