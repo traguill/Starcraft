@@ -91,6 +91,7 @@ public:
 	bool is_enemy;
 
 	//Animations
+	//MOVE
 	Animation up;
 	Animation down;
 	Animation right;
@@ -99,10 +100,32 @@ public:
 	Animation down_right;
 	Animation up_left;
 	Animation down_left;
+	//IDLE
+	Animation i_up;
+	Animation i_down;
+	Animation i_right;
+	Animation i_left;
+	Animation i_up_right;
+	Animation i_down_right;
+	Animation i_up_left;
+	Animation i_down_left;
+	//ATTACK
+	Animation a_up;
+	Animation a_down;
+	Animation a_right;
+	Animation a_left;
+	Animation a_up_right;
+	Animation a_down_right;
+	Animation a_up_left;
+	Animation a_down_left;
+	//DEATH
+	Animation death;
 
 	//Has to be updated inside update();
 	Animation* current_animation;
-	float anim_speed;
+	float walk_anim_speed;
+	float idle_anim_speed;
+	float attack_anim_speed;
 	//Animation attack;
 
 

@@ -99,7 +99,77 @@
       <rect x="852" y="720"/>
       <rect x="852" y="784"/>
     </downleft>
-    <animspeed value="0.1"/>
+    
+    <iup>
+      <rect x="20" y="13"/>
+      <rect x="20" y="77"/>
+    </iup>
+    <idown>
+      <rect x="1043" y="13"/>
+      <rect x="1043" y="77"/>
+    </idown>
+    <iright>
+      <rect x="532" y="13"/>
+      <rect x="532" y="77"/>
+    </iright>
+    <ileft>
+      <rect x="595" y="13"/>
+      <rect x="595" y="77"/>
+    </ileft>
+    <iupright>
+      <rect x="277" y="13"/>
+      <rect x="277" y="77"/>
+    </iupright>
+    <idownright>
+      <rect x="790" y="13"/>
+      <rect x="790" y="77"/>
+    </idownright>
+    <iupleft>
+      <rect x="339" y="13"/>
+      <rect x="339" y="77"/>
+    </iupleft>
+    <idownleft>
+      <rect x="852" y="13"/>
+      <rect x="852" y="77"/>
+    </idownleft>
+
+    <aup>
+      <rect x="20" y="141"/>
+      <rect x="20" y="205"/>
+    </aup>
+    <adown>
+      <rect x="1043" y="141"/>
+      <rect x="1043" y="205"/>
+    </adown>
+    <aright>
+      <rect x="532" y="141"/>
+      <rect x="532" y="205"/>
+    </aright>
+    <aleft>
+      <rect x="595" y="141"/>
+      <rect x="595" y="205"/>
+    </aleft>
+    <aupright>
+      <rect x="277" y="141"/>
+      <rect x="277" y="205"/>
+    </aupright>
+    <adownright>
+      <rect x="790" y="141"/>
+      <rect x="790" y="205"/>
+    </adownright>
+    <aupleft>
+      <rect x="339" y="141"/>
+      <rect x="339" y="205"/>
+    </aupleft>
+    <adownleft>
+      <rect x="852" y="141"/>
+      <rect x="852" y="205"/>
+    </adownleft>
+
+    <animwalkspeed value="0.1"/>
+    <animidlespeed value="0.005"/>
+    <animattackspeed value="0.05"/>
+    
   </unit>
 
   <unit TYPE="GHOST">

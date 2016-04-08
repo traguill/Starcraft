@@ -38,24 +38,58 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 	//Animations
 	up = u->up;
-	up.speed = u->anim_speed;
+	up.speed = u->walk_anim_speed;
 	down = u->down;
-	down.speed = u->anim_speed;
+	down.speed = u->walk_anim_speed;
 	right = u->right;
-	right.speed = u->anim_speed;
+	right.speed = u->walk_anim_speed;
 	left = u->left;
-	left.speed = u->anim_speed;
+	left.speed = u->walk_anim_speed;
 	up_right = u->up_right;
-	up_right.speed = u->anim_speed;
+	up_right.speed = u->walk_anim_speed;
 	down_right = u->down_right;
-	down_right.speed = u->anim_speed;
+	down_right.speed = u->walk_anim_speed;
 	up_left = u->up_left;
-	up_left.speed = u->anim_speed;
+	up_left.speed = u->walk_anim_speed;
 	down_left = u->down_left;
-	down_left.speed = u->anim_speed;
+	down_left.speed = u->walk_anim_speed;
+
+	i_up = u->i_up;
+	i_up.speed = u->idle_anim_speed;
+	i_down = u->i_down;
+	i_down.speed = u->idle_anim_speed;
+	i_right = u->i_right;
+	i_right.speed = u->idle_anim_speed;
+	i_left = u->i_left;
+	i_left.speed = u->idle_anim_speed;
+	i_up_right = u->i_up_right;
+	i_up_right.speed = u->idle_anim_speed;
+	i_down_right = u->i_down_right;
+	i_down_right.speed = u->idle_anim_speed;
+	i_up_left = u->i_up_left;
+	i_up_left.speed = u->idle_anim_speed;
+	i_down_left = u->i_down_left;
+	i_down_left.speed = u->idle_anim_speed;
+
+	a_up = u->a_up;
+	a_up.speed = u->attack_anim_speed;
+	a_down = u->a_down;
+	a_down.speed = u->attack_anim_speed;
+	a_right = u->a_right;
+	a_right.speed = u->attack_anim_speed;
+	a_left = u->a_left;
+	a_left.speed = u->attack_anim_speed;
+	a_up_right = u->a_up_right;
+	a_up_right.speed = u->attack_anim_speed;
+	a_down_right = u->a_down_right;
+	a_down_right.speed = u->attack_anim_speed;
+	a_up_left = u->a_up_left;
+	a_up_left.speed = u->attack_anim_speed;
+	a_down_left = u->a_down_left;
+	a_down_left.speed = u->attack_anim_speed;
 
 	//Has to be updated inside update();
-	current_animation = &down;
+	current_animation = &i_down;
 
 	//TODO: declare widht & height colliders
 	collider.w = width;
@@ -324,45 +358,127 @@ void Unit::SetAnimation()
 
 	float section = abs(angle / 45);
 
-	if (state == UNIT_MOVE)
+	if (direction.x >= 0 && direction.y >= 0)
 	{
-		if (direction.x >= 0 && direction.y >= 0)
+		if (state == UNIT_MOVE)
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &right;
-			if (section >= 0.5 && section <= 1.5)
+			else if (section >= 0.5 && section <= 1.5)
 				current_animation = &down_right;
-			if (section >= 1.5 && section <= 2)
+			else if (section >= 1.5 && section <= 2)
 				current_animation = &down;
 		}
-		else if (direction.x <= 0 && direction.y >= 0)
+		else if (state == UNIT_IDLE)
 		{
 			if (section >= 0 && section <= 0.5)
-				current_animation = &left;
-			if (section >= 0.5 && section <= 1.5)
-				current_animation = &down_left;
-			if (section >= 1.5 && section <= 2)
-				current_animation = &down;
+				current_animation = &i_right;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &i_down_right;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &i_down;
 		}
-		else if (direction.x <= 0 && direction.y <= 0)
+		else if (state == UNIT_ATTACK)
 		{
 			if (section >= 0 && section <= 0.5)
-				current_animation = &left;
-			if (section >= 0.5 && section <= 1.5)
-				current_animation = &up_left;
-			if (section >= 1.5 && section <= 2)
-				current_animation = &up;
-		}
-		else if (direction.x >= 0 && direction.y <= 0)
-		{
-			if (section >= 0 && section <= 0.5)
-				current_animation = &right;
-			if (section >= 0.5 && section <= 1.5)
-				current_animation = &up_right;
-			if (section >= 1.5 && section <= 2)
-				current_animation = &up;
+				current_animation = &a_right;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &a_down_right;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &a_down;
 		}
 	}
+	else if (direction.x <= 0 && direction.y >= 0)
+	{
+		if (state == UNIT_MOVE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &down_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &down;
+		}
+		else if (state == UNIT_IDLE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &i_left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &i_down_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &i_down;
+		}
+		else if (state == UNIT_ATTACK)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &a_left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &a_down_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &a_down;
+		}
+	}
+	else if (direction.x <= 0 && direction.y <= 0)
+	{
+		if (state == UNIT_MOVE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &up_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &up;
+		}
+		else if (state == UNIT_IDLE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &i_left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &i_up_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &i_up;
+		}
+		else if (state == UNIT_ATTACK)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &a_left;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &a_up_left;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &a_up;
+		}
+	}
+	else if (direction.x >= 0 && direction.y <= 0)
+	{
+		if (state == UNIT_MOVE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &right;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &up_right;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &up;
+		}
+		else if (state == UNIT_IDLE)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &i_right;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &i_up_right;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &i_up;
+		}
+		else if (state == UNIT_ATTACK)
+		{
+			if (section >= 0 && section <= 0.5)
+				current_animation = &a_right;
+			else if (section >= 0.5 && section <= 1.5)
+				current_animation = &a_up_right;
+			else if (section >= 1.5 && section <= 2)
+				current_animation = &a_up;
+		}
+	}
+	
 }
 
 UNIT_TYPE Unit::GetType()const
