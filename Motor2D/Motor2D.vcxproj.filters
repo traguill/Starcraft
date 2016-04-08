@@ -85,6 +85,9 @@
     <ClCompile Include="TacticalAI.cpp">
       <Filter>Desenvolupament  ========\AI</Filter>
     </ClCompile>
+    <ClCompile Include="UIProgressBar.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h">
@@ -188,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="TacticalAI.h">
       <Filter>Desenvolupament  ========\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProgressBar.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

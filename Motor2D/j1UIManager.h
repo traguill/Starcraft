@@ -10,6 +10,8 @@ class UIEntity;
 class UIButton;
 class UIInputBox;
 class UICursor;
+class UIProgressBar;
+
 
 enum state
 {
@@ -64,6 +66,9 @@ public:
 
 	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
 
+
+	UIProgressBar* CreateBar(int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture, j1Module* listener = NULL);
+
 	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
 	//Functions ---------------------------------------------------------------------------------------------------
 	UIEntity* GetMouseHover()const;
@@ -81,7 +86,7 @@ private:
 	SDL_Texture* atlas;
 	string atlas_file_name;
 
-	list<UIEntity*>		gui_elements;
+	list<UIEntity*>			gui_elements;
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
 
@@ -98,6 +103,7 @@ private:
 public:
 	bool debug;
 	SDL_Rect selection_rect;
+	void EraseElement(UIEntity* entity);
 	state cursor_state = standart;
 };
 

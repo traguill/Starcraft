@@ -106,6 +106,7 @@
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIInputBox.cpp" />
     <ClCompile Include="UILabel.cpp" />
+    <ClCompile Include="UIProgressBar.cpp" />
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,7 @@
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIInputBox.h" />
     <ClInclude Include="UILabel.h" />
+    <ClInclude Include="UIProgressBar.h" />
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>

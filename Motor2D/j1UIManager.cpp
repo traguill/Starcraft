@@ -9,6 +9,7 @@
 #include "UILabel.h"
 #include "UIImage.h"
 #include "UIButton.h"
+#include "UIProgressBar.h"
 #include "j1Window.h"
 #include "UIInputBox.h"
 #include "UICursor.h"
@@ -169,6 +170,11 @@ bool j1UIManager::CleanUp()
 	return ret;
 }
 
+void j1UIManager::EraseElement(UIEntity* entity)
+{
+	gui_elements.remove(entity);
+}
+
 // const getter for atlas
 SDL_Texture* j1UIManager::GetAtlas() const
 {
@@ -212,6 +218,19 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 
 	return cursor;
 }
+
+
+UIProgressBar* j1UIManager::CreateBar(int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture, j1Module* listener)
+{
+	UIProgressBar* pbar = new UIProgressBar(max_num, x, y, w, h, full_bar, empty_bar, low_bar, middle_bar, texture);
+	pbar->current_number = max_num;
+	pbar->listener = listener;
+	gui_elements.push_back(pbar);
+	pbar->hp_state = FULL;
+
+	return pbar;
+}
+
 
 /*UIInputBox* j1UIManager::CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener)
 {

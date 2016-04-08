@@ -148,6 +148,26 @@ void Unit::Draw()
 	{
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
+		//Drawing health bar
+		hp_bar->SetLocalPos(r.x - 4, r.y + 40);
+		App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetEmptyBar());
+
+		switch (hp_bar->hp_state)
+		{
+		case EMPTY:
+			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetEmptyBar());
+			break;
+		case LOW:
+			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetLowBar());
+			break;
+		case MIDDLE:
+			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetMiddleBar());
+			break;
+		case FULL:
+			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetFullBar());
+			break;
+		}
+	
 	}
 	
 	//Animations
@@ -191,6 +211,7 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 	{
 		if (state != UNIT_DIE)
 		{
+
 			if (is_enemy)
 				LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
 			else
@@ -201,6 +222,15 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 	
 
 	life -= dmg;
+	
+	//Modifying health bar according to the damage recieved
+	
+	int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
+	int new_len = hp_bar->GetFullBar().w - dam;
+	
+	hp_bar->SetBarsLength(new_len);
+	hp_bar->current_number = life;
+
 	if (is_enemy)
 		LOG("Life (enemy): %i", life);
 	else

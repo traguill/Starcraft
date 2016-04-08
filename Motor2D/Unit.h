@@ -5,10 +5,12 @@
 #include "p2Defs.h"
 #include "p2Point.h"
 #include "Entity.h"
+#include "UIProgressBar.h"
 #include <vector>
 #include <queue>
 
 #define MOVE_RADIUS 8
+
 
 enum UNIT_TYPE{ 
 	MARINE, 
@@ -136,6 +138,9 @@ public:
 
 	//Attacking
 	float cool_timer = 0;
+
+	//HP bar
+	UIProgressBar* hp_bar;
 
 };
 #endif

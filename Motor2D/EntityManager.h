@@ -98,6 +98,7 @@ public:
 	bool debug;
 
 	SDL_Texture* gui_cursor;
+	SDL_Texture* health_bar;
 
 };
 
