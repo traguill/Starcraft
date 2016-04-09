@@ -386,8 +386,11 @@ void j1UIManager::ShowUiUnits()
 				SDL_Rect sma_armour{ 108, 578, 32, 32 };
 				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sma_armour);
 
-				CreateLabel("Marine", 330, 400);
-
+				//CreateLabel("Marine", 330, 400);
+				
+				//DO NOT create a new label every frame!!!! 
+				//**
+				//Create a label in the UIManager and call the method to change the text if the type changes
 			}
 
 
