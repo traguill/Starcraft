@@ -60,10 +60,6 @@ private:
 	void CalculateMovementRect();
 	void AssignPath(Unit* u, vector<iPoint> path, iPoint* center);
 
-	//Collisions
-	void CheckCollisions(); //Only between units
-	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
-	void SeparateUnits(Unit* unit_a, Unit* unit_b);
 
 	//Removing
 	void DestroyUnit(Unit* _unit);

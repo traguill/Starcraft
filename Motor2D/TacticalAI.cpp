@@ -34,35 +34,9 @@ bool TacticalAI::Update(float dt)
 {
 
 
-	//Check every x seconds if one unit is close to another
-	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
+	Vision();
 
-	while (unit_f != App->entity->friendly_units.end())
-	{
-		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
-		while (unit_e != App->entity->enemy_units.end())
-		{
-			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
-			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
-				{
-					if ((*unit_f)->GetTarget() == NULL)
-					{
-						LOG("Friend: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
-					}
-					
-					if ((*unit_e)->GetTarget() == NULL)
-					{
-						LOG("Enemy: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
-					}
-				}
-			}
-			++unit_e;
-		}
-		++unit_f;
-	}
+	CheckCollisions();
 	
 
 	return true;
@@ -212,4 +186,110 @@ bool TacticalAI::SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list)
 	}
 
 	return ret;
+}
+
+
+void TacticalAI::CheckCollisions()
+{
+	CheckCollisionsLists(App->entity->friendly_units, App->entity->friendly_units);
+	CheckCollisionsLists(App->entity->friendly_units, App->entity->enemy_units);
+	CheckCollisionsLists(App->entity->enemy_units, App->entity->enemy_units);
+}
+
+void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
+{
+	list<Unit*>::iterator unit_a = list_a.begin();
+	int count_a = 1;
+
+	while (unit_a != list_a.end())
+	{
+		list<Unit*>::iterator unit_b = list_b.begin();
+		int count_b = 1;
+		while (unit_b != list_b.end())
+		{
+			if (count_a >= count_b)	//Avoids duplicate searches
+			{
+				++count_b;
+				++unit_b;
+				continue;
+			}
+
+			if (OverlapRectangles((*unit_a)->GetCollider(), (*unit_b)->GetCollider()))
+			{
+				SeparateUnits(*unit_a, *unit_b);
+			}
+			++count_b;
+			++unit_b;
+		}
+		++count_a;
+		++unit_a;
+	}
+}
+
+void TacticalAI::SeparateUnits(Unit* unit_a, Unit* unit_b)
+{
+	/*
+	** TWO units walking
+	*/
+	
+		//One stops and the other goes around
+
+		//Calculate vector stop_unit->moving_unit
+		iPoint distance = unit_b->GetPosition() - unit_a->GetPosition();
+		distance.Scale(TURN_RANGE);
+		distance.Rotate(3.14 * 0.5f);
+
+		iPoint turn_pos = unit_b->GetPosition() + distance;
+		
+		//Normalize it and scale it
+		//Rotate vector 90 deg clockwise
+		//Get the position of the new point and add it to the new pathfinding
+
+
+
+	
+
+}
+
+void TacticalAI::Vision()
+{
+	//Check every x seconds if one unit is close to another
+	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
+
+	while (unit_f != App->entity->friendly_units.end())
+	{
+		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
+		while (unit_e != App->entity->enemy_units.end())
+		{
+			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
+			{
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
+				{
+					if ((*unit_f)->GetTarget() == NULL)
+					{
+						LOG("Friend: I've found someone near");
+						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+					}
+
+					if ((*unit_e)->GetTarget() == NULL)
+					{
+						LOG("Enemy: I've found someone near");
+						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
+					}
+				}
+			}
+			++unit_e;
+		}
+		++unit_f;
+	}
+}
+
+bool TacticalAI::OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const
+{
+	if (r1.x + r1.w < r2.x || r1.x > r2.x + r2.w) 
+		return false;
+	if (r1.y + r1.h < r2.y || r1.y > r2.y + r2.h) 
+		return false;
+
+	return true;
 }

@@ -7,6 +7,7 @@
 #include <queue>
 
 #define DETECTION_RANGE 100
+#define TURN_RANGE 20 //radius to get the new point to turn when 2 units collide
 
 enum UNIT_EVENT{
 END_MOVING,
@@ -44,6 +45,16 @@ private:
 
 	//Search near enemies and target them (enemy->friendly friendly->enemy)
 	bool SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list);
+
+	//Collisions
+	void CheckCollisions(); //Only between units
+	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
+	void SeparateUnits(Unit* unit_a, Unit* unit_b);
+
+	bool OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const;
+
+	//If one unit sees another kill him
+	void Vision();
 };
 
 

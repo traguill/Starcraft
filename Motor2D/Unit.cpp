@@ -91,9 +91,9 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	//Has to be updated inside update();
 	current_animation = &i_down;
 
-	//TODO: declare widht & height colliders
-	collider.w = width;
-	collider.h = width;
+	
+	collider.w = u->collider.w;
+	collider.h = u->collider.h;
 }
 
 Unit::~Unit()
@@ -108,6 +108,8 @@ void Unit::Update(float dt)
 	//Debug code
 	if (App->entity->debug)
 	{
+		App->render->DrawQuad(GetCollider(), 255, 0, 0, 255, false, true);
+
 		//Paint range
 		App->render->DrawCircle(logic_pos.x, logic_pos.y, range, 0, 0, 255, 255, true);
 

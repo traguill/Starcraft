@@ -51,11 +51,9 @@ public:
 	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
 	UNIT_TYPE GetType()const;
-
 	uint GetRange()const;
 
 	void SetTarget(Unit* unit);
-
 	Unit* GetTarget();
 private:
 
@@ -134,7 +132,7 @@ public:
 	//Pathfinding
 	fPoint direction;
 	bool has_destination = false;
-	iPoint	dst_point;
+	iPoint	dst_point; //Tile point
 
 	//Attacking
 	float cool_timer = 0;

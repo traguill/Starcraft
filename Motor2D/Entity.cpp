@@ -40,8 +40,8 @@ iPoint Entity::GetPosition()const
 
 SDL_Rect Entity::GetCollider()
 {
-	collider.x = logic_pos.x - (collider.w / 2);
-	collider.y = logic_pos.y - (collider.h / 2);
+	collider.x = logic_pos.x - (collider.w * 0.5f);
+	collider.y = logic_pos.y - (collider.h * 0.5f);
 
 	return collider;
 }
