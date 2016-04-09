@@ -74,7 +74,6 @@ private:
 
 	uint speed;
 	uint damage;
-	uint vision;
 	uint range;
 	uint cool;
 	vector<iPoint> path;
@@ -87,7 +86,7 @@ private:
 public:
 	UNIT_STATE state;
 	queue<UNIT_EVENT> events;
-	
+	uint vision;
 
 
 	bool is_enemy;

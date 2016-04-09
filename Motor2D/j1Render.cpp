@@ -111,7 +111,7 @@ bool j1Render::Update(float dt)
 	App->input->GetMouseWorld(mouse_x, mouse_y);
 	iPoint pos = App->map->WorldToMap(mouse_x, mouse_y, 2);
 	sprintf_s(title, 256, "Tile x: %i y: %i", pos.x, pos.y);
-	App->win->SetTitle(title);
+	//App->win->SetTitle(title);
 
 	return true;
 }

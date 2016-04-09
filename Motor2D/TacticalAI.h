@@ -6,8 +6,6 @@
 #include <map>
 #include <queue>
 
-#define DETECTION_RANGE 100
-
 enum UNIT_EVENT{
 END_MOVING,
 ATTACKED,

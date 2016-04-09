@@ -44,7 +44,7 @@ bool TacticalAI::Update(float dt)
 		{
 			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
 			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
 				{
 					if ((*unit_f)->GetTarget() == NULL)
 					{

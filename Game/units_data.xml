@@ -8,7 +8,7 @@
     <life value="100" />
     <speed value="100" />
     <damage value="10" />
-    <vision value="10" />
+    <vision value="180" />
     <range value="80" />
     <cool value="1" />
     <up>
@@ -179,7 +179,7 @@
     <life value="100" />
     <speed value="100" />
     <damage value="100" />
-    <vision value="100" />
+    <vision value="200" />
     <range value="100" />
     <cool value="1" />
 
@@ -350,8 +350,8 @@
     <life value="100" />
     <speed value="100" />
     <damage value="10" />
-    <vision value="10" />
-    <range value="80" />
+    <vision value="180" />
+    <range value="50" />
     <cool value="1" />
     <up>
       <rect x="5" y="68"/>
