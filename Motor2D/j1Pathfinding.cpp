@@ -198,7 +198,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 	int ret = -1;
 	int iterations = 0;
 
-	if (IsWalkable(origin) && IsWalkable(destination))
+	if (IsWalkable(destination))
 	{
 		PathList open;
 		PathList closed;
