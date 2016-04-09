@@ -149,22 +149,22 @@ void Unit::Draw()
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 		//Drawing health bar
-		hp_bar->SetLocalPos(r.x - 4, r.y + 40);
-		App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetEmptyBar());
+		hp_bar->SetLocalPos(r.x + 2, r.y + 35);
+		App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
 
 		switch (hp_bar->hp_state)
 		{
 		case EMPTY:
-			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetEmptyBar());
+			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
 			break;
 		case LOW:
-			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetLowBar());
+			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetLowBar());
 			break;
 		case MIDDLE:
-			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetMiddleBar());
+			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetMiddleBar());
 			break;
 		case FULL:
-			App->render->Blit(hp_bar->GetTexture(), r.x - 4, r.y + 40, &hp_bar->GetFullBar());
+			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetFullBar());
 			break;
 		}
 	

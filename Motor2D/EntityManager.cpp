@@ -198,16 +198,21 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 				if (*s_unit == _unit)
 				{
 					selected_units.erase(s_unit);
-	
-					App->ui->EraseElement(_unit->hp_bar);
-					delete _unit->hp_bar;
+					if (_unit->hp_bar != NULL){
+						
+						App->ui->EraseElement(_unit->hp_bar);
+						delete _unit->hp_bar;
+					}
 					delete _unit;
 					return;
 				}
 				++s_unit;
 			}
-			App->ui->EraseElement(_unit->hp_bar);
-			delete _unit->hp_bar;
+			if (_unit->hp_bar != NULL){
+
+				App->ui->EraseElement(_unit->hp_bar);
+				delete _unit->hp_bar;
+			}
 			delete _unit;
 			return;
 		}
@@ -222,8 +227,11 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		if (*e_unit == _unit)
 		{
 			enemy_units.erase(e_unit);
-			App->ui->EraseElement(_unit->hp_bar);
-			delete _unit->hp_bar;
+			if (_unit->hp_bar != NULL){
+
+				App->ui->EraseElement(_unit->hp_bar);
+				delete _unit->hp_bar;
+			}
 			delete _unit;
 			return;
 		}
@@ -789,7 +797,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 34, 5, SDL_Rect{ 0, 0, 34, 5 }, SDL_Rect{ 0, 15, 34, 5 }, SDL_Rect{ 0, 10, 34, 5 }, SDL_Rect{ 0, 5, 34, 5 }, health_bar);
+		if (type == MARINE)
+			unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
 
 		return unit;
 	}

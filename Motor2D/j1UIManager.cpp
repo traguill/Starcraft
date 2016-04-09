@@ -14,6 +14,8 @@
 #include "UIInputBox.h"
 #include "UICursor.h"
 #include "EntityManager.h"
+#include <stdio.h>
+
 
 
 j1UIManager::j1UIManager() : j1Module()
@@ -58,6 +60,7 @@ bool j1UIManager::Start()
 	sections.push_back({ 64, 62, 20, 21 });
 	sections.push_back({ 85, 62, 20, 21 });
 	cursor = CreateCursor(sections, 0.08);
+	life_HUD = CreateLabel("", 177, 458);
 
 	return ret;
 }
@@ -336,6 +339,7 @@ void j1UIManager::SetNextFocus()
 
 void j1UIManager::ShowUiUnits()
 {
+	life_HUD->Print("");
 	uint count = App->entity->selected_units.size();
 	list<Unit*>::iterator it = App->entity->selected_units.begin();
 	while (it != App->entity->selected_units.end())
@@ -349,6 +353,17 @@ void j1UIManager::ShowUiUnits()
 
 		if (count == 1)
 		{
+			//Show life in HUD
+			
+			int total_unit_life = (*it)->hp_bar->GetMaxSize();
+			int life_from_total = (*it)->hp_bar->current_number;
+
+			char ui_life[20];
+			
+			sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
+			life_HUD->Print(ui_life);
+			//App->ui->CreateLabel(ui_life, pos.x, pos.y);
+
 			SDL_Rect s{ 252, 440, 27, 29 };
 			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
 
@@ -375,7 +390,7 @@ void j1UIManager::ShowUiUnits()
 			if ((*it)->GetType() == MARINE)
 			{
 				SDL_Rect s{ 102, 253, 51, 68 };
-				App->render->Blit(move_ui, 180 - pos.x, 405 - pos.y, &s);
+				App->render->Blit(move_ui, 180 - pos.x, 393 - pos.y, &s);
 
 				SDL_Rect sma{ 357, 439, 30, 31 };
 				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sma);

@@ -97,6 +97,7 @@ private:
 	SDL_Texture* rects;
 
 	UICursor* cursor;
+	UILabel* life_HUD;
 
 	
 
