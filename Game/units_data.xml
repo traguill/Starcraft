@@ -3,7 +3,7 @@
   <unit TYPE="MARINE">
     <texture_path value="sprites/blue_marine.png"/>
     <auxiliar_texture value="sprites/red_marine.png"/>
-    <width value="24" />
+    <width value="48" />
     <height value="32" />
     <life value="100" />
     <speed value="100" />

@@ -384,6 +384,20 @@ iPoint Unit::GetDirection()const
 
 void Unit::SetAnimation()
 {
+	if (state == UNIT_ATTACK)
+	{
+		if (target)
+		{
+			iPoint target_pos = target->GetPosition();
+			iPoint unit_pos = GetPosition();
+
+			direction.x = target_pos.x - unit_pos.x;
+			direction.y = target_pos.y - unit_pos.y;
+
+			direction.Normalize();
+		}
+	}
+	
 	float angle = atan(direction.y / direction.x) * RADTODEG;
 
 	float section = abs(angle / 45);
