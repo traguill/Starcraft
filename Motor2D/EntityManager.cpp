@@ -797,8 +797,7 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		if (type == MARINE)
-			unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
 
 		return unit;
 	}
