@@ -95,6 +95,12 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(MARINE, p.x, p.y, true);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(FIREBAT, p.x, p.y, false);
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 	//------------------------------------------------------------------------------

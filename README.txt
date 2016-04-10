@@ -1,7 +1,16 @@
 
-- M: Create marine
-- G: Create ghost
-- Spacebar: return cam initial position
-- F1 (pressed): Show/hide colliders
-- P: pause the game
-- N: Create enemy marine
+***************************************
+**				     **
+**	STARCRAFT COMMANDOS          **
+**                                   **
+***************************************
+
+- CONTROLS:
+
+	* M: Create marine
+	* N: Create enemy marine
+	* G: Create ghost
+	* F: Create firebat
+	* Spacebar: return cam initial position
+	* F1 : Debug mode
+	* P: pause the game

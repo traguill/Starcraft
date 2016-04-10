@@ -36,6 +36,7 @@ bool TacticalAI::Update(float dt)
 
 	Vision();
 
+
 	CheckCollisions();
 	
 

@@ -6,8 +6,6 @@
 #include <map>
 #include <queue>
 
-#define DETECTION_RANGE 100
-#define TURN_RANGE 20 //radius to get the new point to turn when 2 units collide
 
 enum UNIT_EVENT{
 END_MOVING,

@@ -114,7 +114,7 @@ void Unit::Update(float dt)
 		App->render->DrawCircle(logic_pos.x, logic_pos.y, range, 0, 0, 255, 255, true);
 
 		//Paint vision range
-		App->render->DrawCircle(logic_pos.x, logic_pos.y, DETECTION_RANGE, 0, 255, 255, 255, true);
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, vision, 0, 255, 255, 255, true);
 	}
 
 
@@ -172,9 +172,7 @@ void Unit::Draw()
 	
 	}
 	
-	//Animations
-	sprite.rect.x = current_animation->getCurrentFrame().x;
-	sprite.rect.y = current_animation->getCurrentFrame().y;
+
 
 	App->render->Blit(&sprite);
 
@@ -524,6 +522,10 @@ void Unit::SetAnimation()
 				current_animation = &a_up;
 		}
 	}
+
+	//Animations
+	sprite.rect.x = current_animation->getCurrentFrame().x;
+	sprite.rect.y = current_animation->getCurrentFrame().y;
 	
 }
 
