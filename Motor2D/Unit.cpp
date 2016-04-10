@@ -8,7 +8,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "math.h"
-
+#include "j1UIManager.h"
 
 Unit::Unit() : Entity()
 {
@@ -23,6 +23,8 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 		sprite.texture = u->auxiliar_texture;
 	else
 		sprite.texture = u->sprite.texture;
+
+	auxiliar_texture = NULL;
 
 	sprite.rect.w = u->width;
 	sprite.rect.h = u->height;
@@ -94,11 +96,20 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	
 	collider.w = u->collider.w;
 	collider.h = u->collider.h;
+
+	resolving_collision = false;
 }
 
 Unit::~Unit()
 {
+	auxiliar_texture = NULL;
+	path.clear();
+	target = NULL;
 	attacking_units.clear();
+	current_animation = NULL;
+
+	App->ui->EraseElement(hp_bar);
+	RELEASE(hp_bar);
 }
 
 
@@ -547,7 +558,7 @@ uint Unit::GetRange()const
 bool Unit::CheckTargetRange()
 {
 	bool ret = false;
-	if (logic_pos.DistanceTo(target->GetPosition()) <= range) //Change for vision loaded in the xml NUNES TASK
+	if (logic_pos.DistanceTo(target->GetPosition()) <= range) 
 	{
 		App->tactical_ai->SetEvent(ENEMY_TARGET, this, target);
 		ret = true;

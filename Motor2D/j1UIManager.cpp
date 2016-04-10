@@ -142,7 +142,7 @@ bool j1UIManager::Update(float dt)
 	}
 	*/
 
-	ShowUiUnits();
+	//ShowUiUnits();
 
 	cursor->Update(dt);
 

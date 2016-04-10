@@ -87,7 +87,7 @@ public:
 	uint vision;
 
 	//Can't change state when is resolving a collision
-	bool resolving_collision = false;
+	bool resolving_collision;
 
 	bool is_enemy;
 
