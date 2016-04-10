@@ -46,6 +46,20 @@ bool TacticalAI::Update(float dt)
 
 void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 
+	//Do not change the state if the unit is resolving a collision (high priority)
+	if (unit->resolving_collision == true)
+	{
+		LOG("Changing state while resolving collision");
+		return;
+	}
+
+	if (unit->state == UNIT_DIE)
+	{
+		LOG("Trying to change state while im dead");
+	}
+
+
+
 	switch (unit_event)
 	{
 
@@ -214,10 +228,13 @@ void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
 				++unit_b;
 				continue;
 			}
-
-			if (OverlapRectangles((*unit_a)->GetCollider(), (*unit_b)->GetCollider()))
+			//First check if someone is resolving collisions
+			if ((*unit_a)->resolving_collision == false && (*unit_b)->resolving_collision == false) 
 			{
-				SeparateUnits(*unit_a, *unit_b);
+				if (OverlapRectangles((*unit_a)->GetCollider(), (*unit_b)->GetCollider()))
+				{
+					SeparateUnits(*unit_a, *unit_b);
+				}
 			}
 			++count_b;
 			++unit_b;
@@ -229,26 +246,25 @@ void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
 
 void TacticalAI::SeparateUnits(Unit* unit_a, Unit* unit_b)
 {
-	/*
-	** TWO units walking
-	*/
-	
-		//One stops and the other goes around
 
-		//Calculate vector stop_unit->moving_unit
-		iPoint distance = unit_b->GetPosition() - unit_a->GetPosition();
-		distance.Scale(TURN_RANGE);
-		distance.Rotate(3.14 * 0.5f);
+	//Both units are ATTACKING
+	if (unit_a->state == UNIT_ATTACK && unit_b->state == UNIT_ATTACK)
+	{
+		//Both units share the SAME target
+		if (unit_a->GetTarget() == unit_b->GetTarget())
+		{
+			//Unit B goes in front of Unit A
+			SeparateAtkUnits(unit_b, unit_a);
 
-		iPoint turn_pos = unit_b->GetPosition() + distance;
-		
-		//Normalize it and scale it
-		//Rotate vector 90 deg clockwise
-		//Get the position of the new point and add it to the new pathfinding
-
-
-
-	
+			//[BUG]: when the destination is to close to the enemy the unit doesn't move
+		}
+		else
+		{
+			//DIFFERENT target
+			//Unit B goes closer to his target
+			SeparateAtkUnits(unit_b, unit_b);
+		}
+	}
 
 }
 
@@ -264,8 +280,13 @@ void TacticalAI::Vision()
 		{
 			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
 			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= DETECTION_RANGE)
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
 				{
+					/*
+						TODO: both share the same vision now. Only send ONE unit to attack depend on HIS vision.
+						Iterate friend list searching for enemies
+						Iterate enemy list searching for friends
+					*/
 					if ((*unit_f)->GetTarget() == NULL)
 					{
 						LOG("Friend: I've found someone near");
@@ -293,4 +314,24 @@ bool TacticalAI::OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const
 		return false;
 
 	return true;
+}
+
+void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
+{
+	fPoint distance(unit->GetTarget()->GetPosition().x - reference->GetPosition().x, unit->GetTarget()->GetPosition().y - reference->GetPosition().y);
+	distance.Normalize();
+	distance.Scale(COLLISION_DISTANCE * 2);
+
+	iPoint destination(reference->GetPosition().x + distance.x, reference->GetPosition().y + distance.y);
+
+	//No pathfinding is need it. We asume that nothing is between this units
+	destination = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
+	iPoint origin = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
+
+	vector<iPoint> result_path;
+	result_path.push_back(origin);
+	result_path.push_back(destination);
+
+	unit->SetPath(result_path);
+	unit->resolving_collision = true;
 }

@@ -79,24 +79,28 @@ bool j1EntityManager::Update(float dt)
 	//DEBUG-----------------------------------------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
+		LOG("Ghost created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(GHOST, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
+		LOG("MAarine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MARINE, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 	{
+		LOG("Enemy Marine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MARINE, p.x, p.y, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
+		LOG("Firebat created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
@@ -172,6 +176,9 @@ bool j1EntityManager::CleanUp()
 		++it_en;
 	}
 	enemy_units.clear();
+
+	App->tex->UnLoad(gui_cursor);
+	App->tex->UnLoad(health_bar);
 
 	return true;
 }
@@ -536,7 +543,7 @@ void j1EntityManager::SetMovement()
 			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			vector<iPoint> path;//
+			vector<iPoint> path;
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;

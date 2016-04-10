@@ -6,6 +6,7 @@
 #include <map>
 #include <queue>
 
+#define COLLISION_DISTANCE 15 //Radius of 'vital' space that every unit have to avoid collisons
 
 enum UNIT_EVENT{
 END_MOVING,
@@ -48,6 +49,8 @@ private:
 	void CheckCollisions(); //Only between units
 	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
 	void SeparateUnits(Unit* unit_a, Unit* unit_b);
+
+	void SeparateAtkUnits(Unit* unit, Unit* reference);
 
 	bool OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const;
 

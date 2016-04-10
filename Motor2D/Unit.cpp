@@ -206,17 +206,19 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 		LOG("A death unit is attacking me");
 	}
 
-	
-	if (state != UNIT_ATTACK)
+	//Start attacking if the unit are NOT: death, already attackin or resolving a collision
+	if (resolving_collision == false)
 	{
-		if (state != UNIT_DIE)
+		if (state != UNIT_ATTACK)
 		{
-
-			if (is_enemy)
-				LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
-			else
-				LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
-			App->tactical_ai->SetEvent(ATTACKED, this, source);
+			if (state != UNIT_DIE)
+			{
+				if (is_enemy)
+					LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
+				else
+					LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
+				App->tactical_ai->SetEvent(ATTACKED, this, source);
+			}
 		}
 	}
 	
@@ -264,7 +266,7 @@ void Unit::Move(float dt)
 {
 	if (has_destination)
 	{	
-		if (target != NULL)
+		if (target != NULL && resolving_collision == false)
 		if (CheckTargetRange() == true)
 			return;
 
@@ -308,6 +310,8 @@ void Unit::Move(float dt)
 			}
 			else
 			{
+				//PATH COMPLETED!
+				resolving_collision = false;
 				has_destination = false;
 				App->tactical_ai->SetEvent(END_MOVING, this);
 			}

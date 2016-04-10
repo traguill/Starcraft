@@ -9,6 +9,7 @@
 #include "j1Textures.h"
 #include "j1UIManager.h"
 #include "UICursor.h"
+#include "EntityManager.h"
 
 #define VSYNC true
 
@@ -87,7 +88,10 @@ bool j1Render::Update(float dt)
 	else
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-			camera.x = camera.y = 0; //Spacebar centers the camera to the reset point
+		{
+			camera.x = 0;
+			camera.y = 0;
+		}
 		else
 			CursorMovement(dt);
 
@@ -102,8 +106,6 @@ bool j1Render::Update(float dt)
 		Blit((*i)->texture, (*i)->position.x, (*i)->position.y, &(*i)->rect);
 		++i;
 	}
-
-	blit_sprites.clear();
 
 
 	static char title[256];
@@ -120,6 +122,9 @@ bool j1Render::PostUpdate()
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
+	blit_sprites.clear();
+
 	return true;
 }
 

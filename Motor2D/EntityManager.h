@@ -6,7 +6,6 @@
 #include "Unit.h"
 #include <map>
 
-#define COLLISION_DISTANCE	15
 #define COLLIDER_MAP 2
 
 using namespace std;

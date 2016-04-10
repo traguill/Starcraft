@@ -86,6 +86,8 @@ public:
 	queue<UNIT_EVENT> events;
 	uint vision;
 
+	//Can't change state when is resolving a collision
+	bool resolving_collision = false;
 
 	bool is_enemy;
 
