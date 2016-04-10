@@ -102,14 +102,12 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 Unit::~Unit()
 {
-	auxiliar_texture = NULL;
 	path.clear();
 	target = NULL;
 	attacking_units.clear();
 	current_animation = NULL;
-
-	App->ui->EraseElement(hp_bar);
-	RELEASE(hp_bar);
+	//App->ui->EraseElement(hp_bar);
+	//RELEASE(hp_bar);
 }
 
 
@@ -162,7 +160,7 @@ void Unit::Draw()
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 		//Drawing health bar
-		hp_bar->SetLocalPos(r.x + 2, r.y + 35);
+		/*hp_bar->SetLocalPos(r.x + 2, r.y + 35);
 		App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
 
 		switch (hp_bar->hp_state)
@@ -180,7 +178,7 @@ void Unit::Draw()
 			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetFullBar());
 			break;
 		}
-	
+		*/
 	}
 	
 
@@ -199,7 +197,7 @@ void Unit::Attack(float dt)
 
 	if (cool_timer >= cool)
 	{
-		target = target->ApplyDamage(damage, this);
+		target->ApplyDamage(damage, this);
 		cool_timer = 0;
 	}
 	else
@@ -210,7 +208,7 @@ void Unit::Attack(float dt)
 
 
 
-Unit* Unit::ApplyDamage(uint dmg,Unit* source)
+void Unit::ApplyDamage(uint dmg,Unit* source)
 {
 	if (source->state == UNIT_DIE) //Just check this case, erase if never happens
 	{
@@ -238,11 +236,11 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 	
 	//Modifying health bar according to the damage recieved
 	
-	int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
+	/*int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
 	int new_len = hp_bar->GetFullBar().w - dam;
 	
 	hp_bar->SetBarsLength(new_len);
-	hp_bar->current_number = life;
+	hp_bar->current_number = life;*/
 
 	if (is_enemy)
 		LOG("Life (enemy): %i", life);
@@ -260,17 +258,14 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 		list<Unit*>::iterator a_unit = attacking_units.begin();
 		while (a_unit != attacking_units.end())
 		{
-			(*a_unit)->target = NULL; 
+			(*a_unit)->target = NULL;
 			++a_unit;
 		}
 		//Send target that I'm death
 		target->attacking_units.remove(this);
 
 		state = UNIT_DIE;
-		return NULL;
 	}
-	else
-		return this;
 }
 
 void Unit::Move(float dt)

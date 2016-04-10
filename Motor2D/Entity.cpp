@@ -10,7 +10,10 @@ Entity::Entity()
 
 // Destructor
 Entity::~Entity()
-{}
+{
+	auxiliar_texture = NULL;
+	sprite.texture = NULL;
+}
 
 // Called before render is available
 void Entity::Update(float dt)

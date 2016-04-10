@@ -37,7 +37,9 @@ UIProgressBar::UIProgressBar(int max_num, const int x, const int y, const int w,
 
 // Destructor
 UIProgressBar::~UIProgressBar()
-{}
+{
+	CleanUp();
+}
 bool UIProgressBar::Update(float dt)
 {
 	bool ret = true;
@@ -117,10 +119,7 @@ bool UIProgressBar::CleanUp(){
 
 	bool ret = true;
 
-	if (bar_tex != NULL)
-	{
-		App->tex->UnLoad(bar_tex);
-	}
+	bar_tex = NULL;
 
 	return ret;
 }

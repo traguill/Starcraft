@@ -53,22 +53,7 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
-	if (units_to_remove.size() > 0)
-	{
-		LOG("(Manager): Some units need to be destroyed");
-		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
-		list<Unit*>::iterator i = units_to_remove.begin();
 
-		while (i != units_to_remove.end())
-		{
-			list<Unit*>::iterator unit_to_remove = i;
-			++i;
-			DestroyUnit((*unit_to_remove));
-		}
-
-		units_to_remove.clear();
-		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
-	}
 
 	return true;
 }
@@ -147,7 +132,25 @@ bool j1EntityManager::Update(float dt)
 bool j1EntityManager::PostUpdate()
 {
 	
+	if (units_to_remove.size() > 0)
+	{
+		//Check if the memory is ok
+		_ASSERTE(_CrtCheckMemory());
 
+		LOG("(Manager): Some units need to be destroyed");
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+		list<Unit*>::iterator i = units_to_remove.begin();
+
+		while (i != units_to_remove.end())
+		{
+			list<Unit*>::iterator unit_to_remove = i;
+			++i;
+			DestroyUnit((*unit_to_remove));
+		}
+
+		units_to_remove.clear();
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+	}
 	return true;
 }
 
@@ -711,7 +714,7 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		//unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
 
 		return unit;
 	}

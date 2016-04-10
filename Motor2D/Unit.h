@@ -64,7 +64,7 @@ private:
 
 	void SetAnimation();
 
-	Unit* ApplyDamage(uint dmg,Unit* source); //Applies damage to himself and returns NULL if killed, if not returns himself
+	void ApplyDamage(uint dmg,Unit* source); 
 
 	bool CheckTargetRange();
 
@@ -139,7 +139,7 @@ public:
 	float cool_timer = 0;
 
 	//HP bar
-	UIProgressBar* hp_bar;
+	//UIProgressBar* hp_bar;
 
 };
 #endif
