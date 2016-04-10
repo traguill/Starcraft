@@ -148,23 +148,24 @@ void Unit::Draw()
 	{
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
+
 		//Drawing health bar
-		hp_bar->SetLocalPos(r.x + 2, r.y + 35);
-		App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
+		hp_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 15);
+		App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetEmptyBar());
 
 		switch (hp_bar->hp_state)
 		{
 		case EMPTY:
-			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
+			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetEmptyBar());
 			break;
 		case LOW:
-			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetLowBar());
+			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetLowBar());
 			break;
 		case MIDDLE:
-			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetMiddleBar());
+			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetMiddleBar());
 			break;
 		case FULL:
-			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetFullBar());
+			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetFullBar());
 			break;
 		}
 	
@@ -223,9 +224,9 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 	
 	//Modifying health bar according to the damage recieved
 	
-	int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
+	int dam = (dmg * hp_bar->GetFullBar().w) / hp_bar->current_number;
 	int new_len = hp_bar->GetFullBar().w - dam;
-	
+
 	hp_bar->SetBarsLength(new_len);
 	hp_bar->current_number = life;
 
