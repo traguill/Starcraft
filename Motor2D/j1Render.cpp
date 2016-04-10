@@ -316,7 +316,7 @@ void j1Render::CursorMovement(float dt)
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
 	// doesnt enter none if
-	App->ui->cursor_state = standart;
+
 
 	//Move camera LEFT
 	if (mouse_x  < offset_x)

@@ -33,6 +33,7 @@ public:
 	Animation right_cursor;
 	Animation left_cursor; // no hi ha al atlas
 	Animation friendly_sel;
+	Animation enemy_sel;
 };
 
 #endif

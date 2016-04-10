@@ -137,6 +137,7 @@ bool j1EntityManager::Update(float dt)
 	}
 
 	//Sort 2 lists of elements
+	
 
 	return true;
 }
@@ -144,7 +145,7 @@ bool j1EntityManager::Update(float dt)
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
-	
+
 
 	return true;
 }
@@ -478,11 +479,15 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 void j1EntityManager::SelectUnits()
 {
 
+
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		list<Unit*>::iterator it = selected_units.begin();
 		while (it != selected_units.end())
 		{
+
 			(*it)->selected = false;
 
 			it++;
@@ -491,6 +496,28 @@ void j1EntityManager::SelectUnits()
 		selected_units.clear();
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
+
+		iPoint mouse_pos;
+		App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
+
+		list<Unit*>::iterator it = friendly_units.begin();
+		while (it != friendly_units.end())
+		{
+			if ((*it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*it)->GetCollider().x + (*it)->GetCollider().w && (*it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*it)->GetPosition().y + (*it)->GetCollider().h)
+			{
+				App->ui->cursor_state = on_friendly_unit;
+				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+				{
+					selected_units.push_back((*it));
+					(*it)->selected = true;
+				}
+			}
+			else
+				App->ui->cursor_state = standart;
+
+			it++;
+		}
+
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
