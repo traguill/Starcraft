@@ -671,6 +671,8 @@ void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center
 		++path_it;
 	}
 
+	unit->DiscardTarget();
+	unit->resolving_collision = true; //Change for high priority
 	unit->SetPath(unit_path);
 	unit->CenterUnit();
 }

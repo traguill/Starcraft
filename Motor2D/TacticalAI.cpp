@@ -85,6 +85,17 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		{
 			LOG("Target SHOULDNT BE NULL HERE!");
 		}
+
+		if (unit->GetTarget() == NULL)
+			unit->SetTarget(target);
+		//Now attack another target
+		if (unit->GetTarget() != target)
+		{
+			unit->DiscardTarget();
+			unit->SetTarget(target);
+		}
+		
+		//If the target is in range shoot him
 		if (unit->GetPosition().DistanceTo(target->GetPosition()) <= unit->GetRange())
 		{
 			if (unit->is_enemy)
@@ -92,7 +103,6 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			else
 				LOG("(Friend): I'm going to attack");
 			
-			unit->SetTarget(target);
 			unit->state = UNIT_ATTACK;
 		}
 		else
@@ -103,8 +113,9 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 				LOG("Friend: I have a target to kill, I'm going to move closer");
 
 			CalculatePath(unit, target);
-			unit->SetTarget(target);
-			unit->events.push(ENEMY_TARGET);
+
+			if (unit->events.size() == 0)
+				unit->events.push(ENEMY_TARGET);
 		}
 		break;
 	case END_MOVING:
@@ -148,6 +159,40 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			
 			unit->state = UNIT_IDLE;
 
+		}
+		break;
+	case ENEMY_RUNNING:
+		if (target == NULL || unit->GetTarget() == NULL || target != unit->GetTarget())
+		{
+			LOG("Enemy running ERROR: target not valid");
+		}
+
+		if (unit->is_enemy)
+		{
+			//Check if someone is near and attack
+			if (SearchNearEnemyUnit(unit, App->entity->friendly_units) == false)
+			{
+				//No one is near, chase my target
+				CalculatePath(unit, target);
+
+				unit->AddPath(target->GetPath()); //Combine both paths
+
+				if (unit->events.size() == 0)
+					unit->events.push(ENEMY_TARGET);
+			}
+		}
+		else
+		{
+			if (SearchNearEnemyUnit(unit, App->entity->enemy_units) == false)
+			{
+				//No one is near, chase my target
+				CalculatePath(unit, target);
+
+				unit->AddPath(target->GetPath()); //Combine both paths
+
+				if (unit->events.size() == 0)
+					unit->events.push(ENEMY_TARGET);
+			}
 		}
 		break;
 

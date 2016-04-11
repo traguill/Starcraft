@@ -47,6 +47,8 @@ public:
 	void Draw();
 
 	void SetPath(vector<iPoint> _path);
+	void AddPath(vector<iPoint> _path); //Adds the path to the existing one combining them
+	vector<iPoint> GetPath()const;
 
 	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
@@ -55,6 +57,8 @@ public:
 
 	void SetTarget(Unit* unit);
 	Unit* GetTarget();
+
+	void DiscardTarget(); //Stops attacking the target for some reason
 
 private:
 

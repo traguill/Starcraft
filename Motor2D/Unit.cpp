@@ -203,6 +203,13 @@ void Unit::Attack(float dt)
 		return;
 	}
 
+	//Check the target if it is in range
+	if (target->GetPosition().DistanceTo(logic_pos) > range)
+	{
+		App->tactical_ai->SetEvent(ENEMY_RUNNING, this, target);
+		return;
+	}
+
 	if (cool_timer >= cool)
 	{
 		target->ApplyDamage(damage, this);
@@ -588,4 +595,28 @@ void Unit::SetTarget(Unit* unit)
 Unit* Unit::GetTarget()
 {
 	return target;
+}
+
+void Unit::DiscardTarget()
+{
+	if (target)
+	{
+		target->attacking_units.remove(this); //COULD CAUSE HEAP BREAK!
+		target = NULL;
+	}
+}
+
+void Unit::AddPath(vector<iPoint> _path)
+{
+	vector<iPoint>::iterator tile = _path.begin();
+	while (tile != _path.end())
+	{
+		path.push_back(*tile);
+		++tile;
+	}
+}
+
+vector<iPoint> Unit::GetPath()const
+{
+	return path;
 }
