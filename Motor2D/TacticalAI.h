@@ -56,6 +56,12 @@ private:
 
 	//If one unit sees another kill him
 	void Vision();
+
+private:
+
+	//Check vision and collisions 5 times / sec
+	float checks = 0.12f;
+	float actual_time = 0;
 };
 
 

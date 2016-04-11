@@ -21,7 +21,7 @@ TacticalAI::~TacticalAI()
 bool TacticalAI::Awake(pugi::xml_node& conf)
 {
 	return true;
-	}
+}
 
 // Called before quitting
 bool TacticalAI::CleanUp()
@@ -32,12 +32,19 @@ bool TacticalAI::CleanUp()
 
 bool TacticalAI::Update(float dt)
 {
+	if (actual_time >= checks)
+	{
+		Vision();
 
+		CheckCollisions();
 
-	Vision();
+		actual_time = 0;
+	}
+	else
+	{
+		actual_time += dt;
+	}
 
-
-	CheckCollisions();
 	
 
 	return true;

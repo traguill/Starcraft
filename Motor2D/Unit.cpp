@@ -106,8 +106,8 @@ Unit::~Unit()
 	target = NULL;
 	attacking_units.clear();
 	current_animation = NULL;
-	//App->ui->EraseElement(hp_bar);
-	//RELEASE(hp_bar);
+	App->ui->EraseElement(hp_bar);
+
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
@@ -162,7 +162,7 @@ void Unit::Draw()
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 		//Drawing health bar
-		/*hp_bar->SetLocalPos(r.x + 2, r.y + 35);
+		hp_bar->SetLocalPos(r.x + 2, r.y + 35);
 		App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetEmptyBar());
 
 		switch (hp_bar->hp_state)
@@ -180,7 +180,7 @@ void Unit::Draw()
 			App->render->Blit(hp_bar->GetTexture(), r.x + 2, r.y + 35, &hp_bar->GetFullBar());
 			break;
 		}
-		*/
+		
 	}
 	
 
@@ -238,11 +238,11 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 	
 	//Modifying health bar according to the damage recieved
 	
-	/*int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
+	int dam = (hp_bar->GetEmptyBar().w * dmg)/ hp_bar->GetMaxSize();
 	int new_len = hp_bar->GetFullBar().w - dam;
 	
 	hp_bar->SetBarsLength(new_len);
-	hp_bar->current_number = life;*/
+	hp_bar->current_number = life;
 
 	if (is_enemy)
 		LOG("Life (enemy): %i", life);
@@ -268,10 +268,7 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 		{
 			target->attacking_units.remove(this);
 		}
-		else
-		{
-			LOG("PETA PERQUE EL TARGET ERA NULL I HO HEM SOLUCIONAT -----------------------------------------------"); //DELETE THIS
-		}
+		
 		
 
 		state = UNIT_DIE;

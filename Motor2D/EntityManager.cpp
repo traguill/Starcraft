@@ -134,8 +134,6 @@ bool j1EntityManager::PostUpdate()
 	
 	if (units_to_remove.size() > 0)
 	{
-		//Check if the memory is ok
-		_ASSERTE(_CrtCheckMemory());
 
 		LOG("(Manager): Some units need to be destroyed:    %d", units_to_remove.size());
 		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
@@ -716,7 +714,7 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		//unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
 
 		return unit;
 	}

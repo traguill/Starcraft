@@ -139,7 +139,7 @@ public:
 	float cool_timer = 0;
 
 	//HP bar
-	//UIProgressBar* hp_bar;
+	UIProgressBar* hp_bar;
 
 };
 #endif
