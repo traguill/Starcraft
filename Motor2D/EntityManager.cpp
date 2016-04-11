@@ -497,7 +497,7 @@ void j1EntityManager::SelectUnits()
 		list<Unit*>::iterator friendly_it = friendly_units.begin();
 		while (friendly_it != friendly_units.end())
 		{
-			if ((*friendly_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*friendly_it)->GetCollider().x + (*friendly_it)->GetCollider().w && (*friendly_it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*friendly_it)->GetPosition().y + (*friendly_it)->GetCollider().h)
+			if ((*friendly_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*friendly_it)->GetPosition().x + (*friendly_it)->sprite.rect.w && (*friendly_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*friendly_it)->GetPosition().y - (*friendly_it)->sprite.rect.h + 5)
 			{
 				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 				{
@@ -515,7 +515,7 @@ void j1EntityManager::SelectUnits()
 	list<Unit*>::iterator enemy_it = enemy_units.begin();
 		while (enemy_it != enemy_units.end())
 		{
-			if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetCollider().x + (*enemy_it)->GetCollider().w && (*enemy_it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*enemy_it)->GetPosition().y + (*enemy_it)->GetCollider().h)
+			if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetPosition().x + (*enemy_it)->sprite.rect.w && (*enemy_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*enemy_it)->GetPosition().y - (*enemy_it)->sprite.rect.h + 5)
 			{
 				App->ui->cursor_state = on_enemy_unit;
 				break;
