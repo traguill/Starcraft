@@ -204,14 +204,16 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*f_unit == _unit)
 		{
-			friendly_units.erase(f_unit);
+			f_unit = friendly_units.erase(f_unit);
+			f_unit++;
 
 			list<Unit*>::iterator s_unit = selected_units.begin();
 			while (s_unit != selected_units.end())
 			{
 				if (*s_unit == _unit)
 				{
-					selected_units.erase(s_unit);
+					s_unit = selected_units.erase(s_unit);
+					s_unit++;
 					RELEASE(_unit);
 					return;
 				}
