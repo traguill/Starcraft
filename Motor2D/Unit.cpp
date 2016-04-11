@@ -102,6 +102,12 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 Unit::~Unit()
 {
+	Delete();
+
+}
+
+void Unit::Delete()
+{
 	path.clear();
 	target = NULL;
 	attacking_units.clear();
@@ -111,7 +117,6 @@ Unit::~Unit()
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
-
 
 
 void Unit::Update(float dt)

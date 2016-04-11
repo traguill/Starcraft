@@ -55,6 +55,7 @@ public:
 
 	void SetTarget(Unit* unit);
 	Unit* GetTarget();
+
 private:
 
 	void Move(float dt);
@@ -67,6 +68,8 @@ private:
 	void ApplyDamage(uint dmg,Unit* source); 
 
 	bool CheckTargetRange();
+
+	void Delete(); 
 
 private:
 

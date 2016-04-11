@@ -202,6 +202,7 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*f_unit == _unit)
 		{
+			(*f_unit)->Delete();
 			f_unit = friendly_units.erase(f_unit);
 			f_unit--;
 
@@ -212,12 +213,10 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 				{
 					s_unit = selected_units.erase(s_unit);
 					s_unit--;
-					//RELEASE(_unit);
 					return;
 				}
 				++s_unit;
 			}
-			//RELEASE(_unit);
 			return;
 		}
 		++f_unit;
@@ -230,8 +229,8 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*e_unit == _unit)
 		{
+			(*e_unit)->Delete();
 			enemy_units.erase(e_unit);
-			//RELEASE(_unit);
 			return;
 		}
 		++e_unit;
