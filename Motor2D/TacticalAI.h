@@ -6,6 +6,8 @@
 #include <map>
 #include <queue>
 
+#define COLLISION_DISTANCE 15 //Radius of 'vital' space that every unit have to avoid collisons
+
 enum UNIT_EVENT{
 END_MOVING,
 ATTACKED,
@@ -42,6 +44,24 @@ private:
 
 	//Search near enemies and target them (enemy->friendly friendly->enemy)
 	bool SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list);
+
+	//Collisions
+	void CheckCollisions(); //Only between units
+	void CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b);
+	void SeparateUnits(Unit* unit_a, Unit* unit_b);
+
+	void SeparateAtkUnits(Unit* unit, Unit* reference);
+
+	bool OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const;
+
+	//If one unit sees another kill him
+	void Vision();
+
+private:
+
+	//Check vision and collisions 5 times / sec
+	float checks = 0.12f;
+	float actual_time = 0;
 };
 
 

@@ -8,7 +8,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "math.h"
-
+#include "j1UIManager.h"
 
 Unit::Unit() : Entity()
 {
@@ -23,6 +23,8 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 		sprite.texture = u->auxiliar_texture;
 	else
 		sprite.texture = u->sprite.texture;
+
+	auxiliar_texture = NULL;
 
 	sprite.rect.w = u->width;
 	sprite.rect.h = u->height;
@@ -91,16 +93,30 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	//Has to be updated inside update();
 	current_animation = &i_down;
 
-	//TODO: declare widht & height colliders
-	collider.w = width;
-	collider.h = width;
+	
+	collider.w = u->collider.w;
+	collider.h = u->collider.h;
+
+	resolving_collision = false;
 }
 
 Unit::~Unit()
 {
-	attacking_units.clear();
+	Delete();
+
 }
 
+void Unit::Delete()
+{
+	path.clear();
+	target = NULL;
+	attacking_units.clear();
+	current_animation = NULL;
+	App->ui->EraseElement(hp_bar);
+
+	queue<UNIT_EVENT> empty;
+	swap(events, empty);
+}
 
 
 void Unit::Update(float dt)
@@ -108,6 +124,8 @@ void Unit::Update(float dt)
 	//Debug code
 	if (App->entity->debug)
 	{
+		App->render->DrawQuad(GetCollider(), 255, 0, 0, 255, false, true);
+
 		//Paint range
 		App->render->DrawCircle(logic_pos.x, logic_pos.y, range, 0, 0, 255, 255, true);
 
@@ -168,7 +186,7 @@ void Unit::Draw()
 			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetFullBar());
 			break;
 		}
-	
+		
 	}
 	
 
@@ -187,7 +205,7 @@ void Unit::Attack(float dt)
 
 	if (cool_timer >= cool)
 	{
-		target = target->ApplyDamage(damage, this);
+		target->ApplyDamage(damage, this);
 		cool_timer = 0;
 	}
 	else
@@ -198,24 +216,26 @@ void Unit::Attack(float dt)
 
 
 
-Unit* Unit::ApplyDamage(uint dmg,Unit* source)
+void Unit::ApplyDamage(uint dmg,Unit* source)
 {
 	if (source->state == UNIT_DIE) //Just check this case, erase if never happens
 	{
 		LOG("A death unit is attacking me");
 	}
 
-	
-	if (state != UNIT_ATTACK)
+	//Start attacking if the unit are NOT: death, already attackin or resolving a collision
+	if (resolving_collision == false)
 	{
-		if (state != UNIT_DIE)
+		if (state != UNIT_ATTACK)
 		{
-
-			if (is_enemy)
-				LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
-			else
-				LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
-			App->tactical_ai->SetEvent(ATTACKED, this, source);
+			if (state != UNIT_DIE)
+			{
+				if (is_enemy)
+					LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
+				else
+					LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
+				App->tactical_ai->SetEvent(ATTACKED, this, source);
+			}
 		}
 	}
 	
@@ -246,24 +266,26 @@ Unit* Unit::ApplyDamage(uint dmg,Unit* source)
 		list<Unit*>::iterator a_unit = attacking_units.begin();
 		while (a_unit != attacking_units.end())
 		{
-			(*a_unit)->target = NULL; 
+			(*a_unit)->target = NULL;
 			++a_unit;
 		}
 		//Send target that I'm death
-		target->attacking_units.remove(this);
+		if (target != NULL)
+		{
+			target->attacking_units.remove(this);
+		}
+		
+		
 
 		state = UNIT_DIE;
-		return NULL;
 	}
-	else
-		return this;
 }
 
 void Unit::Move(float dt)
 {
 	if (has_destination)
 	{	
-		if (target != NULL)
+		if (target != NULL && resolving_collision == false)
 		if (CheckTargetRange() == true)
 			return;
 
@@ -307,6 +329,8 @@ void Unit::Move(float dt)
 			}
 			else
 			{
+				//PATH COMPLETED!
+				resolving_collision = false;
 				has_destination = false;
 				App->tactical_ai->SetEvent(END_MOVING, this);
 			}
@@ -542,7 +566,7 @@ uint Unit::GetRange()const
 bool Unit::CheckTargetRange()
 {
 	bool ret = false;
-	if (logic_pos.DistanceTo(target->GetPosition()) <= range) //Change for vision loaded in the xml NUNES TASK
+	if (logic_pos.DistanceTo(target->GetPosition()) <= range) 
 	{
 		App->tactical_ai->SetEvent(ENEMY_TARGET, this, target);
 		ret = true;

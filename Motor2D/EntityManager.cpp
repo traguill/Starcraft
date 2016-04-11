@@ -53,22 +53,7 @@ bool j1EntityManager::Start()
 // Update all UIManagers
 bool j1EntityManager::PreUpdate()
 {
-	if (units_to_remove.size() > 0)
-	{
-		LOG("(Manager): Some units need to be destroyed");
-		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
-		list<Unit*>::iterator i = units_to_remove.begin();
 
-		while (i != units_to_remove.end())
-		{
-			list<Unit*>::iterator unit_to_remove = i;
-			++i;
-			DestroyUnit((*unit_to_remove));
-		}
-
-		units_to_remove.clear();
-		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
-	}
 
 	return true;
 }
@@ -79,24 +64,28 @@ bool j1EntityManager::Update(float dt)
 	//DEBUG-----------------------------------------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
+		LOG("Ghost created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(GHOST, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
+		LOG("MAarine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MARINE, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 	{
+		LOG("Enemy Marine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MARINE, p.x, p.y, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
+		LOG("Firebat created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
@@ -112,8 +101,6 @@ bool j1EntityManager::Update(float dt)
 	{
 		CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
 	}
-
-	CheckCollisions();
 
 	//Update lists
 	list<Unit*>::iterator it = friendly_units.begin();
@@ -146,7 +133,25 @@ bool j1EntityManager::Update(float dt)
 bool j1EntityManager::PostUpdate()
 {
 
+	
+	if (units_to_remove.size() > 0)
+	{
 
+
+		LOG("(Manager): Some units need to be destroyed:    %d", units_to_remove.size());
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+		list<Unit*>::iterator i = units_to_remove.begin();
+
+		while (i != units_to_remove.end())
+		{
+			list<Unit*>::iterator unit_to_remove = i;
+			++i;
+			DestroyUnit((*unit_to_remove));
+		}
+
+		units_to_remove.clear();
+		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
+	}
 	return true;
 }
 
@@ -176,6 +181,9 @@ bool j1EntityManager::CleanUp()
 	}
 	enemy_units.clear();
 
+	App->tex->UnLoad(gui_cursor);
+	App->tex->UnLoad(health_bar);
+
 	return true;
 }
 
@@ -197,30 +205,21 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*f_unit == _unit)
 		{
-			friendly_units.erase(f_unit);
+			(*f_unit)->Delete();
+			f_unit = friendly_units.erase(f_unit);
+			f_unit--;
 
 			list<Unit*>::iterator s_unit = selected_units.begin();
 			while (s_unit != selected_units.end())
 			{
 				if (*s_unit == _unit)
 				{
-					selected_units.erase(s_unit);
-					if (_unit->hp_bar != NULL){
-						
-						App->ui->EraseElement(_unit->hp_bar);
-						delete _unit->hp_bar;
-					}
-					delete _unit;
+					s_unit = selected_units.erase(s_unit);
+					s_unit--;
 					return;
 				}
 				++s_unit;
 			}
-			if (_unit->hp_bar != NULL){
-
-				App->ui->EraseElement(_unit->hp_bar);
-				delete _unit->hp_bar;
-			}
-			delete _unit;
 			return;
 		}
 		++f_unit;
@@ -233,13 +232,8 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*e_unit == _unit)
 		{
+			(*e_unit)->Delete();
 			enemy_units.erase(e_unit);
-			if (_unit->hp_bar != NULL){
-
-				App->ui->EraseElement(_unit->hp_bar);
-				delete _unit->hp_bar;
-			}
-			delete _unit;
 			return;
 		}
 		++e_unit;
@@ -282,6 +276,8 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->type = UnitTypeToEnum(unit.attribute("TYPE").as_string());
 		unit_db->width = unit.child("width").attribute("value").as_int();
 		unit_db->height = unit.child("height").attribute("value").as_int();
+		unit_db->collider.w = unit.child("collider").attribute("width").as_int();
+		unit_db->collider.h = unit.child("collider").attribute("height").as_int();
 
 		//Animations
 		unit_db->up.frames.clear();
@@ -440,7 +436,7 @@ void j1EntityManager::PrintUnitDatabase()const
 		LOG("Vision: %i", (*i).second->vision);
 		LOG("Range: %i", (*i).second->range);
 		LOG("Cool: %i", (*i).second->cool);
-
+		LOG("Collider width %i - height %i", (*i).second->collider.w, (*i).second->collider.h);
 		++i;
 	}
 }
@@ -563,7 +559,7 @@ void j1EntityManager::SetMovement()
 			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
-			vector<iPoint> path;//
+			vector<iPoint> path;
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;
@@ -700,90 +696,6 @@ void j1EntityManager::CalculateMovementRect()//
 
 	center.x = move_rec.x + (move_rec.w / 2);
 	center.y = move_rec.y + (move_rec.h / 2);
-}
-
-void j1EntityManager::CheckCollisions()
-{
-	CheckCollisionsLists(friendly_units, friendly_units);
-	CheckCollisionsLists(friendly_units, enemy_units);
-	CheckCollisionsLists(enemy_units, enemy_units);
-}
-
-void j1EntityManager::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
-{
-	list<Unit*>::iterator unit_a = list_a.begin();
-	int count_a = 1;
-
-	while (unit_a != list_a.end())
-	{
-		list<Unit*>::iterator unit_b = list_b.begin();
-		int count_b = 1;
-		while (unit_b != list_b.end())
-		{
-			if (count_a >= count_b)	//Avoids duplicate searches
-			{
-				++count_b;
-				++unit_b;
-				continue;
-			}
-
-			if ((*unit_a)->GetPosition().DistanceTo((*unit_b)->GetPosition()) <= COLLISION_DISTANCE)
-			{
-				if ((*unit_a)->state == UNIT_MOVE && (*unit_b)->state != UNIT_MOVE)
-					SeparateUnits(*unit_a, *unit_b);
-
-				if ((*unit_b)->state == UNIT_MOVE && (*unit_a)->state != UNIT_MOVE)
-					SeparateUnits(*unit_b, *unit_a);
-			}
-			++count_b;
-			++unit_b;
-		}
-		++count_a;
-		++unit_a;
-	}
-}
-
-void j1EntityManager::SeparateUnits(Unit* unit_a, Unit* unit_b)
-{
-	//Ignore collisions between TWO moving units
-	//No one is moving (Can really happen?)
-
-	iPoint direction = unit_a->GetDirection();
-	iPoint move_to(0, 0);
-
-	bool direction_found = false;
-	int iterations = 0; //Max 8 iterations (directions)
-
-	while (direction_found == false && iterations < 8)
-	{
-		//Move to direction + 1/4
-		if (direction.x == 1 && direction.y == 0) move_to = { 2, 2 };
-		if (direction.x == 1 && direction.y == 1) move_to = { 0, 2 };
-		if (direction.x == 0 && direction.y == 1) move_to = { -2, 2 };
-		if (direction.x == -1 && direction.y == 1) move_to = { -2, 0 };
-		if (direction.x == -1 && direction.y == 0) move_to = { -2, -2 };
-		if (direction.x == -1 && direction.y == -1) move_to = { 0, -2 };
-		if (direction.x == 0 && direction.y == -1) move_to = { 2, -2 };
-		if (direction.x == 1 && direction.y == -1) move_to = { 2, 0 };
-
-		iPoint unit_tile = App->map->WorldToMap(unit_b->GetPosition().x, unit_b->GetPosition().y, COLLIDER_MAP);
-
-		if (App->pathfinding->IsWalkable(unit_tile + move_to) == true)
-		{
-			//Create path for idle unit
-			if (App->pathfinding->CreatePath(unit_tile, unit_tile + move_to) != -1)
-			{
-				unit_b->SetPath(*App->pathfinding->GetLastPath());
-			}
-			direction_found = true;
-		}
-		else
-		{
-			direction = move_to;
-			++iterations;
-		}
-	}
-	
 }
 
 void j1EntityManager::CheckUnderCursor()

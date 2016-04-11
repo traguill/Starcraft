@@ -11,6 +11,7 @@
     <vision value="180" />
     <range value="80" />
     <cool value="1" />
+    <collider width="15" height="15"/>
     <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>
@@ -182,7 +183,7 @@
     <vision value="200" />
     <range value="100" />
     <cool value="1" />
-
+    <collider width="15" height="15"/>
 <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>

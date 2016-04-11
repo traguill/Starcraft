@@ -148,6 +148,33 @@ public:
 		x = x / module;
 		y = y / module;
 	}
+
+	//Scales the vector in x units
+	void Scale(int value)
+	{
+		fPoint point(x, y);
+		float module = sqrt(x * x + y * y);
+		point.x = x / module;
+		point.y = y / module;
+
+		point.x = point.x * value;
+		point.y = point.y * value;
+
+		x = point.x;
+		y = point.y;
+	}
+
+	//Rotates clockwise the vector
+	void Rotate(float radians)
+	{
+		fPoint point;
+
+		point.x = (cos(radians) * x) + (sin(radians) * y);
+		point.y = (-sin(radians) * x) + (cos(radians) * y);
+
+		x = point.x;
+		y = point.y;
+	}
 };
 
 typedef p2Point<int> iPoint;

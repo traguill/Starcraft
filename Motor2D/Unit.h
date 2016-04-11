@@ -51,12 +51,11 @@ public:
 	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
 	UNIT_TYPE GetType()const;
-
 	uint GetRange()const;
 
 	void SetTarget(Unit* unit);
-
 	Unit* GetTarget();
+
 private:
 
 	void Move(float dt);
@@ -66,9 +65,11 @@ private:
 
 	void SetAnimation();
 
-	Unit* ApplyDamage(uint dmg,Unit* source); //Applies damage to himself and returns NULL if killed, if not returns himself
+	void ApplyDamage(uint dmg,Unit* source); 
 
 	bool CheckTargetRange();
+
+	void Delete(); 
 
 private:
 
@@ -88,6 +89,8 @@ public:
 	queue<UNIT_EVENT> events;
 	uint vision;
 
+	//Can't change state when is resolving a collision
+	bool resolving_collision;
 
 	bool is_enemy;
 
@@ -133,7 +136,7 @@ public:
 	//Pathfinding
 	fPoint direction;
 	bool has_destination = false;
-	iPoint	dst_point;
+	iPoint	dst_point; //Tile point
 
 	//Attacking
 	float cool_timer = 0;

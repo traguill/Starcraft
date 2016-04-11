@@ -21,7 +21,7 @@ TacticalAI::~TacticalAI()
 bool TacticalAI::Awake(pugi::xml_node& conf)
 {
 	return true;
-	}
+}
 
 // Called before quitting
 bool TacticalAI::CleanUp()
@@ -32,37 +32,19 @@ bool TacticalAI::CleanUp()
 
 bool TacticalAI::Update(float dt)
 {
-
-
-	//Check every x seconds if one unit is close to another
-	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
-
-	while (unit_f != App->entity->friendly_units.end())
+	if (actual_time >= checks)
 	{
-		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
-		while (unit_e != App->entity->enemy_units.end())
-		{
-			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
-			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
-				{
-					if ((*unit_f)->GetTarget() == NULL)
-					{
-						LOG("Friend: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
-					}
-					
-					if ((*unit_e)->GetTarget() == NULL)
-					{
-						LOG("Enemy: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
-					}
-				}
-			}
-			++unit_e;
-		}
-		++unit_f;
+		Vision();
+
+		CheckCollisions();
+
+		actual_time = 0;
 	}
+	else
+	{
+		actual_time += dt;
+	}
+
 	
 
 	return true;
@@ -70,6 +52,20 @@ bool TacticalAI::Update(float dt)
 
 
 void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
+
+	//Do not change the state if the unit is resolving a collision (high priority)
+	if (unit->resolving_collision == true)
+	{
+		LOG("Changing state while resolving collision");
+		return;
+	}
+
+	if (unit->state == UNIT_DIE)
+	{
+		LOG("Trying to change state while im dead");
+	}
+
+
 
 	switch (unit_event)
 	{
@@ -85,6 +81,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		}
 		break;
 	case ENEMY_TARGET:
+		if (target == NULL)
+		{
+			LOG("Target SHOULDNT BE NULL HERE!");
+		}
 		if (unit->GetPosition().DistanceTo(target->GetPosition()) <= unit->GetRange())
 		{
 			if (unit->is_enemy)
@@ -212,4 +212,151 @@ bool TacticalAI::SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list)
 	}
 
 	return ret;
+}
+
+
+void TacticalAI::CheckCollisions()
+{
+	CheckCollisionsLists(App->entity->friendly_units, App->entity->friendly_units);
+	CheckCollisionsLists(App->entity->friendly_units, App->entity->enemy_units);
+	CheckCollisionsLists(App->entity->enemy_units, App->entity->enemy_units);
+}
+
+void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
+{
+	list<Unit*>::iterator unit_a = list_a.begin();
+	int count_a = 1;
+
+	while (unit_a != list_a.end())
+	{
+		list<Unit*>::iterator unit_b = list_b.begin();
+		int count_b = 1;
+		while (unit_b != list_b.end())
+		{
+			if (count_a >= count_b)	//Avoids duplicate searches
+			{
+				++count_b;
+				++unit_b;
+				continue;
+			}
+			//First check if someone is resolving collisions
+			if ((*unit_a)->resolving_collision == false && (*unit_b)->resolving_collision == false) 
+			{
+				if ((*unit_a)->state == UNIT_DIE || (*unit_b)->state == UNIT_DIE)
+				{
+					++count_b;
+					++unit_b;
+					continue;
+				}
+				if (OverlapRectangles((*unit_a)->GetCollider(), (*unit_b)->GetCollider()))
+				{
+					SeparateUnits(*unit_a, *unit_b);
+				}
+			}
+			++count_b;
+			++unit_b;
+		}
+		++count_a;
+		++unit_a;
+	}
+}
+
+void TacticalAI::SeparateUnits(Unit* unit_a, Unit* unit_b)
+{
+
+	//Both units are ATTACKING
+	if (unit_a->state == UNIT_ATTACK && unit_b->state == UNIT_ATTACK)
+	{
+		if (unit_a->GetTarget() == NULL)
+		{
+			LOG("UNIT A TARGET NULL");
+		}
+		if (unit_b->GetTarget() == NULL)
+		{
+			LOG("UNIT B TARTET NULL");
+		}
+		//Both units share the SAME target
+		if (unit_a->GetTarget() == unit_b->GetTarget())
+		{
+			//Unit B goes in front of Unit A
+			SeparateAtkUnits(unit_b, unit_a);
+
+			//[BUG]: when the destination is to close to the enemy the unit doesn't move
+		}
+		else
+		{
+			//DIFFERENT target
+			//Unit B goes closer to his target
+			SeparateAtkUnits(unit_b, unit_b);
+		}
+	}
+
+}
+
+void TacticalAI::Vision()
+{
+	//Check every x seconds if one unit is close to another
+	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
+
+	while (unit_f != App->entity->friendly_units.end())
+	{
+		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
+		while (unit_e != App->entity->enemy_units.end())
+		{
+			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
+			{
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
+				{
+					/*
+						TODO: both share the same vision now. Only send ONE unit to attack depend on HIS vision.
+						Iterate friend list searching for enemies
+						Iterate enemy list searching for friends
+					*/
+					if ((*unit_f)->GetTarget() == NULL)
+					{
+						LOG("Friend: I've found someone near");
+						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+					}
+
+					if ((*unit_e)->GetTarget() == NULL)
+					{
+						LOG("Enemy: I've found someone near");
+						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
+					}
+				}
+			}
+			++unit_e;
+		}
+		++unit_f;
+	}
+}
+
+bool TacticalAI::OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const
+{
+	if (r1.x + r1.w < r2.x || r1.x > r2.x + r2.w) 
+		return false;
+	if (r1.y + r1.h < r2.y || r1.y > r2.y + r2.h) 
+		return false;
+
+	return true;
+}
+
+void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
+{
+	fPoint distance(unit->GetTarget()->GetPosition().x - reference->GetPosition().x, unit->GetTarget()->GetPosition().y - reference->GetPosition().y);
+	distance.Normalize();
+	distance.Scale(COLLISION_DISTANCE * 2);
+
+	iPoint destination(reference->GetPosition().x + distance.x, reference->GetPosition().y + distance.y);
+
+	//No pathfinding is need it. We asume that nothing is between this units
+	destination = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
+	iPoint origin = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
+
+	vector<iPoint> result_path;
+	result_path.push_back(origin);
+	result_path.push_back(destination);
+
+	unit->SetPath(result_path);
+	unit->resolving_collision = true;
 }
