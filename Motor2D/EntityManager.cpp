@@ -124,6 +124,7 @@ bool j1EntityManager::Update(float dt)
 	}
 
 	//Sort 2 lists of elements
+	
 
 	return true;
 }
@@ -131,9 +132,11 @@ bool j1EntityManager::Update(float dt)
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
+
 	
 	if (units_to_remove.size() > 0)
 	{
+
 
 		LOG("(Manager): Some units need to be destroyed:    %d", units_to_remove.size());
 		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
@@ -472,11 +475,15 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 void j1EntityManager::SelectUnits()
 {
 
+
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		list<Unit*>::iterator it = selected_units.begin();
 		while (it != selected_units.end())
 		{
+
 			(*it)->selected = false;
 
 			it++;
@@ -485,6 +492,28 @@ void j1EntityManager::SelectUnits()
 		selected_units.clear();
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
+
+		iPoint mouse_pos;
+		App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
+
+		list<Unit*>::iterator it = friendly_units.begin();
+		while (it != friendly_units.end())
+		{
+			if ((*it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*it)->GetCollider().x + (*it)->GetCollider().w && (*it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*it)->GetPosition().y + (*it)->GetCollider().h)
+			{
+				App->ui->cursor_state = on_friendly_unit;
+				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+				{
+					selected_units.push_back((*it));
+					(*it)->selected = true;
+				}
+			}
+			else
+				App->ui->cursor_state = standart;
+
+			it++;
+		}
+
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
@@ -713,7 +742,7 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x, unit->GetPosition().y, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x - 8, unit->GetPosition().y + 15, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
 
 		return unit;
 	}

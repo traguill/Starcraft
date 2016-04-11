@@ -24,6 +24,7 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 	right_cursor.frames.clear();
 	left_cursor.frames.clear();
 	friendly_sel.frames.clear();
+	enemy_sel.frames.clear();
 
 	//adding anim frames
 	for (std::vector<SDL_Rect>::iterator it = sections.begin(); it != sections.end(); ++it)
@@ -92,6 +93,37 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 	friendly_sel.frames.push_back(section);
 	friendly_sel.loop = true;
 	friendly_sel.speed = 0.08;
+
+	section.x = 2; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 46; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 90; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 134; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 178; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 222; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 266; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 310; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 354; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 398; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 442; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 486; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 530; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	section.x = 574; section.y = 186, section.w = 41, section.h = 43;
+	enemy_sel.frames.push_back(section);
+	enemy_sel.loop = true;
+	enemy_sel.speed = 0.08;
 }
 
 // Destructor
@@ -142,7 +174,12 @@ bool UICursor::Update(float dt)
 
 		if (App->ui->cursor_state == on_friendly_unit)
 		{
-			App->render->Blit(App->entity->gui_cursor, rect.x, rect.y, &friendly_sel.getCurrentFrame());
+			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &friendly_sel.getCurrentFrame());
+		}
+
+		if (App->ui->cursor_state == on_enemy_unit)
+		{
+			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &enemy_sel.getCurrentFrame());
 		}
 
 		if (App->ui->cursor_state == standart)
