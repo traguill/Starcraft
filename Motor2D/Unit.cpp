@@ -108,6 +108,8 @@ Unit::~Unit()
 	current_animation = NULL;
 	//App->ui->EraseElement(hp_bar);
 	//RELEASE(hp_bar);
+	queue<UNIT_EVENT> empty;
+	swap(events, empty);
 }
 
 
@@ -262,7 +264,15 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 			++a_unit;
 		}
 		//Send target that I'm death
-		target->attacking_units.remove(this);
+		if (target != NULL)
+		{
+			target->attacking_units.remove(this);
+		}
+		else
+		{
+			LOG("PETA PERQUE EL TARGET ERA NULL I HO HEM SOLUCIONAT -----------------------------------------------"); //DELETE THIS
+		}
+		
 
 		state = UNIT_DIE;
 	}

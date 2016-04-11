@@ -74,6 +74,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		}
 		break;
 	case ENEMY_TARGET:
+		if (target == NULL)
+		{
+			LOG("Target SHOULDNT BE NULL HERE!");
+		}
 		if (unit->GetPosition().DistanceTo(target->GetPosition()) <= unit->GetRange())
 		{
 			if (unit->is_enemy)
@@ -231,6 +235,12 @@ void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
 			//First check if someone is resolving collisions
 			if ((*unit_a)->resolving_collision == false && (*unit_b)->resolving_collision == false) 
 			{
+				if ((*unit_a)->state == UNIT_DIE || (*unit_b)->state == UNIT_DIE)
+				{
+					++count_b;
+					++unit_b;
+					continue;
+				}
 				if (OverlapRectangles((*unit_a)->GetCollider(), (*unit_b)->GetCollider()))
 				{
 					SeparateUnits(*unit_a, *unit_b);
@@ -250,6 +260,14 @@ void TacticalAI::SeparateUnits(Unit* unit_a, Unit* unit_b)
 	//Both units are ATTACKING
 	if (unit_a->state == UNIT_ATTACK && unit_b->state == UNIT_ATTACK)
 	{
+		if (unit_a->GetTarget() == NULL)
+		{
+			LOG("UNIT A TARGET NULL");
+		}
+		if (unit_b->GetTarget() == NULL)
+		{
+			LOG("UNIT B TARTET NULL");
+		}
 		//Both units share the SAME target
 		if (unit_a->GetTarget() == unit_b->GetTarget())
 		{

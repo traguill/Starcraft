@@ -137,7 +137,7 @@ bool j1EntityManager::PostUpdate()
 		//Check if the memory is ok
 		_ASSERTE(_CrtCheckMemory());
 
-		LOG("(Manager): Some units need to be destroyed");
+		LOG("(Manager): Some units need to be destroyed:    %d", units_to_remove.size());
 		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
 		list<Unit*>::iterator i = units_to_remove.begin();
 
