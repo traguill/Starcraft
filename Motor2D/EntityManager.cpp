@@ -60,6 +60,7 @@ bool j1EntityManager::PreUpdate()
 
 bool j1EntityManager::Update(float dt)
 {
+	
 	//Create units
 	//DEBUG-----------------------------------------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
@@ -475,8 +476,8 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 void j1EntityManager::SelectUnits()
 {
 
-
-	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		iPoint mouse_pos;
+		App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
@@ -493,25 +494,38 @@ void j1EntityManager::SelectUnits()
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
 
-		iPoint mouse_pos;
-		App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
-
-		list<Unit*>::iterator it = friendly_units.begin();
-		while (it != friendly_units.end())
+		list<Unit*>::iterator friendly_it = friendly_units.begin();
+		while (friendly_it != friendly_units.end())
 		{
-			if ((*it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*it)->GetCollider().x + (*it)->GetCollider().w && (*it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*it)->GetPosition().y + (*it)->GetCollider().h)
+			if ((*friendly_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*friendly_it)->GetCollider().x + (*friendly_it)->GetCollider().w && (*friendly_it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*friendly_it)->GetPosition().y + (*friendly_it)->GetCollider().h)
 			{
-				App->ui->cursor_state = on_friendly_unit;
 				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 				{
-					selected_units.push_back((*it));
-					(*it)->selected = true;
+					selected_units.push_back((*friendly_it));
+					(*friendly_it)->selected = true;
 				}
+				App->ui->cursor_state = on_friendly_unit;
+				break;
 			}
 			else
-				App->ui->cursor_state = standart;
+					App->ui->cursor_state = standart;
+			friendly_it++;
+		}
 
-			it++;
+	list<Unit*>::iterator enemy_it = enemy_units.begin();
+		while (enemy_it != enemy_units.end())
+		{
+			if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetCollider().x + (*enemy_it)->GetCollider().w && (*enemy_it)->GetCollider().y <= mouse_pos.y && mouse_pos.y <= (*enemy_it)->GetPosition().y + (*enemy_it)->GetCollider().h)
+			{
+				App->ui->cursor_state = on_enemy_unit;
+				break;
+			}
+			else
+			{
+				if (App->ui->cursor_state != on_friendly_unit)
+					App->ui->cursor_state = standart;
+			}
+			enemy_it++;
 		}
 
 

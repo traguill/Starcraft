@@ -321,7 +321,8 @@ void j1Render::CursorMovement(float dt)
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
 	// doesnt enter none if
-
+		if (App->ui->cursor_state != on_friendly_unit && App->ui->cursor_state != on_enemy_unit)
+		App->ui->cursor_state = standart;
 
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
@@ -347,6 +348,7 @@ void j1Render::CursorMovement(float dt)
 		camera.y -= dt * camera_speed;
 		App->ui->cursor_state = down;
 	}	
+
 
 	//Limits
 	if (camera.x > 0)			camera.x = 0;
