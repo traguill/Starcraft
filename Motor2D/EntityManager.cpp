@@ -564,8 +564,6 @@ void j1EntityManager::SetMovement()
 			{
 				//Create pathfinding;
 
-				if (App->pathfinding->CreatePath(center_map, destination) == -1)
-
 				path.clear();
 
 				//If you have some units selected & central point is not walkable--------------------------------

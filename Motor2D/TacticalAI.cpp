@@ -289,7 +289,27 @@ void TacticalAI::SeparateUnits(Unit* unit_a, Unit* unit_b)
 			//Unit B goes closer to his target
 			SeparateAtkUnits(unit_b, unit_b);
 		}
+
+		return;
 	}
+
+	//UNIT A moves and Unit B idle
+	if (unit_a->state == UNIT_MOVE && unit_b->state == UNIT_IDLE)
+	{
+		SeparateIdleUnits(unit_a, unit_b);
+		return;
+	}
+	if (unit_a->state == UNIT_IDLE && unit_b->state == UNIT_MOVE)
+	{
+		SeparateIdleUnits(unit_b, unit_a);
+		return;
+	}
+
+	if (unit_a->state == UNIT_IDLE && unit_b->state == UNIT_IDLE)
+	{
+		SeparateIdleUnits(unit_a, unit_b, true);
+	}
+	
 
 }
 
@@ -359,4 +379,48 @@ void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
 
 	unit->SetPath(result_path);
 	unit->resolving_collision = true;
+}
+
+void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
+{
+	//Unit B moves to let unit A pass
+
+	iPoint unit_a_pos = unit_a->GetPosition();
+	iPoint unit_b_pos = unit_b->GetPosition();
+
+	fPoint direction;
+	if (both_idle == true)
+	{
+		direction.x = (rand() / (double)(RAND_MAX + 1));
+		direction.y = (rand() / (double)(RAND_MAX + 1));
+	}
+	else
+		direction = unit_a->direction;
+
+	direction.Normalize();
+	direction.Scale(30); //Change it for distance between units [value]
+	direction.Rotate(3.14 * 0.5f);
+
+	iPoint final_tile(unit_b_pos.x + direction.x, unit_b_pos.y + direction.y);
+	final_tile = App->map->WorldToMap(final_tile.x, final_tile.y, COLLIDER_MAP);
+	iPoint origin_tile = unit_b_pos;
+	origin_tile = App->map->WorldToMap(origin_tile.x, origin_tile.y, COLLIDER_MAP);
+
+	if (App->pathfinding->IsWalkable(final_tile) == true)
+	{
+		vector<iPoint>path;
+		if (App->pathfinding->CreateOptimizedPath(origin_tile, final_tile, path) == true)
+		{
+			unit_b->SetPath(path);
+			unit_b->resolving_collision = true;
+		}
+		else
+		{
+			//Impossible to create pathfinding for some reason
+		}
+	}
+	else
+	{
+		//Final tile no walkable find another one (rotate)
+	}
 }

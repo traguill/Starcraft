@@ -52,6 +52,8 @@ private:
 
 	void SeparateAtkUnits(Unit* unit, Unit* reference);
 
+	void SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle = false); //Separates moving->idle  & idle->idle
+
 	bool OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const;
 
 	//If one unit sees another kill him

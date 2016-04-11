@@ -41,6 +41,8 @@ public:
 
 	bool CreateLine(const iPoint& origin, const iPoint& destination);
 
+	bool CreateOptimizedPath(const iPoint& origin, const iPoint& destination, vector<iPoint>& path);
+
 private:
 
 	uint width;

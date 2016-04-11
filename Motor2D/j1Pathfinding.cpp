@@ -345,4 +345,31 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 	return true;
 }
 
+bool j1PathFinding::CreateOptimizedPath(const iPoint& origin, const iPoint& destination, vector<iPoint>& path)
+{
+	bool ret = false;
 
+	//Origin or destination not walkable
+	if (!IsWalkable(origin) || !IsWalkable(destination))
+		return false;
+
+	if (CreateLine(origin, destination) == true)
+	{
+		//Create line between 2 points
+		path.push_back(origin);
+		path.push_back(destination);
+
+		ret = true;
+	}
+	else
+	{
+		//Use pathfinding
+		if (CreatePath(origin, destination) != -1)
+		{
+			path = last_path;
+			ret = true;
+		}
+	}
+
+	return ret;
+}
