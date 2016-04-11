@@ -217,7 +217,6 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 {
 	UICursor* cursor = new UICursor(sections, anim_speed);
 	cursor->listener = listener;
-	//gui_elements.push_back(cursor);
 
 	return cursor;
 }
@@ -355,14 +354,13 @@ void j1UIManager::ShowUiUnits()
 		{
 			//Show life in HUD
 			
-			//int total_unit_life = (*it)->hp_bar->GetMaxSize();
-			//int life_from_total = (*it)->hp_bar->current_number;
+			int total_unit_life = (*it)->hp_bar->GetMaxSize();
+			int life_from_total = (*it)->hp_bar->current_number;
 
 			char ui_life[20];
 			
-			//sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
-			//life_HUD->Print(ui_life);
-			//App->ui->CreateLabel(ui_life, pos.x, pos.y);
+			sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
+			life_HUD->Print(ui_life);
 
 			SDL_Rect s{ 252, 440, 27, 29 };
 			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
