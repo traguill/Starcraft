@@ -205,7 +205,7 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		if (*f_unit == _unit)
 		{
 			f_unit = friendly_units.erase(f_unit);
-			f_unit++;
+			f_unit--;
 
 			list<Unit*>::iterator s_unit = selected_units.begin();
 			while (s_unit != selected_units.end())
@@ -213,13 +213,13 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 				if (*s_unit == _unit)
 				{
 					s_unit = selected_units.erase(s_unit);
-					s_unit++;
-					RELEASE(_unit);
+					s_unit--;
+					//RELEASE(_unit);
 					return;
 				}
 				++s_unit;
 			}
-			RELEASE(_unit);
+			//RELEASE(_unit);
 			return;
 		}
 		++f_unit;
@@ -233,7 +233,7 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		if (*e_unit == _unit)
 		{
 			enemy_units.erase(e_unit);
-			RELEASE(_unit);
+			//RELEASE(_unit);
 			return;
 		}
 		++e_unit;
