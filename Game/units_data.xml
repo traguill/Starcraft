@@ -12,6 +12,7 @@
     <range value="80" />
     <cool value="1" />
     <collider width="15" height="15"/>
+    <abilities value="false"/>
     <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>
@@ -179,11 +180,15 @@
     <height value="32" />
     <life value="100" />
     <speed value="100" />
-    <damage value="100" />
+    <damage value="10" />
     <vision value="200" />
     <range value="100" />
     <cool value="1" />
     <collider width="15" height="15"/>
+    <abilities value="true">
+      <ability value="INVISIBLE" />
+      <ability value="SNIPPER" />
+    </abilities>
 <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>
@@ -354,6 +359,7 @@
     <vision value="180" />
     <range value="50" />
     <cool value="1" />
+  <abilities value="false"/>
     <up>
       <rect x="5" y="68"/>
       <rect x="5" y="100"/>

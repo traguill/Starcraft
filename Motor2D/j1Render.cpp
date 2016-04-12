@@ -103,7 +103,7 @@ bool j1Render::Update(float dt)
 
 	while (i != blit_sprites.end())
 	{
-		Blit((*i)->texture, (*i)->position.x, (*i)->position.y, &(*i)->rect);
+		Blit((*i)->texture, (*i)->position.x, (*i)->position.y, &(*i)->rect, (*i)->alpha);
 		++i;
 	}
 
@@ -189,7 +189,7 @@ void j1Render::Blit(Sprite* _sprite)
 	if (_sprite != NULL)
 		blit_sprites.push_back(_sprite);
 }
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,uint alpha, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
@@ -221,10 +221,21 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 		p = &pivot;
 	}
 
+	if (alpha != 255 && alpha < 255)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
+
 	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
+	}
+
+	//Reset the texture to the original alpha mode
+	if (alpha != 255)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
 	return ret;

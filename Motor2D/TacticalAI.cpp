@@ -54,7 +54,7 @@ bool TacticalAI::Update(float dt)
 void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 
 	//Do not change the state if the unit is resolving a collision (high priority)
-	if (unit->resolving_collision == true)
+	if (unit->avoid_change_state == true)
 	{
 		LOG("Changing state while resolving collision");
 		return;
@@ -241,17 +241,18 @@ bool TacticalAI::SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list)
 
 	while (i != search_list.end())
 	{
-		if ((*i)->GetPosition().DistanceTo(unit->GetPosition()) < unit->GetRange()) //Change range by vision range and maybe start pathfinding
+		if ((*i)->state != UNIT_DIE && (*i)->IsVisible() == true)
 		{
-			if ((*i)->state != UNIT_DIE)
+			if ((*i)->GetPosition().DistanceTo(unit->GetPosition()) < unit->GetRange()) //Change range by vision range and maybe start pathfinding
 			{
+
 				if (unit->is_enemy)
 					LOG("Enemy: I've killed one enemy and another is near");
 				else
 					LOG("Friend: I've killed one enemy and another is near");
 				SetEvent(ENEMY_TARGET, unit, (*i));
 				return true;
-			}	
+			}
 		}
 		++i;
 	}
@@ -285,7 +286,7 @@ void TacticalAI::CheckCollisionsLists(list<Unit*> list_a, list<Unit*> list_b)
 				continue;
 			}
 			//First check if someone is resolving collisions
-			if ((*unit_a)->resolving_collision == false && (*unit_b)->resolving_collision == false) 
+			if ((*unit_a)->avoid_change_state == false && (*unit_b)->avoid_change_state == false) 
 			{
 				if ((*unit_a)->state == UNIT_DIE || (*unit_b)->state == UNIT_DIE)
 				{
@@ -368,7 +369,7 @@ void TacticalAI::Vision()
 		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
 		while (unit_e != App->entity->enemy_units.end())
 		{
-			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE)
+			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE && (*unit_f)->IsVisible() == true && (*unit_e)->IsVisible() == true)
 			{
 				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
 				{
@@ -423,7 +424,7 @@ void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
 	result_path.push_back(destination);
 
 	unit->SetPath(result_path);
-	unit->resolving_collision = true;
+	unit->avoid_change_state = true;
 }
 
 void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
@@ -457,7 +458,7 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 		if (App->pathfinding->CreateOptimizedPath(origin_tile, final_tile, path) == true)
 		{
 			unit_b->SetPath(path);
-			unit_b->resolving_collision = true;
+			unit_b->avoid_change_state = true;
 		}
 		else
 		{

@@ -11,6 +11,7 @@
 
 #define MOVE_RADIUS 8
 
+#define INVISIBILITY_ALPHA 155 //Load this from xml...
 
 enum UNIT_TYPE{ 
 	MARINE, 
@@ -29,6 +30,13 @@ enum UNIT_STATE{
 	UNIT_MOVE,
 	UNIT_ATTACK,
 	UNIT_DIE
+};
+
+enum UNIT_ABILITY
+{
+	INVISIBLE,
+	SNIPPER,
+	HEAL
 };
 
 class Unit : public Entity
@@ -60,6 +68,8 @@ public:
 
 	void DiscardTarget(); //Stops attacking the target for some reason
 
+	bool IsVisible()const;
+
 private:
 
 	void Move(float dt);
@@ -75,6 +85,13 @@ private:
 
 	void Delete(); 
 
+	void UseAbility(uint id); //Unit use the ability asigned to the id number
+	void CastAbility(const UNIT_ABILITY ability); //Actual method to USE the ability
+
+	//Abilities
+	void Invisibility();
+	void SetVisible();
+
 private:
 
 	uint speed;
@@ -88,13 +105,18 @@ private:
 	UNIT_TYPE type;
 
 	list<Unit*> attacking_units; //Units that are attacking me
+
+	//For abilities
+	bool invisible = false;
+
+	list<UNIT_ABILITY> abilities;
 public:
 	UNIT_STATE state;
 	queue<UNIT_EVENT> events;
 	uint vision;
 
-	//Can't change state when is resolving a collision
-	bool resolving_collision;
+	//Can't change state when is resolving a collision or do another thing
+	bool avoid_change_state;
 
 	bool is_enemy;
 

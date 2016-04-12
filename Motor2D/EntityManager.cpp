@@ -96,6 +96,7 @@ bool j1EntityManager::Update(float dt)
 	//------------------------------------------------------------------------------
 
 	//Basic logic
+
 	SelectUnits();
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
@@ -103,7 +104,9 @@ bool j1EntityManager::Update(float dt)
 		CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
 	}
 
-	//Update lists
+	ActivateAbilities();
+
+	//UPDATE UNITS------------------------------------------------------------------------------------
 	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
@@ -123,8 +126,6 @@ bool j1EntityManager::Update(float dt)
 		(*i)->Draw();
 		i++;
 	}
-
-	//Sort 2 lists of elements
 	
 
 	return true;
@@ -279,6 +280,31 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->height = unit.child("height").attribute("value").as_int();
 		unit_db->collider.w = unit.child("collider").attribute("width").as_int();
 		unit_db->collider.h = unit.child("collider").attribute("height").as_int();
+
+		//Abilities check if the unit has any
+		if (unit.child("abilities").attribute("value").as_bool() == true)
+		{
+			pugi::xml_node ability;
+			for (ability = unit.child("abilities").child("ability"); ability; ability = ability.next_sibling("ability"))
+			{
+				string invisible = "INVISIBLE";
+				string snipper = "SNIPPER";
+				string heal = "HEAL";
+
+				if (ability.attribute("value").as_string() == invisible)
+				{
+					unit_db->abilities.push_back(INVISIBLE);
+				}
+				if (ability.attribute("value").as_string() == snipper)
+				{
+					unit_db->abilities.push_back(SNIPPER);
+				}
+				if (ability.attribute("value").as_string() == heal)
+				{
+					unit_db->abilities.push_back(HEAL);
+				}
+			}
+		}
 
 		//Animations
 		unit_db->up.frames.clear();
@@ -438,6 +464,9 @@ void j1EntityManager::PrintUnitDatabase()const
 		LOG("Range: %i", (*i).second->range);
 		LOG("Cool: %i", (*i).second->cool);
 		LOG("Collider width %i - height %i", (*i).second->collider.w, (*i).second->collider.h);
+
+		LOG("Number of abilities %i", (*i).second->abilities.size());
+
 		++i;
 	}
 }
@@ -672,7 +701,7 @@ void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center
 	}
 
 	unit->DiscardTarget();
-	unit->resolving_collision = true; //Change for high priority
+	unit->avoid_change_state = true; 
 	unit->SetPath(unit_path);
 	unit->CenterUnit();
 }
@@ -726,6 +755,7 @@ void j1EntityManager::CheckUnderCursor()
 			list<Unit*>::iterator sel_unit = selected_units.begin();
 			while (sel_unit != selected_units.end())
 			{
+				(*sel_unit)->avoid_change_state = false;
 				App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
 				++sel_unit;
 			}
@@ -762,4 +792,23 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 	}
 	else
 		return NULL; //Unit type not found
+}
+
+
+void j1EntityManager::ActivateAbilities()
+{
+	//Only activate abilities with 1 unit selected - No multiple units abilities available
+	if (selected_units.size() != 1)
+		return;
+
+	//Use abilities with keys for now - Implement with UI buttons
+	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_UP)
+	{
+		(*selected_units.begin())->UseAbility(1);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_UP)
+	{
+		(*selected_units.begin())->UseAbility(2);
+	}
 }

@@ -38,6 +38,8 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	width = u->width;
 	height = u->height;
 
+	abilities = u->abilities;
+
 	//Animations
 	up = u->up;
 	up.speed = u->walk_anim_speed;
@@ -97,7 +99,7 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	collider.w = u->collider.w;
 	collider.h = u->collider.h;
 
-	resolving_collision = false;
+	avoid_change_state = false;
 }
 
 Unit::~Unit()
@@ -188,8 +190,6 @@ void Unit::Draw()
 		}
 		
 	}
-	
-
 
 	App->render->Blit(&sprite);
 
@@ -209,6 +209,9 @@ void Unit::Attack(float dt)
 		App->tactical_ai->SetEvent(ENEMY_RUNNING, this, target);
 		return;
 	}
+
+	if (invisible)
+		SetVisible();
 
 	if (cool_timer >= cool)
 	{
@@ -231,7 +234,7 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 	}
 
 	//Start attacking if the unit are NOT: death, already attackin or resolving a collision
-	if (resolving_collision == false)
+	if (avoid_change_state == false)
 	{
 		if (state != UNIT_ATTACK)
 		{
@@ -246,6 +249,8 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 		}
 	}
 	
+
+	//ACTUAL MOMENT WHEN THE UNIT ATTACK
 
 	life -= dmg;
 	
@@ -292,7 +297,7 @@ void Unit::Move(float dt)
 {
 	if (has_destination)
 	{	
-		if (target != NULL && resolving_collision == false)
+		if (target != NULL && avoid_change_state == false)
 		if (CheckTargetRange() == true)
 			return;
 
@@ -337,7 +342,7 @@ void Unit::Move(float dt)
 			else
 			{
 				//PATH COMPLETED!
-				resolving_collision = false;
+				avoid_change_state = false;
 				has_destination = false;
 				App->tactical_ai->SetEvent(END_MOVING, this);
 			}
@@ -599,9 +604,9 @@ Unit* Unit::GetTarget()
 
 void Unit::DiscardTarget()
 {
-	if (target)
+	if (target != NULL)
 	{
-		target->attacking_units.remove(this); //COULD CAUSE HEAP BREAK!
+		target->attacking_units.remove(this); //DO NOT USE THIS METHOD TO DISCARD ALL TARGETS
 		target = NULL;
 	}
 }
@@ -619,4 +624,98 @@ void Unit::AddPath(vector<iPoint> _path)
 vector<iPoint> Unit::GetPath()const
 {
 	return path;
+}
+
+bool Unit::IsVisible()const
+{
+	return !invisible;
+}
+
+void Unit::UseAbility(uint id)
+{
+	if (id > abilities.size())
+	{
+		LOG("Error: unit doesn't have this number of ability");
+		return;
+	}
+
+	int counter = 1;
+	list<UNIT_ABILITY>::iterator ability = abilities.begin();
+	while (ability != abilities.end())
+	{
+		if (counter == id)
+		{
+			CastAbility(*ability);
+			return;
+		}
+		++counter;
+		++ability;
+	}
+
+}
+
+void Unit::CastAbility(const UNIT_ABILITY ability)
+{
+	switch (ability)
+	{
+	case INVISIBLE:
+		Invisibility();
+		break;
+	case SNIPPER:
+		break;
+	case HEAL:
+		break;
+	}
+}
+
+/*
+** ABILITIES -------------------------------------------------------------------------------
+*/
+
+void Unit::Invisibility()
+{
+	//Check mana here
+
+	//Check if another ability is in use
+
+	if (state == UNIT_DIE)
+		return;
+
+	if (invisible == false)
+	{
+		sprite.alpha = INVISIBILITY_ALPHA;
+		state = UNIT_IDLE;
+		invisible = true;
+
+		//Discard the target
+		if (target != NULL)
+			target->attacking_units.remove(this);
+
+		target = NULL;
+
+		//Tell attaking units to ignore me
+		list<Unit*>::iterator atk_unit = attacking_units.begin();
+		while (atk_unit != attacking_units.end())
+		{
+			(*atk_unit)->target = NULL;
+			++atk_unit;
+		}
+
+		attacking_units.clear();
+	}
+	else
+	{
+		//Turn visible
+		SetVisible();
+	}
+	
+
+	
+
+}
+
+void Unit::SetVisible()
+{
+	invisible = false;
+	sprite.alpha = 255;
 }
