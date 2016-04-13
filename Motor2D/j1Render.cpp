@@ -373,6 +373,12 @@ void j1Render::SetTransition(int x, int y)
 	transitioning = true;
 	end_point.x = x;
 	end_point.y = y;
+
+	//Limits
+	if (end_point.x > 0)			end_point.x = 0;
+	if (end_point.x < limit_x)		end_point.x = limit_x;
+	if (end_point.y > 0)			end_point.y = 0;
+	if (end_point.y < limit_y)		end_point.y = limit_y;
 }
 
 void j1Render::DoTransition()

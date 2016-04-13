@@ -114,11 +114,15 @@ bool j1EntityManager::Update(float dt)
 	if (SNIPPER_MODE == true)
 	{
 		//Draw line
-		iPoint base = (*selected_units.begin())->GetPosition();
 		iPoint mouse;
 		App->input->GetMouseWorld(mouse.x, mouse.y);
-		App->render->DrawLine(base.x, base.y, mouse.x, mouse.y, 255, 0, 0, 100, true);
-
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN || App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		{
+			iPoint base = (*selected_units.begin())->GetPosition();
+			
+			App->render->DrawLine(base.x, base.y, mouse.x, mouse.y, 255, 0, 0, 100, true);
+		}
+		
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 		{
 			//DISABLE snipper mode
@@ -127,6 +131,7 @@ bool j1EntityManager::Update(float dt)
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 		{
+			//Shoot
 			selected_units.front()->Shoot(mouse.x, mouse.y);
 		}
 	}

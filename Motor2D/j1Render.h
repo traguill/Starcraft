@@ -6,7 +6,7 @@
 #include "j1Module.h"
 #include <list>
 
-#define CAMERA_TRANSITION_RADIUS 40
+#define CAMERA_TRANSITION_RADIUS 23
 
 struct Sprite;
 

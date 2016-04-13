@@ -807,7 +807,6 @@ void Unit::Snipper()
 
 void Unit::Shoot(int x, int y)
 {
-	//Shake cam
 
 	iPoint origin = App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
 	iPoint dst = App->map->WorldToMap(x, y, COLLIDER_MAP);
@@ -832,6 +831,17 @@ void Unit::Shoot(int x, int y)
 	bullet->direction = direction;
 
 	App->entity->bullets.push_back(bullet);
+
+	//Shake Cam
+	direction.x = round(direction.x);
+	direction.y = round(direction.y);
+	direction.Scale(30);
+	iPoint cam_initial(App->render->camera.x, App->render->camera.y);
+	App->render->camera.x += direction.x;
+	App->render->camera.y += direction.y;
+
+	App->render->SetTransition(cam_initial.x, cam_initial.y);
+
 }
 
 void Unit::DisableSnipper()
