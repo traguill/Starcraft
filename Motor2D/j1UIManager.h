@@ -2,7 +2,7 @@
 #define __J1UIMANAGER_H__
 
 #include "j1Module.h"
-
+#include "UIProgressBar.h"
 
 class UILabel;
 class UIImage;
@@ -52,6 +52,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+
+	bool LoadUiInfo();
 	// TODO 2: Create the factory methods
 	// Gui creation functions
 
@@ -66,8 +68,7 @@ public:
 
 	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
 
-
-	UIProgressBar* CreateBar(int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture, j1Module* listener = NULL);
+	UIProgressBar* CreateBar(string _type, int max_num, const int x, const int y, j1Module* listener = NULL);
 
 	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
 	//Functions ---------------------------------------------------------------------------------------------------
@@ -90,6 +91,7 @@ private:
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
 
+	list<UIProgressBar*>	ui_progress_bar;
 
 	//ui unit sprites
 	SDL_Texture* ui_icons;
@@ -98,7 +100,7 @@ private:
 
 	UICursor* cursor;
 	UILabel* life_HUD;
-
+	string ui_file_path;
 	
 
 public:

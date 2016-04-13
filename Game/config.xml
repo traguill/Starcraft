@@ -17,6 +17,7 @@
 
   <gui>
     <atlas file="gui/atlas.png"/>
+    <gui_data value="gui_data.xml"/>
   </gui>
     
   <window>

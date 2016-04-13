@@ -35,7 +35,7 @@ bool j1EntityManager::Awake(pugi::xml_node& conf)
 bool j1EntityManager::Start()
 {
 	bool ret = true;
-
+	
 	LoadUnitsInfo();
 
 	debug = false;
@@ -89,6 +89,13 @@ bool j1EntityManager::Update(float dt)
 		LOG("Firebat created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(FIREBAT, p.x, p.y, false);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		LOG("Observer created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(OBSERVER, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -756,7 +763,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x - 8, unit->GetPosition().y + 15, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		unit->hp_bar = App->ui->CreateBar("health", unit->life, unit->GetPosition().x, unit->GetPosition().y);
+		unit->prg_bar = App->ui->CreateBar("progress", unit->damage, unit->GetPosition().x, unit->GetPosition().y);
 
 		return unit;
 	}

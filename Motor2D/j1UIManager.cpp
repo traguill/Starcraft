@@ -1,6 +1,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
+#include "j1FileSystem.h"
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Fonts.h"
@@ -36,6 +37,8 @@ bool j1UIManager::Awake(pugi::xml_node& conf)
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
 
+	ui_file_path = conf.child("gui_data").attribute("value").as_string("");
+
 	return ret;
 }
 
@@ -62,9 +65,71 @@ bool j1UIManager::Start()
 	cursor = CreateCursor(sections, 0.08);
 	life_HUD = CreateLabel("", 177, 458);
 
+	LoadUiInfo();
+
 	return ret;
 }
 
+bool j1UIManager::LoadUiInfo()
+{
+	bool ret = true;
+
+	pugi::xml_document	ui_file;
+	pugi::xml_node		ui_elements;
+
+	char* buf;
+	int size = App->fs->Load(ui_file_path.c_str(), &buf);
+	pugi::xml_parse_result result = ui_file.load_buffer(buf, size);
+	
+	RELEASE(buf);
+
+	if (result == NULL)
+	{
+		LOG("Could not load xml file %s. PUGI error: %s", ui_file_path.c_str(), result.description());
+		return false;
+	}
+	else
+	{
+		LOG("GUI ELEMENTS");
+		ui_elements = ui_file.child("gui_elements");
+	}
+
+
+	pugi::xml_node gui;
+	for (gui = ui_elements.child("gui"); gui; gui = ui_elements.next_sibling("gui"))
+	{
+		string attribute_type = gui.attribute("TYPE").as_string();
+		if (attribute_type == "progress_bar")
+		{
+			
+			int pos_x = gui.child("local_pos").attribute("x").as_int();
+			int pos_y = gui.child("local_pos").attribute("y").as_int();
+			int _w = gui.child("wh").attribute("width").as_int();
+			int _h = gui.child("wh").attribute("height").as_int();
+			SDL_Rect full = { gui.child("full").attribute("x").as_int(), gui.child("full").attribute("y").as_int(), _w, _h };
+			SDL_Rect empty = { gui.child("empty").attribute("x").as_int(), gui.child("empty").attribute("y").as_int(), _w, _h };
+			SDL_Rect low = { gui.child("low").attribute("x").as_int(), gui.child("low").attribute("y").as_int(), _w, _h };
+			SDL_Rect middle = { gui.child("middle").attribute("x").as_int(), gui.child("middle").attribute("y").as_int(), _w, _h };
+			string load_texture = gui.child("texture_path").attribute("value").as_string();
+			SDL_Texture* text = App->tex->Load(load_texture.c_str());
+			string pb_ty = gui.child("bar_type").attribute("type").as_string();
+			BAR_TYPE type;
+
+			if (pb_ty == "health")
+			{
+				type = HEALTH;
+			}
+			else
+			{
+				type = PROGRESS;
+			}
+			UIProgressBar* ui_pbar = new UIProgressBar(type, pos_x, pos_y, _w, _h, full, empty, low, middle, text);
+			
+			ui_progress_bar.push_back(ui_pbar);
+		}
+	}
+	return ret;
+}
 // Update all UIManagers
 bool j1UIManager::PreUpdate()
 {
@@ -155,6 +220,17 @@ bool j1UIManager::CleanUp()
 	LOG("Freeing UIManager");
 	bool ret = true;
 
+	list<UIProgressBar*>::iterator pi = ui_progress_bar.begin();
+
+	while (pi != ui_progress_bar.end() && ret == true)
+	{
+		ret = (*pi)->CleanUp();
+
+		delete (*pi);
+		++pi;
+	}
+
+	ui_progress_bar.clear();
 
 	list<UIEntity*>::iterator i = gui_elements.begin();
 
@@ -222,15 +298,42 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 }
 
 
-UIProgressBar* j1UIManager::CreateBar(int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture, j1Module* listener)
+UIProgressBar* j1UIManager::CreateBar(string _type, int max_num, const int x, const int y, j1Module* listener)
 {
-	UIProgressBar* pbar = new UIProgressBar(max_num, x, y, w, h, full_bar, empty_bar, low_bar, middle_bar, texture);
-	pbar->current_number = max_num;
-	pbar->listener = listener;
-	gui_elements.push_back(pbar);
-	pbar->hp_state = FULL;
+	BAR_TYPE typ;
+	if (_type == "health")
+	{
+		typ = HEALTH;
+	}
+	else
+	{
+		typ = PROGRESS;
+	}
 
-	return pbar;
+	list<UIProgressBar*>::iterator it = ui_progress_bar.begin();
+	//(*it)->SetMaxNum(max_num);
+	//(*it)->current_number = (*it)->GetMaxSize();
+	//int _x = (*it)->GetLocalRect().x;
+	//int _y = (*it)->GetLocalRect().y;
+	//(*it)->SetLocalPos(_x + x, _y + y);
+	if (it != ui_progress_bar.end()){
+		
+		UIProgressBar* pbar = new UIProgressBar(typ, max_num, x, y, (*it));
+		if (typ == HEALTH)
+		{
+			pbar->current_number = max_num;
+		}
+		else
+			pbar->current_number = 0;
+		
+		pbar->listener = listener;
+		gui_elements.push_back(pbar);
+		pbar->hp_state = FULL;
+
+		return pbar;
+	}
+	return NULL;
+
 }
 
 

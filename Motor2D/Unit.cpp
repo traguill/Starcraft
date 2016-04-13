@@ -113,7 +113,7 @@ void Unit::Delete()
 	attacking_units.clear();
 	current_animation = NULL;
 	App->ui->EraseElement(hp_bar);
-
+	App->ui->EraseElement(prg_bar);
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
@@ -186,7 +186,26 @@ void Unit::Draw()
 			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetFullBar());
 			break;
 		}
-		
+
+		//Drawing progress bar
+		prg_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 20);
+		App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetEmptyBar());
+
+		switch (prg_bar->hp_state)
+		{
+		case EMPTY:
+			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetEmptyBar());
+			break;
+		case LOW:
+			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetLowBar());
+			break;
+		case MIDDLE:
+			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetMiddleBar());
+			break;
+		case FULL:
+			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetFullBar());
+			break;
+		}
 	}
 	
 

@@ -147,6 +147,7 @@ public:
 
 	//HP bar
 	UIProgressBar* hp_bar;
+	UIProgressBar* prg_bar;
 
 };
 #endif
