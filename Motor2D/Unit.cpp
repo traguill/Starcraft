@@ -40,6 +40,9 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 	abilities = u->abilities;
 
+	direction.x = 0;
+	direction.y = 1;
+
 	//Animations
 	up = u->up;
 	up.speed = u->walk_anim_speed;
@@ -192,6 +195,16 @@ void Unit::Draw()
 	}
 
 	App->render->Blit(&sprite);
+
+	//Draw vision
+	iPoint left_vision(direction.x * vision, direction.y * vision);
+	iPoint right_vision(left_vision);
+	left_vision.Rotate(-CONE_VISION / 2);
+	right_vision.Rotate(CONE_VISION / 2);
+	App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + left_vision.x, logic_pos.y + left_vision.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + right_vision.x, logic_pos.y + right_vision.y, 255, 0, 0, 255, true);
+
+	
 
 }
 

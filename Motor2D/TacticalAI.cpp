@@ -384,9 +384,9 @@ void TacticalAI::Vision()
 					iPoint direction = (*unit_e)->GetDirection();
 
 					int dot = direction.x * distance.x + direction.y * distance.y;
-					int det = direction.x * distance.y - direction.y - distance.x;
+					int module = sqrt(direction.x * direction.x + direction.y * direction.y) * sqrt(distance.x * distance.x + distance.y * distance.y);
 
-					float angle = atan2(det, dot);
+					float angle = acos(dot / module);
 					
 					if (angle < CONE_VISION / 2)
 					{
