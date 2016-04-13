@@ -51,7 +51,7 @@ bool GameScene::Start()
 	game_paused = false;
 
 	//UI TESTS
-	App->ui->CreateImage({ 1, 194, 599, 155 }, 21, 325);
+	App->ui->CreateImage({ 1, 396, 637, 192 }, 2, 290);
 	//
 	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);

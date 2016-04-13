@@ -23,6 +23,7 @@ class j1UIManager;
 class j1EntityManager;
 class TacticalAI;
 class GameScene;
+class EventsManager;
 
 class j1App
 {
@@ -100,6 +101,7 @@ public:
 	j1EntityManager*	entity = NULL;
 	GameScene*			game_scene = NULL;
 	TacticalAI*			tactical_ai = NULL;
+	EventsManager*		events = NULL;
 
 private:
 

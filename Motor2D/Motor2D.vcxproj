@@ -82,6 +82,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="EventsManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="EventsManager.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />

@@ -96,6 +96,8 @@ private:
 	//ui unit sprites
 	SDL_Texture* ui_icons;
 	SDL_Texture* move_ui;
+
+	//It maybe has to be public
 	SDL_Texture* rects;
 
 	UICursor* cursor;
