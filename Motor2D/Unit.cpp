@@ -7,6 +7,7 @@
 #include "EntityManager.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1Pathfinding.h"
 #include "math.h"
 #include "j1UIManager.h"
 
@@ -39,6 +40,9 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	height = u->height;
 
 	abilities = u->abilities;
+
+	direction.x = 0;
+	direction.y = 1;
 
 	//Animations
 	up = u->up;
@@ -720,17 +724,102 @@ void Unit::SetVisible()
 
 void Unit::Snipper()
 {
+	if (snipping == true)
+	{
+		DisableSnipper();
+	}
+
+
 	//Snipper CAN NOT be: death, using invisibility or attacking or already snipping
-	if (state == UNIT_DIE || invisible == true || state == UNIT_ATTACK || snipping == true)
+	if (state == UNIT_DIE || invisible == true || state == UNIT_ATTACK)
 		return;
 
-	snipping = true;
+	//snipping = true;
 	//Camera transition (search best position)
-	App->render->SetTransition(-logic_pos.x, -logic_pos.y);
+	avoid_change_state = true;
+	state = UNIT_IDLE;
+	has_destination = false;
+	path.clear();
 
+	iPoint dir(round(direction.x), round(direction.y));
+
+	SDL_Rect cam = App->render->camera;
+
+	//North-West
+	if (dir.x == 1 && dir.y == 1)
+	{
+		App->render->SetTransition(-logic_pos.x, -logic_pos.y);
+	}
+	//North
+	if (dir.x == 0 && dir.y == 1)
+	{
+		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y);
+	}
+	//North-East
+	if (dir.x == -1 && dir.y == 1)
+	{
+		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y);
+	}
+	//East
+	if (dir == iPoint(-1, 0) || dir == iPoint(-1, -1))
+	{
+		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2);
+	}
+	//Up
+	if (dir.x == 0 && dir.y == -1)
+	{
+		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4);
+	}
+	//West
+	if (dir == iPoint(1, 0) || dir == iPoint(1, 1))
+	{
+		App->render->SetTransition(-logic_pos.x, -logic_pos.y + cam.h / 2);
+	}
+
+	App->entity->SNIPPER_MODE = true;
+	//Activate bullet time
+	App->entity->bullet_time = true;
 	//Entity manager to: snipe mode
 
 	//How can I draw snipping animation?
 
 
+}
+
+void Unit::Shoot(int x, int y)
+{
+	//Shake cam
+
+	iPoint origin = App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
+	iPoint dst = App->map->WorldToMap(x, y, COLLIDER_MAP);
+
+	iPoint destination(x, y);
+
+	//A wall is in our way
+	if (App->pathfinding->CreateLine(origin, dst) == false)
+	{
+		destination = App->map->MapToWorld(App->pathfinding->GetLineTile().x, App->pathfinding->GetLineTile().y, COLLIDER_MAP);
+	}
+
+	//Create bullet [MISS A TEXTURE!]
+	Bullet* bullet = new Bullet();
+	bullet->SetPosition(logic_pos.x, logic_pos.y);
+	bullet->source = this;
+	bullet->destination = destination;
+
+	fPoint direction(x - logic_pos.x, y - logic_pos.y);
+	direction.Normalize();
+
+	bullet->direction = direction;
+
+	App->entity->bullets.push_back(bullet);
+}
+
+void Unit::DisableSnipper()
+{
+	//END SNIPPING
+	snipping = false;
+	App->entity->SNIPPER_MODE = false;
+	App->entity->bullet_time = false;
+	App->entity->actual_bullet_time = 0.0f;
 }

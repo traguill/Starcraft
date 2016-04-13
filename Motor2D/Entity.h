@@ -42,12 +42,13 @@ protected:
 	SDL_Texture* auxiliar_texture; //This variable only unit need it
 	int life;
 
-	int width;
-	int height;
-
 
 	SDL_Rect collider;
 	iPoint logic_pos;
+
+public:
+	int width;
+	int height;
 
 };
 

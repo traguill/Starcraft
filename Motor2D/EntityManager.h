@@ -87,7 +87,6 @@ private:
 	//Remove
 	list<Unit*> units_to_remove;
 
-
 public:
 	//Need another list for buildings
 	list<Unit*> friendly_units;
@@ -98,6 +97,15 @@ public:
 	SDL_Texture* gui_cursor;
 	SDL_Texture* health_bar;
 
+	bool SNIPPER_MODE = false;
+
+	//Bullet time
+	bool bullet_time = false;
+	float update_time = 0.033333;
+	float actual_bullet_time = 0;
+
+	//Sniping
+	list<Bullet*> bullets;
 };
 
 #endif

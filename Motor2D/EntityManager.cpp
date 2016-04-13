@@ -104,20 +104,54 @@ bool j1EntityManager::Update(float dt)
 
 	//Basic logic
 
-	SelectUnits();
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+	if (SNIPPER_MODE == true)
 	{
-		CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
-	}
+		//Draw line
+		iPoint base = (*selected_units.begin())->GetPosition();
+		iPoint mouse;
+		App->input->GetMouseWorld(mouse.x, mouse.y);
+		App->render->DrawLine(base.x, base.y, mouse.x, mouse.y, 255, 0, 0, 100, true);
 
-	ActivateAbilities();
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+		{
+			//DISABLE snipper mode
+			selected_units.front()->DisableSnipper();
+		}
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			selected_units.front()->Shoot(mouse.x, mouse.y);
+		}
+	}
+	else
+	{
+		SelectUnits();
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
+		}
+
+		ActivateAbilities();
+	}
+	
 
 	//UPDATE UNITS------------------------------------------------------------------------------------
+	if (bullet_time == true)
+	{
+		if (actual_bullet_time >= update_time)
+		{
+			actual_bullet_time = 0;
+		}
+		else
+		{
+			actual_bullet_time += dt;
+		}
+	}
 	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
-		if (App->game_scene->GamePaused() == false)
+		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
 			(*it)->Update(dt);
 		
 		(*it)->Draw();
@@ -127,11 +161,22 @@ bool j1EntityManager::Update(float dt)
 	list<Unit*>::iterator i = enemy_units.begin();
 	while (i != enemy_units.end())
 	{
-		if (App->game_scene->GamePaused() == false)
+		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
 			(*i)->Update(dt);
 		
 		(*i)->Draw();
 		i++;
+	}
+
+	//Update bullets
+	list<Bullet*>::iterator bullet = bullets.begin();
+	while (bullet != bullets.end())
+	{
+		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
+			(*bullet)->Update(dt);
+
+		(*bullet)->Draw();
+		++bullet;
 	}
 	
 
@@ -189,6 +234,14 @@ bool j1EntityManager::CleanUp()
 		++it_en;
 	}
 	enemy_units.clear();
+
+	list<Bullet*>::iterator bullet = bullets.begin();
+	while (bullet != bullets.end())
+	{
+		delete (*bullet);
+		++bullet;
+	}
+	bullets.clear();
 
 	App->tex->UnLoad(gui_cursor);
 	App->tex->UnLoad(health_bar);
@@ -809,12 +862,12 @@ void j1EntityManager::ActivateAbilities()
 		return;
 
 	//Use abilities with keys for now - Implement with UI buttons
-	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
 	{
 		(*selected_units.begin())->UseAbility(1);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{
 		(*selected_units.begin())->UseAbility(2);
 	}

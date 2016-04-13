@@ -43,12 +43,15 @@ public:
 
 	bool CreateOptimizedPath(const iPoint& origin, const iPoint& destination, vector<iPoint>& path);
 
+	iPoint GetLineTile()const; //Returns the last hitted tile
+
 private:
 
 	uint width;
 	uint height;
 	uchar* map;
 	vector<iPoint> last_path;
+	iPoint hitted_tile;
 
 };
 

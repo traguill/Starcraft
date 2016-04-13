@@ -321,13 +321,22 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 		if (steep)
 		{
 			if (IsWalkable(iPoint(y, x)) == false)
+			{
+				hitted_tile.x = x;
+				hitted_tile.y = y;
 				return false;
+			}
+				
 			
 		}
 		else
 		{
 			if (IsWalkable(iPoint(x, y)) == false)
+			{
+				hitted_tile.x = x;
+				hitted_tile.y = y;
 				return false;
+			}
 			
 		}
 
@@ -372,4 +381,9 @@ bool j1PathFinding::CreateOptimizedPath(const iPoint& origin, const iPoint& dest
 	}
 
 	return ret;
+}
+
+iPoint j1PathFinding::GetLineTile()const
+{
+	return hitted_tile;
 }

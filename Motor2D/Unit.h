@@ -6,6 +6,7 @@
 #include "p2Point.h"
 #include "Entity.h"
 #include "UIProgressBar.h"
+#include "Bullet.h"
 #include <vector>
 #include <queue>
 
@@ -70,6 +71,8 @@ public:
 
 	bool IsVisible()const;
 
+	void ApplyDamage(uint dmg, Unit* source);
+
 private:
 
 	void Move(float dt);
@@ -78,8 +81,6 @@ private:
 	void CenterUnit();
 
 	void SetAnimation();
-
-	void ApplyDamage(uint dmg,Unit* source); 
 
 	bool CheckTargetRange();
 
@@ -93,6 +94,8 @@ private:
 	void SetVisible();
 
 	void Snipper();
+	void DisableSnipper();
+	void Shoot(int x, int y);
 
 private:
 
@@ -172,6 +175,10 @@ public:
 
 	//HP bar
 	UIProgressBar* hp_bar;
+
+	//Sniping
+	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)
+
 
 };
 #endif

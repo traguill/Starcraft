@@ -88,6 +88,9 @@
     <ClCompile Include="UIProgressBar.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Desenvolupament  ========\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="UIProgressBar.h">
       <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Desenvolupament  ========\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
