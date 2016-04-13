@@ -464,6 +464,47 @@
     
   </unit>
   
+
+<unit TYPE="OBSERVER">
+    <texture_path value="sprites/observer.png"/>
+    <width value="40" />
+    <height value="40" />
+    <life value="100" />
+    <speed value="100" />
+    <damage value="0" />
+    <vision value="180" />
+    <range value="50" />
+    <cool value="1" />
+    <up>
+      <rect x="0" y="0"/>   
+    </up>
+    <down>
+      <rect x="560" y="0"/>
+    </down>
+    <right>
+      <rect x="280" y="0"/>
+    </right>
+    <left>
+      <rect x="280" y="40"/>
+    </left>
+    <upright>
+      <rect x="120" y="0"/>
+    </upright>
+    <downright>
+      <rect x="440" y="0"/>
+    </downright>
+    <upleft>
+      <rect x="120" y="40"/>
+    </upleft>
+    <downleft>
+      <rect x="440" y="40"/>
+    </downleft>
+
+    <animwalkspeed value="0.1"/>
+
+    
+  </unit>
+
   <unit TYPE="MEDIC">
     <texture_path value="sprites/blue_medic.png"/>
     <width value="24" />
@@ -644,4 +685,5 @@
     <animattackspeed value="0.05"/>
 
   </unit>
+
 </units>

@@ -175,6 +175,7 @@ public:
 
 	//HP bar
 	UIProgressBar* hp_bar;
+	UIProgressBar* prg_bar;
 
 	//Sniping
 	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)

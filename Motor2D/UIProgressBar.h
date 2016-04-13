@@ -4,7 +4,10 @@
 #include "UIEntity.h"
 
 struct SDL_Texture;
-
+enum BAR_TYPE{
+	HEALTH,
+	PROGRESS
+};
 enum BAR_STATE
 {
 	EMPTY,
@@ -21,7 +24,9 @@ public:
 
 	UIProgressBar();
 
-	UIProgressBar(int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture);
+	UIProgressBar(BAR_TYPE type, int max_num, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture);
+	UIProgressBar(BAR_TYPE type, const int x, const int y, const int w, const int h, SDL_Rect full_bar, SDL_Rect empty_bar, SDL_Rect low_bar, SDL_Rect middle_bar, SDL_Texture* texture);
+	UIProgressBar(BAR_TYPE type, int max_num, const int x, const int y, UIProgressBar* prog_bar);
 
 	// Destructor
 	virtual ~UIProgressBar();
@@ -36,6 +41,7 @@ public:
 	void SetState(BAR_STATE &state);
 	
 	void SetBarsLength(int new_len);
+	void SetMaxNum(const int max_num);
 
 	int GetMaxSize() const;
 	SDL_Rect GetFullBar() const;
@@ -52,12 +58,14 @@ private:
 	SDL_Rect middle_bar_section;
 
 	SDL_Texture* bar_tex;
+protected:
 	int max_number;
 
 
 public:
 	int current_number;
 	BAR_STATE hp_state;
+	BAR_TYPE bar_ty;
 };
 
 #endif

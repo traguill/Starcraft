@@ -18,6 +18,7 @@
 #include "j1App.h"
 #include "GameScene.h"
 #include "TacticalAI.h"
+#include "EventsManager.h"
 
 
 // Constructor
@@ -37,6 +38,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	ui = new j1UIManager();
 	game_scene = new GameScene();
 	entity = new j1EntityManager();
+	events = new EventsManager();
 	tactical_ai = new TacticalAI();
 
 	// Ordered for awake / Start / Update
@@ -54,18 +56,21 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	// scene last
 	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
 	AddModule(game_scene);
+	
+	//Should be before render
+	AddModule(ui);
 
 	AddModule(entity);
 	
 	AddModule(tactical_ai);
 
-
+	AddModule(events);
+	
 
 	// render last to swap buffer
 	AddModule(render);
 
-	//Should be before render
-	AddModule(ui);
+	
 
 
 

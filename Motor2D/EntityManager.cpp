@@ -60,7 +60,7 @@ bool j1EntityManager::PreUpdate()
 
 bool j1EntityManager::Update(float dt)
 {
-	
+
 	//Create units
 	//DEBUG-----------------------------------------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
@@ -91,11 +91,18 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		LOG("Observer created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(OBSERVER, p.x, p.y, false);
+	}
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
 		LOG("Medic created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MEDIC, p.x, p.y, false);
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -153,7 +160,7 @@ bool j1EntityManager::Update(float dt)
 	{
 		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
 			(*it)->Update(dt);
-		
+
 		(*it)->Draw();
 		it++;
 	}
@@ -163,10 +170,11 @@ bool j1EntityManager::Update(float dt)
 	{
 		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
 			(*i)->Update(dt);
-		
+
 		(*i)->Draw();
 		i++;
 	}
+
 
 	//Update bullets
 	list<Bullet*>::iterator bullet = bullets.begin();
@@ -181,13 +189,14 @@ bool j1EntityManager::Update(float dt)
 	
 
 	return true;
+
 }
 
 // Called after all Updates
 bool j1EntityManager::PostUpdate()
 {
 
-	
+
 	if (units_to_remove.size() > 0)
 	{
 
@@ -565,8 +574,8 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 void j1EntityManager::SelectUnits()
 {
 
-		iPoint mouse_pos;
-		App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
+	iPoint mouse_pos;
+	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
@@ -583,39 +592,39 @@ void j1EntityManager::SelectUnits()
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
 
-		list<Unit*>::iterator friendly_it = friendly_units.begin();
-		while (friendly_it != friendly_units.end())
+	list<Unit*>::iterator friendly_it = friendly_units.begin();
+	while (friendly_it != friendly_units.end())
+	{
+		if ((*friendly_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*friendly_it)->GetPosition().x + (*friendly_it)->sprite.rect.w && (*friendly_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*friendly_it)->GetPosition().y - (*friendly_it)->sprite.rect.h + 5)
 		{
-			if ((*friendly_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*friendly_it)->GetPosition().x + (*friendly_it)->sprite.rect.w && (*friendly_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*friendly_it)->GetPosition().y - (*friendly_it)->sprite.rect.h + 5)
+			if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
-				if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-				{
-					selected_units.push_back((*friendly_it));
-					(*friendly_it)->selected = true;
-				}
-				App->ui->cursor_state = on_friendly_unit;
-				break;
+				selected_units.push_back((*friendly_it));
+				(*friendly_it)->selected = true;
 			}
-			else
-					App->ui->cursor_state = standart;
-			friendly_it++;
+			App->ui->cursor_state = on_friendly_unit;
+			break;
 		}
+		else
+			App->ui->cursor_state = standart;
+		friendly_it++;
+	}
 
 	list<Unit*>::iterator enemy_it = enemy_units.begin();
-		while (enemy_it != enemy_units.end())
+	while (enemy_it != enemy_units.end())
+	{
+		if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetPosition().x + (*enemy_it)->sprite.rect.w && (*enemy_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*enemy_it)->GetPosition().y - (*enemy_it)->sprite.rect.h + 5)
 		{
-			if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetPosition().x + (*enemy_it)->sprite.rect.w && (*enemy_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*enemy_it)->GetPosition().y - (*enemy_it)->sprite.rect.h + 5)
-			{
-				App->ui->cursor_state = on_enemy_unit;
-				break;
-			}
-			else
-			{
-				if (App->ui->cursor_state != on_friendly_unit)
-					App->ui->cursor_state = standart;
-			}
-			enemy_it++;
+			App->ui->cursor_state = on_enemy_unit;
+			break;
 		}
+		else
+		{
+			if (App->ui->cursor_state != on_friendly_unit)
+				App->ui->cursor_state = standart;
+		}
+		enemy_it++;
+	}
 
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
@@ -723,10 +732,10 @@ void j1EntityManager::SetMovement()
 					if (App->pathfinding->IsWalkable(end_point) == true)
 					{
 						//If it is, create a path to go there
-						if(App->pathfinding->CreatePath(unit_map_pos, end_point) != 1)
+						if (App->pathfinding->CreatePath(unit_map_pos, end_point) != 1)
 							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
 					}
-					
+
 					else
 					{
 						//If it doesn't, go to the mouse point
@@ -761,7 +770,7 @@ void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center
 	}
 
 	unit->DiscardTarget();
-	unit->avoid_change_state = true; 
+	unit->avoid_change_state = true;
 	unit->SetPath(unit_path);
 	unit->CenterUnit();
 }
@@ -846,7 +855,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar(unit->life, unit->GetPosition().x - 8, unit->GetPosition().y + 15, 19, 5, SDL_Rect{ 0, 0, 19, 5 }, SDL_Rect{ 0, 15, 19, 5 }, SDL_Rect{ 0, 10, 19, 5 }, SDL_Rect{ 0, 5, 19, 5 }, health_bar);
+		unit->hp_bar = App->ui->CreateBar("health", unit->life, unit->GetPosition().x, unit->GetPosition().y);
+		unit->prg_bar = App->ui->CreateBar("progress", unit->damage, unit->GetPosition().x, unit->GetPosition().y);
 
 		return unit;
 	}
