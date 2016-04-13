@@ -42,7 +42,7 @@ public:
 	Unit* CreateUnit(UNIT_TYPE type, int x, int y,bool is_enemy);
 
 	void RemoveUnit(Unit* _unit);
-	
+	void RemoveBullet(Bullet* _bullet);
 private:
 
 	//Load data
@@ -65,6 +65,7 @@ private:
 
 	//Removing
 	void DestroyUnit(Unit* _unit);
+	void DestroyBullet(Bullet* _bullet);
 
 	//DEBUG
 	void PrintUnitDatabase()const;
@@ -86,6 +87,7 @@ private:
 
 	//Remove
 	list<Unit*> units_to_remove;
+	list<Bullet*> bullets_to_remove;
 
 public:
 	//Need another list for buildings

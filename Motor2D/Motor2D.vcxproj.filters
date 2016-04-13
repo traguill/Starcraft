@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="EventsManager.cpp" />
+    <ClCompile Include="j1Main.cpp" />
+    <ClCompile Include="j1App.cpp" />
+    <ClCompile Include="TacticalAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UICursor.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEntity.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIInputBox.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UILabel.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIProgressBar.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="j1UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Audio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1FileSystem.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Fonts.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Map.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Input.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Pathfinding.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1PerfTimer.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Render.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Textures.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Timer.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Window.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="p2Log.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="PugiXml\src\pugixml.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EventsManager.h" />
+    <ClInclude Include="j1App.h" />
+    <ClInclude Include="TacticalAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProgressBar.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UICursor.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEntity.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIInputBox.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UILabel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Audio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1FileSystem.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Fonts.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Module.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Map.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Input.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Pathfinding.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1PerfTimer.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Render.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Textures.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Timer.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Window.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="AdvancedMath.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="memleaks.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Defs.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Log.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Point.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugixml.hpp">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AI">
+      <UniqueIdentifier>{002022a0-9a60-4f4f-a171-f78d263e0ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{6674ea70-6859-4d4c-a888-f84c7aeceb1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{4d113295-e10c-440f-b295-7c4e833c7f0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{88eadeb7-2c9b-4f3d-9058-03175e8289a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{39402056-4205-4655-9376-0ab87ef42331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Snippets">
+      <UniqueIdentifier>{4f92d277-5dfd-4ae6-bd13-0ebf86d344a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{627172bc-a652-4ef3-8867-45fd7dfa0aff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="IterateList.snippet">
+      <Filter>Snippets</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

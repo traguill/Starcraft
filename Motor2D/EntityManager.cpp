@@ -215,6 +215,18 @@ bool j1EntityManager::PostUpdate()
 		units_to_remove.clear();
 		LOG("(Friendly)Total units: %d, (Enemy)Total units: %d, (Selected): Total units %d", friendly_units.size(), enemy_units.size(), selected_units.size());
 	}
+
+	if (bullets_to_remove.size() > 0)
+	{
+		list<Bullet*>::iterator b = bullets_to_remove.begin();
+		while (b != bullets_to_remove.end())
+		{
+			list<Bullet*>::iterator bullet_to_remove = b;
+			++b;
+			DestroyBullet((*bullet_to_remove));
+		}
+	}
+	bullets_to_remove.clear();
 	return true;
 }
 
@@ -881,4 +893,26 @@ void j1EntityManager::ActivateAbilities()
 	{
 		(*selected_units.begin())->UseAbility(2);
 	}
+}
+
+void j1EntityManager::DestroyBullet(Bullet* _bullet)
+{
+	list<Bullet*>::iterator i = bullets.begin();
+
+	while (i != bullets.end())
+	{
+		if (*i == _bullet)
+		{
+			bullets.erase(i);
+			return;
+		}
+		++i;
+	}
+
+}
+
+void j1EntityManager::RemoveBullet(Bullet* _bullet)
+{
+	if (_bullet != NULL)
+		bullets_to_remove.push_back(_bullet);
 }

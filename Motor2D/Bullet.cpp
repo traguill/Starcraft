@@ -55,6 +55,5 @@ void Bullet::Destroy()
 {
 	if (source != NULL)
 	source->has_hit = true;
-	App->entity->bullets.remove(this);
-	delete this;
+	App->entity->RemoveBullet(this);
 }

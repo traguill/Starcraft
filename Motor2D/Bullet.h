@@ -33,7 +33,7 @@ public:
 
 	Unit* source;
 private:
-	float speed = 100;
+	float speed = 900;
 };
 
 #endif
