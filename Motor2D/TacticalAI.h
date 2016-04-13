@@ -8,6 +8,8 @@
 
 #define COLLISION_DISTANCE 15 //Radius of 'vital' space that every unit have to avoid collisons
 
+#define CONE_VISION 3.14/2
+
 enum UNIT_EVENT{
 END_MOVING,
 ATTACKED,

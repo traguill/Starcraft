@@ -371,24 +371,47 @@ void TacticalAI::Vision()
 		{
 			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE && (*unit_f)->IsVisible() == true && (*unit_e)->IsVisible() == true)
 			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
+
+				//If this doesn't work properly change distanceNoSqrt for distance(this uses a sqrt)
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_e)->vision)
 				{
 					/*
 						TODO: both share the same vision now. Only send ONE unit to attack depend on HIS vision.
 						Iterate friend list searching for enemies
 						Iterate enemy list searching for friends
 					*/
-					if ((*unit_f)->GetTarget() == NULL)
+					iPoint distance((*unit_e)->GetPosition().x - (*unit_f)->GetPosition().x, (*unit_e)->GetPosition().y- (*unit_f)->GetPosition().y);
+					iPoint direction = (*unit_e)->GetDirection();
+
+					int dot = direction.x * distance.x + direction.y * distance.y;
+					int det = direction.x * distance.y - direction.y - distance.x;
+
+					float angle = atan2(det, dot);
+					
+					if (angle < CONE_VISION / 2)
 					{
-						LOG("Friend: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+						iPoint e_tile = App->map->WorldToMap((*unit_e)->GetPosition().x, (*unit_e)->GetPosition().y, COLLIDER_MAP);
+						iPoint f_tile = App->map->WorldToMap((*unit_f)->GetPosition().x, (*unit_f)->GetPosition().y, COLLIDER_MAP);
+
+						if (App->pathfinding->CreateLine(e_tile, f_tile) == true)
+						{
+
+							if ((*unit_f)->GetTarget() == NULL)
+							{
+								LOG("Friend: I've found someone near");
+								SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+							}
+
+							if ((*unit_e)->GetTarget() == NULL)
+							{
+								LOG("Enemy: I've found someone near");
+								SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
+							}
+						}
 					}
 
-					if ((*unit_e)->GetTarget() == NULL)
-					{
-						LOG("Enemy: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
-					}
+
+
 				}
 			}
 			++unit_e;
