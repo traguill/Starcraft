@@ -662,6 +662,7 @@ void Unit::CastAbility(const UNIT_ABILITY ability)
 		Invisibility();
 		break;
 	case SNIPPER:
+		Snipper();
 		break;
 	case HEAL:
 		break;
@@ -678,7 +679,7 @@ void Unit::Invisibility()
 
 	//Check if another ability is in use
 
-	if (state == UNIT_DIE)
+	if (state == UNIT_DIE || snipping == true)
 		return;
 
 	if (invisible == false)
@@ -706,16 +707,30 @@ void Unit::Invisibility()
 	else
 	{
 		//Turn visible
-		SetVisible();
+		SetVisible(); 
 	}
 	
-
-	
-
 }
 
 void Unit::SetVisible()
 {
 	invisible = false;
 	sprite.alpha = 255;
+}
+
+void Unit::Snipper()
+{
+	//Snipper CAN NOT be: death, using invisibility or attacking or already snipping
+	if (state == UNIT_DIE || invisible == true || state == UNIT_ATTACK || snipping == true)
+		return;
+
+	snipping = true;
+	//Camera transition (search best position)
+	App->render->SetTransition(-logic_pos.x, -logic_pos.y);
+
+	//Entity manager to: snipe mode
+
+	//How can I draw snipping animation?
+
+
 }

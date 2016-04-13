@@ -92,6 +92,8 @@ private:
 	void Invisibility();
 	void SetVisible();
 
+	void Snipper();
+
 private:
 
 	uint speed;
@@ -108,6 +110,7 @@ private:
 
 	//For abilities
 	bool invisible = false;
+	bool snipping = false;
 
 	list<UNIT_ABILITY> abilities;
 public:

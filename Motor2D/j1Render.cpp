@@ -380,6 +380,6 @@ void j1Render::DoTransition()
 	camera.x = lerp(camera.x, end_point.x, 0.05f);
 	camera.y = lerp(camera.y, end_point.y, 0.05f);
 
-	if (camera.x == end_point.x && camera.y == end_point.y)
+	if (end_point.DistanceTo(iPoint(camera.x, camera.y)) < CAMERA_TRANSITION_RADIUS)
 		transitioning = false;
 }

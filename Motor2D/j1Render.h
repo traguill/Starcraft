@@ -6,6 +6,8 @@
 #include "j1Module.h"
 #include <list>
 
+#define CAMERA_TRANSITION_RADIUS 40
+
 struct Sprite;
 
 class j1Render : public j1Module
