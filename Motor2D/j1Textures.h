@@ -12,7 +12,7 @@ struct Sprite
 	iPoint		 position;
 	SDL_Texture* texture;
 	SDL_Rect	 rect;
-
+	int			 alpha = 255;
 	//Something about animation should be placed here
 };
 

@@ -54,6 +54,9 @@ private:
 	void SelectUnits();
 	void CheckUnderCursor();
 
+	//Abilities
+	void ActivateAbilities();
+
 	//Pathfinding
 	void SetMovement();
 	void CalculateMovementRect();
