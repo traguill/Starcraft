@@ -91,6 +91,13 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	{
+		LOG("Medic created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(MEDIC, p.x, p.y, false);
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 	//------------------------------------------------------------------------------
