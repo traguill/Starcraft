@@ -921,7 +921,9 @@ void Unit::Snipper()
 	if (state == UNIT_DIE || invisible == true || state == UNIT_ATTACK)
 		return;
 
-	//snipping = true;
+	snipping = true;
+
+
 	//Camera transition (search best position)
 	avoid_change_state = true;
 	state = UNIT_IDLE;
@@ -935,32 +937,32 @@ void Unit::Snipper()
 	//North-West
 	if (dir.x == 1 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x, -logic_pos.y);
+		App->render->SetTransition(-logic_pos.x, -logic_pos.y, true);
 	}
 	//North
 	if (dir.x == 0 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y);
+		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y, true);
 	}
 	//North-East
 	if (dir.x == -1 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y);
+		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y, true);
 	}
 	//East
 	if (dir == iPoint(-1, 0) || dir == iPoint(-1, -1))
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2);
+		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2, true);
 	}
 	//Up
 	if (dir.x == 0 && dir.y == -1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4);
+		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4, true);
 	}
 	//West
 	if (dir == iPoint(1, 0) || dir == iPoint(1, 1))
 	{
-		App->render->SetTransition(-logic_pos.x, -logic_pos.y + cam.h / 2);
+		App->render->SetTransition(-logic_pos.x, -logic_pos.y + cam.h / 2, true);
 	}
 
 	App->entity->SNIPPER_MODE = true;
@@ -1007,6 +1009,7 @@ void Unit::Shoot(int x, int y)
 	App->entity->bullets.push_back(bullet);
 
 	//Shake Cam
+	App->render->lock_camera = false;
 	direction.x = round(direction.x);
 	direction.y = round(direction.y);
 	direction.Scale(30);
@@ -1014,7 +1017,7 @@ void Unit::Shoot(int x, int y)
 	App->render->camera.x += direction.x;
 	App->render->camera.y += direction.y;
 
-	App->render->SetTransition(cam_initial.x, cam_initial.y);
+	App->render->SetTransition(cam_initial.x, cam_initial.y, true);
 
 }
 
@@ -1025,4 +1028,5 @@ void Unit::DisableSnipper()
 	App->entity->SNIPPER_MODE = false;
 	App->entity->bullet_time = false;
 	App->entity->actual_bullet_time = 0.0f;
+	App->render->lock_camera = false;
 }

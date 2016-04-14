@@ -82,18 +82,24 @@ bool j1Render::PreUpdate()
 
 bool j1Render::Update(float dt)
 {
-
-	if (transitioning == true)
-		DoTransition();
-	else
-
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-		{
-			camera.x = 0;
-			camera.y = 0;
-		}
+	if (!lock_camera)
+	{
+		if (transitioning == true)
+			DoTransition();
 		else
-			CursorMovement(dt);
+
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+			{
+				if (App->entity->selected_units.size() > 0)
+				{
+					camera.x = -App->entity->selected_units.front()->GetPosition().x + (camera.w / 2);
+					camera.y = -App->entity->selected_units.front()->GetPosition().y + (camera.h / 2);
+				}
+			}
+			else
+				CursorMovement(dt);
+	}
+
 
 
 	//Sort Sprites and blit
@@ -368,7 +374,7 @@ void j1Render::CursorMovement(float dt)
 	if (camera.y < limit_y)		camera.y = limit_y;
 }
 
-void j1Render::SetTransition(int x, int y)
+void j1Render::SetTransition(int x, int y,bool end_locking)
 {
 	transitioning = true;
 	end_point.x = x;
@@ -379,6 +385,9 @@ void j1Render::SetTransition(int x, int y)
 	if (end_point.x < limit_x)		end_point.x = limit_x;
 	if (end_point.y > 0)			end_point.y = 0;
 	if (end_point.y < limit_y)		end_point.y = limit_y;
+
+	if (end_locking)
+		lock_after_transition = true;
 }
 
 void j1Render::DoTransition()
@@ -387,5 +396,14 @@ void j1Render::DoTransition()
 	camera.y = lerp(camera.y, end_point.y, 0.05f);
 
 	if (end_point.DistanceTo(iPoint(camera.x, camera.y)) < CAMERA_TRANSITION_RADIUS)
+	{
 		transitioning = false;
+		if (lock_after_transition == true)
+		{
+			lock_camera = true;
+			lock_after_transition = false;
+		}
+			
+	}
+		
 }

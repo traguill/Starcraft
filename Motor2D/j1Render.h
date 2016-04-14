@@ -53,7 +53,7 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	//Set a transition to a point
-	void SetTransition(int x, int y);
+	void SetTransition(int x, int y, bool end_locking = false);
 
 private:
 
@@ -66,6 +66,8 @@ public:
 	SDL_Rect		camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
+
+	bool lock_camera = false;
 
 private:
 	int		camera_speed;
@@ -81,6 +83,8 @@ private:
 	iPoint end_point;
 
 	list<Sprite*> blit_sprites;
+
+	bool lock_after_transition = false; //Locks the camera after a transition
 };
 
 #endif // __j1RENDER_H__
