@@ -339,15 +339,39 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 					LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
 				else
 					LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
-				App->tactical_ai->SetEvent(ATTACKED, this, source);
+
+				if (source->GetType() == MEDIC && is_enemy == false)
+				{
+					//Ignore attacking
+					LOG("A medic is about to heal me!");
+				}
+				else
+				{
+					if (type != MEDIC)
+						App->tactical_ai->SetEvent(ATTACKED, this, source);
+				}
+				
 			}
 		}
 	}
 	
 
 	//ACTUAL MOMENT WHEN THE UNIT ATTACK
+	if (source->GetType() != MEDIC)
+	{
+		life -= dmg;
+	}
+	else
+	{
+		life += dmg;
+		if (life >= max_life)
+		{
+			//Stop healing
+			life = max_life;
+			source->DiscardTarget();
+		}
+	}
 
-	life -= dmg;
 	
 	//Modifying health bar according to the damage recieved
 	

@@ -937,14 +937,33 @@ void j1EntityManager::CheckUnderCursor()
 			list<Unit*>::iterator sel_unit = selected_units.begin();
 			while (sel_unit != selected_units.end())
 			{
-				(*sel_unit)->avoid_change_state = false;
-				App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
+				if ((*sel_unit)->GetType() != MEDIC) //Medics doesn't attack
+				{
+					(*sel_unit)->avoid_change_state = false;
+					App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
+				}
 				++sel_unit;
 			}
 
 			return;
 		}
 		++i;
+	}
+
+	//If we have ONLY 1 medic selected
+	if (selected_units.size() == 1 && selected_units.front()->GetType() == MEDIC)
+	{
+		list<Unit*>::iterator ally = friendly_units.begin();
+		while (ally != friendly_units.end())
+		{
+			if (mouse_x >= (*ally)->sprite.position.x && mouse_x <= (*ally)->sprite.position.x + (*ally)->width && mouse_y >= (*ally)->sprite.position.y && mouse_y <= (*ally)->sprite.position.y + (*ally)->height)
+			{
+				selected_units.front()->avoid_change_state = false;
+				App->tactical_ai->SetEvent(ENEMY_TARGET, selected_units.front(), (*ally));
+				return;
+			}
+			++ally;
+		}
 	}
 
 	//Nothing under

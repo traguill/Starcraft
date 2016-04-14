@@ -366,6 +366,7 @@ void TacticalAI::Vision()
 
 	while (unit_f != App->entity->friendly_units.end())
 	{
+
 		list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
 		while (unit_e != App->entity->enemy_units.end())
 		{
@@ -378,7 +379,7 @@ void TacticalAI::Vision()
 						Iterate friend list searching for enemies
 						Iterate enemy list searching for friends
 					*/
-					if ((*unit_f)->GetTarget() == NULL)
+					if ((*unit_f)->GetTarget() == NULL && (*unit_f)->GetType() != MEDIC) //MEDICS DOESN'T ATTACK
 					{
 						LOG("Friend: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
