@@ -48,6 +48,8 @@ private:
 	UILabel* objective_info_2;
 	UILabel* objective_info_3;
 	UIImage* objectives_box;
+	UIImage* pause_mark;
+	UIImage* run_mark;
 
 };
 

@@ -3,6 +3,7 @@
 #include "j1Module.h"
 #include "j1Render.h"
 #include "j1Textures.h"
+#include "GameScene.h"
 #include "j1Input.h"
 
 
@@ -21,6 +22,10 @@ bool EventsManager::Start()
 	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
 	objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
 	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
+	pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0);
+	pause_mark->SetVisible(false);
+	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0);
+	run_mark->SetVisible(true);
 	return true;
 }
 
@@ -36,7 +41,20 @@ bool EventsManager::Update(float dt)
 		break;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	if (App->game_scene->GamePaused())
+	{
+		run_mark->SetVisible(false);
+		pause_mark->SetVisible(true);
+	}
+
+	else
+	{
+		run_mark->SetVisible(true);
+		pause_mark->SetVisible(false);
+	}
+
+
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 		game_event = BOMB_RETRIVED;
 
 	return true;

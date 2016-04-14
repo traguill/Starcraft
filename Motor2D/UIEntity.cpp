@@ -150,7 +150,7 @@ void UIEntity::SetVisible(bool visible)
 			++i;
 		}
 
-		delete (*i);
+		//delete (*i);
 	}
 }
 
