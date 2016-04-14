@@ -349,6 +349,11 @@ bool j1EntityManager::LoadUnitsInfo()
 	else
 		units = unit_file.child("units");
 
+	//Abilities cost
+	invisibility_cost = units.child("invisibility").attribute("cost").as_float();
+	snipper_cost = units.child("snipper").attribute("cost").as_int();
+
+	//UNITS
 	pugi::xml_node unit;
 	for (unit = units.child("unit"); unit && ret; unit = unit.next_sibling("unit"))
 	{
@@ -366,7 +371,11 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->height = unit.child("height").attribute("value").as_int();
 		unit_db->collider.w = unit.child("collider").attribute("width").as_int();
 		unit_db->collider.h = unit.child("collider").attribute("height").as_int();
-
+		unit_db->mana = unit.child("mana").attribute("value").as_int();
+		unit_db->mana_regen = unit.child("mana_regen").attribute("value").as_int();
+		unit_db->max_life = unit_db->life;
+		unit_db->max_mana = unit_db->mana;
+		
 		//Abilities check if the unit has any
 		if (unit.child("abilities").attribute("value").as_bool() == true)
 		{
@@ -637,6 +646,8 @@ void j1EntityManager::PrintUnitDatabase()const
 		LOG("Collider width %i - height %i", (*i).second->collider.w, (*i).second->collider.h);
 
 		LOG("Number of abilities %i", (*i).second->abilities.size());
+		LOG("Mana: %i", (*i).second->mana);
+		LOG("Mana regeneration: %i", (*i).second->mana_regen);
 
 		++i;
 	}
@@ -957,8 +968,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar("health", unit->life, unit->GetPosition().x, unit->GetPosition().y);
-		unit->prg_bar = App->ui->CreateBar("progress", unit->damage, unit->GetPosition().x, unit->GetPosition().y);
+		unit->hp_bar = App->ui->CreateBar("health", unit->max_life, unit->GetPosition().x, unit->GetPosition().y);
+		unit->mana_bar = App->ui->CreateBar("progress", unit->max_mana, unit->GetPosition().x, unit->GetPosition().y);
 
 		return unit;
 	}

@@ -108,6 +108,10 @@ public:
 
 	//Sniping
 	list<Bullet*> bullets;
+
+	//Costs
+	float invisibility_cost;
+	int snipper_cost;
 };
 
 #endif

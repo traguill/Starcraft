@@ -47,6 +47,7 @@ Projectile::Projectile(Projectile* p)
 
 	current_pos = { 0, 0 };
 	current_animation = NULL;
+
 }
 
 
@@ -82,6 +83,11 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 
 	direction.x = 0;
 	direction.y = 1;
+
+	max_life = u->max_life;
+	max_mana = u->max_mana;
+	mana = u->mana;
+	mana_regen = u->mana_regen;
 
 	//Animations
 	up = u->up;
@@ -164,7 +170,7 @@ void Unit::Delete()
 	attacking_units.clear();
 	current_animation = NULL;
 	App->ui->EraseElement(hp_bar);
-	App->ui->EraseElement(prg_bar);
+	App->ui->EraseElement(mana_bar);
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
@@ -202,6 +208,20 @@ void Unit::Update(float dt)
 		break;
 	}
 
+	//Abilities
+	if (invisible)
+	{
+		mana -= App->entity->invisibility_cost * dt;
+		if (mana <= 0)
+			SetVisible();
+	}
+		
+
+	//Update mana
+	mana += mana_regen * dt;
+	if (mana > max_mana) 
+		mana = max_mana;
+
 	SetAnimation();
 }
 
@@ -238,23 +258,27 @@ void Unit::Draw()
 			break;
 		}
 
-		//Drawing progress bar
-		prg_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 20);
-		App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetEmptyBar());
+		//Drawing mana bar
+		float len = (mana / max_mana) * mana_bar->GetFullBar().w;
+		mana_bar->SetBarsLength(len);
+		mana_bar->current_number = mana;
 
-		switch (prg_bar->hp_state)
+		mana_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 20);
+		App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetEmptyBar());
+
+		switch (mana_bar->hp_state)
 		{
 		case EMPTY:
-			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetEmptyBar());
+			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetEmptyBar());
 			break;
 		case LOW:
-			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetLowBar());
+			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetLowBar());
 			break;
 		case MIDDLE:
-			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetMiddleBar());
+			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetMiddleBar());
 			break;
 		case FULL:
-			App->render->Blit(prg_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &prg_bar->GetFullBar());
+			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetFullBar());
 			break;
 		}
 	}
@@ -839,7 +863,6 @@ void Unit::CastAbility(const UNIT_ABILITY ability)
 
 void Unit::Invisibility()
 {
-	//Check mana here
 
 	//Check if another ability is in use
 
@@ -848,6 +871,10 @@ void Unit::Invisibility()
 
 	if (invisible == false)
 	{
+		//Check mana here (not enough mana to start invisibility)
+		if (mana < 10)
+			return;
+
 		sprite.alpha = INVISIBILITY_ALPHA;
 		state = UNIT_IDLE;
 		invisible = true;
@@ -948,6 +975,12 @@ void Unit::Snipper()
 
 void Unit::Shoot(int x, int y)
 {
+	if (mana - App->entity->snipper_cost < 0)
+		return;
+	else
+	{
+		mana -= App->entity->snipper_cost;
+	}
 
 	iPoint origin = App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
 	iPoint dst = App->map->WorldToMap(x, y, COLLIDER_MAP);

@@ -148,6 +148,10 @@ private:
 	Unit* target;
 	UNIT_TYPE type;
 
+	float max_mana;
+	float mana;
+	int mana_regen;
+
 	list<Unit*> attacking_units; //Units that are attacking me
 
 	//For abilities
@@ -216,7 +220,7 @@ public:
 
 	//HP bar
 	UIProgressBar* hp_bar;
-	UIProgressBar* prg_bar;
+	UIProgressBar* mana_bar;
 
 	//Sniping
 	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)

@@ -1,5 +1,7 @@
 <units>
-
+  <invisibility cost="7"/>
+  <snipper cost="40"/>
+  
   <unit TYPE="MARINE">
     <texture_path value="sprites/blue_marine.png"/>
     <auxiliar_texture value="sprites/red_marine.png"/>
@@ -13,6 +15,8 @@
     <cool value="1" />
     <collider width="15" height="15"/>
     <abilities value="false"/>
+    <mana value="100" />
+    <mana_regen value="5" />
     <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>
@@ -184,6 +188,8 @@
     <vision value="200" />
     <range value="100" />
     <cool value="1" />
+    <mana value="100" />
+    <mana_regen value="5" />
     <collider width="15" height="15"/>
     <abilities value="true">
       <ability value="INVISIBLE" />
@@ -360,6 +366,8 @@
     <range value="50" />
     <cool value="1" />
     <collider width="15" height="15"/>
+    <mana value="100" />
+    <mana_regen value="5" />
   <abilities value="false"/>
     <up>
       <rect x="5" y="68"/>
@@ -610,6 +618,8 @@
     <vision value="180" />
     <range value="50" />
     <cool value="1" />
+    <mana value="100" />
+    <mana_regen value="5" />
     <up>
       <rect x="0" y="0"/>   
     </up>
@@ -651,6 +661,8 @@
     <range value="80" />
     <cool value="1" />
     <collider width="15" height="15"/>
+    <mana value="100" />
+    <mana_regen value="5" />
     <abilities value="false"/>
     <up>
       

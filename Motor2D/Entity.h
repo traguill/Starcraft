@@ -41,7 +41,7 @@ protected:
 	Sprite sprite;
 	SDL_Texture* auxiliar_texture; //This variable only unit need it
 	int life;
-
+	int max_life;
 
 	SDL_Rect collider;
 	iPoint logic_pos;

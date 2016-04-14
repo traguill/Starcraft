@@ -58,7 +58,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(game_scene);
 	
 	//Should be before render
-	AddModule(ui);
+	
 
 	AddModule(entity);
 	
@@ -70,7 +70,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	// render last to swap buffer
 	AddModule(render);
 
-	
+	AddModule(ui);
 
 
 
