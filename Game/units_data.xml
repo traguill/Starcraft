@@ -461,7 +461,142 @@
     <animwalkspeed value="0.1"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
-    
+
+    <projectile>
+      <path value="sprites/firebat_attack.png"/>
+      <width value="80"/>
+      <height value="71"/>
+      <anim_speed value="0.1"/>
+      <up>
+        <pos x="-20" y="-60"/>
+        <rect x="1" y="1"/>
+        <rect x="1" y="73"/>
+        <rect x="1" y="145"/>
+        <rect x="1" y="217"/>
+        <rect x="1" y="289"/>
+        <rect x="1" y="361"/>
+        <rect x="1" y="433"/>
+        <rect x="1" y="505"/>
+        <rect x="1" y="577"/>
+        <rect x="1" y="649"/>
+        <rect x="1" y="721"/>
+        <rect x="1" y="793"/>
+        <rect x="1" y="865"/>
+      </up>
+      <down>
+        <pos x="-20" y="18"/>
+        <rect x="82" y="1"/>
+        <rect x="82" y="73"/>
+        <rect x="82" y="145"/>
+        <rect x="82" y="217"/>
+        <rect x="82" y="289"/>
+        <rect x="82" y="361"/>
+        <rect x="82" y="433"/>
+        <rect x="82" y="505"/>
+        <rect x="82" y="577"/>
+        <rect x="82" y="649"/>
+        <rect x="82" y="721"/>
+        <rect x="82" y="793"/>
+        <rect x="82" y="865"/>
+      </down>
+      <right>
+        <pos x="30" y="-20"/>
+        <rect x="163" y="1"/>
+        <rect x="163" y="73"/>
+        <rect x="163" y="145"/>
+        <rect x="163" y="217"/>
+        <rect x="163" y="289"/>
+        <rect x="163" y="361"/>
+        <rect x="163" y="433"/>
+        <rect x="163" y="505"/>
+        <rect x="163" y="577"/>
+        <rect x="163" y="649"/>
+        <rect x="163" y="721"/>
+        <rect x="163" y="793"/>
+        <rect x="163" y="865"/>
+      </right>
+      <left>
+        <pos x="-70" y="-20"/>
+        <rect x="244" y="1"/>
+        <rect x="244" y="73"/>
+        <rect x="244" y="145"/>
+        <rect x="244" y="217"/>
+        <rect x="244" y="289"/>
+        <rect x="244" y="361"/>
+        <rect x="244" y="433"/>
+        <rect x="244" y="505"/>
+        <rect x="244" y="577"/>
+        <rect x="244" y="649"/>
+        <rect x="244" y="721"/>
+        <rect x="244" y="793"/>
+        <rect x="244" y="865"/>
+      </left>
+      <upright>
+        <pos x="15" y="-55"/>
+        <rect x="325" y="1"/>
+        <rect x="325" y="73"/>
+        <rect x="325" y="145"/>
+        <rect x="325" y="217"/>
+        <rect x="325" y="289"/>
+        <rect x="325" y="361"/>
+        <rect x="325" y="433"/>
+        <rect x="325" y="505"/>
+        <rect x="325" y="577"/>
+        <rect x="325" y="649"/>
+        <rect x="325" y="721"/>
+        <rect x="325" y="793"/>
+        <rect x="325" y="865"/>
+      </upright>
+      <downright>
+        <pos x="15" y="15"/>
+        <rect x="487" y="1"/>
+        <rect x="487" y="73"/>
+        <rect x="487" y="145"/>
+        <rect x="487" y="217"/>
+        <rect x="487" y="289"/>
+        <rect x="487" y="361"/>
+        <rect x="487" y="433"/>
+        <rect x="487" y="505"/>
+        <rect x="487" y="577"/>
+        <rect x="487" y="649"/>
+        <rect x="487" y="721"/>
+        <rect x="487" y="793"/>
+        <rect x="487" y="865"/>
+      </downright>
+      <upleft>
+        <pos x="-65" y="-55"/>
+        <rect x="406" y="1"/>
+        <rect x="406" y="73"/>
+        <rect x="406" y="145"/>
+        <rect x="406" y="217"/>
+        <rect x="406" y="289"/>
+        <rect x="406" y="361"/>
+        <rect x="406" y="433"/>
+        <rect x="406" y="505"/>
+        <rect x="406" y="577"/>
+        <rect x="406" y="649"/>
+        <rect x="406" y="721"/>
+        <rect x="406" y="793"/>
+        <rect x="406" y="865"/>
+      </upleft>
+      <downleft>
+        <pos x="-65" y="15"/>
+        <rect x="568" y="1"/>
+        <rect x="568" y="73"/>
+        <rect x="568" y="145"/>
+        <rect x="568" y="217"/>
+        <rect x="568" y="289"/>
+        <rect x="568" y="361"/>
+        <rect x="568" y="433"/>
+        <rect x="568" y="505"/>
+        <rect x="568" y="577"/>
+        <rect x="568" y="649"/>
+        <rect x="568" y="721"/>
+        <rect x="568" y="793"/>
+        <rect x="568" y="865"/>
+      </downleft>
+    </projectile>
+  
   </unit>
   
 

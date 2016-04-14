@@ -11,6 +11,45 @@
 #include "math.h"
 #include "j1UIManager.h"
 
+//FIREBATATTACK
+Projectile::Projectile(Projectile* p)
+{
+	sprite.texture = p->sprite.texture;
+
+	sprite.rect.w = p->sprite.rect.w;
+	sprite.rect.h = p->sprite.rect.h;
+
+	up = p->up;
+	up.speed = p->anim_speed;
+	down = p->down;
+	down.speed = p->anim_speed;
+	right = p->right;
+	right.speed = p->anim_speed;
+	left = p->left;
+	left.speed = p->anim_speed;
+	up_right = p->up_right;
+	up_right.speed = p->anim_speed;
+	down_right = p->down_right;
+	down_right.speed = p->anim_speed;
+	up_left = p->up_left;
+	up_left.speed = p->anim_speed;
+	down_left = p->down_left;
+	down_left.speed = p->anim_speed;
+
+	pos_up = p->pos_up;
+	pos_down = p->pos_down;
+	pos_right = p->pos_right;
+	pos_left = p->pos_left;
+	pos_up_right = p->pos_up_right;
+	pos_down_right = p->pos_down_right;
+	pos_up_left = p->pos_up_left;
+	pos_down_left = p->pos_down_left;
+
+	current_pos = { 0, 0 };
+	current_animation = NULL;
+}
+
+
 Unit::Unit() : Entity()
 {
 
@@ -99,7 +138,13 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	//Has to be updated inside update();
 	current_animation = &i_down;
 
-	
+	//projectile
+	if (type == FIREBAT)
+	{
+		p = u->p;
+		p.current_animation = &p.up;
+	}
+
 	collider.w = u->collider.w;
 	collider.h = u->collider.h;
 
@@ -214,6 +259,9 @@ void Unit::Draw()
 		}
 	}
 
+	//FIREBATATTACK
+	if (state == UNIT_ATTACK && type == FIREBAT)
+		App->render->Blit(&p.sprite);
 	App->render->Blit(&sprite);
 
 }
@@ -455,7 +503,7 @@ void Unit::SetAnimation()
 			direction.Normalize();
 		}
 	}
-	
+
 	float angle = atan(direction.y / direction.x) * RADTODEG;
 
 	float section = abs(angle / 45);
@@ -483,11 +531,32 @@ void Unit::SetAnimation()
 		else if (state == UNIT_ATTACK)
 		{
 			if (section >= 0 && section <= 0.5)
+			{
 				current_animation = &a_right;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.right;
+					p.current_pos = p.pos_right;
+				}
+			}
 			else if (section >= 0.5 && section <= 1.5)
+			{
 				current_animation = &a_down_right;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.down_right;
+					p.current_pos = p.pos_down_right;
+				}
+			}
 			else if (section >= 1.5 && section <= 2)
+			{
 				current_animation = &a_down;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.down;
+					p.current_pos = p.pos_down;
+				}
+			}
 		}
 	}
 	else if (direction.x <= 0 && direction.y >= 0)
@@ -513,11 +582,32 @@ void Unit::SetAnimation()
 		else if (state == UNIT_ATTACK)
 		{
 			if (section >= 0 && section <= 0.5)
+			{
 				current_animation = &a_left;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.left;
+					p.current_pos = p.pos_left;
+				}
+			}
 			else if (section >= 0.5 && section <= 1.5)
+			{
 				current_animation = &a_down_left;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.down_left;
+					p.current_pos = p.pos_down_left;
+				}
+			}
 			else if (section >= 1.5 && section <= 2)
+			{
 				current_animation = &a_down;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.down;
+					p.current_pos = p.pos_down;
+				}
+			}
 		}
 	}
 	else if (direction.x <= 0 && direction.y <= 0)
@@ -543,11 +633,32 @@ void Unit::SetAnimation()
 		else if (state == UNIT_ATTACK)
 		{
 			if (section >= 0 && section <= 0.5)
+			{
 				current_animation = &a_left;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.left;
+					p.current_pos = p.pos_left;
+				}
+			}
 			else if (section >= 0.5 && section <= 1.5)
+			{
 				current_animation = &a_up_left;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.up_left;
+					p.current_pos = p.pos_up_left;
+				}
+			}
 			else if (section >= 1.5 && section <= 2)
+			{
 				current_animation = &a_up;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.up;
+					p.current_pos = p.pos_up;
+				}
+			}
 		}
 	}
 	else if (direction.x >= 0 && direction.y <= 0)
@@ -573,18 +684,48 @@ void Unit::SetAnimation()
 		else if (state == UNIT_ATTACK)
 		{
 			if (section >= 0 && section <= 0.5)
+			{
 				current_animation = &a_right;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.right;
+					p.current_pos = p.pos_right;
+				}
+			}
 			else if (section >= 0.5 && section <= 1.5)
+			{
 				current_animation = &a_up_right;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.up_right;
+					p.current_pos = p.pos_up_right;
+				}
+			}
 			else if (section >= 1.5 && section <= 2)
+			{
 				current_animation = &a_up;
+				if (type == FIREBAT)
+				{
+					p.current_animation = &p.up;
+					p.current_pos = p.pos_up;
+				}
+			}
 		}
 	}
 
 	//Animations
 	sprite.rect.x = current_animation->getCurrentFrame().x;
 	sprite.rect.y = current_animation->getCurrentFrame().y;
-	
+
+	//FIREBATATTACK gotta implement everything except UP inside the ifs above
+	if (state == UNIT_ATTACK && type == FIREBAT)
+	{
+		p.sprite.position.x = GetDrawPosition().x + p.current_pos.x;
+		p.sprite.position.y = GetDrawPosition().y + p.current_pos.y;
+
+		p.sprite.rect.x = p.current_animation->getCurrentFrame().x;
+		p.sprite.rect.y = p.current_animation->getCurrentFrame().y;
+	}
 }
 
 UNIT_TYPE Unit::GetType()const
