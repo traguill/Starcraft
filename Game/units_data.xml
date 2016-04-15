@@ -188,7 +188,7 @@
     <animwalkspeed value="0.1"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
-    <deathanimspeed value="0.05"/>
+    <deathanimspeed value="0.1"/>
   
   </unit>
 

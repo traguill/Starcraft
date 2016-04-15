@@ -145,7 +145,7 @@ private:
 	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
-	Unit* target;
+	Unit* target = NULL;
 	UNIT_TYPE type;
 
 	float max_mana;
@@ -165,7 +165,7 @@ public:
 	uint vision;
 
 	//Can't change state when is resolving a collision or do another thing
-	bool avoid_change_state;
+	bool avoid_change_state = false;
 
 	bool is_enemy;
 

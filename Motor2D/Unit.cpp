@@ -175,8 +175,13 @@ void Unit::Delete()
 	target = NULL;
 	attacking_units.clear();
 	current_animation = NULL;
-	App->ui->EraseElement(hp_bar);
-	App->ui->EraseElement(mana_bar);
+
+	delete hp_bar;
+	hp_bar = NULL;
+
+	delete mana_bar;
+	mana_bar = NULL;
+
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
@@ -342,32 +347,7 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 		LOG("A death unit is attacking me");
 	}
 
-	//Start attacking if the unit are NOT: death, already attackin or resolving a collision
-	if (avoid_change_state == false)
-	{
-		if (state != UNIT_ATTACK)
-		{
-			if (state != UNIT_DIE)
-			{
-				if (is_enemy)
-					LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
-				else
-					LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
-
-				if (source->GetType() == MEDIC && is_enemy == false)
-				{
-					//Ignore attacking
-					LOG("A medic is about to heal me!");
-				}
-				else
-				{
-					if (type != MEDIC)
-						App->tactical_ai->SetEvent(ATTACKED, this, source);
-				}
-				
-			}
-		}
-	}
+	
 	
 
 	//ACTUAL MOMENT WHEN THE UNIT ATTACK
@@ -421,8 +401,35 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 		}
 		
 		
-
+		avoid_change_state = true;
 		state = UNIT_DIE;
+	}
+
+	//Start attacking if the unit are NOT: death, already attackin or resolving a collision
+	if (avoid_change_state == false)
+	{
+		if (state != UNIT_ATTACK)
+		{
+			if (state != UNIT_DIE)
+			{
+				if (is_enemy)
+					LOG("Enemy: Someone attacked me! (%d)", source->is_enemy);
+				else
+					LOG("Friend: Someone attacked me! (%d)", source->is_enemy);
+
+				if (source->GetType() == MEDIC && is_enemy == false)
+				{
+					//Ignore attacking
+					LOG("A medic is about to heal me!");
+				}
+				else
+				{
+					if (type != MEDIC)
+						App->tactical_ai->SetEvent(ATTACKED, this, source);
+				}
+
+			}
+		}
 	}
 }
 

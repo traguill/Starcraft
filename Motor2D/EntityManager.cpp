@@ -237,6 +237,7 @@ bool j1EntityManager::PostUpdate()
 
 bool j1EntityManager::CleanUp()
 {
+	LOG("Freeing Entity Manager");
 	map<string, Unit*>::iterator it_db = units_database.begin();
 	while (it_db != units_database.end())
 	{
@@ -293,7 +294,6 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*f_unit == _unit)
 		{
-			(*f_unit)->Delete();
 			f_unit = friendly_units.erase(f_unit);
 			f_unit--;
 
@@ -303,11 +303,13 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 				if (*s_unit == _unit)
 				{
 					s_unit = selected_units.erase(s_unit);
+					delete _unit;
 					s_unit--;
 					return;
 				}
 				++s_unit;
 			}
+			delete _unit;
 			return;
 		}
 		++f_unit;
@@ -320,8 +322,8 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 	{
 		if (*e_unit == _unit)
 		{
-			(*e_unit)->Delete();
 			enemy_units.erase(e_unit);
+			delete _unit;
 			return;
 		}
 		++e_unit;
@@ -622,6 +624,9 @@ bool j1EntityManager::LoadUnitsInfo()
 			}
 
 			unit_db->p = p;
+
+			delete p;
+			p = NULL;
 		}
 
 		unit_db->walk_anim_speed = unit.child("animwalkspeed").attribute("value").as_float();
@@ -841,6 +846,12 @@ void j1EntityManager::SetMovement()
 			list<Unit*>::iterator unit_p = selected_units.begin();
 			while (unit_p != selected_units.end())
 			{
+				if ((*unit_p)->state == UNIT_DIE)
+				{
+					++unit_p;
+					continue;
+				}
+
 				iPoint unit_pos = (*unit_p)->GetPosition();
 				iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 				iPoint rect_offset = unit_map_pos - center_map;
@@ -948,7 +959,7 @@ void j1EntityManager::CheckUnderCursor()
 			list<Unit*>::iterator sel_unit = selected_units.begin();
 			while (sel_unit != selected_units.end())
 			{
-				if ((*sel_unit)->GetType() != MEDIC) //Medics doesn't attack
+				if ((*sel_unit)->GetType() != MEDIC && (*sel_unit)->state != UNIT_DIE) //Medics doesn't attack
 				{
 					(*sel_unit)->avoid_change_state = false;
 					App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
@@ -962,7 +973,7 @@ void j1EntityManager::CheckUnderCursor()
 	}
 
 	//If we have ONLY 1 medic selected
-	if (selected_units.size() == 1 && selected_units.front()->GetType() == MEDIC)
+	if (selected_units.size() == 1 && selected_units.front()->GetType() == MEDIC && selected_units.front()->state != UNIT_DIE)
 	{
 		list<Unit*>::iterator ally = friendly_units.begin();
 		while (ally != friendly_units.end())
@@ -1035,6 +1046,7 @@ void j1EntityManager::DestroyBullet(Bullet* _bullet)
 		if (*i == _bullet)
 		{
 			bullets.erase(i);
+			delete _bullet;
 			return;
 		}
 		++i;

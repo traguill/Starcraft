@@ -227,6 +227,7 @@ bool j1UIManager::CleanUp()
 		ret = (*pi)->CleanUp();
 
 		delete (*pi);
+		(*pi) = NULL;
 		++pi;
 	}
 
@@ -236,9 +237,10 @@ bool j1UIManager::CleanUp()
 
 	while (i != gui_elements.end() && ret == true)
 	{
-		ret = (*i)->CleanUp();
+			ret = (*i)->CleanUp();
 
-		delete (*i);
+			delete (*i);
+			(*i) = NULL;
 		++i;
 	}
 
@@ -327,7 +329,6 @@ UIProgressBar* j1UIManager::CreateBar(string _type, int max_num, const int x, co
 			pbar->current_number = 0;
 		
 		pbar->listener = listener;
-		gui_elements.push_back(pbar);
 		pbar->hp_state = FULL;
 
 		return pbar;

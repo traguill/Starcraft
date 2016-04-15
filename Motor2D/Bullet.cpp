@@ -31,9 +31,11 @@ void Bullet::Update(float dt)
 		collider.h = (*enemy)->height;
 		if (logic_pos.x >= collider.x && logic_pos.x <= collider.x + collider.w && logic_pos.y >= collider.y && logic_pos.y <= collider.y + collider.h)
 		{
-			(*enemy)->ApplyDamage(1000, source);
-			Destroy();
-			break;
+			if ((*enemy)->state != UNIT_DIE)
+			{
+				(*enemy)->ApplyDamage(1000, source);
+			}
+			
 		}
 		++enemy;
 	}
