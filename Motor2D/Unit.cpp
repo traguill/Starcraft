@@ -10,6 +10,7 @@
 #include "j1Pathfinding.h"
 #include "math.h"
 #include "j1UIManager.h"
+#include "j1Audio.h"
 
 //FIREBATATTACK
 Projectile::Projectile(Projectile* p)
@@ -1029,7 +1030,8 @@ void Unit::Snipper()
 	App->entity->bullet_time = true;
 	//Entity manager to: snipe mode
 
-	//How can I draw snipping animation?
+	//Sound
+	App->audio->PlayFx(App->entity->sound_sniper_mode);
 
 
 }
@@ -1083,6 +1085,9 @@ void Unit::Shoot(int x, int y)
 	App->render->camera.y += direction.y;
 
 	App->render->SetTransition(cam_initial.x, cam_initial.y, true);
+
+	//Play sound
+	App->audio->PlayFx(App->entity->sound_shoot);
 
 }
 

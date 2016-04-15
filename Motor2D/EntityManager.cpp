@@ -10,7 +10,7 @@
 #include "j1Map.h"
 #include "j1UIManager.h"
 #include "GameScene.h"
-
+#include "j1Audio.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -47,6 +47,8 @@ bool j1EntityManager::Start()
 	//Loading bar texture
 	health_bar = App->tex->Load("healthbar.png");
 
+	LoadSounds();
+
 	return ret;
 }
 
@@ -56,6 +58,12 @@ bool j1EntityManager::PreUpdate()
 
 
 	return true;
+}
+
+void j1EntityManager::LoadSounds()
+{
+	sound_shoot = App->audio->LoadFx("sounds/shoot.ogg");
+	sound_sniper_mode = App->audio->LoadFx("sounds/sniper_mode.ogg");
 }
 
 bool j1EntityManager::Update(float dt)
