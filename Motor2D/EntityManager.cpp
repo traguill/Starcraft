@@ -1009,8 +1009,8 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			friendly_units.push_back(unit);
 
 		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar("health", unit->max_life, unit->GetPosition().x, unit->GetPosition().y);
-		unit->mana_bar = App->ui->CreateBar("progress", unit->max_mana, unit->GetPosition().x, unit->GetPosition().y);
+		//unit->hp_bar = App->ui->CreateBar("health", unit->max_life, unit->GetPosition().x, unit->GetPosition().y);
+		//unit->mana_bar = App->ui->CreateBar("progress", unit->max_mana, unit->GetPosition().x, unit->GetPosition().y);
 
 		return unit;
 	}

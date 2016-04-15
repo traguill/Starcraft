@@ -178,11 +178,13 @@ void Unit::Delete()
 	attacking_units.clear();
 	current_animation = NULL;
 
-	delete hp_bar;
+	/*if (hp_bar != NULL)
+		delete hp_bar;
 	hp_bar = NULL;
 
-	delete mana_bar;
-	mana_bar = NULL;
+	if (mana_bar != NULL)
+		delete mana_bar;
+	mana_bar = NULL;*/
 
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
@@ -255,7 +257,7 @@ void Unit::Draw()
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 
 		//Drawing health bar
-		hp_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 15);
+		/*hp_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 15);
 		App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetEmptyBar());
 
 		switch (hp_bar->hp_state)
@@ -296,7 +298,7 @@ void Unit::Draw()
 		case FULL:
 			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetFullBar());
 			break;
-		}
+		}*/
 	}
 
 	//FIREBATATTACK
@@ -371,11 +373,11 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 	
 	//Modifying health bar according to the damage recieved
 	
-	int dam = (dmg * hp_bar->GetFullBar().w) / hp_bar->current_number;
+	/*int dam = (dmg * hp_bar->GetFullBar().w) / hp_bar->current_number;
 	int new_len = hp_bar->GetFullBar().w - dam;
 
 	hp_bar->SetBarsLength(new_len);
-	hp_bar->current_number = life;
+	hp_bar->current_number = life;*/
 
 	if (is_enemy)
 		LOG("Life (enemy): %i", life);

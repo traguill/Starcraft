@@ -460,13 +460,13 @@ void j1UIManager::ShowUiUnits()
 		{
 			//Show life in HUD
 			
-			int total_unit_life = (*it)->hp_bar->GetMaxSize();
-			int life_from_total = (*it)->hp_bar->current_number;
+			//int total_unit_life = (*it)->hp_bar->GetMaxSize();
+			//int life_from_total = (*it)->hp_bar->current_number;
 
 			char ui_life[20];
 			
-			sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
-			life_HUD->Print(ui_life);
+			//sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
+			//life_HUD->Print(ui_life);
 
 			SDL_Rect s{ 252, 440, 27, 29 };
 			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
