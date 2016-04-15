@@ -172,10 +172,24 @@
       <rect x="852" y="205"/>
     </adownleft>
 
+    <death>
+      <pos x="-18" y="0"/>
+      <size w="58" h="37"/>
+      <rect x="2" y="846"/>
+      <rect x="67" y="846"/>
+      <rect x="131" y="846"/>
+      <rect x="196" y="846"/>
+      <rect x="257" y="846"/>
+      <rect x="321" y="846"/>
+      <rect x="385" y="846"/>
+      <rect x="449" y="846"/>
+    </death>
+
     <animwalkspeed value="0.1"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
-    
+    <deathanimspeed value="0.05"/>
+  
   </unit>
 
   <unit TYPE="GHOST">
@@ -349,6 +363,20 @@
       <rect x="852" y="141"/>
       <rect x="852" y="205"/>
     </adownleft>
+
+    <death>
+      <pos x="-18" y="0"/>
+      <size w="58" h="37"/>
+      <rect x="2" y="846"/>
+      <rect x="67" y="846"/>
+      <rect x="131" y="846"/>
+      <rect x="196" y="846"/>
+      <rect x="257" y="846"/>
+      <rect x="321" y="846"/>
+      <rect x="385" y="846"/>
+      <rect x="449" y="846"/>
+    </death>
+    <deathanimspeed value="0.05"/>
 
     <animwalkspeed value="0.1"/>
     <animidlespeed value="0.005"/>

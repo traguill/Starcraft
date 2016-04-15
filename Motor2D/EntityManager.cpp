@@ -429,6 +429,8 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->a_up_left.frames.clear();
 		unit_db->a_down_left.frames.clear();
 
+		unit_db->death.frames.clear();
+
 		//move
 		for (pugi::xml_node rect = unit.child("up").child("rect"); rect; rect = rect.next_sibling("rect"))
 		{
@@ -529,6 +531,14 @@ bool j1EntityManager::LoadUnitsInfo()
 			unit_db->a_down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->width, unit_db->height });
 		}
 
+		//DEATH
+		unit_db->death_pos_corrector = { unit.child("death").child("pos").attribute("x").as_int(), unit.child("death").child("pos").attribute("y").as_int() };
+		unit_db->death_size = { unit.child("death").child("size").attribute("w").as_int(), unit.child("death").child("size").attribute("h").as_int() };
+		for (pugi::xml_node rect = unit.child("death").child("rect"); rect; rect = rect.next_sibling("rect"))
+		{
+			unit_db->death.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->death_size.x, unit_db->death_size.y });
+		}
+
 		//FIREBATATTACK
 		//projectiles, gotta implement everything except UP
 		if (unit_db->type == FIREBAT)
@@ -617,6 +627,7 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->walk_anim_speed = unit.child("animwalkspeed").attribute("value").as_float();
 		unit_db->idle_anim_speed = unit.child("animidlespeed").attribute("value").as_float();
 		unit_db->attack_anim_speed = unit.child("animattackspeed").attribute("value").as_float();
+		unit_db->death_anim_speed = unit.child("deathanimspeed").attribute("value").as_float();
 
 		units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 	}

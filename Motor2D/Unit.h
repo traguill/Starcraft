@@ -198,6 +198,8 @@ public:
 	Animation a_up_left;
 	Animation a_down_left;
 	//DEATH
+	iPoint death_pos_corrector;
+	iPoint death_size;
 	Animation death;
 
 	Projectile p;
@@ -207,8 +209,7 @@ public:
 	float walk_anim_speed;
 	float idle_anim_speed;
 	float attack_anim_speed;
-	//Animation attack;
-
+	float death_anim_speed;
 
 	//Pathfinding
 	fPoint direction;

@@ -141,6 +141,12 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	a_down_left = u->a_down_left;
 	a_down_left.speed = u->attack_anim_speed;
 
+	death = u->death;
+	death_pos_corrector = u->death_pos_corrector;
+	death_size = u->death_size;
+	death.speed = u->death_anim_speed;
+	death.loop = false;
+
 	//Has to be updated inside update();
 	current_animation = &i_down;
 
@@ -204,7 +210,10 @@ void Unit::Update(float dt)
 		break;
 	case UNIT_DIE:
 		//Timer of the animation and delete the unit
-		App->entity->RemoveUnit(this);
+		if (death.finished() && (type == MARINE || type == GHOST))
+			App->entity->RemoveUnit(this);
+		else if (type != MARINE && type != GHOST)
+			App->entity->RemoveUnit(this);
 		break;
 	}
 
@@ -286,8 +295,13 @@ void Unit::Draw()
 	//FIREBATATTACK
 	if (state == UNIT_ATTACK && type == FIREBAT)
 		App->render->Blit(&p.sprite);
-	App->render->Blit(&sprite);
-
+	if (state == UNIT_DIE)
+	{
+		sprite.position = GetDrawPosition() + death_pos_corrector;
+		App->render->Blit(&sprite);
+	}
+	else
+		App->render->Blit(&sprite);
 }
 
 void Unit::Attack(float dt)
@@ -759,6 +773,16 @@ void Unit::SetAnimation()
 				}
 			}
 		}
+	}
+
+	//DEATH anim
+	if (state == UNIT_DIE)
+	{
+		sprite.position = GetDrawPosition() + death_pos_corrector;
+
+		sprite.rect.w = death_size.x;
+		sprite.rect.h = death_size.y;
+		current_animation = &death;
 	}
 
 	//Animations
