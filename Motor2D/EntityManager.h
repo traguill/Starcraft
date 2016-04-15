@@ -112,6 +112,9 @@ public:
 	//Costs
 	float invisibility_cost;
 	int snipper_cost;
+
+	//Reference bullet
+	Bullet* db_bullet;
 };
 
 #endif

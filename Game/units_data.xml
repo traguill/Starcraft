@@ -1,6 +1,36 @@
 <units>
   <invisibility cost="7"/>
   <snipper cost="40"/>
+
+  <bullet>
+    <texture value="sprites/missile.png" />
+    <width value="32"/>
+    <height value="32"/>
+    <up>
+      <pos x="0" y="32"/>
+    </up>
+    <down>
+      <pos x="0" y="0"/>
+    </down>
+    <right>
+      <pos x="256" y="32"/>
+    </right>
+    <left>
+      <pos x="256" y="0"/>
+    </left>
+    <upright>
+      <pos x="64" y="32"/>
+    </upright>
+    <downright>
+      <pos x="416" y="32"/>
+    </downright>
+    <upleft>
+      <pos x="416" y="0"/>
+    </upleft>
+    <downleft>
+      <pos x="64" y="0"/>
+    </downleft>
+  </bullet>
   
   <unit TYPE="MARINE">
     <texture_path value="sprites/blue_marine.png"/>

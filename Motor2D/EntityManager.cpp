@@ -273,6 +273,10 @@ bool j1EntityManager::CleanUp()
 	App->tex->UnLoad(gui_cursor);
 	App->tex->UnLoad(health_bar);
 
+	App->tex->UnLoad(db_bullet->sprite.texture);
+	delete db_bullet;
+	db_bullet = NULL;
+
 	return true;
 }
 
@@ -354,6 +358,39 @@ bool j1EntityManager::LoadUnitsInfo()
 	//Abilities cost
 	invisibility_cost = units.child("invisibility").attribute("cost").as_float();
 	snipper_cost = units.child("snipper").attribute("cost").as_int();
+
+	//Bullet
+	pugi::xml_node bul = units.child("bullet");
+
+	db_bullet = new Bullet();
+
+	db_bullet->sprite.texture = App->tex->Load(bul.child("texture").attribute("value").as_string());
+	db_bullet->sprite.rect.w = bul.child("width").attribute("value").as_int();
+	db_bullet->sprite.rect.h = bul.child("height").attribute("value").as_int();
+
+	db_bullet->pos_up.x = bul.child("up").child("pos").attribute("x").as_int();
+	db_bullet->pos_up.y = bul.child("up").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down.x = bul.child("down").child("pos").attribute("x").as_int();
+	db_bullet->pos_down.y = bul.child("down").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_right.x = bul.child("right").child("pos").attribute("x").as_int();
+	db_bullet->pos_right.y = bul.child("right").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_left.x = bul.child("left").child("pos").attribute("x").as_int();
+	db_bullet->pos_left.y = bul.child("left").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_up_right.x = bul.child("upright").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_right.y = bul.child("upright").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_right.x = bul.child("downright").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_right.y = bul.child("downright").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_up_left.x = bul.child("upleft").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_left.y = bul.child("upleft").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_left.x = bul.child("downleft").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_left.y = bul.child("downleft").child("pos").attribute("y").as_int();
 
 	//UNITS
 	pugi::xml_node unit;
@@ -540,6 +577,8 @@ bool j1EntityManager::LoadUnitsInfo()
 		{
 			unit_db->death.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->death_size.x, unit_db->death_size.y });
 		}
+
+		
 
 		//FIREBATATTACK
 		//projectiles, gotta implement everything except UP
