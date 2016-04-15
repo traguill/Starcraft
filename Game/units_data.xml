@@ -636,42 +636,70 @@
   </unit>
   
 
+ 
+
 <unit TYPE="OBSERVER">
     <texture_path value="sprites/observer.png"/>
-    <width value="40" />
-    <height value="40" />
+    <width value="37" />
+    <height value="37" />
     <life value="100" />
     <speed value="100" />
     <damage value="0" />
     <vision value="180" />
     <range value="50" />
+    <collider width="15" height="15"/>
     <cool value="1" />
     <mana value="100" />
     <mana_regen value="5" />
     <up>
-      <rect x="0" y="0"/>   
+      <rect x="3" y="2"/>   
     </up>
     <down>
-      <rect x="560" y="0"/>
+      <rect x="562" y="2"/>
     </down>
     <right>
-      <rect x="280" y="0"/>
+      <rect x="282" y="2"/>
     </right>
     <left>
-      <rect x="280" y="40"/>
+      <rect x="281" y="42"/>
     </left>
     <upright>
-      <rect x="120" y="0"/>
+      <rect x="82" y="2"/>
     </upright>
     <downright>
-      <rect x="440" y="0"/>
+      <rect x="482" y="0"/>
     </downright>
     <upleft>
-      <rect x="120" y="40"/>
+    <rect x="482" y="42"/>
     </upleft>
     <downleft>
-      <rect x="440" y="40"/>
+      <rect x="82" y="40"/>
     </downleft>
+
+     <iup>
+      <rect x="3" y="2"/>   
+    </iup>
+    <idown>
+      <rect x="562" y="2"/>
+    </idown>
+    <iright>
+      <rect x="282" y="2"/>
+    </iright>
+    <ileft>
+      <rect x="281" y="42"/>
+    </ileft>
+    <iupright>
+      <rect x="82" y="2"/>
+    </iupright>
+    <idownright>
+      <rect x="482" y="0"/>
+    </idownright>
+    <iupleft>
+    <rect x="482" y="42"/>
+    </iupleft>
+    <idownleft>
+      <rect x="82" y="40"/>
+    </idownleft>
 
     <animwalkspeed value="0.1"/>
 
