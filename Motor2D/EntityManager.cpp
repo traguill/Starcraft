@@ -731,11 +731,11 @@ void j1EntityManager::SelectUnits()
 				selected_units.push_back((*friendly_it));
 				(*friendly_it)->selected = true;
 			}
-			App->ui->cursor_state = on_friendly_unit;
+			App->ui->cursor_state = ON_FRIENDLY;
 			break;
 		}
 		else
-			App->ui->cursor_state = standart;
+			App->ui->cursor_state = STANDARD;
 		friendly_it++;
 	}
 
@@ -744,13 +744,13 @@ void j1EntityManager::SelectUnits()
 	{
 		if ((*enemy_it)->GetPosition().x <= mouse_pos.x && mouse_pos.x <= (*enemy_it)->GetPosition().x + (*enemy_it)->sprite.rect.w && (*enemy_it)->GetPosition().y + 5 >= mouse_pos.y && mouse_pos.y >= (*enemy_it)->GetPosition().y - (*enemy_it)->sprite.rect.h + 5)
 		{
-			App->ui->cursor_state = on_enemy_unit;
+			App->ui->cursor_state = ON_ENEMY;
 			break;
 		}
 		else
 		{
-			if (App->ui->cursor_state != on_friendly_unit)
-				App->ui->cursor_state = standart;
+			if (App->ui->cursor_state != ON_FRIENDLY)
+				App->ui->cursor_state = STANDARD;
 		}
 		enemy_it++;
 	}

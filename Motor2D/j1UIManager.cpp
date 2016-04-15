@@ -55,6 +55,8 @@ bool j1UIManager::Start()
 	ui_icons = App->tex->Load("gui/cmdicons.png");
 	rects = App->tex->Load("gui/pcmdbtns.png");
 
+	cursor_state = STANDARD;
+
 
 	vector<SDL_Rect> sections;
 	sections.push_back({ 1, 62, 20, 21 });

@@ -338,32 +338,32 @@ void j1Render::CursorMovement(float dt)
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
 	// doesnt enter none if
-		if (App->ui->cursor_state != on_friendly_unit && App->ui->cursor_state != on_enemy_unit)
-		App->ui->cursor_state = standart;
+		if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
+		App->ui->cursor_state = STANDARD;
 
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
 	{
 		camera.x += dt * camera_speed;
-		App->ui->cursor_state = to_left;
+		App->ui->cursor_state = TO_LEFT;
 	}
 	//Move camera RIGHT
 	if (mouse_x > camera.w - offset_x)
 	{
 		camera.x -= dt * camera_speed;
-		App->ui->cursor_state = to_right;
+		App->ui->cursor_state = TO_RIGHT;
 	}
 	//Move camera UP
 	if (mouse_y < offset_y)
 	{
 		camera.y += dt * camera_speed;
-		App->ui->cursor_state = up;
+		App->ui->cursor_state = UP;
 	}
 	//Move camera DOWN
 	if (mouse_y > camera.h - offset_y)
 	{
 		camera.y -= dt * camera_speed;
-		App->ui->cursor_state = down;
+		App->ui->cursor_state = DOWN;
 	}	
 
 

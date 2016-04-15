@@ -13,16 +13,16 @@ class UICursor;
 class UIProgressBar;
 
 
-enum state
+enum CURSOR_STATE
 {
-	standart,
-	to_right,
-	to_left,
-	up,
-	down,
-	drag,
-	on_friendly_unit,
-	on_enemy_unit
+	STANDARD,
+	TO_RIGHT,
+	TO_LEFT,
+	UP,
+	DOWN,
+	DRAG,
+	ON_FRIENDLY,
+	ON_ENEMY
 };
 
 // ---------------------------------------------------
@@ -109,7 +109,7 @@ public:
 	bool debug;
 	SDL_Rect selection_rect;
 	void EraseElement(UIEntity* entity);
-	state cursor_state = standart;
+	CURSOR_STATE cursor_state;
 };
 
 #endif

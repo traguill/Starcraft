@@ -79,6 +79,8 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	width = u->width;
 	height = u->height;
 
+	state = UNIT_IDLE;
+
 	abilities = u->abilities;
 
 	direction.x = 0;

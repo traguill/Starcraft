@@ -152,37 +152,37 @@ bool UICursor::Update(float dt)
 
 	else
 	{
-		if (App->ui->cursor_state == to_right)
+		if (App->ui->cursor_state == TO_RIGHT)
 		{
 			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 21), rect.y, &right_cursor.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == to_left)
+		if (App->ui->cursor_state == TO_LEFT)
 		{
 			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &left_cursor.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == up)
+		if (App->ui->cursor_state == UP)
 		{
 			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &up_cursor.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == down)
+		if (App->ui->cursor_state == DOWN)
 		{
 			App->render->Blit(App->ui->GetAtlas(), rect.x, MIN(rect.y, App->render->camera.h - App->render->camera.y - 21), &down_cursor.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == on_friendly_unit)
+		if (App->ui->cursor_state == ON_FRIENDLY)
 		{
 			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &friendly_sel.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == on_enemy_unit)
+		if (App->ui->cursor_state == ON_ENEMY)
 		{
 			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &enemy_sel.getCurrentFrame());
 		}
 
-		if (App->ui->cursor_state == standart)
+		if (App->ui->cursor_state == STANDARD)
 		{
 			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &anim.getCurrentFrame());
 		}
