@@ -13,7 +13,7 @@ UIImage::UIImage() : UIEntity()
 
 UIImage::UIImage(SDL_Rect _section, const int x, const int y) : UIEntity()
 {
-	interactable = true;
+	interactable = false;
 	type = IMAGE;
 	section = _section;
 
