@@ -94,8 +94,8 @@ void SceneManager::StartGame()
 		App->entity->EnableModule();
 		App->tactical_ai->EnableModule();
 
-		App->game_scene->Start();
 		App->entity->Start();
+		App->game_scene->Start();
 		App->tactical_ai->Start();
 
 		in_game = true;

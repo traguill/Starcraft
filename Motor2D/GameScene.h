@@ -37,6 +37,11 @@ public:
 
 private:
 
+	void LoadLevel();
+	void SaveLevelDesign();
+
+private:
+
 	uint map_id; //Drawable map
 	uint collider_id;
 

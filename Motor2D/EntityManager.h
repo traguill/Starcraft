@@ -43,12 +43,14 @@ public:
 
 	void RemoveUnit(Unit* _unit);
 	void RemoveBullet(Bullet* _bullet);
+
+	string UnitTypeToString(UNIT_TYPE type)const;
+	UNIT_TYPE UnitTypeToEnum(string type)const;
+
 private:
 
 	//Load data
 	bool LoadUnitsInfo();
-	string UnitTypeToString(UNIT_TYPE type)const;
-	UNIT_TYPE UnitTypeToEnum(string type)const;
 	void LoadSounds();
 
 	//Selection
