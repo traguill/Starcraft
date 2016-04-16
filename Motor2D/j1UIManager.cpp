@@ -202,8 +202,8 @@ bool j1UIManager::Update(float dt)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		App->render->DrawQuad(selection_rect, 0, 255, 0, 255, false);
-	list<UIEntity*>::iterator i = gui_elements.begin();
 
+	list<UIEntity*>::iterator i = gui_elements.begin();
 	while (i != gui_elements.end() && ret == true)
 	{
 		if ((*i)->IsVisible() == true)
@@ -221,7 +221,7 @@ bool j1UIManager::Update(float dt)
 		ShowMiniWireframes(dt);
 	
 	else if (App->entity->selected_units.size() == 1)
-		ShowUiUnits();
+		ShowIndividualWireframe();
 
 	cursor->Update(dt);
 
@@ -482,14 +482,8 @@ void j1UIManager::ShowMiniWireframes(float dt)
 	}
 }
 
-void j1UIManager::ShowUiUnits()
+void j1UIManager::ShowIndividualWireframe()
 {
-	list<Unit*>::iterator it = App->entity->selected_units.begin();
-	iPoint pos;
-	pos.x = App->render->camera.x;
-	pos.y = App->render->camera.y;
-
-	uint x = 0; uint y = 0;
 	//------------Show life in HUD------------------------
 
 	/*
@@ -503,6 +497,8 @@ void j1UIManager::ShowUiUnits()
 	life_HUD->Print(ui_life);*/
 
 	//------------Show life in HUD------------------------
+	
+	list<Unit*>::iterator it = App->entity->selected_units.begin();
 
 	switch ((*it)->GetType())
 	{

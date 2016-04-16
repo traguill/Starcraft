@@ -86,7 +86,7 @@ private:
 	//Utilities ------------------------------------------------------------------------------------------------------
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
 	void SetNextFocus(); //Sets the focus to the next element
-	void ShowUiUnits();
+	void ShowIndividualWireframe();
 	void ShowMiniWireframes(float dt);
 
 
