@@ -169,6 +169,10 @@ public:
 
 	bool is_enemy;
 
+	//fx
+	uint death_fx;
+	uint attack_fx;
+
 	//Animations
 	//MOVE
 	Animation up;

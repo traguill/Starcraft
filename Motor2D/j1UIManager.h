@@ -96,6 +96,8 @@ private:
 	bool					pressed_last_frame = false;
 	SDL_Texture*			atlas;
 	string					atlas_file_name;
+	string					ui_file_path;
+
 
 	list<UIEntity*>			gui_elements;
 	UIEntity*				gui_pressed = NULL;
@@ -103,35 +105,15 @@ private:
 
 	list<UIProgressBar*>	ui_progress_bar;
 
-	//ui unit sprites
-	SDL_Texture*			ui_icons;
-	SDL_Texture*			move_ui;
 
-	//It maybe has to be public
 	SDL_Texture*			rects;
 
 	UICursor*				cursor;
-	UILabel*				life_HUD;
-	string					ui_file_path;
 
-	//Marine
-	UIImage*				marine_weapon_icon;
-	UIImage*				marine_armour_icon;
-	UIImage*				marine_wireframe;
 
-	//Ghost
-	UIImage*				ghost_weapon_icon;
-	UIImage*				ghost_wireframe;
+	//Snipper ui
+	UIImage*                snipper_ui;
 
-	//Firebat
-	UIImage*				firebat_weapon_icon;
-	UIImage*				firebat_wireframe;
-
-	//Medic
-	UIImage*				 medic_wireframe;
-
-	//Observer
-	UIImage*				observer_wireframe;
 	
 
 public:

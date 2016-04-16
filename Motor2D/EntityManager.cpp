@@ -430,6 +430,12 @@ bool j1EntityManager::LoadUnitsInfo()
 		unit_db->max_life = unit_db->life;
 		unit_db->max_mana = unit_db->mana;
 		
+		string at_fx = unit.child("attack_fx").attribute("value").as_string();
+		string dth_fx = unit.child("death_fx").attribute("value").as_string();
+
+		unit_db->attack_fx = App->audio->LoadFx(at_fx.c_str());
+		unit_db->death_fx = App->audio->LoadFx(dth_fx.c_str());
+
 		//Abilities check if the unit has any
 		if (unit.child("abilities").attribute("value").as_bool() == true)
 		{

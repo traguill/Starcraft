@@ -44,12 +44,6 @@ public:
 
 private:
 	CURRENT_EVENT game_event = INITIAL_STATE;
-	UILabel* objective_info_1;
-	UILabel* objective_info_2;
-	UILabel* objective_info_3;
-	UIImage* objectives_box;
-	UIImage* pause_mark;
-	UIImage* run_mark;
 
 };
 

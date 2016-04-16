@@ -47,20 +47,78 @@ bool GameScene::Start()
 
 		App->pathfinding->SetMap(width, height, buffer);
 		RELEASE_ARRAY(buffer);
+
+
+		//Create HUD
+		App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
+
+
+		//MARINE
+		SDL_Rect s_armourM{ 621, 62, 34, 33 };
+		marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440, false);
+
+
+		SDL_Rect s_weaponM{ 507, 62, 34, 33 };
+		marine_weapon_icon = App->ui->CreateImage(s_weaponM, 275, 440, false);
+
+
+		SDL_Rect s_wireframeM{ 705, 126, 54, 70 };
+		marine_wireframe = App->ui->CreateImage(s_wireframeM, 180, 390, false);
+
+
+		//GHOST
+		SDL_Rect s_weaponG{ 543, 62, 34, 33 };
+		ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440, false);
+
+
+		SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
+		ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390, false);
+
+
+		//FIREBAT
+		SDL_Rect s_weaponF{ 582, 62, 34, 33 };
+		firebat_weapon_icon = App->ui->CreateImage(s_weaponF, 275, 440, false);
+
+
+		SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
+		firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390, false);
+
+
+		//MEDIC
+		SDL_Rect s_wireframeMed{ 797, 208, 47, 66 };
+		medic_wireframe = App->ui->CreateImage(s_wireframeMed, 180, 390, false);
+
+
+		//OBSERVER
+		SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
+		observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
+
+
+
+		
+		life_HUD = App->ui->CreateLabel("", 177, 458);
 	}
+
+
+	//CREATE EVENT
+	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
+	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
+	objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
+	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
+	pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
+	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 
 
 	debug = false;
 	game_paused = false;
 
 	//UI TESTS
-	App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
 	//
 	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
 	
-	music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
+	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
 	LoadLevel();
 
@@ -97,6 +155,20 @@ bool GameScene::Update(float dt)
 	}
 
 
+	if (GamePaused())
+	{
+		run_mark->is_visible = false;
+		pause_mark->is_visible = true;
+	}
+
+	else
+	{
+		run_mark->is_visible = true;
+		pause_mark->is_visible = false;
+	}
+
+
+
 	return true;
 }
 
@@ -114,6 +186,8 @@ bool GameScene::PostUpdate()
 bool GameScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
+
+
 
 	return true;
 }

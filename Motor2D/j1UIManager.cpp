@@ -17,6 +17,7 @@
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include <stdio.h>
+#include "GameScene.h"
 
 
 
@@ -52,42 +53,7 @@ bool j1UIManager::Start()
 
 	SDL_ShowCursor(SDL_DISABLE);
 
-	move_ui = App->tex->Load("gui/wireframes.png");
-	ui_icons = App->tex->Load("gui/cmdicons.png");
-	rects = App->tex->Load("gui/pcmdbtns.png");
-
 	cursor_state = STANDARD;
-
-	SDL_Rect s_armourM{ 621, 62, 34, 33 };
-	marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440, false);
-
-
-	SDL_Rect s_weaponM{ 507, 62, 34, 33 };
-	marine_weapon_icon = App->ui->CreateImage(s_weaponM, 275, 440, false);
-
-
-	SDL_Rect s_wireframeM{ 705, 126, 54, 70 };
-	marine_wireframe = App->ui->CreateImage(s_wireframeM, 180, 390, false);
-
-	SDL_Rect s_weaponG{ 543, 62, 34, 33 };
-	ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440, false);
-
-
-	SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
-	ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390, false);
-
-	SDL_Rect s_weaponF{ 582, 62, 34, 33 };
-	firebat_weapon_icon = App->ui->CreateImage(s_weaponF, 275, 440, false);
-
-
-	SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
-	firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390, false);
-
-	SDL_Rect s_wireframeMed{ 797, 208, 47, 66 };
-	medic_wireframe = App->ui->CreateImage(s_wireframeMed, 180, 390, false);
-
-	SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
-	observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
 
 	vector<SDL_Rect> sections;
 	sections.push_back({ 1, 62, 20, 21 });
@@ -95,8 +61,9 @@ bool j1UIManager::Start()
 	sections.push_back({ 43, 62, 20, 21 });
 	sections.push_back({ 64, 62, 20, 21 });
 	sections.push_back({ 85, 62, 20, 21 });
-	cursor = CreateCursor(sections, 0.08);
-	life_HUD = CreateLabel("", 177, 458);
+	cursor = App->ui->CreateCursor(sections, 0.08);
+
+	snipper_ui = CreateImage({0, 651, 640, 480}, 0, 0, false);
 
 	LoadUiInfo();
 
@@ -211,7 +178,19 @@ bool j1UIManager::Update(float dt)
 	else if (App->entity->selected_units.size() == 1)
 		ShowIndividualWireframe();
 
+
+	if (App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(true);
+	}
+
+	else if (!App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(false);
+	}
+
 	cursor->Update(dt);
+
 
 	return ret;
 }
@@ -249,6 +228,7 @@ bool j1UIManager::CleanUp()
 	gui_elements.clear();
 
 	delete cursor;
+
 
 	return ret;
 }
@@ -472,19 +452,19 @@ void j1UIManager::RectangleSelection()
 
 void j1UIManager::OcultWireframes()
 {
-	marine_armour_icon->is_visible = false;
-	marine_weapon_icon->is_visible = false;
-	marine_wireframe->is_visible = false;
+	App->game_scene->marine_armour_icon->is_visible = false;
+	App->game_scene->marine_weapon_icon->is_visible = false;
+	App->game_scene->marine_wireframe->is_visible = false;
 
-	ghost_weapon_icon->is_visible = false;
-	ghost_wireframe->is_visible = false;
+	App->game_scene->ghost_weapon_icon->is_visible = false;
+	App->game_scene->ghost_wireframe->is_visible = false;
 
 
-	firebat_weapon_icon->is_visible = false;
-	firebat_wireframe->is_visible = false;
+	App->game_scene->firebat_weapon_icon->is_visible = false;
+	App->game_scene->firebat_wireframe->is_visible = false;
 
-	observer_wireframe->is_visible = false;
-	medic_wireframe->is_visible = false;
+	App->game_scene->observer_wireframe->is_visible = false;
+	App->game_scene->medic_wireframe->is_visible = false;
 }
 
 void j1UIManager::ShowMiniWireframes(float dt)
@@ -520,29 +500,29 @@ void j1UIManager::ShowIndividualWireframe()
 	switch ((*it)->GetType())
 	{
 	case MARINE:
-		marine_armour_icon->is_visible = true;
-		marine_weapon_icon->is_visible = true;
-		marine_wireframe->is_visible = true;
+		App->game_scene->marine_armour_icon->is_visible = true;
+		App->game_scene->marine_weapon_icon->is_visible = true;
+		App->game_scene->marine_wireframe->is_visible = true;
 		break;
 
 	case GHOST:
-		marine_armour_icon->is_visible = true;
-		ghost_weapon_icon->is_visible = true;
-		ghost_wireframe->is_visible = true;
+		App->game_scene->marine_armour_icon->is_visible = true;
+		App->game_scene->ghost_weapon_icon->is_visible = true;
+		App->game_scene->ghost_wireframe->is_visible = true;
 		break;
 
 	case FIREBAT:
-		marine_armour_icon->is_visible = true;
-		firebat_weapon_icon->is_visible = true;
-		firebat_wireframe->is_visible = true;
+		App->game_scene->marine_armour_icon->is_visible = true;
+		App->game_scene->firebat_weapon_icon->is_visible = true;
+		App->game_scene->firebat_wireframe->is_visible = true;
 		break;
 
 	case MEDIC:
-		medic_wireframe->is_visible = true;
+		App->game_scene->medic_wireframe->is_visible = true;
 		break;
 
 	case OBSERVER:
-		observer_wireframe->is_visible = true;
+		App->game_scene->observer_wireframe->is_visible = true;
 		break;
 
 	case ENGINEER:

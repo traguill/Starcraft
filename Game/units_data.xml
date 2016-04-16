@@ -33,6 +33,9 @@
   </bullet>
   
   <unit TYPE="MARINE">
+    <attack_fx value="sounds/marine_shot.ogg"/>
+    <death_fx value="sounds/marine_death.ogg"/>
+
     <texture_path value="sprites/blue_marine.png"/>
     <auxiliar_texture value="sprites/red_marine.png"/>
     <width value="24" />
@@ -223,6 +226,9 @@
   </unit>
 
   <unit TYPE="GHOST">
+   <attack_fx value="sounds/ghost_shot.ogg"/>
+    <death_fx value="sounds/ghost_death.ogg"/>
+
     <texture_path value="sprites/blue_ghost.png"/>
     <width value="24" />
     <height value="32" />
@@ -414,13 +420,18 @@
   </unit>
 
 <unit TYPE="FIREBAT">
+
+   <attack_fx value="sounds/firebat_shot.ogg"/>
+    <death_fx value="sounds/firebat_death.ogg"/>
+
+
     <texture_path value="sprites/blue_firebat.png"/>
     <auxiliar_texture value="sprites/red_firebat.png"/>
     <width value="24" />
     <height value="32" />
-    <life value="100" />
+    <life value="120" />
     <speed value="100" />
-    <damage value="10" />
+    <damage value="12" />
     <vision value="180" />
     <range value="50" />
     <cool value="1" />
@@ -705,6 +716,9 @@
  
 
 <unit TYPE="OBSERVER">
+
+    <death_fx value="sounds/observer_death.ogg"/>
+
     <texture_path value="sprites/observer.png"/>
     <width value="37" />
     <height value="37" />
@@ -773,6 +787,10 @@
   </unit>
 
   <unit TYPE="MEDIC">
+   <attack_fx value="sounds/medic_shot.ogg"/>
+    <death_fx value="sounds/medic_death.ogg"/>
+
+
     <texture_path value="sprites/blue_medic.png"/>
     <width value="24" />
     <height value="32" />

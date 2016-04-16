@@ -18,12 +18,6 @@ bool EventsManager::Awake(pugi::xml_node&){ return true; }
 // Call before first frame
 bool EventsManager::Start()
 {
-	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 72 }, 470, -5, true);
-	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
-	objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
-	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
-	pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
-	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 	return true;
 }
 
@@ -39,18 +33,8 @@ bool EventsManager::Update(float dt)
 		break;
 	}
 
-	if (App->game_scene->GamePaused())
-	{
-		run_mark->SetVisible(false);
-		pause_mark->SetVisible(true);
-	}
 
-	else
-	{
-		run_mark->SetVisible(true);
-		pause_mark->SetVisible(false);
-	}
-
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 		game_event = BOMB_RETRIVED;
@@ -66,7 +50,7 @@ bool EventsManager::CleanUp(){ return true; }
 
 void EventsManager::BombRetrieved()
 {
-	objective_info_1->Print("Plant the bomb at their");
-	objective_info_2->Print("main base. It is to");
-	objective_info_3->Print("the south");
+	App->game_scene->objective_info_1->Print("Plant the bomb at their");
+	App->game_scene->objective_info_2->Print("main base. It is to");
+	App->game_scene->objective_info_3->Print("the south");
 }
