@@ -246,6 +246,9 @@ void Unit::Update(float dt)
 	if (mana > max_mana) 
 		mana = max_mana;
 
+	hp_bar->Update(dt);
+	mana_bar->Update(dt);
+
 	SetAnimation();
 }
 
@@ -263,48 +266,12 @@ void Unit::Draw()
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 
 		//Drawing health bar
-		/*hp_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 15);
-		App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetEmptyBar());
-
-		switch (hp_bar->hp_state)
-		{
-		case EMPTY:
-			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetEmptyBar());
-			break;
-		case LOW:
-			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetLowBar());
-			break;
-		case MIDDLE:
-			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetMiddleBar());
-			break;
-		case FULL:
-			App->render->Blit(hp_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 15, &hp_bar->GetFullBar());
-			break;
-		}
+		hp_bar->SetValue(life);
+		hp_bar->Draw(logic_pos.x, logic_pos.y);
 
 		//Drawing mana bar
-		float len = (mana / max_mana) * mana_bar->GetFullBar().w;
-		mana_bar->SetBarsLength(len);
-		mana_bar->current_number = mana;
-
-		mana_bar->SetLocalPos(GetPosition().x - 8, GetPosition().y + 20);
-		App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetEmptyBar());
-
-		switch (mana_bar->hp_state)
-		{
-		case EMPTY:
-			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetEmptyBar());
-			break;
-		case LOW:
-			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetLowBar());
-			break;
-		case MIDDLE:
-			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetMiddleBar());
-			break;
-		case FULL:
-			App->render->Blit(mana_bar->GetTexture(), GetPosition().x - 8, GetPosition().y + 20, &mana_bar->GetFullBar());
-			break;
-		}*/
+		mana_bar->SetValue(mana);
+		mana_bar->Draw(logic_pos.x, logic_pos.y + 8);
 	}
 
 	//FIREBATATTACK
@@ -375,15 +342,6 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 			source->DiscardTarget();
 		}
 	}
-
-	
-	//Modifying health bar according to the damage recieved
-	
-	/*int dam = (dmg * hp_bar->GetFullBar().w) / hp_bar->current_number;
-	int new_len = hp_bar->GetFullBar().w - dam;
-
-	hp_bar->SetBarsLength(new_len);
-	hp_bar->current_number = life;*/
 
 	if (is_enemy)
 		LOG("Life (enemy): %i", life);

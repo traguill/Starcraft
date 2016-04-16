@@ -192,3 +192,39 @@ bool UIProgressBar::CleanUp(){
 
 	return ret;
 }
+
+void UIProgressBar::SetValue(int value)
+{
+	current_number = value;
+}
+
+void UIProgressBar::Draw(int x, int y)
+{
+	App->render->Blit(bar_tex, x - 8, y + 15, &empty_bar_section);
+	SDL_Rect section = empty_bar_section;
+
+	float width = ((float)current_number / (float)max_number) * (float)empty_bar_section.w;
+	section.w = width;
+
+	switch (hp_state)
+	{
+	case EMPTY:
+		section.x = empty_bar_section.x;
+		section.y = empty_bar_section.y;
+		break;
+	case LOW:
+		section.x = low_bar_section.x;
+		section.y = low_bar_section.y;
+		break;
+	case MIDDLE:
+		section.x = middle_bar_section.x;
+		section.y = middle_bar_section.y;
+		break;
+	case FULL:
+		section.x = full_bar_section.x;
+		section.y = full_bar_section.y;
+		break;
+	}
+
+	App->render->Blit(bar_tex, x - 8, y + 15, &section);
+}
