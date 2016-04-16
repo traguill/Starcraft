@@ -217,9 +217,11 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
-	ShowMiniWireframes(dt);
-
-	ShowUiUnits();
+	if (App->entity->selected_units.size() > 1)
+		ShowMiniWireframes(dt);
+	
+	else if (App->entity->selected_units.size() == 1)
+		ShowUiUnits();
 
 	cursor->Update(dt);
 
@@ -482,112 +484,57 @@ void j1UIManager::ShowMiniWireframes(float dt)
 
 void j1UIManager::ShowUiUnits()
 {
-	life_HUD->Print("");
-	uint count = App->entity->selected_units.size();
 	list<Unit*>::iterator it = App->entity->selected_units.begin();
-	while (it != App->entity->selected_units.end())
+	iPoint pos;
+	pos.x = App->render->camera.x;
+	pos.y = App->render->camera.y;
+
+	uint x = 0; uint y = 0;
+	//------------Show life in HUD------------------------
+
+	/*
+	life_HUD->Print("");
+	int total_unit_life = (*it)->hp_bar->GetMaxSize();
+	int life_from_total = (*it)->hp_bar->current_number;
+
+	char ui_life[20];
+
+	sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
+	life_HUD->Print(ui_life);*/
+
+	//------------Show life in HUD------------------------
+
+	switch ((*it)->GetType())
 	{
-		iPoint pos;
-		pos.x = App->render->camera.x;
-		pos.y = App->render->camera.y;
+	case MARINE:
+		marine_armour_icon->is_visible = true;
+		marine_weapon_icon->is_visible = true;
+		marine_wireframe->is_visible = true;
+		break;
 
-		uint x = 0; uint y = 0;
+	case GHOST:
+		marine_armour_icon->is_visible = true;
+		ghost_weapon_icon->is_visible = true;
+		ghost_wireframe->is_visible = true;
+		break;
 
-		if (count == 1)
-		{
-			//Show life in HUD
+	case FIREBAT:
+		marine_armour_icon->is_visible = true;
+		firebat_weapon_icon->is_visible = true;
+		firebat_wireframe->is_visible = true;
+		break;
 
-			/*int total_unit_life = (*it)->hp_bar->GetMaxSize();
-			int life_from_total = (*it)->hp_bar->current_number;
+	case MEDIC:
 
-			char ui_life[20];
+		break;
 
-			sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
-			life_HUD->Print(ui_life);*/
+	case OBSERVER:
 
-			if ((*it)->GetType() == MARINE)
-			{
-				marine_armour_icon->is_visible = true;
-				marine_weapon_icon->is_visible = true;
-				marine_wireframe->is_visible = true;
-			}
+		break;
 
-
-			if ((*it)->GetType() == GHOST)
-			{
-				marine_armour_icon->is_visible = true;
-				ghost_weapon_icon->is_visible = true;
-				ghost_wireframe->is_visible = true;
-			}
-
-
-			if ((*it)->GetType() == FIREBAT)
-			{
-				marine_armour_icon->is_visible = true;
-				firebat_weapon_icon->is_visible = true;
-				firebat_wireframe->is_visible = true;
-			}
-
-			if ((*it)->GetType() == MEDIC)
-			{
-
-			}
-
-			if ((*it)->GetType() == OBSERVER)
-			{
-
-			}
-
-			if ((*it)->GetType() == ENGINEER)
-			{
-
-			}
-		}
-
-
-		if (count > 1)
-		{
-			list<Unit*>::iterator it2 = App->entity->selected_units.begin();
-			while (it2 != App->entity->selected_units.end())
-			{
-				if ((*it2)->GetType() == MARINE)
-				{
-
-				}
-
-				if ((*it2)->GetType() == GHOST)
-				{
-
-
-
-				}
-
-				if ((*it2)->GetType() == FIREBAT)
-				{
-
-
-				}
-
-				if ((*it2)->GetType() == MEDIC)
-				{
-
-				}
-
-				if ((*it2)->GetType() == OBSERVER)
-				{
-
-				}
-
-				if ((*it2)->GetType() == ENGINEER)
-				{
-
-				}
-
-				it2++;
-
-			}
-		}
-		it++;
+	case ENGINEER:
+			
+		break;
 	}
 }
 
