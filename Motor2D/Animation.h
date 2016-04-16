@@ -25,9 +25,9 @@ public:
 	Animation(const Animation& a) : frames(a.frames), speed(a.speed), current_frame(0), loop(a.loop), loops(0)
 	{ }
 
-	SDL_Rect& getCurrentFrame()
+	SDL_Rect& getCurrentFrame(float bullet_time = 1.0f)
 	{
-		current_frame += speed;
+		current_frame += speed * bullet_time;
 		if (current_frame >= frames.size())
 		{
 			current_frame = (loop) ? 0.0f : frames.size() - 1;

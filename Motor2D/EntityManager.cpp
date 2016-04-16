@@ -157,22 +157,11 @@ bool j1EntityManager::Update(float dt)
 	
 
 	//UPDATE UNITS------------------------------------------------------------------------------------
-	if (bullet_time == true)
-	{
-		if (actual_bullet_time >= update_time)
-		{
-			actual_bullet_time = 0;
-		}
-		else
-		{
-			actual_bullet_time += dt;
-		}
-	}
 	list<Unit*>::iterator it = friendly_units.begin();
 	while (it != friendly_units.end())
 	{
-		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
-			(*it)->Update(dt);
+		if (App->game_scene->GamePaused() == false)
+			(*it)->Update(dt * bullet_time);
 
 		(*it)->Draw();
 		it++;
@@ -181,8 +170,8 @@ bool j1EntityManager::Update(float dt)
 	list<Unit*>::iterator i = enemy_units.begin();
 	while (i != enemy_units.end())
 	{
-		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
-			(*i)->Update(dt);
+		if (App->game_scene->GamePaused() == false)
+			(*i)->Update(dt * bullet_time);
 
 		(*i)->Draw();
 		i++;
@@ -193,8 +182,8 @@ bool j1EntityManager::Update(float dt)
 	list<Bullet*>::iterator bullet = bullets.begin();
 	while (bullet != bullets.end())
 	{
-		if (App->game_scene->GamePaused() == false && actual_bullet_time == 0)
-			(*bullet)->Update(dt);
+		if (App->game_scene->GamePaused() == false)
+			(*bullet)->Update(dt*bullet_time);
 
 		(*bullet)->Draw();
 		++bullet;
