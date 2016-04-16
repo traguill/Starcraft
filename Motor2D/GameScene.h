@@ -44,6 +44,8 @@ private:
 
 	bool debug;
 
+	uint music;
+
 private:
 
 	UICursor* main_cur;

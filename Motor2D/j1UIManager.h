@@ -11,6 +11,7 @@ class UIButton;
 class UIInputBox;
 class UICursor;
 class UIProgressBar;
+enum UNIT_TYPE;
 
 
 enum CURSOR_STATE
@@ -54,7 +55,6 @@ public:
 
 
 	bool LoadUiInfo();
-	// TODO 2: Create the factory methods
 	// Gui creation functions
 
 	SDL_Texture* GetAtlas() const;
@@ -62,7 +62,7 @@ public:
 	//Creators ------------------------------------------------------------------------------------------------
 	UILabel* CreateLabel(const char* text, const int x, const int y, j1Module* listener = NULL);
 
-	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, j1Module* listener = NULL);
+	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, bool on_list = true,j1Module* listener = NULL);
 
 	UIButton* CreateButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover, j1Module* listener = NULL);
 
@@ -70,22 +70,31 @@ public:
 
 	UIProgressBar* CreateBar(string _type, int max_num, const int x, const int y, j1Module* listener = NULL);
 
+	void CreateMiniWireframe(UNIT_TYPE type, uint pos);
+
+	void DeleteMiniWIreframe(uint pos);
+
+	void OcultWireframes();
+
 	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
 	//Functions ---------------------------------------------------------------------------------------------------
 	UIEntity* GetMouseHover()const;
+
+	void EraseElement(UIEntity* entity);
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
 	void SetNextFocus(); //Sets the focus to the next element
 	void ShowUiUnits();
+	void ShowMiniWireframes(float dt);
 
 
 private:
 
-	bool pressed_last_frame = false;
-	SDL_Texture* atlas;
-	string atlas_file_name;
+	bool					pressed_last_frame = false;
+	SDL_Texture*			atlas;
+	string					atlas_file_name;
 
 	list<UIEntity*>			gui_elements;
 	UIEntity*				gui_pressed = NULL;
@@ -94,22 +103,35 @@ private:
 	list<UIProgressBar*>	ui_progress_bar;
 
 	//ui unit sprites
-	SDL_Texture* ui_icons;
-	SDL_Texture* move_ui;
+	SDL_Texture*			ui_icons;
+	SDL_Texture*			move_ui;
 
 	//It maybe has to be public
-	SDL_Texture* rects;
+	SDL_Texture*			rects;
 
-	UICursor* cursor;
-	UILabel* life_HUD;
-	string ui_file_path;
+	UICursor*				cursor;
+	UILabel*				life_HUD;
+	string					ui_file_path;
+
+	//Marine
+	UIImage*				marine_weapon_icon;
+	UIImage*				marine_armour_icon;
+	UIImage*				marine_wireframe;
+
+	//Ghost
+	UIImage*				ghost_weapon_icon;
+	UIImage*				ghost_wireframe;
+
+	//Firebat
+	UIImage*				firebat_weapon_icon;
+	UIImage*				firebat_wireframe;
 	
 
 public:
-	bool debug;
-	SDL_Rect selection_rect;
-	void EraseElement(UIEntity* entity);
-	CURSOR_STATE cursor_state;
+	bool					debug;
+	SDL_Rect				selection_rect;
+	CURSOR_STATE			cursor_state;
+	list<UIImage*>			mini_wireframes;
 };
 
 #endif

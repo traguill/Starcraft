@@ -138,9 +138,9 @@ void UIEntity::SetParent(UIEntity* _parent)
 
 void UIEntity::SetVisible(bool visible)
 {
-	if (visible != isVisible)
+	if (visible != is_visible)
 	{
-		isVisible = visible;
+		is_visible = visible;
 
 		list<UIEntity*>::iterator i = childs.begin();
 
@@ -156,5 +156,5 @@ void UIEntity::SetVisible(bool visible)
 
 bool UIEntity::IsVisible()const
 {
-	return isVisible;
+	return is_visible;
 }

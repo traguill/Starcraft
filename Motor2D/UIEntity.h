@@ -64,16 +64,16 @@ public:
 	GUI_TYPE			type;
 	GUI_EVENTS			gui_event;
 	j1Module*			listener;
-	list<UIEntity*>	childs;
+	list<UIEntity*>		childs;
 	bool				interactable = false;
 	bool				focusable = true;
 	bool				isFocus = false;
+	bool				is_visible = true;
 	
 protected:
 	SDL_Rect rect; //Local
 
 private:
-	bool				isVisible = true;
 	UIEntity*			parent = NULL;
 
 };

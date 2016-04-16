@@ -298,16 +298,20 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 			f_unit--;
 
 			list<Unit*>::iterator s_unit = selected_units.begin();
-			while (s_unit != selected_units.end())
+			for (uint i = 0; s_unit != selected_units.end(); i++, ++s_unit)
 			{
 				if (*s_unit == _unit)
 				{
+					if (selected_units.size() > 1)
+						App->ui->DeleteMiniWIreframe(i);
+					else
+						App->ui->OcultWireframes();
+
 					s_unit = selected_units.erase(s_unit);
-					delete _unit;
 					s_unit--;
+					delete _unit;
 					return;
 				}
-				++s_unit;
 			}
 			delete _unit;
 			return;
@@ -702,22 +706,27 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 
 void j1EntityManager::SelectUnits()
 {
-
 	iPoint mouse_pos;
 	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		list<Unit*>::iterator it = selected_units.begin();
+		list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();
+
 		while (it != selected_units.end())
 		{
-
 			(*it)->selected = false;
 
-			it++;
+			if (App->ui->mini_wireframes.size() > 0)
+				RELEASE(*wire_it);
+
+			it++; wire_it++;
 		}
 
+		App->ui->OcultWireframes();
 		selected_units.clear();
+		App->ui->mini_wireframes.clear();
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
 
@@ -770,7 +779,6 @@ void j1EntityManager::SelectUnits()
 		selection_rect.h = down_right.y - selection_rect.y;
 
 		list<Unit*>::iterator it = friendly_units.begin();
-
 		while (it != friendly_units.end())
 		{
 			if ((*it)->GetPosition().PointInRect(selection_rect.x, selection_rect.y, selection_rect.w, selection_rect.h) == true)
@@ -778,10 +786,17 @@ void j1EntityManager::SelectUnits()
 				selected_units.push_back((*it));
 				(*it)->selected = true;
 			}
-
 			it++;
 		}
 
+		if (selected_units.size() > 1)
+		{
+			list<Unit*>::iterator select_it = selected_units.begin();
+			for (uint i = 0; select_it != selected_units.end(); i++, select_it++)
+			{
+				App->ui->CreateMiniWireframe((*select_it)->type, i);
+			}
+		}
 	}
 }
 

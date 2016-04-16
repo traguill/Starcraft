@@ -57,6 +57,32 @@ bool j1UIManager::Start()
 
 	cursor_state = STANDARD;
 
+	SDL_Rect s_armourM{ 621, 62, 34, 33 };
+	marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440);
+
+
+	SDL_Rect s_weaponM{ 507, 62, 34, 33 };
+	marine_weapon_icon = App->ui->CreateImage(s_weaponM, 275, 440);
+
+
+	SDL_Rect s_wireframeM{ 705, 126, 54, 70 };
+	marine_wireframe = App->ui->CreateImage(s_wireframeM, 180, 390);
+
+	SDL_Rect s_weaponG{ 543, 62, 34, 33 };
+	ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440);
+
+
+	SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
+	ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390);
+
+	SDL_Rect s_weaponF{ 582, 62, 34, 33 };
+	firebat_weapon_icon = App->ui->CreateImage(s_weaponF, 275, 440);
+
+
+	SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
+	firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390);
+
+	OcultWireframes();
 
 	vector<SDL_Rect> sections;
 	sections.push_back({ 1, 62, 20, 21 });
@@ -193,21 +219,7 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
-
-	//UIMASTER
-	/*
-	int ghost;
-	int marine;
-	
-	list<Unit*>::iterator units_i = App->entity->selected_units.begin();
-	while (units_i != App->entity->selected_units.end())
-	{
-		if ((*units_i)->GetType() == MARINE)
-			marine++;
-		if ((*units_i)->GetType() == GHOST)
-			ghost++;
-	}
-	*/
+	ShowMiniWireframes(dt);
 
 	ShowUiUnits();
 
@@ -275,11 +287,12 @@ UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, j1
 	return label;
 }
 
-UIImage* j1UIManager::CreateImage(SDL_Rect _section, const int x, const int y, j1Module* listener)
+UIImage* j1UIManager::CreateImage(SDL_Rect _section, const int x, const int y, bool on_list, j1Module* listener)
 {
 	UIImage* img = new UIImage(_section, x, y);
 	img->listener = listener;
-	gui_elements.push_back(img);
+	if (on_list == true)
+		gui_elements.push_back(img);
 
 	return img;
 }
@@ -442,6 +455,32 @@ void j1UIManager::SetNextFocus()
 	}
 }
 
+void j1UIManager::OcultWireframes()
+{
+	marine_armour_icon->is_visible = false;
+	marine_weapon_icon->is_visible = false;
+	marine_wireframe->is_visible = false;
+
+	ghost_weapon_icon->is_visible = false;
+	ghost_wireframe->is_visible = false;
+
+
+	firebat_weapon_icon->is_visible = false;
+	firebat_wireframe->is_visible = false;
+}
+
+void j1UIManager::ShowMiniWireframes(float dt)
+{
+	list<UIImage*>::iterator it = mini_wireframes.begin();
+	while (it != mini_wireframes.end())
+	{
+		(*it)->Update(dt);
+		if (debug)
+			(*it)->Debug();
+		++it;
+	}
+}
+
 void j1UIManager::ShowUiUnits()
 {
 	life_HUD->Print("");
@@ -449,7 +488,6 @@ void j1UIManager::ShowUiUnits()
 	list<Unit*>::iterator it = App->entity->selected_units.begin();
 	while (it != App->entity->selected_units.end())
 	{
-
 		iPoint pos;
 		pos.x = App->render->camera.x;
 		pos.y = App->render->camera.y;
@@ -459,83 +497,36 @@ void j1UIManager::ShowUiUnits()
 		if (count == 1)
 		{
 			//Show life in HUD
-			
-			//int total_unit_life = (*it)->hp_bar->GetMaxSize();
-			//int life_from_total = (*it)->hp_bar->current_number;
+
+			/*int total_unit_life = (*it)->hp_bar->GetMaxSize();
+			int life_from_total = (*it)->hp_bar->current_number;
 
 			char ui_life[20];
-			
-			//sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
-			//life_HUD->Print(ui_life);
 
-			SDL_Rect s{ 252, 440, 27, 29 };
-			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
-
-			SDL_Rect s1{ 288, 440, 29, 29 };
-			App->render->Blit(ui_icons, 540 - pos.x, 365 - pos.y, &s1);
-
-			SDL_Rect s2{ 324, 440, 29, 29 };
-			App->render->Blit(ui_icons, 583 - pos.x, 365 - pos.y, &s2);
-
-			SDL_Rect s3{ 576, 475, 29, 29 };
-			App->render->Blit(ui_icons, 498 - pos.x, 405 - pos.y, &s3);
-
-			//GIRU: try switch instead of infinites if's
-
-			//switch((*it)->GetType())
-			//{ case MARINE:
-
-			//it works ;)
-
-			
-			//GIRU: all this magic numbers... Have to be loaded from xml doc. Create new structs to handle all this data
-
+			sprintf_s(ui_life, sizeof(ui_life), "%d / %d", life_from_total, total_unit_life);
+			life_HUD->Print(ui_life);*/
 
 			if ((*it)->GetType() == MARINE)
 			{
-				SDL_Rect s{ 102, 253, 51, 68 };
-				App->render->Blit(move_ui, 180 - pos.x, 393 - pos.y, &s);
-
-				SDL_Rect sma{ 357, 439, 30, 31 };
-				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sma);
-
-				SDL_Rect sma_weapon{ 1, 647, 31, 31 };
-				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sma_weapon);
-
-				SDL_Rect sma_armour{ 108, 578, 32, 32 };
-				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sma_armour);
-
-				//CreateLabel("Marine", 330, 400);
-				
-				//DO NOT create a new label every frame!!!! 
-				//**
-				//Create a label in the UIManager and call the method to change the text if the type changes
+				marine_armour_icon->is_visible = true;
+				marine_weapon_icon->is_visible = true;
+				marine_wireframe->is_visible = true;
 			}
 
 
 			if ((*it)->GetType() == GHOST)
 			{
-				SDL_Rect sg{ 362, 255, 51, 68 };
-				App->render->Blit(move_ui, 175 - pos.x, 400 - pos.y, &sg);
-
-				SDL_Rect sg_special{ 430, 440, 30, 32 };
-				App->render->Blit(ui_icons, 495 - pos.x, 440 - pos.y, &sg_special);
-
-				SDL_Rect sg_armour{ 108, 578, 32, 32 };
-				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sg_armour);
-
-				SDL_Rect sf_weapon{ 37, 647, 32, 32 };
-				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sf_weapon);
+				marine_armour_icon->is_visible = true;
+				ghost_weapon_icon->is_visible = true;
+				ghost_wireframe->is_visible = true;
 			}
 
 
 			if ((*it)->GetType() == FIREBAT)
 			{
-				SDL_Rect sf_armour{ 108, 578, 32, 32 };
-				App->render->Blit(ui_icons, 240 - pos.x, 440 - pos.y, &sf_armour);
-
-				SDL_Rect sf_weapon{ 433, 647, 32, 32 };
-				App->render->Blit(ui_icons, 275 - pos.x, 440 - pos.y, &sf_weapon);
+				marine_armour_icon->is_visible = true;
+				firebat_weapon_icon->is_visible = true;
+				firebat_wireframe->is_visible = true;
 			}
 
 			if ((*it)->GetType() == MEDIC)
@@ -558,61 +549,24 @@ void j1UIManager::ShowUiUnits()
 
 		if (count > 1)
 		{
-			SDL_Rect s{ 252, 440, 27, 29 };
-			App->render->Blit(ui_icons, 497 - pos.x, 365 - pos.y, &s);
-
-			SDL_Rect s1{ 288, 440, 29, 29 };
-			App->render->Blit(ui_icons, 540 - pos.x, 365 - pos.y, &s1);
-
-			SDL_Rect s2{ 324, 440, 29, 29 };
-			App->render->Blit(ui_icons, 583 - pos.x, 365 - pos.y, &s2);
-
-			SDL_Rect s3{ 576, 475, 29, 29 };
-			App->render->Blit(ui_icons, 498 - pos.x, 405 - pos.y, &s3);
-
-
 			list<Unit*>::iterator it2 = App->entity->selected_units.begin();
 			while (it2 != App->entity->selected_units.end())
 			{
-
-
-
 				if ((*it2)->GetType() == MARINE)
 				{
-					SDL_Rect square{ 1008, 72, 33, 34 };
-					App->render->Blit(rects, 175 - pos.x + x, 400 - pos.y + y, &square);
 
-					SDL_Rect sma{ 46, 3, 28, 36 };
-					App->render->Blit(move_ui, 178 - pos.x + x, 400 - pos.y + y, &sma);
-
-					x += 35;
-					if (x == 210)
-					{
-						y += 40;
-						x = 0;
-					}
 				}
 
 				if ((*it2)->GetType() == GHOST)
 				{
-					SDL_Rect square{ 1008, 72, 33, 34 };
-					App->render->Blit(rects, 175 - pos.x + x, 400 - pos.y + y, &square);
 
-					SDL_Rect sg{ 161, 4, 28, 33 };
-					App->render->Blit(move_ui, 178 - pos.x + x, 400 - pos.y + y, &sg);
-
-					x += 35;
-					if (x == 210)
-					{
-						y += 40;
-						x = 0;
-					}
 
 
 				}
 
 				if ((*it2)->GetType() == FIREBAT)
 				{
+
 
 				}
 
@@ -634,17 +588,80 @@ void j1UIManager::ShowUiUnits()
 				it2++;
 
 			}
-
-
 		}
-
 		it++;
 	}
+}
 
+void j1UIManager::CreateMiniWireframe(UNIT_TYPE type, uint pos)
+{
+	uint width = 35; uint height = 40;
 
-	/*if (App->entity->selected_units.empty() == true)
+	switch (type)
 	{
+	case MARINE:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 736, 445, 33, 34 }, 170 + pos * width, 400, false));
 
-	}*/
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 736, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, false));
 
+		break;
+
+	case GHOST:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 816, 445, 33, 34 }, 170 + pos * width, 400, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 816, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, false));
+
+		break;
+
+	case FIREBAT:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 774, 445, 33, 34 }, 170 + pos * width, 400, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 774, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, false));
+		break;
+	}
+}
+
+
+
+void j1UIManager::DeleteMiniWIreframe(uint pos)
+{
+	if (mini_wireframes.size() > 2)
+	{
+		list<UIImage*>::iterator it = mini_wireframes.begin();
+		for (uint i = 0; i < pos; i++)
+			it++;
+
+		delete (*it);
+		it = mini_wireframes.erase(it);
+
+
+		for (uint i = pos; i < mini_wireframes.size(); i++, it++)
+		{
+			int x, y;
+			(*it)->GetLocalPos(x, y);
+
+			if (i != 5)
+				(*it)->SetLocalPos(x - 35, y);
+
+			else
+				(*it)->SetLocalPos(x + 35 * 5, y - 40);
+		}
+	}
+
+	else
+	{
+		list<UIImage*>::iterator it = mini_wireframes.begin();
+		while (it != mini_wireframes.end())
+		{
+			RELEASE(*it);
+			it++;
+		}
+		mini_wireframes.clear();
+	}
 }

@@ -51,7 +51,7 @@ bool GameScene::Start()
 	game_paused = false;
 
 	//UI TESTS
-	App->ui->CreateImage({ 1, 396, 637, 192 }, 2, 290);
+	App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290);
 	//
 	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);
@@ -64,7 +64,7 @@ bool GameScene::Start()
 	sections.push_back({ 85, 62, 20, 21 });
 	main_cur = App->ui->CreateCursor(sections, 0.08);
 	
-
+	music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
 	return true;
 }
