@@ -105,9 +105,7 @@ public:
 	bool SNIPPER_MODE = false;
 
 	//Bullet time
-	bool bullet_time = false;
-	float update_time = 0.033333;
-	float actual_bullet_time = 0;
+	float bullet_time = 1.0f;
 
 	//Sniping
 	list<Bullet*> bullets;

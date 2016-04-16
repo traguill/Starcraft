@@ -807,8 +807,8 @@ void Unit::SetAnimation()
 	}
 
 	//Animations
-	sprite.rect.x = current_animation->getCurrentFrame().x;
-	sprite.rect.y = current_animation->getCurrentFrame().y;
+	sprite.rect.x = current_animation->getCurrentFrame(App->entity->bullet_time).x;
+	sprite.rect.y = current_animation->getCurrentFrame(App->entity->bullet_time).y;
 
 	//FIREBATATTACK gotta implement everything except UP inside the ifs above
 	if (state == UNIT_ATTACK && type == FIREBAT)
@@ -816,8 +816,8 @@ void Unit::SetAnimation()
 		p.sprite.position.x = GetDrawPosition().x + p.current_pos.x;
 		p.sprite.position.y = GetDrawPosition().y + p.current_pos.y;
 
-		p.sprite.rect.x = p.current_animation->getCurrentFrame().x;
-		p.sprite.rect.y = p.current_animation->getCurrentFrame().y;
+		p.sprite.rect.x = p.current_animation->getCurrentFrame(App->entity->bullet_time).x;
+		p.sprite.rect.y = p.current_animation->getCurrentFrame(App->entity->bullet_time).y;
 	}
 }
 
@@ -1045,7 +1045,8 @@ void Unit::Snipper()
 
 	App->entity->SNIPPER_MODE = true;
 	//Activate bullet time
-	App->entity->bullet_time = true;
+	App->entity->bullet_time = 0.5f;
+
 	//Entity manager to: snipe mode
 
 	//Sound
@@ -1114,7 +1115,7 @@ void Unit::DisableSnipper()
 	//END SNIPPING
 	snipping = false;
 	App->entity->SNIPPER_MODE = false;
-	App->entity->bullet_time = false;
-	App->entity->actual_bullet_time = 0.0f;
+	//Disable bullet mode
+	App->entity->bullet_time = 1.0f;
 	App->render->lock_camera = false;
 }
