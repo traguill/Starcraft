@@ -182,26 +182,7 @@ bool j1UIManager::Update(float dt)
 		SetNextFocus();
 	}
 
-	//Selection rectangle
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && pressed_last_frame == false)
-	{
-		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
-		pressed_last_frame = true;
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
-	{
-		iPoint position;
-		App->input->GetMouseWorld(position.x, position.y);
-		selection_rect.w = position.x - selection_rect.x;
-		selection_rect.h = position.y - selection_rect.y;
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && pressed_last_frame == true)
-		pressed_last_frame = false;
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
-		App->render->DrawQuad(selection_rect, 0, 255, 0, 255, false);
+	RectangleSelection();
 
 	list<UIEntity*>::iterator i = gui_elements.begin();
 	while (i != gui_elements.end() && ret == true)
@@ -454,6 +435,29 @@ void j1UIManager::SetNextFocus()
 		focus = best_match;
 		focus->isFocus = true;
 	}
+}
+
+void j1UIManager::RectangleSelection()
+{
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && pressed_last_frame == false)
+	{
+		App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
+		pressed_last_frame = true;
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		iPoint position;
+		App->input->GetMouseWorld(position.x, position.y);
+		selection_rect.w = position.x - selection_rect.x;
+		selection_rect.h = position.y - selection_rect.y;
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && pressed_last_frame == true)
+		pressed_last_frame = false;
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		App->render->DrawQuad(selection_rect, 0, 255, 0, 255, false);
 }
 
 void j1UIManager::OcultWireframes()

@@ -88,6 +88,7 @@ private:
 	void SetNextFocus(); //Sets the focus to the next element
 	void ShowIndividualWireframe();
 	void ShowMiniWireframes(float dt);
+	void RectangleSelection();
 
 
 private:
