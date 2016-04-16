@@ -744,7 +744,7 @@
     <speed value="100" />
     <damage value="10" />
     <vision value="180" />
-    <range value="80" />
+    <range value="30" />
     <cool value="1" />
     <collider width="15" height="15"/>
     <mana value="100" />

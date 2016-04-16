@@ -126,6 +126,12 @@ private:
 	//Firebat
 	UIImage*				firebat_weapon_icon;
 	UIImage*				firebat_wireframe;
+
+	//Medic
+	UIImage*				 medic_wireframe;
+
+	//Observer
+	UIImage*				observer_wireframe;
 	
 
 public:

@@ -82,6 +82,12 @@ bool j1UIManager::Start()
 	SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
 	firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390, false);
 
+	SDL_Rect s_wireframeMed{ 797, 208, 47, 66 };
+	medic_wireframe = App->ui->CreateImage(s_wireframeMed, 180, 390, false);
+
+	SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
+	observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
+
 	vector<SDL_Rect> sections;
 	sections.push_back({ 1, 62, 20, 21 });
 	sections.push_back({ 22, 62, 20, 21 });
@@ -472,6 +478,9 @@ void j1UIManager::OcultWireframes()
 
 	firebat_weapon_icon->is_visible = false;
 	firebat_wireframe->is_visible = false;
+
+	observer_wireframe->is_visible = false;
+	medic_wireframe->is_visible = false;
 }
 
 void j1UIManager::ShowMiniWireframes(float dt)
@@ -525,11 +534,11 @@ void j1UIManager::ShowIndividualWireframe()
 		break;
 
 	case MEDIC:
-
+		medic_wireframe->is_visible = true;
 		break;
 
 	case OBSERVER:
-
+		observer_wireframe->is_visible = true;
 		break;
 
 	case ENGINEER:
@@ -555,19 +564,35 @@ void j1UIManager::CreateMiniWireframe(UNIT_TYPE type, uint pos)
 
 	case GHOST:
 		if (pos < 6)
-			mini_wireframes.push_back(CreateImage({ 816, 445, 33, 34 }, 170 + pos * width, 400, true, false));
+			mini_wireframes.push_back(CreateImage({ 814, 445, 33, 34 }, 170 + pos * width, 400, true, false));
 
 		else if (pos < 12)
-			mini_wireframes.push_back(CreateImage({ 816, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+			mini_wireframes.push_back(CreateImage({ 814, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
 
 		break;
 
 	case FIREBAT:
 		if (pos < 6)
-			mini_wireframes.push_back(CreateImage({ 774, 445, 33, 34 }, 170 + pos * width, 400, true, false));
+			mini_wireframes.push_back(CreateImage({ 776, 445, 33, 34 }, 170 + pos * width, 400, true, false));
 
 		else if (pos < 12)
-			mini_wireframes.push_back(CreateImage({ 774, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+			mini_wireframes.push_back(CreateImage({ 776, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+		break;
+
+	case MEDIC:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 736, 485, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 736, 485, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+		break;
+
+	case OBSERVER :
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 776, 485, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 776, 485, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
 		break;
 	}
 }
