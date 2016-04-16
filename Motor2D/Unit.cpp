@@ -10,6 +10,7 @@
 #include "j1Pathfinding.h"
 #include "math.h"
 #include "j1UIManager.h"
+#include "j1Audio.h"
 
 //FIREBATATTACK
 Projectile::Projectile(Projectile* p)
@@ -1029,7 +1030,8 @@ void Unit::Snipper()
 	App->entity->bullet_time = true;
 	//Entity manager to: snipe mode
 
-	//How can I draw snipping animation?
+	//Sound
+	App->audio->PlayFx(App->entity->sound_sniper_mode);
 
 
 }
@@ -1042,23 +1044,29 @@ void Unit::Shoot(int x, int y)
 	{
 		mana -= App->entity->snipper_cost;
 	}
+	fPoint destination(x-logic_pos.x, y-logic_pos.y);
+	destination.Normalize();
+	destination.Scale(800);
+	destination.x += logic_pos.x;
+	destination.y += logic_pos.y;
 
 	iPoint origin = App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
-	iPoint dst = App->map->WorldToMap(x, y, COLLIDER_MAP);
-
-	iPoint destination(x, y);
+	iPoint dst = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
 
 	//A wall is in our way
 	if (App->pathfinding->CreateLine(origin, dst) == false)
 	{
-		destination = App->map->MapToWorld(App->pathfinding->GetLineTile().x, App->pathfinding->GetLineTile().y, COLLIDER_MAP);
+		iPoint result =  App->map->MapToWorld(App->pathfinding->GetLineTile().x, App->pathfinding->GetLineTile().y, COLLIDER_MAP);
+		destination.x = result.x;
+		destination.y = result.y;
 	}
 
-	//Create bullet [MISS A TEXTURE!]
-	Bullet* bullet = new Bullet();
+	//Create bullet 
+	Bullet* bullet = new Bullet(App->entity->db_bullet);
 	bullet->SetPosition(logic_pos.x, logic_pos.y);
 	bullet->source = this;
-	bullet->destination = destination;
+	bullet->destination.x = destination.x;
+	bullet->destination.y = destination.y;
 
 	fPoint direction(x - logic_pos.x, y - logic_pos.y);
 	direction.Normalize();
@@ -1077,6 +1085,9 @@ void Unit::Shoot(int x, int y)
 	App->render->camera.y += direction.y;
 
 	App->render->SetTransition(cam_initial.x, cam_initial.y, true);
+
+	//Play sound
+	App->audio->PlayFx(App->entity->sound_shoot);
 
 }
 

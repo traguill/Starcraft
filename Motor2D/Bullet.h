@@ -15,6 +15,8 @@ public:
 
 	Bullet();
 
+	Bullet(Bullet* b);
+
 	// Bullet
 	 ~Bullet();
 
@@ -34,6 +36,15 @@ public:
 	Unit* source;
 private:
 	float speed = 900;
+
+	iPoint pos_up;
+	iPoint pos_down;
+	iPoint pos_right;
+	iPoint pos_left;
+	iPoint pos_up_right;
+	iPoint pos_down_right;
+	iPoint pos_up_left;
+	iPoint pos_down_left;
 };
 
 #endif

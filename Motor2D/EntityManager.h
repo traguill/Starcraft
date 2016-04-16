@@ -49,6 +49,7 @@ private:
 	bool LoadUnitsInfo();
 	string UnitTypeToString(UNIT_TYPE type)const;
 	UNIT_TYPE UnitTypeToEnum(string type)const;
+	void LoadSounds();
 
 	//Selection
 	void SelectUnits();
@@ -112,6 +113,13 @@ public:
 	//Costs
 	float invisibility_cost;
 	int snipper_cost;
+
+	//Reference bullet
+	Bullet* db_bullet;
+
+	//Audio
+	uint sound_shoot;
+	uint sound_sniper_mode;
 };
 
 #endif
