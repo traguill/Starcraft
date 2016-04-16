@@ -64,6 +64,8 @@ bool GameScene::Start()
 
 	LoadLevel();
 
+	App->render->camera = SDL_Rect{ -2100, 0, App->render->camera.w, App->render->camera.h };
+
 	return true;
 }
 

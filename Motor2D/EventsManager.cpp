@@ -18,7 +18,7 @@ bool EventsManager::Awake(pugi::xml_node&){ return true; }
 // Call before first frame
 bool EventsManager::Start()
 {
-	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 66 }, 470, -5, true);
+	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 72 }, 470, -5, true);
 	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
 	objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
 	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
