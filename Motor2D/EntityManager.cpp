@@ -281,9 +281,12 @@ bool j1EntityManager::CleanUp()
 	App->tex->UnLoad(gui_cursor);
 	App->tex->UnLoad(health_bar);
 
-	App->tex->UnLoad(db_bullet->sprite.texture);
-	delete db_bullet;
-	db_bullet = NULL;
+	if (db_bullet != NULL)
+	{
+		App->tex->UnLoad(db_bullet->sprite.texture);
+		delete db_bullet;
+		db_bullet = NULL;
+	}
 
 	return true;
 }

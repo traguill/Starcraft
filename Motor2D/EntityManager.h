@@ -115,7 +115,7 @@ public:
 	int snipper_cost;
 
 	//Reference bullet
-	Bullet* db_bullet;
+	Bullet* db_bullet = NULL;
 
 	//Audio
 	uint sound_shoot;

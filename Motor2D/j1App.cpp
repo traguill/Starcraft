@@ -19,6 +19,8 @@
 #include "GameScene.h"
 #include "TacticalAI.h"
 #include "EventsManager.h"
+#include "MenuScene.h"
+#include "SceneManager.h"
 
 
 // Constructor
@@ -40,6 +42,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	entity = new j1EntityManager();
 	events = new EventsManager();
 	tactical_ai = new TacticalAI();
+	menu = new MenuScene();
+	scene_manager = new SceneManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -52,13 +56,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(font);
 	
+	AddModule(scene_manager);
 
 	// scene last
-	//AddModule(scene); //This scene is ONLY for testing stuff (DISABLE FOR FINAL GAME)
 	AddModule(game_scene);
-	
-	//Should be before render
-	
+	AddModule(menu);
+
 
 	AddModule(entity);
 	
@@ -157,7 +160,8 @@ bool j1App::Start()
 
 	while (i != modules.end() && ret == true)
 	{
-		ret = (*i)->Start();
+		if ((*i)->active == true)
+			ret = (*i)->Start();
 		++i;
 	}
 	

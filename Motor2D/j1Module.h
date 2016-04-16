@@ -78,6 +78,15 @@ public:
 	virtual void OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{}
 
+	void DisableModule()
+	{
+		active = false;
+	}
+	void EnableModule()
+	{
+		active = true;
+	}
+
 public:
 
 	string		name;

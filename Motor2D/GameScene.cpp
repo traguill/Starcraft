@@ -21,7 +21,7 @@ GameScene::~GameScene()
 {}
 
 // Called before render is available
-bool GameScene::Awake()
+bool GameScene::Awake(pugi::xml_node& conf)
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -98,8 +98,7 @@ bool GameScene::PostUpdate()
 {
 	bool ret = true;
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+
 
 	return ret;
 }

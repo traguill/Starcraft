@@ -1,19 +1,19 @@
-#ifndef __GAME_SCENE_H__
-#define __GAME_SCENE_H__
+#ifndef __MENU_SCENE_H__
+#define __MENU_SCENE_H__
 
 #include "j1Module.h"
-#include "UICursor.h"
+
 
 struct SDL_Texture;
 
-class GameScene : public j1Module
+class MenuScene : public j1Module
 {
 public:
 
-	GameScene();
+	MenuScene();
 
 	// Destructor
-	virtual ~GameScene();
+	virtual ~MenuScene();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -33,22 +33,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	bool GamePaused()const;
-
-private:
-
-	uint map_id; //Drawable map
-	uint collider_id;
-
-	bool game_paused;
-
-	bool debug;
-
-	uint music;
-
-private:
-
-	UICursor* main_cur;
 
 };
 
