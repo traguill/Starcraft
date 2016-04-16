@@ -98,6 +98,8 @@ bool j1UIManager::Start()
 	cursor = CreateCursor(sections, 0.08);
 	life_HUD = CreateLabel("", 177, 458);
 
+	snipper_ui = CreateImage({0, 651, 640, 480}, 0, 0, false);
+
 	LoadUiInfo();
 
 	return ret;
@@ -212,6 +214,16 @@ bool j1UIManager::Update(float dt)
 		ShowIndividualWireframe();
 
 	cursor->Update(dt);
+
+	if (App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(true);
+	}
+
+	else if (!App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(false);
+	}
 
 	return ret;
 }

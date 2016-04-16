@@ -132,6 +132,10 @@ private:
 
 	//Observer
 	UIImage*				observer_wireframe;
+
+
+	//Snipper ui
+	UIImage*                snipper_ui;
 	
 
 public:
