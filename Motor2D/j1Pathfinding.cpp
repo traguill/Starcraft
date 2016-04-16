@@ -104,7 +104,7 @@ list<PathNode>::iterator PathList::Find(const iPoint& point)
 list<PathNode>::iterator PathList::GetNodeLowestScore() 
 {
 	list<PathNode>::iterator ret = list_nodes.end();
-	int min = 65535;
+	int min = 6500535;
 	list<PathNode>::iterator i = list_nodes.begin();
 
 	while (i != list_nodes.end())
