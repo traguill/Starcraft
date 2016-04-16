@@ -95,13 +95,7 @@ bool GameScene::Start()
 
 
 
-		vector<SDL_Rect> sections;
-		sections.push_back({ 1, 62, 20, 21 });
-		sections.push_back({ 22, 62, 20, 21 });
-		sections.push_back({ 43, 62, 20, 21 });
-		sections.push_back({ 64, 62, 20, 21 });
-		sections.push_back({ 85, 62, 20, 21 });
-		cursor = App->ui->CreateCursor(sections, 0.08);
+		
 		life_HUD = App->ui->CreateLabel("", 177, 458);
 	}
 
@@ -171,7 +165,6 @@ bool GameScene::Update(float dt)
 		App->game_scene->pause_mark->is_visible = false;
 	}
 
-	cursor->Update(dt);
 
 
 	return true;
@@ -192,7 +185,6 @@ bool GameScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
 
-	delete cursor;
 
 
 	return true;

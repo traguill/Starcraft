@@ -106,6 +106,13 @@ private:
 	list<UIProgressBar*>	ui_progress_bar;
 
 
+	SDL_Texture*			rects;
+
+	UICursor*				cursor;
+
+
+	//Snipper ui
+	UIImage*                snipper_ui;
 
 	
 

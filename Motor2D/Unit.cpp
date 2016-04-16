@@ -46,6 +46,7 @@ Projectile::Projectile(Projectile* p)
 	pos_up_left = p->pos_up_left;
 	pos_down_left = p->pos_down_left;
 
+	
 	current_pos = { 0, 0 };
 	current_animation = NULL;
 
@@ -91,6 +92,10 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	max_mana = u->max_mana;
 	mana = u->mana;
 	mana_regen = u->mana_regen;
+
+	//fx
+	attack_fx = u->attack_fx;
+	death_fx = u->death_fx;
 
 	//Animations
 	up = u->up;
@@ -426,6 +431,7 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 				{
 					//Ignore attacking
 					LOG("A medic is about to heal me!");
+					App->audio->PlayFx(source->attack_fx);
 				}
 				else
 				{
@@ -566,6 +572,7 @@ void Unit::SetAnimation()
 {
 	if (state == UNIT_ATTACK)
 	{
+		App->audio->PlayFx(attack_fx);
 		if (target)
 		{
 			iPoint target_pos = target->GetPosition();
@@ -790,6 +797,8 @@ void Unit::SetAnimation()
 	//DEATH anim
 	if (state == UNIT_DIE)
 	{
+		App->audio->PlayFx(death_fx);
+
 		sprite.position = GetDrawPosition() + death_pos_corrector;
 
 		sprite.rect.w = death_size.x;

@@ -56,9 +56,7 @@ private:
 public:
 
 	//It maybe has to be public
-	SDL_Texture*			rects;
 
-	UICursor*				cursor;
 	UILabel*				life_HUD;
 
 	//Marine

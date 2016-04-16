@@ -55,7 +55,15 @@ bool j1UIManager::Start()
 
 	cursor_state = STANDARD;
 
-	
+	vector<SDL_Rect> sections;
+	sections.push_back({ 1, 62, 20, 21 });
+	sections.push_back({ 22, 62, 20, 21 });
+	sections.push_back({ 43, 62, 20, 21 });
+	sections.push_back({ 64, 62, 20, 21 });
+	sections.push_back({ 85, 62, 20, 21 });
+	cursor = App->ui->CreateCursor(sections, 0.08);
+
+	snipper_ui = CreateImage({0, 651, 640, 480}, 0, 0, false);
 
 	LoadUiInfo();
 
@@ -171,6 +179,19 @@ bool j1UIManager::Update(float dt)
 		ShowIndividualWireframe();
 
 
+	if (App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(true);
+	}
+
+	else if (!App->entity->SNIPPER_MODE)
+	{
+		snipper_ui->SetVisible(false);
+	}
+
+	cursor->Update(dt);
+
+
 	return ret;
 }
 
@@ -205,6 +226,8 @@ bool j1UIManager::CleanUp()
 	}
 
 	gui_elements.clear();
+
+	delete cursor;
 
 
 	return ret;
