@@ -6,6 +6,7 @@
 #include "j1UIManager.h"
 #include "j1Input.h"
 #include "EntityManager.h"
+#include "SceneManager.h"
 
 UICursor::UICursor() : UIEntity()
 {
@@ -142,7 +143,7 @@ bool UICursor::Update(float dt)
 	rect.x -= cam_pos.x;
 	rect.y -= cam_pos.y;
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && App->scene_manager->in_game == true)
 	{
 		//MARTI: dont' use operate new inside Blit method Blit(new SDL_Rect{x,y,w,h}) 
 		//DO NOT use magic numbers pls...

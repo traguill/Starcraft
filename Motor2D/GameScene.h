@@ -48,7 +48,6 @@ private:
 
 private:
 
-	UICursor* main_cur;
 
 };
 

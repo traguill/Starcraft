@@ -56,13 +56,6 @@ bool GameScene::Start()
 	//Not able to use labels, missing font;
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
-	vector<SDL_Rect> sections;
-	sections.push_back({ 1, 62, 20, 21 });
-	sections.push_back({ 22, 62, 20, 21 });
-	sections.push_back({ 43, 62, 20, 21 });
-	sections.push_back({ 64, 62, 20, 21 });
-	sections.push_back({ 85, 62, 20, 21 });
-	main_cur = App->ui->CreateCursor(sections, 0.08);
 	
 	music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
@@ -107,8 +100,6 @@ bool GameScene::PostUpdate()
 bool GameScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
-
-	delete main_cur;
 
 	return true;
 }
