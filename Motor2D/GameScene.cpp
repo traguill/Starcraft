@@ -118,7 +118,7 @@ bool GameScene::Start()
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
 	
-	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
+	music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
 	LoadLevel();
 
