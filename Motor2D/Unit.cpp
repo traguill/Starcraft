@@ -990,7 +990,16 @@ void Unit::Snipper()
 	has_destination = false;
 	path.clear();
 
-	iPoint dir(round(direction.x), round(direction.y));
+	iPoint mouse_pos;
+	App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+
+	fPoint dir_f(mouse_pos.x - logic_pos.x, mouse_pos.y - logic_pos.y);
+	dir_f.Normalize();
+	dir_f.x = round(dir_f.x);
+	dir_f.y = round(dir_f.y);
+	direction = dir_f;
+
+	iPoint dir(dir_f.x, dir_f.y);
 
 	SDL_Rect cam = App->render->camera;
 
