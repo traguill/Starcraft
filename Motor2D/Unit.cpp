@@ -220,9 +220,9 @@ void Unit::Update(float dt)
 		break;
 	case UNIT_DIE:
 		//Timer of the animation and delete the unit
-		if (death.finished() && (type == MARINE || type == GHOST))
+		if (death.finished() && (type == MARINE || type == GHOST || type == MEDIC))
 			App->entity->RemoveUnit(this);
-		else if (type != MARINE && type != GHOST)
+		else if (type != MARINE && type != GHOST && type != MEDIC)
 			App->entity->RemoveUnit(this);
 		break;
 	}
