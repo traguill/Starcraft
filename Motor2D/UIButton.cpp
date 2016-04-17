@@ -47,12 +47,14 @@ bool UIButton::Update(float dt)
 	int x, y;
 	GetScreenPos(x, y);
 
+	iPoint cam(App->render->camera.x, App->render->camera.y);
+
 	if (state == IDLE)
-		App->render->Blit(App->ui->GetAtlas(), x, y, &idle);
-	if (state == PRESSED)
-		App->render->Blit(App->ui->GetAtlas(), x, y, &pressed);
-	if (state == HOVER)
-		App->render->Blit(App->ui->GetAtlas(), x, y, &hover);
+		App->render->Blit(App->ui->GetAtlas(), x- cam.x, y - cam.y, &idle);
+	if (state == PRESSED)						
+		App->render->Blit(App->ui->GetAtlas(), x- cam.x, y - cam.y, &pressed);
+	if (state == HOVER)							
+		App->render->Blit(App->ui->GetAtlas(), x- cam.x, y - cam.y, &hover);
 
 
 

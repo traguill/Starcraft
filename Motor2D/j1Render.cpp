@@ -89,7 +89,7 @@ bool j1Render::Update(float dt)
 			DoTransition();
 		else
 		{
-			if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_UP)
+			if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_UP && App->entity->friendly_units.size() != 0)
 			{
 				++focus_unit_num;
 				if (focus_unit_num >= App->entity->friendly_units.size())

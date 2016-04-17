@@ -37,6 +37,8 @@ public:
 
 	bool GamePaused()const;
 
+	void OnGUI(UIEntity* gui, GUI_EVENTS event);
+
 private:
 
 	void LoadLevel();

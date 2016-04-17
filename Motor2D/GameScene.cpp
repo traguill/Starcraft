@@ -13,6 +13,7 @@
 #include "j1UIManager.h"
 #include "j1FileSystem.h"
 #include "EntityManager.h"
+#include "SceneManager.h"
 
 GameScene::GameScene() : j1Module()
 {
@@ -114,20 +115,22 @@ bool GameScene::Start()
 
 	//Win image & button
 	win_background = App->ui->CreateImage({ 847, 1, 221, 108 }, 220, 150, false, true);
-	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 });
+	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
 	//win_button->SetParent(win_background);
 	win_button->SetVisible(false);
 
 	//Loose image & button
-	loose_background = App->ui->CreateImage({ 1173, 1, 221, 108 }, 220, 150, false, true);
-	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 });
+	loose_background = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
+	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 }, this);
 	//loose_button->SetParent(loose_background);
 	loose_button->SetVisible(false);
 
 	//Bomb
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
-	bomb_zone = { 150, 20, 50, 50 };
+	bomb_zone = { 815, 3080, 50, 50 };
+	bomb_pos.x = 926;
+	bomb_pos.y = 1403;
 
 	debug = false;
 	game_paused = false;
@@ -162,10 +165,12 @@ bool GameScene::Update(float dt)
 	if (App->entity->debug)
 	{
 		App->render->DrawQuad({ bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }, 255, 255, 0, 255, true, true);
-		App->render->DrawQuad(bomb_zone, 0, 255, 255, 255, true, true);
 	}
 
-	App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
+	if (bomb_available == false)
+		App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
+	else
+		App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
@@ -201,7 +206,7 @@ bool GameScene::Update(float dt)
 	{
 		loose_background->is_visible = true;
 		loose_button->is_visible = true;
-		LOG("YOU LOSE");
+		game_paused = true;
 	}
 
 	if (bomb_available == false)
@@ -231,7 +236,7 @@ bool GameScene::Update(float dt)
 			{
 				win_background->is_visible = true;
 				win_button->is_visible = true;
-				LOG("YOU WIN!");
+				game_paused = true;
 			}
 
 			++f_unit;
@@ -358,4 +363,20 @@ void GameScene::SaveLevelDesign()
 	// we are done, so write data to disk
 	App->fs->Save("my_level.xml", stream.str().c_str(), stream.str().length());
 	
+}
+
+void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
+{
+	if (gui->type == BUTTON)
+	{
+		if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->WantToChangeScene();
+		}
+
+		else if ((UIButton*)gui == loose_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->WantToChangeScene();
+		}
+	}
 }
