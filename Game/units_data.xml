@@ -1,5 +1,5 @@
 <units>
-  <invisibility cost="40"/>
+  <invisibility cost="27"/>
   <snipper cost="40"/>
 
   <bullet>
@@ -43,7 +43,7 @@
     <life value="100" />
     <speed value="100" />
     <damage value="10" />
-    <vision value="180" />
+    <vision value="130" />
     <range value="80" />
     <cool value="1" />
     <collider width="15" height="15"/>
@@ -234,7 +234,7 @@
     <height value="32" />
     <life value="100" />
     <speed value="100" />
-    <damage value="10" />
+    <damage value="5" />
     <vision value="200" />
     <range value="100" />
     <cool value="1" />
@@ -431,7 +431,7 @@
     <height value="32" />
     <life value="120" />
     <speed value="100" />
-    <damage value="12" />
+    <damage value="20" />
     <vision value="180" />
     <range value="50" />
     <cool value="1" />
@@ -796,7 +796,7 @@
     <height value="32" />
     <life value="60" />
     <speed value="100" />
-    <damage value="10" />
+    <damage value="13" />
     <vision value="180" />
     <range value="30" />
     <cool value="1" />

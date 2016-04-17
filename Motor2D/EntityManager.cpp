@@ -99,6 +99,13 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	{
+		LOG("Firebat created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(FIREBAT, p.x, p.y, true);
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 	{
 		LOG("Observer created");
@@ -113,7 +120,7 @@ bool j1EntityManager::Update(float dt)
 
 	}
 	
-	/*if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 		*/
 	//------------------------------------------------------------------------------

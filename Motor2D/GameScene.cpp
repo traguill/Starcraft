@@ -197,10 +197,10 @@ bool GameScene::Update(float dt)
 
 
 	//Save level designed
-	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_UP)
+	/*if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_UP)
 	{
 		SaveLevelDesign();
-	}
+	}*/
 
 
 	if (GamePaused())
