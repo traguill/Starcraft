@@ -89,6 +89,12 @@ public:
 	UIImage* pause_mark;
 	UIImage* run_mark;
 
+	//Bomb
+	SDL_Rect bomb_collider;
+	bool bomb_available = false;
+
+	SDL_Rect bomb_zone;
+
 
 };
 

@@ -794,7 +794,7 @@
     <texture_path value="sprites/blue_medic.png"/>
     <width value="24" />
     <height value="32" />
-    <life value="100" />
+    <life value="60" />
     <speed value="100" />
     <damage value="10" />
     <vision value="180" />

@@ -36,7 +36,7 @@ bool GameScene::Awake(pugi::xml_node& conf)
 bool GameScene::Start()
 {
 	//Load Map
-	App->map->Load("game_map.tmx", map_id);
+	App->map->Load("0.5_game_map.tmx", map_id);
 
 	//Load collision map
 	if (App->map->Load("collision.tmx", collider_id) == true)
@@ -109,6 +109,10 @@ bool GameScene::Start()
 	pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
 	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 
+	//BOMB
+	bomb_collider = {10, 10, 50, 50};
+	bomb_zone = { 20, 20, 50, 50 };
+
 
 	debug = false;
 	game_paused = false;
@@ -123,7 +127,7 @@ bool GameScene::Start()
 
 	LoadLevel();
 
-	App->render->camera = SDL_Rect{ -2100, 0, App->render->camera.w, App->render->camera.h };
+	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
 	return true;
 }
@@ -138,6 +142,13 @@ bool GameScene::PreUpdate()
 // Called each loop iteration
 bool GameScene::Update(float dt)
 {
+	//Debug
+	if (App->entity->debug)
+	{
+		App->render->DrawQuad(bomb_collider, 255, 255, 0, 255, true, true);
+		App->render->DrawQuad(bomb_zone, 255, 255, 0, 255, true, true);
+	}
+
 	App->map->Draw(map_id);
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -174,6 +185,39 @@ bool GameScene::Update(float dt)
 	{
 		LOG("YOU LOSE");
 	}
+
+	if (bomb_available == false)
+	{
+		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
+		while (f_unit != App->entity->friendly_units.end())
+		{
+			iPoint pos = (*f_unit)->GetPosition();
+
+			if (pos.x > bomb_collider.x && pos.x < bomb_collider.x + bomb_collider.w && pos.y > bomb_collider.y && pos.y < bomb_collider.y + bomb_collider.w)
+			{
+				LOG("YOU HAVE THE BOMB");
+				bomb_available = true;
+			}
+
+			++f_unit;
+		}
+	}
+	else
+	{
+		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
+		while (f_unit != App->entity->friendly_units.end())
+		{
+			iPoint pos = (*f_unit)->GetPosition();
+
+			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w)
+			{
+				LOG("YOU WIN!");
+			}
+
+			++f_unit;
+		}
+	}
+	
 
 
 	return true;
