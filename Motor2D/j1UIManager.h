@@ -60,7 +60,7 @@ public:
 	SDL_Texture* GetAtlas() const;
 
 	//Creators ------------------------------------------------------------------------------------------------
-	UILabel* CreateLabel(const char* text, const int x, const int y, j1Module* listener = NULL);
+	UILabel* CreateLabel(const char* text, const int x, const int y, bool on_list = true, j1Module* listener = NULL);
 
 	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, bool initial_visible, bool on_list = true,j1Module* listener = NULL);
 

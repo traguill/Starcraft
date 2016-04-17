@@ -262,11 +262,12 @@ SDL_Texture* j1UIManager::GetAtlas() const
 
 // class UIManager ---------------------------------------------------
 
-UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, j1Module* listener)
+UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, bool on_list, j1Module* listener)
 {
 	UILabel* label = new UILabel(text, x, y);
 	label->listener = listener;
-	gui_elements.push_back(label);
+	if (on_list == true)
+		gui_elements.push_back(label);
 
 	return label;
 }
