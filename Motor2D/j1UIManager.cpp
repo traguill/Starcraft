@@ -358,14 +358,19 @@ UIProgressBar* j1UIManager::CreateBar(string _type, int max_num, const int x, co
 		if (typ == HEALTH)
 		{
 			pbar->current_number = max_num;
+			pbar->bar_tex = App->tex->Load("gui/healthbar.png");
 		}
 		else
-			pbar->current_number = 0;
+		{
+			pbar->current_number = max_num;
+			pbar->bar_tex = App->tex->Load("gui/pgbar.png");
+		}
 		
 		pbar->listener = listener;
 		pbar->hp_state = FULL;
 
 		return pbar;
+		
 	}
 	return NULL;
 

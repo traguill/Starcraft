@@ -61,12 +61,14 @@ private:
 	SDL_Rect low_bar_section;
 	SDL_Rect middle_bar_section;
 
-	SDL_Texture* bar_tex;
+
 protected:
+
 	int max_number;
 
 
 public:
+	SDL_Texture* bar_tex;
 	int current_number;
 	BAR_STATE hp_state;
 	BAR_TYPE bar_ty;
