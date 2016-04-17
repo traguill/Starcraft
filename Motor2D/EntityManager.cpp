@@ -112,7 +112,7 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(MEDIC, p.x, p.y, false);
 
 	}
-	*/
+	
 	/*if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 		*/
