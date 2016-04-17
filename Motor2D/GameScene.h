@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "UICursor.h"
 #include "UILabel.h"
+#include "UIButton.h"
 
 struct SDL_Texture;
 
@@ -90,11 +91,20 @@ public:
 	UIImage* run_mark;
 
 	//Bomb
-	SDL_Rect bomb_collider;
+	SDL_Texture* bomb;
+	iPoint bomb_pos;
+	SDL_Rect bomb_rect;
 	bool bomb_available = false;
 
 	SDL_Rect bomb_zone;
 
+	//Win UI
+	UIImage* win_background;
+	UIButton* win_button;
+
+	//Loose UI
+	UIImage* loose_background;
+	UIButton* loose_button;
 
 };
 

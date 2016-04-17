@@ -105,16 +105,25 @@ bool GameScene::Start()
 		life_HUD = App->ui->CreateLabel("", 177, 458);
 		
 		//Sniper
-		snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);
-
-		
-		
+		snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);		
 	}
 
-	//BOMB
-	bomb_collider = {10, 10, 50, 50};
-	bomb_zone = { 20, 20, 50, 50 };
+	//Win image & button
+	win_background = App->ui->CreateImage({ 847, 1, 221, 108 }, 220, 150, false, true);
+	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 });
+	//win_button->SetParent(win_background);
+	win_button->SetVisible(false);
 
+	//Loose image & button
+	loose_background = App->ui->CreateImage({ 1173, 1, 221, 108 }, 220, 150, false, true);
+	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 });
+	//loose_button->SetParent(loose_background);
+	loose_button->SetVisible(false);
+
+	//Bomb
+	bomb = App->tex->Load("sprites/Bomb.png");
+	bomb_rect = { 30, 12, 32, 32 };
+	bomb_zone = { 150, 20, 50, 50 };
 
 	debug = false;
 	game_paused = false;
@@ -144,14 +153,15 @@ bool GameScene::PreUpdate()
 // Called each loop iteration
 bool GameScene::Update(float dt)
 {
-	//Debug
+	App->map->Draw(map_id);
+
 	if (App->entity->debug)
 	{
-		App->render->DrawQuad(bomb_collider, 255, 255, 0, 255, true, true);
-		App->render->DrawQuad(bomb_zone, 255, 255, 0, 255, true, true);
+		App->render->DrawQuad({ bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }, 255, 255, 0, 255, true, true);
+		App->render->DrawQuad(bomb_zone, 0, 255, 255, 255, true, true);
 	}
 
-	App->map->Draw(map_id);
+	App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
@@ -185,6 +195,8 @@ bool GameScene::Update(float dt)
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
 	{
+		loose_background->is_visible = true;
+		loose_button->is_visible = true;
 		LOG("YOU LOSE");
 	}
 
@@ -195,7 +207,7 @@ bool GameScene::Update(float dt)
 		{
 			iPoint pos = (*f_unit)->GetPosition();
 
-			if (pos.x > bomb_collider.x && pos.x < bomb_collider.x + bomb_collider.w && pos.y > bomb_collider.y && pos.y < bomb_collider.y + bomb_collider.w)
+			if (pos.x > bomb_pos.x && pos.x < bomb_pos.x + bomb_rect.w && pos.y > bomb_pos.y && pos.y < bomb_pos.y + bomb_rect.w)
 			{
 				LOG("YOU HAVE THE BOMB");
 				bomb_available = true;
@@ -213,6 +225,8 @@ bool GameScene::Update(float dt)
 
 			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w)
 			{
+				win_background->is_visible = true;
+				win_button->is_visible = true;
 				LOG("YOU WIN!");
 			}
 
