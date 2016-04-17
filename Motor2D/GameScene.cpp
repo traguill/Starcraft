@@ -36,7 +36,7 @@ bool GameScene::Awake(pugi::xml_node& conf)
 bool GameScene::Start()
 {
 	//Load Map
-	App->map->Load("game_map.tmx", map_id);
+	App->map->Load("0.5_game_map.tmx", map_id);
 
 	//Load collision map
 	if (App->map->Load("collision.tmx", collider_id) == true)
@@ -123,7 +123,7 @@ bool GameScene::Start()
 
 	LoadLevel();
 
-	App->render->camera = SDL_Rect{ -2100, 0, App->render->camera.w, App->render->camera.h };
+	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
 	return true;
 }
