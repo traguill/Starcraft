@@ -51,6 +51,7 @@ bool j1UIManager::Start()
 	bool ret = true;
 
 	atlas = App->tex->Load(atlas_file_name.data());
+	ghost_tex = App->tex->Load("gui/ghost_ui.png");
 
 	SDL_ShowCursor(SDL_DISABLE);
 
@@ -180,7 +181,23 @@ bool j1UIManager::Update(float dt)
 
 	if (App->scene_manager->in_game == true && App->entity->SNIPPER_MODE)
 	{
+		//snipper_ui->SetVisible(true);
+		
+		iPoint pos;
+		SDL_Rect rec;
+		list<Unit*>::iterator it = App->entity->selected_units.begin();
+		for (it; it != App->entity->selected_units.end(); it++)
+		{
+			if ((*it)->GetType() == GHOST && (*it)->GetSnipping() == true){
+				rec = (*it)->current_animation->getCurrentFrame();
+				pos = (*it)->GetDrawPosition();
+			}
+		}
+		rec = { rec.x - 5, rec.y - 5, rec.w + 10, rec.h + 10 };
+		App->render->Blit(ghost_tex, pos.x, pos.y, &rec);
+
 		App->game_scene->snipper_ui->SetVisible(true);
+
 	}
 
 	else if (App->scene_manager->in_game == true && !App->entity->SNIPPER_MODE)

@@ -93,21 +93,23 @@ bool GameScene::Start()
 		SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
 		observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
 
+		//CREATE EVENT
+		objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
+		objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
+		objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
+		objective_info_3 = App->ui->CreateLabel("base", 477, 25);
+		pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
+		run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
+
+		//Life in HUD
+		life_HUD = App->ui->CreateLabel("", 177, 458);
+		
 		//Sniper
 		snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);
 
 		
-		life_HUD = App->ui->CreateLabel("", 177, 458);
+		
 	}
-
-
-	//CREATE EVENT
-	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
-	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
-	objective_info_2 = App->ui->CreateLabel("from the western enemy", 477, 15);
-	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
-	pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
-	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 
 	//BOMB
 	bomb_collider = {10, 10, 50, 50};

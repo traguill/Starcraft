@@ -231,5 +231,6 @@ public:
 	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)
 
 
+	bool GetSnipping();
 };
 #endif
