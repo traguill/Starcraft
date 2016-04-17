@@ -95,10 +95,21 @@ bool j1Render::Update(float dt)
 				if (focus_unit_num >= App->entity->friendly_units.size())
 					focus_unit_num = 1;
 
-				list<Unit*>::iterator it = next(App->entity->friendly_units.begin(), focus_unit_num);
+				int count = 1;
+				list<Unit*>::iterator it = App->entity->friendly_units.begin();
+				while (it != App->entity->friendly_units.end())
+				{
+					if (count == focus_unit_num)
+					{
+						camera.x = -(*it)->GetPosition().x + (camera.w / 2);
+						camera.y = -(*it)->GetPosition().y + (camera.h / 2);
+						break;
+					}
+					++count;
+					++it;
+				}
 
-				camera.x = -(*it)->GetPosition().x + (camera.w / 2);
-				camera.y = -(*it)->GetPosition().y + (camera.h / 2);
+			
 				CheckBoundaries();
 			}
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)

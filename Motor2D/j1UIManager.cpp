@@ -151,10 +151,10 @@ bool j1UIManager::Update(float dt)
 
 	GetMouseInput();
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
+	/*if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
 		SetNextFocus();
-	}
+	}*/
 
 	RectangleSelection();
 
