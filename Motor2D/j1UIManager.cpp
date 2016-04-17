@@ -193,8 +193,8 @@ bool j1UIManager::Update(float dt)
 				pos = (*it)->GetDrawPosition();
 			}
 		}
-		rec = { rec.x - 5, rec.y - 5, rec.w + 10, rec.h + 10 };
-		App->render->Blit(ghost_tex, pos.x, pos.y, &rec);
+		rec = { rec.x - 5, rec.y - 5, rec.w + 10, rec.h + 15 };
+		App->render->Blit(ghost_tex, pos.x - 5, pos.y - 5, &rec);
 
 		App->game_scene->snipper_ui->SetVisible(true);
 
