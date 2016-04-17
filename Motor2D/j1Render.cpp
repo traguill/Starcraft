@@ -10,6 +10,7 @@
 #include "j1UIManager.h"
 #include "UICursor.h"
 #include "EntityManager.h"
+#include "SceneManager.h"
 
 #define VSYNC true
 
@@ -96,7 +97,7 @@ bool j1Render::Update(float dt)
 					camera.y = -App->entity->selected_units.front()->GetPosition().y + (camera.h / 2);
 				}
 			}
-			else
+			else if (App->scene_manager->in_game == true)
 				CursorMovement(dt);
 	}
 
@@ -332,8 +333,8 @@ void j1Render::CursorMovement(float dt)
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
 	// doesnt enter none if
-		if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
-		App->ui->cursor_state = STANDARD;
+	if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
+	App->ui->cursor_state = STANDARD;
 
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
