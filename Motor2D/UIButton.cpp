@@ -21,6 +21,8 @@ UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section
 
 	rect.x = x;
 	rect.y = y;
+	rect.w = section_idle.w;
+	rect.h = section_idle.h;
 
 	idle = section_idle;
 	pressed = section_pressed;

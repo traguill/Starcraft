@@ -4,7 +4,8 @@
 #include "j1Module.h"
 
 
-struct SDL_Texture;
+class UIImage;
+class UIButton;
 
 class MenuScene : public j1Module
 {
@@ -32,6 +33,19 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	void OnGUI(UIEntity* gui, GUI_EVENTS event);
+
+private:
+
+	UIImage* background;
+	UIImage* logo;
+
+	bool close_game;
+
+public:
+	UIButton* start;
+	UIButton* quit;
 
 
 };

@@ -236,6 +236,7 @@ bool j1UIManager::CleanUp()
 void j1UIManager::EraseElement(UIEntity* entity)
 {
 	gui_elements.remove(entity);
+	delete entity;
 }
 
 // const getter for atlas
