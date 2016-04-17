@@ -34,11 +34,6 @@ bool EventsManager::Update(float dt)
 	}
 
 
-	
-
-	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
-		game_event = BOMB_RETRIVED;
-
 	return true;
 }
 

@@ -71,7 +71,7 @@ bool j1EntityManager::Update(float dt)
 
 	//Create units
 	//DEBUG-----------------------------------------------------------------------------
-	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	/*if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
 		LOG("Ghost created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
@@ -112,9 +112,10 @@ bool j1EntityManager::Update(float dt)
 		CreateUnit(MEDIC, p.x, p.y, false);
 
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	*/
+	/*if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
+		*/
 	//------------------------------------------------------------------------------
 
 	//Basic logic

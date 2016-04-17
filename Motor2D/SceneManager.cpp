@@ -50,15 +50,6 @@ bool SceneManager::PreUpdate()
 bool SceneManager::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_UP)
-	{
-		StartGame();
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_UP)
-	{
-		StartMenu();
-	}
 
 	return true;
 }

@@ -177,7 +177,7 @@ bool GameScene::Update(float dt)
 	if (debug)
 		App->map->Draw(collider_id);
 
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 		game_paused = !game_paused;
 
 
