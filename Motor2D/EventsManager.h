@@ -42,7 +42,7 @@ public:
 
 	void BombRetrieved();
 
-private:
+public:
 	CURRENT_EVENT game_event = INITIAL_STATE;
 
 };

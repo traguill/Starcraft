@@ -12,6 +12,7 @@
 #include "GameScene.h"
 #include "j1UIManager.h"
 #include "j1FileSystem.h"
+#include "EventsManager.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
 
@@ -219,6 +220,7 @@ bool GameScene::Update(float dt)
 			if (pos.x > bomb_pos.x && pos.x < bomb_pos.x + bomb_rect.w && pos.y > bomb_pos.y && pos.y < bomb_pos.y + bomb_rect.w)
 			{
 				LOG("YOU HAVE THE BOMB");
+				App->events->game_event = BOMB_RETRIVED;
 				bomb_available = true;
 			}
 
