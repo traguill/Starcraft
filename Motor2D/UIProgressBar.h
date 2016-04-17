@@ -4,6 +4,7 @@
 #include "UIEntity.h"
 
 struct SDL_Texture;
+
 enum BAR_TYPE{
 	HEALTH,
 	PROGRESS
@@ -35,6 +36,9 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	void SetValue(int value);
+	void Draw(int x, int y);
 
 public:
 

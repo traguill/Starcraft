@@ -10,6 +10,7 @@
 #include "j1UIManager.h"
 #include "UICursor.h"
 #include "EntityManager.h"
+#include "SceneManager.h"
 
 #define VSYNC true
 
@@ -87,17 +88,31 @@ bool j1Render::Update(float dt)
 		if (transitioning == true)
 			DoTransition();
 		else
+		{
+			if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_UP)
+			{
+				++focus_unit_num;
+				if (focus_unit_num >= App->entity->friendly_units.size())
+					focus_unit_num = 1;
 
+				list<Unit*>::iterator it = next(App->entity->friendly_units.begin(), focus_unit_num);
+
+				camera.x = -(*it)->GetPosition().x + (camera.w / 2);
+				camera.y = -(*it)->GetPosition().y + (camera.h / 2);
+				CheckBoundaries();
+			}
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 			{
 				if (App->entity->selected_units.size() > 0)
 				{
 					camera.x = -App->entity->selected_units.front()->GetPosition().x + (camera.w / 2);
 					camera.y = -App->entity->selected_units.front()->GetPosition().y + (camera.h / 2);
+					CheckBoundaries();
 				}
 			}
-			else
+			else if (App->scene_manager->in_game == true)
 				CursorMovement(dt);
+		}
 	}
 
 
@@ -114,12 +129,6 @@ bool j1Render::Update(float dt)
 	}
 
 
-	static char title[256];
-	int mouse_x, mouse_y;
-	App->input->GetMouseWorld(mouse_x, mouse_y);
-	iPoint pos = App->map->WorldToMap(mouse_x, mouse_y, 2);
-	sprintf_s(title, 256, "Tile x: %i y: %i", pos.x, pos.y);
-	//App->win->SetTitle(title);
 
 	return true;
 }
@@ -338,8 +347,8 @@ void j1Render::CursorMovement(float dt)
 	App->input->GetMousePosition(mouse_x, mouse_y);
 
 	// doesnt enter none if
-		if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
-		App->ui->cursor_state = STANDARD;
+	if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
+	App->ui->cursor_state = STANDARD;
 
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
@@ -366,12 +375,8 @@ void j1Render::CursorMovement(float dt)
 		App->ui->cursor_state = DOWN;
 	}	
 
+	CheckBoundaries();
 
-	//Limits
-	if (camera.x > 0)			camera.x = 0;
-	if (camera.x < limit_x)		camera.x = limit_x;
-	if (camera.y > 0)			camera.y = 0;
-	if (camera.y < limit_y)		camera.y = limit_y;
 }
 
 void j1Render::SetTransition(int x, int y,bool end_locking)
@@ -406,4 +411,13 @@ void j1Render::DoTransition()
 			
 	}
 		
+}
+
+void j1Render::CheckBoundaries()
+{
+	//Limits
+	if (camera.x > 0)			camera.x = 0;
+	if (camera.x < limit_x)		camera.x = limit_x;
+	if (camera.y > 0)			camera.y = 0;
+	if (camera.y < limit_y)		camera.y = limit_y;
 }

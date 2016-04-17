@@ -15,18 +15,21 @@ UIButton::UIButton() : UIEntity()
 UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover) : UIEntity()
 {
 	type = BUTTON;
-	interactable = true;
+	interactable = false;
 	state = IDLE;
-	text.Print(_text);
-
+	
 	rect.x = x;
 	rect.y = y;
+	rect.w = section_idle.w;
+	rect.h = section_idle.h;
+
+	//X & Y position are magic numbers
+	text = *App->ui->CreateLabel(_text, rect.w / 3, rect.h / 6, false);
+	text.SetParent(this);
 
 	idle = section_idle;
 	pressed = section_pressed;
 	hover = section_hover;
-
-	text.SetParent(this);
 }
 
 

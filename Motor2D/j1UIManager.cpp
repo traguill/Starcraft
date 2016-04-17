@@ -18,6 +18,7 @@
 #include "SceneManager.h"
 #include <stdio.h>
 #include "GameScene.h"
+#include "MenuScene.h"
 
 
 
@@ -63,8 +64,6 @@ bool j1UIManager::Start()
 	sections.push_back({ 64, 62, 20, 21 });
 	sections.push_back({ 85, 62, 20, 21 });
 	cursor = App->ui->CreateCursor(sections, 0.08);
-
-	snipper_ui = CreateImage({0, 651, 640, 480}, 0, 0, false);
 
 	LoadUiInfo();
 
@@ -180,9 +179,9 @@ bool j1UIManager::Update(float dt)
 		ShowIndividualWireframe();
 
 
-	if (App->entity->SNIPPER_MODE)
+	if (App->scene_manager->in_game == true && App->entity->SNIPPER_MODE)
 	{
-		snipper_ui->SetVisible(true);
+		//snipper_ui->SetVisible(true);
 		
 		iPoint pos;
 		SDL_Rect rec;
@@ -196,11 +195,14 @@ bool j1UIManager::Update(float dt)
 		}
 		rec = { rec.x - 5, rec.y - 5, rec.w + 10, rec.h + 10 };
 		App->render->Blit(ghost_tex, pos.x, pos.y, &rec);
+
+		App->game_scene->snipper_ui->SetVisible(true);
+
 	}
 
-	else if (!App->entity->SNIPPER_MODE)
+	else if (App->scene_manager->in_game == true && !App->entity->SNIPPER_MODE)
 	{
-		snipper_ui->SetVisible(false);
+		App->game_scene->snipper_ui->SetVisible(false);
 	}
 
 	cursor->Update(dt);
@@ -247,9 +249,26 @@ bool j1UIManager::CleanUp()
 	return ret;
 }
 
+void j1UIManager::CleanUpList()
+{
+	list<UIEntity*>::iterator i = gui_elements.begin();
+
+	while (i != gui_elements.end())
+	{
+		(*i)->CleanUp();
+
+		delete (*i);
+		(*i) = NULL;
+		++i;
+	}
+
+	gui_elements.clear();
+}
+
 void j1UIManager::EraseElement(UIEntity* entity)
 {
 	gui_elements.remove(entity);
+	delete entity;
 }
 
 // const getter for atlas
@@ -260,11 +279,12 @@ SDL_Texture* j1UIManager::GetAtlas() const
 
 // class UIManager ---------------------------------------------------
 
-UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, j1Module* listener)
+UILabel* j1UIManager::CreateLabel(const char* text, const int x, const int y, bool on_list, j1Module* listener)
 {
 	UILabel* label = new UILabel(text, x, y);
 	label->listener = listener;
-	gui_elements.push_back(label);
+	if (on_list == true)
+		gui_elements.push_back(label);
 
 	return label;
 }

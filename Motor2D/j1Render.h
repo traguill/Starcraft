@@ -60,6 +60,8 @@ private:
 	void CursorMovement(float dt);
 	void DoTransition();
 
+	void CheckBoundaries();
+
 public:
 
 	SDL_Renderer*	renderer;
@@ -85,6 +87,8 @@ private:
 	list<Sprite*> blit_sprites;
 
 	bool lock_after_transition = false; //Locks the camera after a transition
+
+	int focus_unit_num = 1;
 };
 
 #endif // __j1RENDER_H__

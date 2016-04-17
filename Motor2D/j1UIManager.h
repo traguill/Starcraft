@@ -60,7 +60,7 @@ public:
 	SDL_Texture* GetAtlas() const;
 
 	//Creators ------------------------------------------------------------------------------------------------
-	UILabel* CreateLabel(const char* text, const int x, const int y, j1Module* listener = NULL);
+	UILabel* CreateLabel(const char* text, const int x, const int y, bool on_list = true, j1Module* listener = NULL);
 
 	UIImage* CreateImage(SDL_Rect _section, const int x, const int y, bool initial_visible, bool on_list = true,j1Module* listener = NULL);
 
@@ -81,6 +81,8 @@ public:
 	UIEntity* GetMouseHover()const;
 
 	void EraseElement(UIEntity* entity);
+
+	void CleanUpList();
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
@@ -106,15 +108,18 @@ private:
 	list<UIProgressBar*>	ui_progress_bar;
 
 
+
 	SDL_Texture*			rects;
 
-	UICursor*				cursor;
 
 
 	//Snipper ui
-	UIImage*                snipper_ui;
+	//UIImage*                snipper_ui;
 	SDL_Texture*			ghost_tex;
 	
+
+	UICursor*				cursor;	
+
 
 public:
 	bool					debug;

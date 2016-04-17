@@ -93,7 +93,8 @@ bool GameScene::Start()
 		SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
 		observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
 
-
+		//Sniper
+		snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);
 
 		
 		life_HUD = App->ui->CreateLabel("", 177, 458);
@@ -167,6 +168,12 @@ bool GameScene::Update(float dt)
 		pause_mark->is_visible = false;
 	}
 
+
+	//Check win or lose
+	if (App->entity->friendly_units.size() == 0)
+	{
+		LOG("YOU LOSE");
+	}
 
 
 	return true;
