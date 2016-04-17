@@ -421,3 +421,8 @@ void j1Render::CheckBoundaries()
 	if (camera.y > 0)			camera.y = 0;
 	if (camera.y < limit_y)		camera.y = limit_y;
 }
+
+void j1Render::DiscardTransition()
+{
+	transitioning = false;
+}

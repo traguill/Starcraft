@@ -55,6 +55,8 @@ public:
 	//Set a transition to a point
 	void SetTransition(int x, int y, bool end_locking = false);
 
+	void DiscardTransition(); //Stops a transition
+
 private:
 
 	void CursorMovement(float dt);

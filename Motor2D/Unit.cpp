@@ -1076,6 +1076,7 @@ void Unit::DisableSnipper()
 	//Disable bullet mode
 	App->entity->bullet_time = 1.0f;
 	App->render->lock_camera = false;
+	App->render->DiscardTransition();
 }
 
 bool Unit::GetSnipping(){
