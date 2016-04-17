@@ -276,9 +276,12 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			}
 
 			
-			
-
 			++iterations;
+			if (iterations > 60)
+			{
+				return -1;
+			}
+			
 		} while (open.list_nodes.size() > 0);
 	}
 

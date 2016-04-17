@@ -169,6 +169,12 @@ bool GameScene::Update(float dt)
 	}
 
 
+	//Check win or lose
+	if (App->entity->friendly_units.size() == 0)
+	{
+		LOG("YOU LOSE");
+	}
+
 
 	return true;
 }
