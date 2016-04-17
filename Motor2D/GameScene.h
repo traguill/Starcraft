@@ -96,7 +96,7 @@ public:
 	SDL_Texture* bomb;
 	iPoint bomb_pos;
 	SDL_Rect bomb_rect;
-	bool bomb_available = false;
+	bool bomb_available;
 
 	SDL_Rect bomb_zone;
 

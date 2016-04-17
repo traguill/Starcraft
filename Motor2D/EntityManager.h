@@ -44,6 +44,8 @@ public:
 	void RemoveUnit(Unit* _unit);
 	void RemoveBullet(Bullet* _bullet);
 
+	void CleanUpList();
+
 	string UnitTypeToString(UNIT_TYPE type)const;
 	UNIT_TYPE UnitTypeToEnum(string type)const;
 

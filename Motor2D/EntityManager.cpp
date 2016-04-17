@@ -1120,3 +1120,32 @@ void j1EntityManager::RemoveBullet(Bullet* _bullet)
 	if (_bullet != NULL)
 		bullets_to_remove.push_back(_bullet);
 }
+
+void j1EntityManager::CleanUpList()
+{
+	list<Unit*>::iterator i = friendly_units.begin();
+
+	while (i != friendly_units.end())
+	{
+		(*i)->CleanUp();
+
+		delete (*i);
+		(*i) = NULL;
+		++i;
+	}
+
+	friendly_units.clear();
+
+	list<Unit*>::iterator it = enemy_units.begin();
+
+	while (it != enemy_units.end())
+	{
+		(*it)->CleanUp();
+
+		delete (*it);
+		(*it) = NULL;
+		++it;
+	}
+
+	enemy_units.clear();
+}

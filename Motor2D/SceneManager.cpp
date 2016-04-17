@@ -113,6 +113,10 @@ void SceneManager::StartMenu()
 	App->entity->DisableModule();
 	App->game_scene->DisableModule();
 
+	App->ui->CleanUpList();
+	App->entity->CleanUpList();
+	//App->ui->CleanUpBars();
+
 	App->menu->EnableModule();
 	App->menu->Start();
 

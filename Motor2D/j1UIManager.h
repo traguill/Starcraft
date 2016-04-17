@@ -84,6 +84,8 @@ public:
 
 	void CleanUpList();
 
+	void CleanUpBars();
+
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
 	void GetMouseInput(); //Get input of mouse to drag windows/elements

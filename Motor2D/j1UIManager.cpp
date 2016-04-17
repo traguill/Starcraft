@@ -265,6 +265,22 @@ void j1UIManager::CleanUpList()
 	gui_elements.clear();
 }
 
+void j1UIManager::CleanUpBars()
+{
+	list<UIProgressBar*>::iterator i = ui_progress_bar.begin();
+
+	while (i != ui_progress_bar.end())
+	{
+		(*i)->CleanUp();
+
+		delete (*i);
+		(*i) = NULL;
+		++i;
+	}
+
+	gui_elements.clear();
+}
+
 void j1UIManager::EraseElement(UIEntity* entity)
 {
 	gui_elements.remove(entity);

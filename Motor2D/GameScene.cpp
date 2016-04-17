@@ -133,6 +133,8 @@ bool GameScene::Start()
 	bomb_pos.x = 926;
 	bomb_pos.y = 1403;
 
+	bomb_available = false;
+
 	debug = false;
 	game_paused = false;
 
