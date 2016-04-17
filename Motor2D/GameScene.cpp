@@ -107,6 +107,10 @@ bool GameScene::Start()
 		pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
 		run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 
+		//Pathfinding Label
+		pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
+		pathfinding_label->is_visible = false;
+
 		App->events->game_event = INITIAL_STATE;
 
 		//Life in HUD
@@ -170,6 +174,12 @@ bool GameScene::Update(float dt)
 	if (App->entity->debug)
 	{
 		App->render->DrawQuad({ bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }, 255, 255, 0, 255, true, true);
+	}
+
+	//Updating timer
+	if (parthfinding_label_timer.ReadSec() >= 3)
+	{
+		pathfinding_label->is_visible = false;
 	}
 
 	if (bomb_available == false)

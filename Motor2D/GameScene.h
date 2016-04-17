@@ -5,6 +5,7 @@
 #include "UICursor.h"
 #include "UILabel.h"
 #include "UIButton.h"
+#include "j1Timer.h"
 
 struct SDL_Texture;
 
@@ -91,6 +92,10 @@ public:
 	UIImage* objectives_box;
 	UIImage* pause_mark;
 	UIImage* run_mark;
+
+	//Pathfinding Label
+	UILabel* pathfinding_label;
+	j1Timer parthfinding_label_timer;
 
 	//Bomb
 	SDL_Texture* bomb;

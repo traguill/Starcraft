@@ -887,8 +887,12 @@ void j1EntityManager::SetMovement()
 				//-----------------------------------------------------------------------------------------------
 
 				else if (App->pathfinding->CreatePath(center_map, destination) == -1)
-
 				{
+					if (!App->game_scene->pathfinding_label->IsVisible())
+					{
+						App->game_scene->pathfinding_label->SetVisible(true);
+						App->game_scene->parthfinding_label_timer.Start();
+					}
 					LOG("Impossible to create path");
 					return;
 				}
