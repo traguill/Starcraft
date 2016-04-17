@@ -182,3 +182,21 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	return ret;
 }
 
+bool j1Audio::SetFxVolume(unsigned int _volume)
+{
+	bool ret = false;
+	
+	if (_volume >= 0 && _volume <= MIX_MAX_VOLUME)
+	{
+		list<Mix_Chunk*>::iterator it = fx.begin();
+
+		for (it; it != fx.end(); it++)
+		{
+			Mix_VolumeChunk((*it), _volume);
+			ret = true;
+		}
+	}
+	
+
+	return ret;
+}

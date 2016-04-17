@@ -35,6 +35,10 @@ bool GameScene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool GameScene::Start()
 {
+
+	//Setting fx volume
+	App->audio->SetFxVolume(30);
+
 	//Load Map
 	App->map->Load("0.5_game_map.tmx", map_id);
 

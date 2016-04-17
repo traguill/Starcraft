@@ -34,10 +34,13 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+	bool SetFxVolume(unsigned int _volume);
+
 private:
 
 	_Mix_Music*			music = NULL;
 	list<Mix_Chunk*>	fx;
+	unsigned int		volume;
 };
 
 #endif // __j1AUDIO_H__
