@@ -958,7 +958,7 @@ void Unit::Snipper()
 	path.clear();
 
 	iPoint mouse_pos;
-	App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
 	fPoint dir_f(mouse_pos.x - logic_pos.x, mouse_pos.y - logic_pos.y);
 	dir_f.Normalize();
