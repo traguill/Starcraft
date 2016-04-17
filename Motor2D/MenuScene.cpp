@@ -6,6 +6,7 @@
 #include "j1Render.h"
 #include "j1UIManager.h"
 #include "SceneManager.h"
+#include "j1Audio.h"
 
 
 MenuScene::MenuScene() : j1Module()
@@ -24,6 +25,7 @@ bool MenuScene::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 
+
 	return ret;
 }
 
@@ -37,6 +39,8 @@ bool MenuScene::Start()
 	quit = App->ui->CreateButton(" QUIT", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 
 	close_game = false;
+
+	App->audio->PlayMusic("");
 
 	return true;
 }
