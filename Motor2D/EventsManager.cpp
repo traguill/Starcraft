@@ -26,11 +26,14 @@ bool EventsManager::PreUpdate(){ return true; }
 
 bool EventsManager::Update(float dt)
 {
-	switch (game_event)
+	if (active == true)
 	{
-	case BOMB_RETRIVED:
-		BombRetrieved();
-		break;
+		switch (game_event)
+		{
+		case BOMB_RETRIVED:
+			BombRetrieved();
+			break;
+		}
 	}
 
 

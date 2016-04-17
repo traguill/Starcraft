@@ -7,6 +7,7 @@
 #include "MenuScene.h"
 #include "j1Input.h"
 #include "j1UIManager.h"
+#include "EventsManager.h"
 
 SceneManager::SceneManager() : j1Module()
 {
@@ -96,6 +97,7 @@ void SceneManager::StartGame()
 	App->game_scene->EnableModule();
 	App->entity->EnableModule();
 	App->tactical_ai->EnableModule();
+	App->events->EnableModule();
 
 	App->ui->CleanUpList();
 
@@ -112,6 +114,7 @@ void SceneManager::StartMenu()
 	App->tactical_ai->DisableModule();
 	App->entity->DisableModule();
 	App->game_scene->DisableModule();
+	App->events->DisableModule();
 
 	App->ui->CleanUpList();
 	App->entity->CleanUpList();

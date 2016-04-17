@@ -107,6 +107,8 @@ bool GameScene::Start()
 		pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
 		run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 
+		App->events->game_event = INITIAL_STATE;
+
 		//Life in HUD
 		life_HUD = App->ui->CreateLabel("", 177, 458);
 		
@@ -219,7 +221,7 @@ bool GameScene::Update(float dt)
 		{
 			iPoint pos = (*f_unit)->GetPosition();
 
-			if (pos.x > bomb_pos.x && pos.x < bomb_pos.x + bomb_rect.w && pos.y > bomb_pos.y && pos.y < bomb_pos.y + bomb_rect.w)
+			if (pos.x > bomb_pos.x && pos.x < bomb_pos.x + bomb_rect.w && pos.y > bomb_pos.y && pos.y < bomb_pos.y + bomb_rect.w && (*f_unit)->IsVisible())
 			{
 				LOG("YOU HAVE THE BOMB");
 				App->events->game_event = BOMB_RETRIVED;
@@ -236,7 +238,7 @@ bool GameScene::Update(float dt)
 		{
 			iPoint pos = (*f_unit)->GetPosition();
 
-			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w)
+			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w && (*f_unit)->IsVisible())
 			{
 				win_background->is_visible = true;
 				win_button->is_visible = true;

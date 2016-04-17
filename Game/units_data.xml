@@ -1,5 +1,5 @@
 <units>
-  <invisibility cost="7"/>
+  <invisibility cost="40"/>
   <snipper cost="40"/>
 
   <bullet>
