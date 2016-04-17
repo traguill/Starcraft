@@ -935,7 +935,10 @@ void j1EntityManager::SetMovement()
 					else
 					{
 						//If it doesn't, go to the mouse point
-						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
+						if (App->pathfinding->CreateLine(unit_map_pos, destination) == true)
+							AssignPath(*unit_p, path, NULL);
+
+						else if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
 							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
 					}
 				}
