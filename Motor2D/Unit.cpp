@@ -1119,3 +1119,7 @@ void Unit::DisableSnipper()
 	App->entity->bullet_time = 1.0f;
 	App->render->lock_camera = false;
 }
+
+bool Unit::GetSnipping(){
+	return snipping;
+}
