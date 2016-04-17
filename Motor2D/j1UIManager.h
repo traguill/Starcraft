@@ -82,6 +82,8 @@ public:
 
 	void EraseElement(UIEntity* entity);
 
+	void CleanUpList();
+
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
@@ -105,16 +107,7 @@ private:
 
 	list<UIProgressBar*>	ui_progress_bar;
 
-
-	SDL_Texture*			rects;
-
-	UICursor*				cursor;
-
-
-	//Snipper ui
-	UIImage*                snipper_ui;
-
-	
+	UICursor*				cursor;	
 
 public:
 	bool					debug;

@@ -87,13 +87,7 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{
 		if ((UIButton*)gui == start && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-
-			App->ui->EraseElement((UIEntity*)background);
-			App->ui->EraseElement((UIEntity*)logo);
-			//App->ui->EraseElement((UIEntity*)start);
-			App->ui->EraseElement((UIEntity*)quit);
-
-			App->scene_manager->StartGame();
+			App->scene_manager->WantToChangeScene();
 		}
 
 		else if ((UIButton*)gui == quit && event == MOUSE_BUTTON_RIGHT_UP)

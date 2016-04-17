@@ -6,6 +6,7 @@
 #include "EntityManager.h"
 #include "MenuScene.h"
 #include "j1Input.h"
+#include "j1UIManager.h"
 
 SceneManager::SceneManager() : j1Module()
 {
@@ -67,6 +68,15 @@ bool SceneManager::PostUpdate()
 {
 	bool ret = true;
 
+	if (changing_scene == true)
+	{
+		if (in_game == false)
+			StartGame();
+
+		else
+			StartMenu();
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
@@ -83,38 +93,38 @@ bool SceneManager::CleanUp()
 	return true;
 }
 
+void SceneManager::WantToChangeScene()
+{
+	changing_scene = true;
+}
 
 void SceneManager::StartGame()
 {
-	if (in_game == false)
-	{
-		App->menu->DisableModule();
+	App->menu->DisableModule();
 
-		App->game_scene->EnableModule();
-		App->entity->EnableModule();
-		App->tactical_ai->EnableModule();
+	App->game_scene->EnableModule();
+	App->entity->EnableModule();
+	App->tactical_ai->EnableModule();
 
-		App->entity->Start();
-		App->game_scene->Start();
-		App->tactical_ai->Start();
+	App->ui->CleanUpList();
 
-		in_game = true;
-	}
+	App->entity->Start();
+	App->game_scene->Start();
+	App->tactical_ai->Start();
 
+	in_game = true;
+	changing_scene = false;
 }
 
 void SceneManager::StartMenu()
 {
-	if (in_game == true)
-	{
-		App->tactical_ai->DisableModule();
-		App->entity->DisableModule();
-		App->game_scene->DisableModule();
+	App->tactical_ai->DisableModule();
+	App->entity->DisableModule();
+	App->game_scene->DisableModule();
 
-		App->menu->EnableModule();
-		App->menu->Start();
+	App->menu->EnableModule();
+	App->menu->Start();
 
-		in_game = false;
-	}
-
+	in_game = false;
+	changing_scene = false;
 }

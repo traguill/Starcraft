@@ -37,6 +37,10 @@ public:
 	void StartGame();
 	void StartMenu();
 
+	void WantToChangeScene();
+
+	bool changing_scene = false;
+
 	bool in_game = false;
 
 

@@ -78,7 +78,8 @@ public:
 	//Observer
 	UIImage*				observer_wireframe;
 
-
+	//Sniper
+	UIImage*                snipper_ui;
 
 	//EVENT MANAGER
 	UILabel* objective_info_1;
