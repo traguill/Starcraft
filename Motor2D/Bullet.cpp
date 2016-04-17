@@ -34,8 +34,16 @@ Bullet::~Bullet()
 
 void Bullet::Update(float dt)
 {
-	logic_pos.x += direction.x * speed * dt;
-	logic_pos.y += direction.y * speed * dt;
+	fPoint float_pos; float_pos.x = logic_pos.x, float_pos.y = logic_pos.y;
+
+	float_pos.x += (direction.x * speed) * dt;
+	float_pos.y += (direction.y * speed) * dt;
+
+	float_pos.x = roundf(float_pos.x);
+	float_pos.y = roundf(float_pos.y);
+
+	logic_pos.x = float_pos.x;
+	logic_pos.y = float_pos.y;
 
 	//Check if hits an enemy
 	list<Unit*>::iterator enemy = App->entity->enemy_units.begin();
