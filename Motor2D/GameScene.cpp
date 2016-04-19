@@ -39,7 +39,11 @@ bool GameScene::Start()
 {
 
 	//Setting fx volume
-	App->audio->SetFxVolume(30);
+	App->audio->SetFxVolume(10);
+	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
+	App->audio->SetFxVolume(5, "sounds/ghost_shot.ogg");
+	App->audio->SetFxVolume(5, "sounds/firebat_shot.ogg");
+
 
 	//Load Map
 	App->map->Load("0.5_game_map.tmx", map_id);

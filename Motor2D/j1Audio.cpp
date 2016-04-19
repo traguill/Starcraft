@@ -78,6 +78,16 @@ bool j1Audio::CleanUp()
 
 	fx.clear();
 
+	list<string>::iterator it = paths.begin();
+
+	while (it != paths.end())
+	{
+		it->empty();
+		it++;
+	}
+
+	paths.clear();
+
 	Mix_CloseAudio();
 	Mix_Quit();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
@@ -146,7 +156,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 
 	if(!active)
 		return 0;
-
+	
 	Mix_Chunk* chunk = Mix_LoadWAV_RW(App->fs->Load(path), 1);
 
 	if(chunk == NULL)
@@ -157,6 +167,8 @@ unsigned int j1Audio::LoadFx(const char* path)
 	{
 		fx.push_back(chunk);
 		ret = fx.size();
+		string pth(path);
+		paths.push_back(pth);
 	}
 
 	return ret;
@@ -192,11 +204,37 @@ bool j1Audio::SetFxVolume(unsigned int _volume)
 
 		for (it; it != fx.end(); it++)
 		{
+			
 			Mix_VolumeChunk((*it), _volume);
 			ret = true;
 		}
 	}
 	
+
+	return ret;
+}
+
+
+bool j1Audio::SetFxVolume(unsigned int _volume, const char* fx_path)
+{
+	bool ret = false;
+
+	if (_volume >= 0 && _volume <= MIX_MAX_VOLUME)
+	{
+		list<string>::iterator it = paths.begin();
+
+		for (it; it != paths.end(); it++)
+		{
+			for (list<Mix_Chunk*>::iterator i = fx.begin(); i != fx.end(); i++)
+			{
+				if ((*it) == fx_path)
+				{
+					Mix_VolumeChunk((*i), _volume);
+					return true;
+				}
+			}
+		}
+	}
 
 	return ret;
 }

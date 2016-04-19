@@ -36,10 +36,13 @@ public:
 
 	bool SetFxVolume(unsigned int _volume);
 
+	bool SetFxVolume(unsigned int _volume, const char* fx_path);
+
 private:
 
 	_Mix_Music*			music = NULL;
 	list<Mix_Chunk*>	fx;
+	list<string>	    paths;
 	unsigned int		volume;
 };
 
