@@ -26,6 +26,10 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 	left_cursor.frames.clear();
 	friendly_sel.frames.clear();
 	enemy_sel.frames.clear();
+	right_up_cursor.frames.clear();
+	right_down_cursor.frames.clear();
+	left_up_cursor.frames.clear();
+	left_down_cursor.frames.clear();
 
 	//adding anim frames
 	for (std::vector<SDL_Rect>::iterator it = sections.begin(); it != sections.end(); ++it)
@@ -57,12 +61,40 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 	right_cursor.loop = true;
 	right_cursor.speed = 0.08;
 
-	section.x = 180; section.y = 63, section.w = 20, section.h = 34;	// no hi ha al atlas up
+	section.x = 180; section.y = 63, section.w = 20, section.h = 33;
 	left_cursor.frames.push_back(section);
-	section.x = 202; section.y = 63, section.w = 20, section.h = 34;
+	section.x = 202; section.y = 63, section.w = 20, section.h = 33;
 	left_cursor.frames.push_back(section);
 	left_cursor.loop = true;
 	left_cursor.speed = 0.08;
+
+	section.x = 341; section.y = 33, section.w = 28, section.h = 28;
+	right_up_cursor.frames.push_back(section);
+	section.x = 371; section.y = 33, section.w = 28, section.h = 28;
+	right_up_cursor.frames.push_back(section);
+	right_up_cursor.loop = true;
+	right_up_cursor.speed = 0.08;
+
+	section.x = 401; section.y = 33, section.w = 28, section.h = 28;
+	right_down_cursor.frames.push_back(section);
+	section.x = 431; section.y = 33, section.w = 28, section.h = 28;
+	right_down_cursor.frames.push_back(section);
+	right_down_cursor.loop = true;
+	right_down_cursor.speed = 0.08;
+
+	section.x = 341; section.y = 62, section.w = 28, section.h = 28;
+	left_up_cursor.frames.push_back(section);
+	section.x = 371; section.y = 62, section.w = 28, section.h = 28;
+	left_up_cursor.frames.push_back(section);
+	left_up_cursor.loop = true;
+	left_up_cursor.speed = 0.08;
+
+	section.x = 401; section.y = 62, section.w = 28, section.h = 28;
+	left_down_cursor.frames.push_back(section);
+	section.x = 431; section.y = 62, section.w = 28, section.h = 28;
+	left_down_cursor.frames.push_back(section);
+	left_down_cursor.loop = true;
+	left_down_cursor.speed = 0.08;
 
 	section.x = 2; section.y = 94, section.w = 41, section.h = 43;
 	friendly_sel.frames.push_back(section);
@@ -171,6 +203,26 @@ bool UICursor::Update(float dt)
 		if (App->ui->cursor_state == DOWN)
 		{
 			App->render->Blit(App->ui->GetAtlas(), rect.x, MIN(rect.y, App->render->camera.h - App->render->camera.y - 21), &down_cursor.getCurrentFrame());
+		}
+
+		if (App->ui->cursor_state == TO_RIGHT_UP)
+		{
+			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 30), rect.y, &right_up_cursor.getCurrentFrame());
+		}
+
+		if (App->ui->cursor_state == TO_RIGHT_DOWN)
+		{
+			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 30), MIN(rect.y, App->render->camera.h - App->render->camera.y - 30), &right_down_cursor.getCurrentFrame());
+		}
+
+		if (App->ui->cursor_state == TO_LEFT_UP)
+		{
+			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &left_up_cursor.getCurrentFrame());
+		}
+
+		if (App->ui->cursor_state == TO_LEFT_DOWN)
+		{
+			App->render->Blit(App->ui->GetAtlas(), rect.x, MIN(rect.y, App->render->camera.h - App->render->camera.y - 30), &left_down_cursor.getCurrentFrame());
 		}
 
 		if (App->ui->cursor_state == ON_FRIENDLY)

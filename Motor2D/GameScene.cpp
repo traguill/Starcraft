@@ -44,6 +44,34 @@ bool GameScene::Start()
 	App->audio->SetFxVolume(5, "sounds/ghost_shot.ogg");
 	App->audio->SetFxVolume(5, "sounds/firebat_shot.ogg");
 
+	//Load all fx uint sounds
+	//Select
+	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
+	ghost_select = App->audio->LoadFx("FX/Terran/Ghost/ImHere.wav");
+	firebat_select = App->audio->LoadFx("FX/Terran/Firebat/GoodSmoke.wav");
+	medic_select = App->audio->LoadFx("FX/psrotos/probe/pprpss00.wav");
+
+	//order
+	marine_order = App->audio->LoadFx("FX/Terran/Marine/RockndRoll.wav");
+	ghost_order = App->audio->LoadFx("FX/Terran/Ghost/Gone.wav");
+	firebat_order = App->audio->LoadFx("FX/Terran/Firebat/GotIt.wav");
+	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnMyWAy.wav");
+	observer_order = App->audio->LoadFx("FX/psrotos/probe/ppryes02.wav");
+
+	//attack order
+	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
+	ghost_order_attack_order = App->audio->LoadFx("FX/Ghost/Marine/CallShot.wav");
+	firebat_order_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
+	medic_order_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
+	//observer_order_attack_order;
+
+	//death
+	marine_death = App->audio->LoadFx("FX/Terran/Marine/tmadth00.wav");
+	ghost_death = App->audio->LoadFx("FX/Terran/Ghost/tghdth01.wav");
+	firebat_death = App->audio->LoadFx("FX/Terran/Firebat/tfbdth02.wav");
+	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
+	observer_death = App->audio->LoadFx("FX/psrotos/probe/pprdth00.wav");
+
 
 	//Load Map
 	App->map->Load("0.5_game_map.tmx", map_id);
@@ -154,7 +182,7 @@ bool GameScene::Start()
 	//----------App->ui->CreateLabel("hola", 100, 100);
 	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
 	
-	music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
+	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
 	LoadLevel();
 

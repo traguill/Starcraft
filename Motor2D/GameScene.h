@@ -113,6 +113,36 @@ public:
 	UIImage* loose_background;
 	UIButton* loose_button;
 
+	// SOUNDS FX
+
+	//Select
+	uint marine_select;
+	uint ghost_select;
+	uint firebat_select;
+	uint medic_select;
+	uint observer_select;
+
+	//order
+	uint marine_order;
+	uint ghost_order;
+	uint firebat_order;
+	uint medic_order;
+	uint observer_order;
+
+	//attack order
+	uint marine_attack_order;
+	uint ghost_order_attack_order;
+	uint firebat_order_attack_order;
+	uint medic_order_attack_order;
+	uint observer_order_attack_order;
+
+	//death
+	uint marine_death;
+	uint ghost_death;
+	uint firebat_death;
+	uint medic_death;
+	uint observer_death;
+
 };
 
 #endif // __GAME_SCENE_H__

@@ -31,7 +31,11 @@ public:
 	Animation down_cursor;
 	Animation up_cursor;
 	Animation right_cursor;
-	Animation left_cursor; // no hi ha al atlas
+	Animation left_cursor;
+	Animation right_up_cursor;
+	Animation right_down_cursor;
+	Animation left_up_cursor;
+	Animation left_down_cursor;
 	Animation friendly_sel;
 	Animation enemy_sel;
 };

@@ -386,6 +386,58 @@ void j1Render::CursorMovement(float dt)
 		App->ui->cursor_state = DOWN;
 	}	
 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		camera.x += dt * camera_speed;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		camera.x -= dt * camera_speed;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		camera.y += dt * camera_speed;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		camera.y -= dt * camera_speed;
+	}
+
+	//Move camera RIGHT UP
+	if (mouse_x > camera.w - offset_x && mouse_y < offset_y)
+	{
+		camera.x -= dt * (camera_speed / 3);
+		camera.y += dt * (camera_speed / 3);
+		App->ui->cursor_state = TO_RIGHT_UP;
+	}
+
+	//Move camera RIGHT DOWN
+	if (mouse_x > camera.w - offset_x && mouse_y > camera.h - offset_y)
+	{
+		camera.x -= dt * (camera_speed / 3);
+		camera.y -= dt * (camera_speed / 3);
+		App->ui->cursor_state = TO_RIGHT_DOWN;
+	}
+
+	//Move camera LEFT_UP
+	if (mouse_x  < offset_x && mouse_y < offset_y)
+	{
+		camera.x += dt * (camera_speed / 3);
+		camera.y += dt * (camera_speed / 3);
+		App->ui->cursor_state = TO_LEFT_UP;
+	}
+
+	//Move camera LEFT DOWN
+	if (mouse_x  < offset_x && mouse_y > camera.h - offset_y)
+	{
+		camera.x += dt * (camera_speed / 3);
+		camera.y -= dt * (camera_speed / 3);
+		App->ui->cursor_state = TO_LEFT_DOWN;
+	}
+
 	CheckBoundaries();
 
 }
