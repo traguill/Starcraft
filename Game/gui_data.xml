@@ -1,31 +1,25 @@
 <gui_elements>
 
-  <gui TYPE="progress_bar">
-    
-    <bar_type type="health"/>
-
-    <texture_path value="gui/healthbar.png"/>
-
+  <gui type="PROGRESS_BAR" key="HEALTH_BAR">
+    <texture value="gui/healthbar.png" />
     <local_pos x="-8" y="15"/>
-    <wh width="19" height="5"/>
+    <size width="19" height="5"/>
     <full x="0" y="0"/>
     <empty x="0" y="15"/>
     <low x="0" y="10"/>
     <middle x="0" y="5"/>
+    <bar_type value="HEALTH"/>
   </gui>
 
-  <gui TYPE="progress_bar">
-    
-    <bar_type type="progress"/>
-
-    <texture_path value="gui/pgbar.png"/>
-
+  <gui type="PROGRESS_BAR" key="MANA_BAR">
+    <texture value="gui/pgbar.png" />
     <local_pos x="-8" y="20"/>
-    <wh width="19" height="5"/>
+    <size width="19" height="5"/>
     <full x="0" y="0"/>
     <empty x="0" y="5"/>
     <low x="0" y="0"/>
     <middle x="0" y="0"/>
+    <bar_type value="MANA"/>
   </gui>
 
 

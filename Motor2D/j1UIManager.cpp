@@ -94,6 +94,42 @@ bool j1UIManager::LoadUiInfo()
 		ui_elements = ui_file.child("gui_elements");
 	}
 
+	pugi::xml_node element;
+	for (element = ui_elements.child("gui"); element && ret; element = ui_elements.next_sibling("gui"))
+	{
+		//Progressbar
+		if (element.attribute("type").as_string() == "PROGRESS_BAR")
+		{
+			UIProgressBar* bar = new UIProgressBar();
+
+			//Fill data here
+			bar->bar_tex = App->tex->Load(element.child("texture").attribute("value").as_string());
+
+			bar->SetLocalPos(element.child("local_pos").attribute("x").as_int(), element.child("local_pos").attribute("y").as_int());
+
+			int width = element.child("size").attribute("width").as_int();
+			int height = element.child("size").attribute("height").as_int();
+
+			bar->full_bar_section = { element.child("full").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
+			bar->middle_bar_section = { element.child("middle").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
+			bar->low_bar_section = { element.child("low").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
+			bar->empty_bar_section = { element.child("empty").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
+
+			string bar_type = element.child("bar_type").attribute("value").as_string();
+
+			//Types of bars
+			if (bar_type == "HEALTH")
+				bar->bar_type = HEALTH;
+
+			if (bar_type == "MANA")
+				bar->bar_type = MANA;
+
+			gui_database.insert(pair<string, UIEntity*>(element.attribute("key").as_string(), bar));
+		}
+
+		
+	}
+
 	return ret;
 }
 // Update all UIManagers
@@ -138,6 +174,8 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
+	//TODO: Draw lifes & mana
+	
 	if (App->entity->selected_units.size() > 1)
 		ShowMiniWireframes(dt);
 	

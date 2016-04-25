@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "UIProgressBar.h"
+#include <map>
 
 class UILabel;
 class UIImage;
@@ -57,8 +58,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-
-	bool LoadUiInfo();
 	// Gui creation functions
 
 	SDL_Texture* GetAtlas() const;
@@ -95,6 +94,7 @@ private:
 	void ShowMiniWireframes(float dt);
 	void RectangleSelection();
 
+	bool LoadUiInfo();
 
 private:
 
@@ -103,23 +103,19 @@ private:
 	string					atlas_file_name;
 	string					ui_file_path;
 
-
 	list<UIEntity*>			gui_elements;
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
 
-
 	SDL_Texture*			rects;
-
-
 
 	//Snipper ui
 	//UIImage*                snipper_ui;
 	SDL_Texture*			ghost_tex;
 	
-
 	UICursor*				cursor;	
 
+	map<string, UIEntity*>	gui_database;
 
 public:
 	bool					debug;
