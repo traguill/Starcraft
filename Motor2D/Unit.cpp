@@ -246,8 +246,8 @@ void Unit::Update(float dt)
 	if (mana > max_mana) 
 		mana = max_mana;
 
-	hp_bar->Update(dt);
-	mana_bar->Update(dt);
+	//hp_bar->Update(dt);
+	//mana_bar->Update(dt);
 
 	SetAnimation();
 }
@@ -266,12 +266,12 @@ void Unit::Draw()
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 
 		//Drawing health bar
-		hp_bar->SetValue(life);
+		/*hp_bar->SetValue(life);
 		hp_bar->Draw(logic_pos.x, logic_pos.y);
 
 		//Drawing mana bar
 		mana_bar->SetValue(mana);
-		mana_bar->Draw(logic_pos.x, logic_pos.y + 8);
+		mana_bar->Draw(logic_pos.x, logic_pos.y + 8);*/
 	}
 
 	//FIREBATATTACK

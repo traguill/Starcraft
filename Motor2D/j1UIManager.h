@@ -72,8 +72,6 @@ public:
 
 	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
 
-	UIProgressBar* CreateBar(string _type, int max_num, const int x, const int y, j1Module* listener = NULL);
-
 	void CreateMiniWireframe(UNIT_TYPE type, uint pos);
 
 	void DeleteMiniWIreframe(uint pos);
@@ -88,7 +86,6 @@ public:
 
 	void CleanUpList();
 
-	void CleanUpBars();
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
@@ -110,9 +107,6 @@ private:
 	list<UIEntity*>			gui_elements;
 	UIEntity*				gui_pressed = NULL;
 	UIEntity*				focus = NULL;
-
-	list<UIProgressBar*>	ui_progress_bar;
-
 
 
 	SDL_Texture*			rects;

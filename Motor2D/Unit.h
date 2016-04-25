@@ -224,8 +224,8 @@ public:
 	float cool_timer = 0;
 
 	//HP bar
-	UIProgressBar* hp_bar;
-	UIProgressBar* mana_bar;
+	//UIProgressBar* hp_bar;
+	//UIProgressBar* mana_bar;
 
 	//Sniping
 	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)

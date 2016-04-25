@@ -24,8 +24,8 @@ UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section
 	rect.h = section_idle.h;
 
 	//X & Y position are magic numbers
-	text = *App->ui->CreateLabel(_text, rect.w / 3, rect.h / 6, false);
-	text.SetParent(this);
+	text = App->ui->CreateLabel(_text, rect.w / 3, rect.h / 6, false);
+	text->SetParent(this);
 
 	idle = section_idle;
 	pressed = section_pressed;
@@ -58,7 +58,7 @@ bool UIButton::Update(float dt)
 
 
 
-	text.Update(dt);
+	text->Update(dt);
 
 
 	return ret;
@@ -68,7 +68,9 @@ bool UIButton::CleanUp()
 {
 	bool ret = true;
 
-	text.CleanUp();
+	text->CleanUp();
+	delete text;
+	text = NULL;
 
 	return ret;
 }

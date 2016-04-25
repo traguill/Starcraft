@@ -39,7 +39,7 @@ private:
 	SDL_Rect pressed;
 	SDL_Rect hover;
 public:
-	UILabel		text;
+	UILabel*		text;
 	BUTTON_STATE state;
 };
 

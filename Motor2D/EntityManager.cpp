@@ -44,9 +44,6 @@ bool j1EntityManager::Start()
 
 	gui_cursor = App->tex->Load("gui/gui_atlas.png");
 
-	//Loading bar texture
-	health_bar = App->tex->Load("healthbar.png");
-
 	LoadSounds();
 
 	return ret;
@@ -276,7 +273,6 @@ bool j1EntityManager::CleanUp()
 	bullets.clear();
 
 	App->tex->UnLoad(gui_cursor);
-	App->tex->UnLoad(health_bar);
 
 	if (db_bullet != NULL)
 	{
@@ -284,6 +280,17 @@ bool j1EntityManager::CleanUp()
 		delete db_bullet;
 		db_bullet = NULL;
 	}
+
+	//Wireframes change THIS!!
+	list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();
+
+	while (wire_it != App->ui->mini_wireframes.end())
+	{
+		RELEASE(*wire_it);
+
+		wire_it++;
+	}
+	App->ui->mini_wireframes.clear();
 
 	return true;
 }
@@ -1082,10 +1089,6 @@ Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 			enemy_units.push_back(unit);
 		else
 			friendly_units.push_back(unit);
-
-		//Creating health bar for the unit
-		unit->hp_bar = App->ui->CreateBar("health", unit->max_life, unit->GetPosition().x, unit->GetPosition().y);
-		unit->mana_bar = App->ui->CreateBar("progress", unit->max_mana, unit->GetPosition().x, unit->GetPosition().y);
 
 		return unit;
 	}

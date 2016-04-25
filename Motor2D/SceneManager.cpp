@@ -100,6 +100,7 @@ void SceneManager::StartGame()
 	App->events->EnableModule();
 
 	App->ui->CleanUpList();
+	App->menu->CleanUp();
 
 	App->entity->Start();
 	App->game_scene->Start();
@@ -118,7 +119,6 @@ void SceneManager::StartMenu()
 
 	App->ui->CleanUpList();
 	App->entity->CleanUpList();
-	//App->ui->CleanUpBars();
 
 	App->menu->EnableModule();
 	App->menu->Start();

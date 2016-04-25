@@ -77,7 +77,10 @@ bool MenuScene::CleanUp()
 {
 	LOG("Freeing Menu Scene");
 
-
+	start = NULL;
+	quit = NULL;
+	background = NULL;
+	logo = NULL;
 
 	return true;
 }
