@@ -84,7 +84,8 @@ bool GameScene::Start()
 		App->map->CreateWalkabilityMap(width, height, &buffer, collider_id);
 
 		App->pathfinding->SetMap(width, height, buffer);
-		RELEASE_ARRAY(buffer);
+		delete[] buffer;
+		buffer = NULL;
 
 
 		//Create HUD
@@ -330,7 +331,8 @@ void GameScene::LoadLevel()
 	char* buf;
 	int size = App->fs->Load("my_level.xml", &buf);
 	pugi::xml_parse_result result = level_file.load_buffer(buf, size);
-	RELEASE(buf);
+	delete[] buf;
+	buf = NULL;
 
 	if (result == NULL)
 	{

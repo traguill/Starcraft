@@ -4,7 +4,6 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Render.h"
-#include "SDL/include/SDL.h"
 
 #define MAX_KEYS 300
 

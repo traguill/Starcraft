@@ -74,6 +74,7 @@ private:
 
 	//DEBUG
 	void PrintUnitDatabase()const;
+	void Debug();
 
 private:
 

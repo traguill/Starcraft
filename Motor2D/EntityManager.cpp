@@ -68,58 +68,14 @@ bool j1EntityManager::Update(float dt)
 
 	//Create units
 	//DEBUG-----------------------------------------------------------------------------
-	/*if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
-	{
-		LOG("Ghost created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(GHOST, p.x, p.y, false);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
-	{
-		LOG("MAarine created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MARINE, p.x, p.y, false);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
-	{
-		LOG("Enemy Marine created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MARINE, p.x, p.y, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-	{
-		LOG("Firebat created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(FIREBAT, p.x, p.y, false);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-	{
-		LOG("Firebat created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(FIREBAT, p.x, p.y, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		LOG("Observer created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(OBSERVER, p.x, p.y, false);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-	{
-		LOG("Medic created");
-		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MEDIC, p.x, p.y, false);
-
-	}
+	
 	
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
-		*/
+
+	if (debug)
+		Debug();
+		
 	//------------------------------------------------------------------------------
 
 	//Basic logic
@@ -286,7 +242,8 @@ bool j1EntityManager::CleanUp()
 
 	while (wire_it != App->ui->mini_wireframes.end())
 	{
-		RELEASE(*wire_it);
+		delete *wire_it;
+		*wire_it = NULL;
 
 		wire_it++;
 	}
@@ -364,7 +321,8 @@ bool j1EntityManager::LoadUnitsInfo()
 	char* buf;
 	int size = App->fs->Load(units_file_path.c_str(), &buf);
 	pugi::xml_parse_result result = unit_file.load_buffer(buf, size);
-	RELEASE(buf);
+	delete[] buf;
+	buf = NULL;
 
 	if (result == NULL)
 	{
@@ -779,7 +737,10 @@ void j1EntityManager::SelectUnits()
 			(*it)->selected = false;
 
 			if (App->ui->mini_wireframes.size() > 0)
-				RELEASE(*wire_it);
+			{
+				delete *wire_it;
+				*wire_it = NULL;
+			}
 
 			it++; wire_it++;
 		}
@@ -1165,4 +1126,68 @@ void j1EntityManager::CleanUpList()
 	}
 
 	enemy_units.clear();
+}
+
+void j1EntityManager::Debug()
+{
+	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	{
+		LOG("Ghost created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(GHOST, p.x, p.y, false);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		LOG("MAarine created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(MARINE, p.x, p.y, false);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
+		LOG("Enemy Marine created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(MARINE, p.x, p.y, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		LOG("Firebat created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(FIREBAT, p.x, p.y, false);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	{
+		LOG("Firebat created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(FIREBAT, p.x, p.y, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		LOG("Observer created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(OBSERVER, p.x, p.y, false);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	{
+		LOG("Medic created");
+		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
+		CreateUnit(MEDIC, p.x, p.y, false);
+
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	{
+		LOG("All units killed (DEBUG)");
+		list<Unit*>::iterator unit = friendly_units.begin();
+		while (unit != friendly_units.end())
+		{
+			(*unit)->life = 0;
+			(*unit)->state = UNIT_DIE;
+			++unit;
+		}
+	}
 }

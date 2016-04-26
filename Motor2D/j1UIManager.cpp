@@ -81,7 +81,8 @@ bool j1UIManager::LoadUiInfo()
 	int size = App->fs->Load(ui_file_path.c_str(), &buf);
 	pugi::xml_parse_result result = ui_file.load_buffer(buf, size);
 	
-	RELEASE(buf);
+	delete[] buf;
+	buf = NULL;
 
 	if (result == NULL)
 	{
@@ -619,7 +620,8 @@ void j1UIManager::DeleteMiniWIreframe(uint pos)
 		list<UIImage*>::iterator it = mini_wireframes.begin();
 		while (it != mini_wireframes.end())
 		{
-			RELEASE(*it);
+			delete *it;
+			*it = NULL;
 			it++;
 		}
 		mini_wireframes.clear();

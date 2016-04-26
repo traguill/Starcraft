@@ -17,7 +17,8 @@ height(0)
 // Destructor
 j1PathFinding::~j1PathFinding()
 {
-	RELEASE_ARRAY(map);
+	delete[] map;
+	map = NULL;
 }
 
 // Called before render is available
@@ -44,7 +45,8 @@ bool j1PathFinding::CleanUp()
 	LOG("Freeing pathfinding library");
 
 	last_path.clear();
-	RELEASE_ARRAY(map);
+	delete[] map;
+	map = NULL;
 	return true;
 }
 
@@ -54,7 +56,8 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 	this->width = width;
 	this->height = height;
 
-	RELEASE_ARRAY(map);
+	delete[] map;
+	map = NULL;
 	map = new uchar[width*height];
 	memcpy(map, data, width*height);
 }

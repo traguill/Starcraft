@@ -203,7 +203,8 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 	char* buf;
 	int size = App->fs->Load("config.xml", &buf);
 	pugi::xml_parse_result result = config_file.load_buffer(buf, size);
-	RELEASE(buf);
+	delete[] buf;
+	buf = NULL;
 
 	if(result == NULL)
 		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
@@ -401,7 +402,8 @@ bool j1App::LoadGameNow()
 		pugi::xml_node root;
 
 		pugi::xml_parse_result result = data.load_buffer(buffer, size);
-		RELEASE(buffer);
+		delete buffer;
+		buffer = NULL;
 
 		if(result != NULL)
 		{

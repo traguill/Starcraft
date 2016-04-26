@@ -250,7 +250,8 @@ bool j1Map::Load(const char* file_name, uint &id)
 	int size = App->fs->Load(tmp.data(), &buf);
 	pugi::xml_parse_result result = map_file.load_buffer(buf, size);
 
-	RELEASE(buf);
+	delete[] buf;
+	buf = NULL;
 
 	if(result == NULL)
 	{
@@ -476,7 +477,8 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	{
 		LOG("Error parsing map xml file: Cannot find 'layer/data' tag.");
 		ret = false;
-		RELEASE(layer);
+		delete layer;
+		layer = NULL;
 	}
 	else
 	{

@@ -106,7 +106,8 @@ unsigned int j1FileSystem::Load(const char* file, char** buffer) const
 			if(readed != size)
 			{
 				LOG("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
-				RELEASE(buffer);
+				delete[] buffer;
+				buffer = NULL;
 			}
 			else
 				ret = (uint)readed;
@@ -141,7 +142,8 @@ SDL_RWops* j1FileSystem::Load(const char* file) const
 
 int close_sdl_rwops(SDL_RWops *rw)
 {
-	RELEASE(rw->hidden.mem.base);
+	delete[] rw->hidden.mem.base;
+	rw->hidden.mem.base = NULL;
 	SDL_FreeRW(rw);
 	return 0;
 }
