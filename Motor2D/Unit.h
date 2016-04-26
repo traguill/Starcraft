@@ -112,6 +112,12 @@ public:
 
 	void ApplyDamage(uint dmg, Unit* source);
 
+	int GetLife()const;
+	int GetMana()const;
+
+	int GetMaxLife()const;
+	int GetMaxMana()const;
+
 private:
 
 	void Move(float dt);

@@ -3,6 +3,7 @@
 #include "j1Textures.h"
 #include "j1Render.h"
 #include "j1UIManager.h"
+#include "p2Log.h"
 
 UIProgressBar::UIProgressBar() : UIEntity()
 {
@@ -32,15 +33,34 @@ UIProgressBar::UIProgressBar(UIProgressBar* bar) : UIEntity()
 // Destructor
 UIProgressBar::~UIProgressBar()
 {
-	CleanUp();
 }
 bool UIProgressBar::Update(float dt)
 {
 	bool ret = true;
+	
+
+	return ret;
+}
+
+// Called before quitting
+bool UIProgressBar::CleanUp(){
+
+	bool ret = true;
+
+	App->tex->UnLoad(bar_tex);
+
+	bar_tex = NULL;
+
+	return ret;
+}
+
+void UIProgressBar::SetValue(int value)
+{
+	current_number = value;
 
 	if (bar_type == HEALTH)
 	{
-		if (current_number == 0)
+		if (current_number < 0)
 			hp_state = EMPTY;
 
 		if (current_number > 0 && current_number <= max_number / 3)
@@ -52,39 +72,16 @@ bool UIProgressBar::Update(float dt)
 		if (current_number > (2 * max_number) / 3)
 			hp_state = FULL;
 	}
-	
-
-	return ret;
-}
-
-// Called before quitting
-bool UIProgressBar::CleanUp(){
-
-	bool ret = true;
-
-	bar_tex = NULL;
-
-	return ret;
-}
-
-void UIProgressBar::SetValue(int value)
-{
-	current_number = value;
-
-	if (current_number <= 0)
-		current_number = 0;
-
-	if (current_number >= max_number)
-		current_number = max_number;
 }
 
 void UIProgressBar::Draw(int x, int y)
 {
-	App->render->Blit(bar_tex, x - 8, y + 15, &empty_bar_section);
+	App->render->Blit(bar_tex, x + rect.x, y + rect.y , &empty_bar_section);
 	SDL_Rect section = empty_bar_section;
 
 	float width = ((float)current_number / (float)max_number) * (float)empty_bar_section.w;
 	section.w = width;
+
 
 	switch (hp_state)
 	{
@@ -106,5 +103,5 @@ void UIProgressBar::Draw(int x, int y)
 		break;
 	}
 
-	App->render->Blit(bar_tex, x - 8, y + 15, &section);
+	App->render->Blit(bar_tex, x + rect.x, y + rect.y, &section);
 }

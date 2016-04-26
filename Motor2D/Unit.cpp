@@ -1082,3 +1082,23 @@ void Unit::DisableSnipper()
 bool Unit::GetSnipping(){
 	return snipping;
 }
+
+int Unit::GetLife()const
+{
+	return life;
+}
+
+int Unit::GetMana()const
+{
+	return mana;
+}
+
+int Unit::GetMaxLife()const
+{
+	return max_life;
+}
+
+int Unit::GetMaxMana()const
+{
+	return max_mana;
+}

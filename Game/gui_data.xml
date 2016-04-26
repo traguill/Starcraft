@@ -16,7 +16,7 @@
     <local_pos x="-8" y="20"/>
     <size width="19" height="5"/>
     <full x="0" y="0"/>
-    <empty x="0" y="5"/>
+    <empty x="0" y="15"/>
     <low x="0" y="0"/>
     <middle x="0" y="0"/>
     <bar_type value="MANA"/>

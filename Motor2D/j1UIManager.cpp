@@ -95,10 +95,12 @@ bool j1UIManager::LoadUiInfo()
 	}
 
 	pugi::xml_node element;
-	for (element = ui_elements.child("gui"); element && ret; element = ui_elements.next_sibling("gui"))
+	for (element = ui_elements.child("gui"); element; element = element.next_sibling("gui"))
 	{
+		string progress_bar = "PROGRESS_BAR";
+
 		//Progressbar
-		if (element.attribute("type").as_string() == "PROGRESS_BAR")
+		if (element.attribute("type").as_string() == progress_bar)
 		{
 			UIProgressBar* bar = new UIProgressBar();
 
@@ -111,9 +113,9 @@ bool j1UIManager::LoadUiInfo()
 			int height = element.child("size").attribute("height").as_int();
 
 			bar->full_bar_section = { element.child("full").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
-			bar->middle_bar_section = { element.child("middle").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
-			bar->low_bar_section = { element.child("low").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
-			bar->empty_bar_section = { element.child("empty").attribute("x").as_int(), element.child("full").attribute("y").as_int(), width, height };
+			bar->middle_bar_section = { element.child("middle").attribute("x").as_int(), element.child("middle").attribute("y").as_int(), width, height };
+			bar->low_bar_section = { element.child("low").attribute("x").as_int(), element.child("low").attribute("y").as_int(), width, height };
+			bar->empty_bar_section = { element.child("empty").attribute("x").as_int(), element.child("empty").attribute("y").as_int(), width, height };
 
 			string bar_type = element.child("bar_type").attribute("value").as_string();
 
@@ -174,8 +176,9 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
-	//TODO: Draw lifes & mana
-	
+	//Draw lifes & mana
+	DrawLifeMana();
+
 	if (App->entity->selected_units.size() > 1)
 		ShowMiniWireframes(dt);
 	
@@ -235,6 +238,17 @@ bool j1UIManager::CleanUp()
 	}
 
 	gui_elements.clear();
+
+	map<string, UIEntity*>::iterator it = gui_database.begin();
+	while (it != gui_database.end())
+	{
+		it->second->CleanUp();
+		delete it->second;
+		it->second = NULL;
+		++it;
+	}
+
+	gui_database.clear();
 
 
 	delete cursor;
@@ -610,4 +624,35 @@ void j1UIManager::DeleteMiniWIreframe(uint pos)
 		}
 		mini_wireframes.clear();
 	}
+}
+
+
+void j1UIManager::DrawLifeMana()
+{
+	if (App->scene_manager->in_game == true)
+	{
+		UIProgressBar* life = (UIProgressBar*)(*gui_database.find("HEALTH_BAR")).second;
+		UIProgressBar* mana = (UIProgressBar*)(*gui_database.find("MANA_BAR")).second;
+
+		list<Unit*>::iterator unit = App->entity->selected_units.begin();
+
+		while (unit != App->entity->selected_units.end())
+		{
+			if ((*unit)->state != UNIT_DIE)
+			{
+				life->max_number = (*unit)->GetMaxLife();
+				mana->max_number = (*unit)->GetMaxMana();
+
+				life->SetValue((*unit)->GetLife());
+				mana->SetValue((*unit)->GetMana());
+
+				life->Draw((*unit)->GetPosition().x, (*unit)->GetPosition().y);
+				mana->Draw((*unit)->GetPosition().x, (*unit)->GetPosition().y);
+			}
+			
+
+			++unit;
+		}
+	}
+	
 }

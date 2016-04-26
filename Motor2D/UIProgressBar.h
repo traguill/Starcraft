@@ -42,7 +42,7 @@ public:
 
 private:
 
-	int max_number;
+
 
 
 public:
@@ -55,6 +55,8 @@ public:
 	SDL_Rect empty_bar_section;
 	SDL_Rect low_bar_section;
 	SDL_Rect middle_bar_section;
+
+	int max_number;
 };
 
 #endif

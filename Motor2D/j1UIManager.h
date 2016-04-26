@@ -96,6 +96,8 @@ private:
 
 	bool LoadUiInfo();
 
+	void DrawLifeMana();
+
 private:
 
 	bool					pressed_last_frame = false;
