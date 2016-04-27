@@ -133,7 +133,7 @@ PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(
 PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
 {}
 
-void PathNode::IdentifySuccessors(PathList& successors, PathNode startNode, PathNode endNode, j1PathFinding* path_finder)const
+void PathNode::IdentifySuccessors(PathList& successors, iPoint startNode, iPoint endNode, j1PathFinding* path_finder)const
 {
 	PathList neighbours;
 	this->FindWalkableAdjacents(neighbours, path_finder);
@@ -145,51 +145,96 @@ void PathNode::IdentifySuccessors(PathList& successors, PathNode startNode, Path
 		int dx = clamp(neighbour->pos.x - this->pos.x, -1, 1);
 		int dy = clamp(neighbour->pos.y - this->pos.y, -1, 1);
 
-		PathNode jump_point = Jump();
+		PathNode jump_point(-1, -1, iPoint(-1, -1), this);
+		bool succed = path_finder->Jump(this->pos.x, this->pos.y, dx, dy, startNode, endNode, jump_point);
 
-		if (jump_point != NULL)
+		if (succed == true)
 			successors.list_nodes.push_back(jump_point);
 
 		++neighbour;
 	}
 }
 
-PathNode j1PathFinding::Jump(int cx, int cy, int dx, int dy, PathNode start, PathNode end)
+bool j1PathFinding::Jump(int cx, int cy, int dx, int dy, iPoint start, iPoint end,PathNode& new_node)
 {
 	iPoint next(cx + dx, cy + dy);
 
 	if (IsWalkable(next) == false)
-		return NULL;
+		return false;
 
-	if (next.x == end.pos.x && next.y == end.pos.y)
+	if (next.x == end.x && next.y == end.y)
 	{
-		//Return node with next as position
+		new_node.pos = next;
+		return true;
 	}
 
 	//Diagonal
 	if (dx != 0 && dy != 0)
 	{
+		if (!IsWalkable(iPoint(cx + dx, cy)))
+		{
+			new_node.pos = next;
+			return true;
+		}
+		if (!IsWalkable(iPoint(cx, cy + dy)))
+		{
+			new_node.pos = next;
+			return true;
+		}
 
+		//Check also horizontal and vertical directions for forced neighbors
+		if (Jump(next.x, next.y, dx, 0, start, end, new_node) != NULL || Jump(next.x, next.y, 0, dy, start, end, new_node) != NULL)
+		{
+			new_node.pos = next;
+			return true;
+		}
 	}
 	else
 	{
 		//Horizontal
 		if (dx != 0)
 		{
-			if (!IsWalkable(iPoint(next.x + dx, next.y)))
+			if (!IsWalkable(iPoint(cx, cy + 1)))
 			{
-				if (IsWalkable())
+				if (IsWalkable(iPoint(cx + dx, cy + 1)))
+				{
+					new_node.pos = next;
+					return true;
+				}
+			}
+			else if (!IsWalkable(iPoint(cx, cy - 1)))
+			{
+				if (IsWalkable(iPoint(cx + dx, cy - 1)))
+				{
+					new_node.pos = next;
+					return true;
+				}
 			}
 		}
 		else //Vertical
 		{
-
+			if (!IsWalkable(iPoint(cx + 1, cy)))
+			{
+				if (IsWalkable(iPoint(cx + 1, cy + dy)))
+				{
+					new_node.pos = next;
+					return true;
+				}
+			}
+			else if (!IsWalkable(iPoint(cx - 1, cy)))
+			{
+				if (IsWalkable(iPoint(cx - 1, cy + dy)))
+				{
+					new_node.pos = next;
+					return true;
+				}
+			}
 		}
 
 	}
 
 	//Forced neighbour not found try next jump point
-	return Jump(next.x, next.y, dx, dy, start, end);
+	return Jump(next.x, next.y, dx, dy, start, end, new_node);
 }
 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path_finder) const
@@ -247,7 +292,7 @@ int PathNode::Score() const
 
 int PathNode::CalculateF(const iPoint& destination)
 {
-	g = parent->g + 1;
+	g = parent->g + this->pos.DistanceManhattan(parent->pos);
 	h = pos.DistanceManhattan(destination);
 
 	return g + h;
@@ -304,7 +349,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 			// Fill a list with all adjacent nodes
 			adjacent.list_nodes.clear();
-			node->FindWalkableAdjacents(adjacent, this);
+			node->IdentifySuccessors(adjacent, origin, destination, this);
 
 
 			list<PathNode>::iterator i = adjacent.list_nodes.begin();

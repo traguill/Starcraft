@@ -9,6 +9,7 @@
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
+struct PathNode;
 // --------------------------------------------------
 class j1PathFinding : public j1Module
 {
@@ -45,9 +46,7 @@ public:
 
 	iPoint GetLineTile()const; //Returns the last hitted tile
 
-private:
-
-	PathNode Jump(int cx, int cy, int dx, int dy, PathNode start, PathNode end);
+	bool Jump(int cx, int cy, int dx, int dy, iPoint start, iPoint end, PathNode& new_node);
 	
 
 private:
@@ -73,7 +72,7 @@ struct PathNode
 	int Score() const;
 	int CalculateF(const iPoint& destination);
 
-	void IdentifySuccessors(PathList& list_to_fill, PathNode startNode, PathNode endNode, j1PathFinding* path_finder)const;
+	void IdentifySuccessors(PathList& list_to_fill, iPoint startNode, iPoint endNode, j1PathFinding* path_finder)const;
 
 	int g;
 	int h;
