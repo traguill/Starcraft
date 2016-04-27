@@ -2,7 +2,7 @@
 #define __P2DEFS_H__
 
 #include <stdio.h>
-
+#include <algorithm>
 //  NULL just in case ----------------------
 
 #ifdef NULL
@@ -72,7 +72,7 @@ inline const char* const PATH(const char* folder, const char* file)
 template <typename T>
 T clamp(const T& n, const T& lower, const T&upper)
 {
-	return max(lower, min(n, upper));
+	return std::max(lower, std::min(n, upper));
 }
 
 #endif
