@@ -91,6 +91,9 @@ bool GameScene::Start()
 		//Create HUD
 		App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
 
+		//Creating Mini Map
+		App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 });
+
 
 		//MARINE
 		SDL_Rect s_armourM{ 621, 62, 34, 33 };

@@ -94,6 +94,12 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="FogOfWar.cpp">
+      <Filter>FogOfWar</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMiniMap.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventsManager.h" />
@@ -209,6 +215,12 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="FogOfWar.h">
+      <Filter>FogOfWar</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMiniMap.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -231,6 +243,9 @@
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{627172bc-a652-4ef3-8867-45fd7dfa0aff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FogOfWar">
+      <UniqueIdentifier>{a8344e2d-b217-40fb-aba5-a3311c9beb8e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "GameScene.h"
 #include "MenuScene.h"
+#include "UIMiniMap.h"
 
 
 
@@ -327,7 +328,14 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 	return cursor;
 }
 
+UIMiniMap* j1UIManager::CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, j1Module* listener)
+{
+	UIMiniMap* mini_map = new UIMiniMap(_rec, section_drawn);
+	mini_map->listener = listener;
+	gui_elements.push_back(mini_map);
 
+	return mini_map;
+}
 
 /*UIInputBox* j1UIManager::CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener)
 {

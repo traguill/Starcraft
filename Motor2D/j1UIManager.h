@@ -12,6 +12,7 @@ class UIButton;
 class UIInputBox;
 class UICursor;
 class UIProgressBar;
+class UIMiniMap;
 enum UNIT_TYPE;
 
 
@@ -70,6 +71,8 @@ public:
 	UIButton* CreateButton(const char* _text, const int x, const int y, SDL_Rect section_idle, SDL_Rect section_pressed, SDL_Rect section_hover, j1Module* listener = NULL);
 
 	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
+
+	UIMiniMap* CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, j1Module* listener = NULL);
 
 	void CreateMiniWireframe(UNIT_TYPE type, uint pos);
 

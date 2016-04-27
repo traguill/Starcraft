@@ -57,6 +57,8 @@ public:
 
 	void DiscardTransition(); //Stops a transition
 
+	bool GetTransitioning();
+
 private:
 
 	void CursorMovement(float dt);
