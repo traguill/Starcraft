@@ -47,6 +47,11 @@ public:
 
 private:
 
+	PathNode Jump(int cx, int cy, int dx, int dy, PathNode start, PathNode end);
+	
+
+private:
+
 	uint width;
 	uint height;
 	uchar* map;
@@ -67,6 +72,8 @@ struct PathNode
 	uint FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path_finder) const;
 	int Score() const;
 	int CalculateF(const iPoint& destination);
+
+	void IdentifySuccessors(PathList& list_to_fill, PathNode startNode, PathNode endNode, j1PathFinding* path_finder)const;
 
 	int g;
 	int h;

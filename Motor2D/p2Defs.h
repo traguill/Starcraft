@@ -69,4 +69,10 @@ inline const char* const PATH(const char* folder, const char* file)
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
+template <typename T>
+T clamp(const T& n, const T& lower, const T&upper)
+{
+	return max(lower, min(n, upper));
+}
+
 #endif

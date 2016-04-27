@@ -133,6 +133,65 @@ PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(
 PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
 {}
 
+void PathNode::IdentifySuccessors(PathList& successors, PathNode startNode, PathNode endNode, j1PathFinding* path_finder)const
+{
+	PathList neighbours;
+	this->FindWalkableAdjacents(neighbours, path_finder);
+
+	list<PathNode>::iterator neighbour = neighbours.list_nodes.begin();
+
+	while (neighbour != neighbours.list_nodes.end())
+	{
+		int dx = clamp(neighbour->pos.x - this->pos.x, -1, 1);
+		int dy = clamp(neighbour->pos.y - this->pos.y, -1, 1);
+
+		PathNode jump_point = Jump();
+
+		if (jump_point != NULL)
+			successors.list_nodes.push_back(jump_point);
+
+		++neighbour;
+	}
+}
+
+PathNode j1PathFinding::Jump(int cx, int cy, int dx, int dy, PathNode start, PathNode end)
+{
+	iPoint next(cx + dx, cy + dy);
+
+	if (IsWalkable(next) == false)
+		return NULL;
+
+	if (next.x == end.pos.x && next.y == end.pos.y)
+	{
+		//Return node with next as position
+	}
+
+	//Diagonal
+	if (dx != 0 && dy != 0)
+	{
+
+	}
+	else
+	{
+		//Horizontal
+		if (dx != 0)
+		{
+			if (!IsWalkable(iPoint(next.x + dx, next.y)))
+			{
+				if (IsWalkable())
+			}
+		}
+		else //Vertical
+		{
+
+		}
+
+	}
+
+	//Forced neighbour not found try next jump point
+	return Jump(next.x, next.y, dx, dy, start, end);
+}
+
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path_finder) const
 {
 	iPoint cell;
@@ -189,8 +248,7 @@ int PathNode::Score() const
 int PathNode::CalculateF(const iPoint& destination)
 {
 	g = parent->g + 1;
-	//h = pos.DistanceManhattan(destination);
-	h = pos.DistanceNoSqrt(destination);
+	h = pos.DistanceManhattan(destination);
 
 	return g + h;
 }
@@ -216,9 +274,8 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			// Move the lowest score cell from open list to the closed list
 			list<PathNode>::iterator lowest = open.GetNodeLowestScore();
 			closed.list_nodes.push_back(*lowest);
-			iPoint pos = lowest->pos;
 			open.list_nodes.erase(lowest);
-			list<PathNode>::iterator node = closed.Find(pos);
+			list<PathNode>::iterator node = --closed.list_nodes.end();
 
 
 			// If destination was added, we are done!
@@ -280,10 +337,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 			
 			++iterations;
-			if (iterations > 60)
-			{
-				return -1;
-			}
 			
 		} while (open.list_nodes.size() > 0);
 	}
