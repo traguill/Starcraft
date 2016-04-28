@@ -51,7 +51,6 @@ bool j1PathFinding::PreUpdate()
 		}
 		else
 		{
-
 			delete path->second;
 			path->second = NULL;
 			std::map<uint, Path*>::iterator tmp = path;

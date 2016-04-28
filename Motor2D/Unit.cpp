@@ -496,6 +496,7 @@ void Unit::CenterUnit()
 
 void Unit::SetPath(vector<iPoint> _path)
 {	
+	waiting_for_path = false;
 	has_destination = false;
 	path = _path;
 	state = UNIT_MOVE;
@@ -503,6 +504,7 @@ void Unit::SetPath(vector<iPoint> _path)
 
 void Unit::SetPathId(uint id)
 {
+	waiting_for_path = true;
 	path.clear();
 	this->path_id = id;
 	has_destination = false;
