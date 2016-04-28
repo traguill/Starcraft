@@ -4,12 +4,16 @@
 #include "j1Module.h"
 #include "p2Point.h"
 
+#include <iostream>
 #include <vector>
+#include <map>
 
-#define DEFAULT_PATH_LENGTH 50
+#define MAX_ITERATIONS 8
 #define INVALID_WALK_CODE 255
 
 struct PathNode;
+struct PathList;
+struct Path;
 // --------------------------------------------------
 class j1PathFinding : public j1Module
 {
@@ -26,6 +30,9 @@ public:
 	// Called before the first frame
 	bool Start();
 
+	bool PreUpdate();
+	bool PostUpdate();
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -34,32 +41,37 @@ public:
 
 	int CreatePath(const iPoint& origin, const iPoint& destination);
 
-	const vector<iPoint>* GetLastPath() const;
-
 	bool CheckBoundaries(const iPoint& pos) const;
 	bool IsWalkable(const iPoint& pos) const;
 	uchar GetTileAt(const iPoint& pos) const;
 
 	bool CreateLine(const iPoint& origin, const iPoint& destination);
 
-	bool CreateOptimizedPath(const iPoint& origin, const iPoint& destination, vector<iPoint>& path);
-
 	iPoint GetLineTile()const; //Returns the last hitted tile
 
 	bool Jump(int cx, int cy, int dx, int dy, iPoint start, iPoint end, PathNode& new_node);
-	
 
+	//Check path status
+	bool PathFinished(uint id)const;
+	vector<iPoint> GetPath(uint id)const;
+
+private:
+
+	void CalculatePath(Path* path);
+	
 private:
 
 	uint width;
 	uint height;
 	uchar* map;
-	vector<iPoint> last_path;
 	iPoint hitted_tile;
+	std::map<uint, Path*> paths_to_calculate;
+
+	uint current_id = 0;
 
 };
 
-struct PathList;
+
 
 // Helper struct to reprsent a node in the path creation
 struct PathNode
@@ -90,6 +102,19 @@ struct PathList
 	list<PathNode> list_nodes;
 };
 
+struct Path
+{
+	Path();
+	PathList open;
+	PathList closed;
+	PathList adjacent;
 
+	iPoint origin;
+	iPoint destination;
+
+	vector<iPoint> path_finished;
+
+	bool completed;
+};
 
 #endif // __j1PATHFINDING_H__

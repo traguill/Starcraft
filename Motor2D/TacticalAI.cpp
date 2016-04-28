@@ -210,26 +210,28 @@ bool TacticalAI::CalculatePath(Unit* unit, Unit* target)
 	iPoint target_map = App->map->WorldToMap(target->GetPosition().x, target->GetPosition().y, COLLIDER_MAP);
 
 	vector<iPoint> path;
+	path.clear();
 
 	if (App->pathfinding->CreateLine(unit_map, target_map) == true)
 	{
 		path.push_back(unit_map);
 		path.push_back(target_map);
-
+		unit->SetPath(path);
 	}
 	else
 	{
 		//Create pathfinding
-		if (App->pathfinding->CreatePath(unit_map, target_map) == -1)
+		uint path_id = App->pathfinding->CreatePath(unit_map, target_map);
+		if (path_id == -1)
 		{
 			LOG("Impossible to create path");
 			return false;
 		}
-
-		path = *App->pathfinding->GetLastPath();
+		unit->SetPathId(path_id);
+		unit->waiting_for_path = true;
 	}
 
-	unit->SetPath(path);
+	
 
 	return true; 
 }
@@ -455,7 +457,7 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 
 	if (App->pathfinding->IsWalkable(final_tile) == true)
 	{
-		vector<iPoint>path;
+		/*vector<iPoint>path;
 		if (App->pathfinding->CreateOptimizedPath(origin_tile, final_tile, path) == true)
 		{
 			unit_b->SetPath(path);
@@ -464,7 +466,7 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 		else
 		{
 			//Impossible to create pathfinding for some reason
-		}
+		}*/
 	}
 	else
 	{

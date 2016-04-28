@@ -837,6 +837,8 @@ void j1EntityManager::SetMovement()
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
 			vector<iPoint> path;
+			int pathfinding_id = -1;
+
 			if (App->pathfinding->CreateLine(center_map, destination) == false)
 			{
 				//Create pathfinding;
@@ -852,8 +854,9 @@ void j1EntityManager::SetMovement()
 						iPoint unit_pos = (*unit_p)->GetPosition();
 						iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 
-						if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
-							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+						int path_result = App->pathfinding->CreatePath(unit_map_pos, destination);
+						if (path_result != -1)
+							AssignPath(*unit_p, path_result, NULL);
 
 						++unit_p;
 					}
@@ -861,18 +864,20 @@ void j1EntityManager::SetMovement()
 				}
 				//-----------------------------------------------------------------------------------------------
 
-				else if (App->pathfinding->CreatePath(center_map, destination) == -1)
+				else 
 				{
-					if (!App->game_scene->pathfinding_label->IsVisible())
+					pathfinding_id = App->pathfinding->CreatePath(center_map, destination);
+					if (pathfinding_id == -1)
 					{
-						App->game_scene->pathfinding_label->SetVisible(true);
-						App->game_scene->parthfinding_label_timer.Start();
+						if (!App->game_scene->pathfinding_label->IsVisible())
+						{
+							App->game_scene->pathfinding_label->SetVisible(true);
+							App->game_scene->parthfinding_label_timer.Start();
+						}
+						LOG("Impossible to create path");
+						return;
 					}
-					LOG("Impossible to create path");
-					return;
 				}
-
-				path = *App->pathfinding->GetLastPath();
 			}
 
 			else
@@ -895,11 +900,17 @@ void j1EntityManager::SetMovement()
 				iPoint unit_pos = (*unit_p)->GetPosition();
 				iPoint unit_map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, 2);
 				iPoint rect_offset = unit_map_pos - center_map;
-				iPoint end_point = path.back() + rect_offset;
+				iPoint end_point = destination + rect_offset;
 
 				//Check if there is any collider in the path (copy of the center point of rect path)
 				if (App->pathfinding->CreateLine(unit_map_pos, end_point) == true)
-					AssignPath(*unit_p, path, &center_map);
+				{
+					if (pathfinding_id != -1)
+						AssignPath(*unit_p, pathfinding_id, &center_map);
+					else
+						AssignPath(*unit_p, path, &center_map);
+				}
+					
 
 				else
 				{
@@ -907,24 +918,55 @@ void j1EntityManager::SetMovement()
 					if (App->pathfinding->IsWalkable(end_point) == true)
 					{
 						//If it is, create a path to go there
-						if (App->pathfinding->CreatePath(unit_map_pos, end_point) != 1)
-							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+						uint path_id = App->pathfinding->CreatePath(unit_map_pos, end_point);
+						if (path_id != 1)
+							AssignPath(*unit_p, path_id, NULL);
 					}
 
 					else
 					{
 						//If it doesn't, go to the mouse point
 						if (App->pathfinding->CreateLine(unit_map_pos, destination) == true)
-							AssignPath(*unit_p, path, NULL);
-
-						else if (App->pathfinding->CreatePath(unit_map_pos, destination) != -1)
-							AssignPath(*unit_p, *App->pathfinding->GetLastPath(), NULL);
+						{
+							if (pathfinding_id != -1)
+								AssignPath(*unit_p, pathfinding_id, NULL);
+							else
+								AssignPath(*unit_p, path, NULL);
+						}
+						else
+						{
+							uint path_id2 = App->pathfinding->CreatePath(unit_map_pos, destination);
+							if (path_id2 != -1)
+								AssignPath(*unit_p, path_id2, NULL);
+						}
 					}
 				}
 				++unit_p;
 			}
 		}
 	}
+}
+
+void j1EntityManager::AssignPath(Unit* unit, uint path_id, iPoint* center)
+{
+	iPoint unit_pos = unit->GetPosition();
+	iPoint unit_pos_tile(App->map->WorldToMap(unit_pos.x, unit_pos.y, 2));
+	iPoint dst_center(0, 0);
+
+	if (center != NULL)
+	{
+		dst_center.x = unit_pos_tile.x - center->x;
+		dst_center.y = unit_pos_tile.y - center->y;
+	}
+
+
+	unit->DiscardTarget();
+	unit->avoid_change_state = true;
+	unit->SetPathId(path_id);
+	unit->path_offset_x = dst_center.x;
+	unit->path_offset_y = dst_center.y;
+	unit->CenterUnit();
+	unit->waiting_for_path = true;
 }
 
 void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center)
