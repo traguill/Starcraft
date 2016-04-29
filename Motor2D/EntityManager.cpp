@@ -810,6 +810,9 @@ void j1EntityManager::SelectUnits()
 			it++;
 		}
 
+		if (selected_units.empty() == false)
+			App->game_scene->SelectFX((*selected_units.begin())->type);
+
 		if (selected_units.size() > 1)
 		{
 			list<Unit*>::iterator select_it = selected_units.begin();
@@ -835,6 +838,9 @@ void j1EntityManager::SetMovement()
 			LOG("X: %i", destination.x);
 			LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
+
+			App->game_scene->MoveFX((*selected_units.begin())->type);
+
 
 			vector<iPoint> path;
 			if (App->pathfinding->CreateLine(center_map, destination) == false)

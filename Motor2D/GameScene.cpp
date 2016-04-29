@@ -60,9 +60,9 @@ bool GameScene::Start()
 
 	//attack order
 	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
-	ghost_order_attack_order = App->audio->LoadFx("FX/Ghost/Marine/CallShot.wav");
-	firebat_order_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
-	medic_order_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
+	ghost_attack_order = App->audio->LoadFx("FX/Ghost/Marine/CallShot.wav");
+	firebat_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
+	medic_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
 	//observer_order_attack_order;
 
 	//death
@@ -431,5 +431,68 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			App->scene_manager->WantToChangeScene();
 		}
+	}
+}
+
+void GameScene::SelectFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_select);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_select);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_select);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_select);
+		break;
+	case OBSERVER:
+		App->audio->PlayFx(observer_select);
+		break;
+	}
+}
+
+void GameScene::MoveFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_order);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_order);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_order);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_order);
+		break;
+	case OBSERVER:
+		App->audio->PlayFx(observer_order);
+		break;
+	}
+}
+
+void GameScene::AttackFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_attack_order);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_attack_order);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_attack_order);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_attack_order);
+		break;
 	}
 }
