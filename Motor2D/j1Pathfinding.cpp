@@ -40,14 +40,30 @@ bool j1PathFinding::Start()
 
 bool j1PathFinding::PreUpdate()
 {
+	//timer.Start();
 
+	int paths_calculated = 0;
+	int paths_deleted = 0;
+	int paths_to_process = paths_to_calculate.size();
+
+	int iterations = 0;
+	bool can_calculate = true;
 	std::map<uint, Path*>::iterator path = paths_to_calculate.begin();
 
 	while (path != paths_to_calculate.end())
 	{
 		if (path->second->completed == false)
 		{
- 			CalculatePath(path->second);
+			if (can_calculate)
+			{
+				iterations = CalculatePath(path->second, 8 - iterations);
+
+				++paths_calculated;
+
+				if (iterations >= 8)
+					can_calculate = false;
+			}
+ 			
 		}
 		else
 		{
@@ -56,9 +72,16 @@ bool j1PathFinding::PreUpdate()
 			std::map<uint, Path*>::iterator tmp = path;
 			++path;
 			paths_to_calculate.erase(tmp);
+
+			++paths_deleted;
 		}
 		++path;
 	}
+
+	/*if (paths_to_process > 0)
+		LOG("Pathfinding time %d, Iterations %i,  Paths to process: %i, Paths calculated %i, Paths deleted %i", 
+			timer.Read(), iterations, paths_to_process, paths_calculated, paths_deleted);*/
+
 
 	return true;
 }
@@ -354,7 +377,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 		path->origin = origin;
 		path->destination = destination;
 
-		CalculatePath(path);
+		//CalculatePath(path);
 
 		ret = current_id; //Id of the path created
 	}
@@ -362,12 +385,15 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 	return ret;
 }
 
-void j1PathFinding::CalculatePath(Path* path)
+int j1PathFinding::CalculatePath(Path* path, int max_iterations)
 {
-	int iterations = 0;
+	int it_time = 0;
 
 	do
 	{
+		//Debug
+		timer.Start();
+
 		// Move the lowest score cell from open list to the closed list
 		list<PathNode>::iterator lowest = path->open.GetNodeLowestScore();
 		path->closed.list_nodes.push_back(*lowest);
@@ -432,12 +458,14 @@ void j1PathFinding::CalculatePath(Path* path)
 			++i;
 		}
 
-		++iterations;
+		it_time += timer.Read();
 
-		if (iterations >= MAX_ITERATIONS)
-			return;
+		if (it_time >= max_iterations)
+			break;
 
 	} while (path->open.list_nodes.size() > 0);
+
+	return it_time;
 }
 
 

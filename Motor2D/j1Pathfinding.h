@@ -3,12 +3,13 @@
 
 #include "j1Module.h"
 #include "p2Point.h"
+#include "j1Timer.h"
 
 #include <iostream>
 #include <vector>
 #include <map>
 
-#define MAX_ITERATIONS 8
+#define MAX_ITERATIONS 26
 #define INVALID_WALK_CODE 255
 
 struct PathNode;
@@ -57,7 +58,7 @@ public:
 
 private:
 
-	void CalculatePath(Path* path);
+	int CalculatePath(Path* path, int max_iterations); //Returns the number of iterations
 	
 private:
 
@@ -68,6 +69,8 @@ private:
 	std::map<uint, Path*> paths_to_calculate;
 
 	uint current_id = 0;
+
+	j1Timer timer;
 
 };
 

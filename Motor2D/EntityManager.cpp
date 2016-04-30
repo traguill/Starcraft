@@ -832,8 +832,8 @@ void j1EntityManager::SetMovement()
 			int mouse_x, mouse_y;
 			App->input->GetMouseWorld(mouse_x, mouse_y);
 			iPoint destination(App->map->WorldToMap(mouse_x, mouse_y, 2));
-			LOG("X: %i", destination.x);
-			LOG("Y: %i", destination.y);
+			//LOG("X: %i", destination.x);
+			//LOG("Y: %i", destination.y);
 			iPoint center_map = App->map->WorldToMap(center.x, center.y, 2);
 
 			vector<iPoint> path;

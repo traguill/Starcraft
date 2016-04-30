@@ -56,7 +56,7 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	//Do not change the state if the unit is resolving a collision (high priority)
 	if (unit->avoid_change_state == true)
 	{
-		LOG("Changing state while resolving collision");
+		//LOG("Changing state while resolving collision");
 		return;
 	}
 
