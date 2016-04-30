@@ -49,18 +49,20 @@ bool GameScene::Start()
 	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
 	ghost_select = App->audio->LoadFx("FX/Terran/Ghost/ImHere.wav");
 	firebat_select = App->audio->LoadFx("FX/Terran/Firebat/GoodSmoke.wav");
-	medic_select = App->audio->LoadFx("FX/psrotos/probe/pprpss00.wav");
+	medic_select = App->audio->LoadFx("FX/Terran/Medic/MedicalAttention.wav");
+	observer_select = App->audio->LoadFx("FX/protoss/probe/pprerr00.wav");
+
 
 	//order
 	marine_order = App->audio->LoadFx("FX/Terran/Marine/RockndRoll.wav");
 	ghost_order = App->audio->LoadFx("FX/Terran/Ghost/Gone.wav");
 	firebat_order = App->audio->LoadFx("FX/Terran/Firebat/GotIt.wav");
-	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnMyWAy.wav");
-	observer_order = App->audio->LoadFx("FX/psrotos/probe/ppryes02.wav");
+	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnTheJob.wav");
+	observer_order = App->audio->LoadFx("FX/protoss/probe/ppryes02.wav");
 
 	//attack order
 	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
-	ghost_attack_order = App->audio->LoadFx("FX/Ghost/Marine/CallShot.wav");
+	ghost_attack_order = App->audio->LoadFx("FX/Terran/Ghost/CallShot.wav");
 	firebat_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
 	medic_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
 	//observer_order_attack_order;
@@ -70,7 +72,7 @@ bool GameScene::Start()
 	ghost_death = App->audio->LoadFx("FX/Terran/Ghost/tghdth01.wav");
 	firebat_death = App->audio->LoadFx("FX/Terran/Firebat/tfbdth02.wav");
 	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
-	observer_death = App->audio->LoadFx("FX/psrotos/probe/pprdth00.wav");
+	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
 
 
 	//Load Map
