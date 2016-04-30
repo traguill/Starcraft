@@ -383,13 +383,13 @@ void TacticalAI::Vision()
 					*/
 					if ((*unit_f)->GetTarget() == NULL && (*unit_f)->GetType() != MEDIC) //MEDICS DOESN'T ATTACK
 					{
-						LOG("Friend: I've found someone near");
+						//LOG("Friend: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
 					}
 
 					if ((*unit_e)->GetTarget() == NULL)
 					{
-						LOG("Enemy: I've found someone near");
+						//LOG("Enemy: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
 					}
 				}
@@ -418,7 +418,7 @@ void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
 
 	iPoint destination(reference->GetPosition().x + distance.x, reference->GetPosition().y + distance.y);
 
-	//No pathfinding is need it. We asume that nothing is between this units
+	//No pathfinding is need it. We asume that nothing is between this units WRONG
 	destination = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
 	iPoint origin = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
 
