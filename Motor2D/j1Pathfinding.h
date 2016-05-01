@@ -59,6 +59,8 @@ public:
 private:
 
 	int CalculatePath(Path* path, int max_iterations); //Returns the number of iterations
+
+	iPoint FindNearestWalkable(const iPoint& origin);
 	
 private:
 

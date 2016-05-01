@@ -448,28 +448,30 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 
 	direction.Normalize();
 	direction.Scale(30); //Change it for distance between units [value]
-	direction.Rotate(3.14 * 0.5f);
 
-	iPoint final_tile(unit_b_pos.x + direction.x, unit_b_pos.y + direction.y);
-	final_tile = App->map->WorldToMap(final_tile.x, final_tile.y, COLLIDER_MAP);
-	iPoint origin_tile = unit_b_pos;
-	origin_tile = App->map->WorldToMap(origin_tile.x, origin_tile.y, COLLIDER_MAP);
+	int dir = 0;
 
-	if (App->pathfinding->IsWalkable(final_tile) == true)
+	//If final tile is not walkable rotate in 4 directions
+	while (dir < 4)
 	{
-		/*vector<iPoint>path;
-		if (App->pathfinding->CreateOptimizedPath(origin_tile, final_tile, path) == true)
+		direction.Rotate(3.14 * 0.5f);
+
+		iPoint final_tile(unit_b_pos.x + direction.x, unit_b_pos.y + direction.y);
+		final_tile = App->map->WorldToMap(final_tile.x, final_tile.y, COLLIDER_MAP);
+		iPoint origin_tile = unit_b_pos;
+		origin_tile = App->map->WorldToMap(origin_tile.x, origin_tile.y, COLLIDER_MAP);
+
+		if (App->pathfinding->IsWalkable(final_tile) == true)
 		{
-			unit_b->SetPath(path);
-			unit_b->avoid_change_state = true;
+			uint path_id = App->pathfinding->CreatePath(origin_tile, final_tile);
+			if (path_id != -1)
+			{
+				unit_b->SetPathId(path_id);
+				unit_b->avoid_change_state = true;
+			}
+			break;
 		}
-		else
-		{
-			//Impossible to create pathfinding for some reason
-		}*/
 	}
-	else
-	{
-		//Final tile no walkable find another one (rotate)
-	}
+	
+	
 }

@@ -305,13 +305,13 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path
 	uint before = list_to_fill.list_nodes.size();
 
 	// north
-	cell.create(pos.x, pos.y + 1);
+	cell.create(pos.x, pos.y - 1);
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	//north-east
-	cell.create(pos.x + 1, pos.y + 1);
-	if (path_finder->IsWalkable(cell) && path_finder->IsWalkable(iPoint(cell.x -1, cell.y)) && path_finder->IsWalkable(iPoint(cell.x, cell.y +1)))
+	cell.create(pos.x + 1, pos.y - 1);
+	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	// east
@@ -320,18 +320,18 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	//south-east
-	cell.create(pos.x + 1, pos.y - 1);
-	if (path_finder->IsWalkable(cell) && path_finder->IsWalkable(iPoint(cell.x - 1, cell.y)) && path_finder->IsWalkable(iPoint(cell.x, cell.y - 1)))
+	cell.create(pos.x + 1, pos.y + 1);
+	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	// south
-	cell.create(pos.x, pos.y - 1);
+	cell.create(pos.x, pos.y + 1);
 	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	//south-west
-	cell.create(pos.x - 1, pos.y - 1);
-	if (path_finder->IsWalkable(cell) && path_finder->IsWalkable(iPoint(cell.x, cell.y - 1)) && path_finder->IsWalkable(iPoint(cell.x -1, cell.y)))
+	cell.create(pos.x - 1, pos.y + 1);
+	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 	
 	// west
@@ -340,8 +340,8 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill, j1PathFinding* path
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	//nord-west
-	cell.create(pos.x - 1, pos.y + 1);
-	if (path_finder->IsWalkable(cell) && path_finder->IsWalkable(iPoint(cell.x , cell.y +1)) && path_finder->IsWalkable(iPoint(cell.x -1, cell.y)))
+	cell.create(pos.x - 1, pos.y - 1);
+	if (path_finder->IsWalkable(cell))
 		list_to_fill.list_nodes.push_back(PathNode(-1, -1, cell, this));
 
 	return list_to_fill.list_nodes.size();
@@ -360,21 +360,64 @@ int PathNode::CalculateF(const iPoint& destination)
 	return g + h;
 }
 
+iPoint j1PathFinding::FindNearestWalkable(const iPoint& origin)
+{
+	iPoint ret(origin);
+	//Find the nearest walkable tile in a 10 tiles radius
+	int var = 1;
+	while (var != 10)
+	{
+		for (int dx = -var; dx < var; dx++)
+		{
+			for (int dy = -var; dy < var; dy++)
+			{
+				ret.x = origin.x + dx;
+				ret.y = origin.y + dy;
+				if (IsWalkable(ret))
+					return ret;
+			}
+		}
+
+		++var;
+	}
+	
+
+	return ret.create(-1, -1);
+}
+
 // Actual A* algorithm -----------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
 	int ret = -1;
 
-	if (IsWalkable(destination) && IsWalkable(origin))
+	iPoint actual_origin = origin;
+
+	if (IsWalkable(destination))
 	{
+		if (IsWalkable(origin) == false)
+		{
+			actual_origin = FindNearestWalkable(origin);
+
+			if (IsWalkable(actual_origin))
+			{
+				LOG("Found new origin walkable");
+			}
+
+			if (actual_origin.x == -1 && actual_origin.y == -1)
+			{
+				LOG("Path no created: Origin no walkable && no near walkable tiles available");
+				return ret;
+			}
+				
+		}
 		Path* path = new Path();
 
 		paths_to_calculate.insert(pair<uint, Path*>(++current_id, path));
 
 		// Start pushing the origin in the open list
-		path->open.list_nodes.push_back(PathNode(0, 0, origin, NULL));
+		path->open.list_nodes.push_back(PathNode(0, 0, actual_origin, NULL));
 
-		path->origin = origin;
+		path->origin = actual_origin;
 		path->destination = destination;
 
 		//CalculatePath(path);
