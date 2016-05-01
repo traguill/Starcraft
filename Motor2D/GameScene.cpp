@@ -49,20 +49,22 @@ bool GameScene::Start()
 	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
 	ghost_select = App->audio->LoadFx("FX/Terran/Ghost/ImHere.wav");
 	firebat_select = App->audio->LoadFx("FX/Terran/Firebat/GoodSmoke.wav");
-	medic_select = App->audio->LoadFx("FX/psrotos/probe/pprpss00.wav");
+	medic_select = App->audio->LoadFx("FX/Terran/Medic/MedicalAttention.wav");
+	observer_select = App->audio->LoadFx("FX/protoss/probe/pprerr00.wav");
+
 
 	//order
 	marine_order = App->audio->LoadFx("FX/Terran/Marine/RockndRoll.wav");
 	ghost_order = App->audio->LoadFx("FX/Terran/Ghost/Gone.wav");
 	firebat_order = App->audio->LoadFx("FX/Terran/Firebat/GotIt.wav");
-	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnMyWAy.wav");
-	observer_order = App->audio->LoadFx("FX/psrotos/probe/ppryes02.wav");
+	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnTheJob.wav");
+	observer_order = App->audio->LoadFx("FX/protoss/probe/ppryes02.wav");
 
 	//attack order
 	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
-	ghost_order_attack_order = App->audio->LoadFx("FX/Ghost/Marine/CallShot.wav");
-	firebat_order_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
-	medic_order_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
+	ghost_attack_order = App->audio->LoadFx("FX/Terran/Ghost/CallShot.wav");
+	firebat_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
+	medic_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
 	//observer_order_attack_order;
 
 	//death
@@ -70,7 +72,7 @@ bool GameScene::Start()
 	ghost_death = App->audio->LoadFx("FX/Terran/Ghost/tghdth01.wav");
 	firebat_death = App->audio->LoadFx("FX/Terran/Firebat/tfbdth02.wav");
 	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
-	observer_death = App->audio->LoadFx("FX/psrotos/probe/pprdth00.wav");
+	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
 
 
 	//Load Map
@@ -90,6 +92,9 @@ bool GameScene::Start()
 
 		//Create HUD
 		App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
+
+		//Creating Mini Map
+		App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 });
 
 
 		//MARINE
@@ -428,5 +433,68 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			App->scene_manager->WantToChangeScene();
 		}
+	}
+}
+
+void GameScene::SelectFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_select);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_select);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_select);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_select);
+		break;
+	case OBSERVER:
+		App->audio->PlayFx(observer_select);
+		break;
+	}
+}
+
+void GameScene::MoveFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_order);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_order);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_order);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_order);
+		break;
+	case OBSERVER:
+		App->audio->PlayFx(observer_order);
+		break;
+	}
+}
+
+void GameScene::AttackFX(UNIT_TYPE type)
+{
+	switch (type)
+	{
+	case MARINE:
+		App->audio->PlayFx(marine_attack_order);
+		break;
+	case GHOST:
+		App->audio->PlayFx(ghost_attack_order);
+		break;
+	case FIREBAT:
+		App->audio->PlayFx(firebat_attack_order);
+		break;
+	case MEDIC:
+		App->audio->PlayFx(medic_attack_order);
+		break;
 	}
 }

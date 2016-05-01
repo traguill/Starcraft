@@ -7,6 +7,7 @@
 #include "EntityManager.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "GameScene.h"
 
 TacticalAI::TacticalAI() : j1Module()
 {
@@ -110,7 +111,13 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			if (unit->is_enemy)
 				LOG("Enemy: I have a target to kill, I'm going to move closer");
 			else
+			{
 				LOG("Friend: I have a target to kill, I'm going to move closer");
+				if (App->entity->selected_units.empty() != true)
+				{
+					App->game_scene->AttackFX((*App->entity->selected_units.begin())->type);
+				}
+			}
 
 			CalculatePath(unit, target);
 

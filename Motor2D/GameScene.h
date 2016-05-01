@@ -8,6 +8,7 @@
 #include "j1Timer.h"
 
 struct SDL_Texture;
+enum UNIT_TYPE;
 
 class GameScene : public j1Module
 {
@@ -39,6 +40,10 @@ public:
 	bool GamePaused()const;
 
 	void OnGUI(UIEntity* gui, GUI_EVENTS event);
+
+	void SelectFX(UNIT_TYPE type);
+	void MoveFX(UNIT_TYPE type);
+	void AttackFX(UNIT_TYPE type);
 
 private:
 
@@ -131,10 +136,10 @@ public:
 
 	//attack order
 	uint marine_attack_order;
-	uint ghost_order_attack_order;
-	uint firebat_order_attack_order;
-	uint medic_order_attack_order;
-	uint observer_order_attack_order;
+	uint ghost_attack_order;
+	uint firebat_attack_order;
+	uint medic_attack_order;
+	uint observer_attack_order;
 
 	//death
 	uint marine_death;

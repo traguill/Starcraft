@@ -158,7 +158,6 @@ private:
 	bool costume;
 	bool selected = false;
 	Unit* target = NULL;
-	UNIT_TYPE type;
 
 	float max_mana;
 	float mana;
@@ -178,7 +177,7 @@ public:
 
 	//Can't change state when is resolving a collision or do another thing
 	bool avoid_change_state = false;
-
+	UNIT_TYPE type;
 	bool is_enemy;
 
 	//fx

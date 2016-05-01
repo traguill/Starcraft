@@ -489,3 +489,8 @@ void j1Render::DiscardTransition()
 {
 	transitioning = false;
 }
+
+bool j1Render::GetTransitioning()
+{
+	return transitioning;
+}
