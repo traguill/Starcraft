@@ -57,7 +57,7 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	//Do not change the state if the unit is resolving a collision (high priority)
 	if (unit->avoid_change_state == true)
 	{
-		LOG("Changing state while resolving collision");
+		//LOG("Changing state while resolving collision");
 		return;
 	}
 
@@ -217,26 +217,28 @@ bool TacticalAI::CalculatePath(Unit* unit, Unit* target)
 	iPoint target_map = App->map->WorldToMap(target->GetPosition().x, target->GetPosition().y, COLLIDER_MAP);
 
 	vector<iPoint> path;
+	path.clear();
 
 	if (App->pathfinding->CreateLine(unit_map, target_map) == true)
 	{
 		path.push_back(unit_map);
 		path.push_back(target_map);
-
+		unit->SetPath(path);
 	}
 	else
 	{
 		//Create pathfinding
-		if (App->pathfinding->CreatePath(unit_map, target_map) == -1)
+		uint path_id = App->pathfinding->CreatePath(unit_map, target_map);
+		if (path_id == -1)
 		{
 			LOG("Impossible to create path");
 			return false;
 		}
-
-		path = *App->pathfinding->GetLastPath();
+		unit->SetPathId(path_id);
+		unit->waiting_for_path = true;
 	}
 
-	unit->SetPath(path);
+	
 
 	return true; 
 }
@@ -388,13 +390,13 @@ void TacticalAI::Vision()
 					*/
 					if ((*unit_f)->GetTarget() == NULL && (*unit_f)->GetType() != MEDIC) //MEDICS DOESN'T ATTACK
 					{
-						LOG("Friend: I've found someone near");
+						//LOG("Friend: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
 					}
 
 					if ((*unit_e)->GetTarget() == NULL)
 					{
-						LOG("Enemy: I've found someone near");
+						//LOG("Enemy: I've found someone near");
 						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
 					}
 				}
@@ -423,7 +425,7 @@ void TacticalAI::SeparateAtkUnits(Unit* unit, Unit* reference)
 
 	iPoint destination(reference->GetPosition().x + distance.x, reference->GetPosition().y + distance.y);
 
-	//No pathfinding is need it. We asume that nothing is between this units
+	//No pathfinding is need it. We asume that nothing is between this units WRONG
 	destination = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
 	iPoint origin = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
 
@@ -453,28 +455,30 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 
 	direction.Normalize();
 	direction.Scale(30); //Change it for distance between units [value]
-	direction.Rotate(3.14 * 0.5f);
 
-	iPoint final_tile(unit_b_pos.x + direction.x, unit_b_pos.y + direction.y);
-	final_tile = App->map->WorldToMap(final_tile.x, final_tile.y, COLLIDER_MAP);
-	iPoint origin_tile = unit_b_pos;
-	origin_tile = App->map->WorldToMap(origin_tile.x, origin_tile.y, COLLIDER_MAP);
+	int dir = 0;
 
-	if (App->pathfinding->IsWalkable(final_tile) == true)
+	//If final tile is not walkable rotate in 4 directions
+	while (dir < 4)
 	{
-		vector<iPoint>path;
-		if (App->pathfinding->CreateOptimizedPath(origin_tile, final_tile, path) == true)
+		direction.Rotate(3.14 * 0.5f);
+
+		iPoint final_tile(unit_b_pos.x + direction.x, unit_b_pos.y + direction.y);
+		final_tile = App->map->WorldToMap(final_tile.x, final_tile.y, COLLIDER_MAP);
+		iPoint origin_tile = unit_b_pos;
+		origin_tile = App->map->WorldToMap(origin_tile.x, origin_tile.y, COLLIDER_MAP);
+
+		if (App->pathfinding->IsWalkable(final_tile) == true)
 		{
-			unit_b->SetPath(path);
-			unit_b->avoid_change_state = true;
-		}
-		else
-		{
-			//Impossible to create pathfinding for some reason
+			uint path_id = App->pathfinding->CreatePath(origin_tile, final_tile);
+			if (path_id != -1)
+			{
+				unit_b->SetPathId(path_id);
+				unit_b->avoid_change_state = true;
+			}
+			break;
 		}
 	}
-	else
-	{
-		//Final tile no walkable find another one (rotate)
-	}
+	
+	
 }

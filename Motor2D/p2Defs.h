@@ -2,7 +2,7 @@
 #define __P2DEFS_H__
 
 #include <stdio.h>
-
+#include <algorithm>
 //  NULL just in case ----------------------
 
 #ifdef NULL
@@ -68,5 +68,11 @@ inline const char* const PATH(const char* folder, const char* file)
 //Angles
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
+
+template <typename T>
+T clamp(const T& n, const T& lower, const T&upper)
+{
+	return std::max(lower, std::min(n, upper));
+}
 
 #endif

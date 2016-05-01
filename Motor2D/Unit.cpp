@@ -404,6 +404,18 @@ void Unit::ApplyDamage(uint dmg,Unit* source)
 
 void Unit::Move(float dt)
 {
+	if (waiting_for_path)
+	{
+		//Need to wait for the path
+		if (App->pathfinding->PathFinished(path_id) == true)
+		{
+			AsignPath(App->pathfinding->GetPath(path_id));
+			waiting_for_path = false;
+		}
+		else
+			return;
+	}
+
 	if (has_destination)
 	{	
 		if (target != NULL && avoid_change_state == false)
@@ -484,8 +496,18 @@ void Unit::CenterUnit()
 
 void Unit::SetPath(vector<iPoint> _path)
 {	
+	waiting_for_path = false;
 	has_destination = false;
 	path = _path;
+	state = UNIT_MOVE;
+}
+
+void Unit::SetPathId(uint id)
+{
+	waiting_for_path = true;
+	path.clear();
+	this->path_id = id;
+	has_destination = false;
 	state = UNIT_MOVE;
 }
 
@@ -1066,6 +1088,16 @@ void Unit::Shoot(int x, int y)
 	//Play sound
 	App->audio->PlayFx(App->entity->sound_shoot);
 
+}
+
+void Unit::AsignPath(vector<iPoint> main_path)
+{
+	vector<iPoint>::iterator it = main_path.begin();
+	while (it != main_path.end())
+	{
+		path.push_back(iPoint((*it).x + path_offset_x, (*it).y + path_offset_y));
+		++it;
+	}
 }
 
 void Unit::DisableSnipper()

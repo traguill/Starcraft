@@ -40,7 +40,7 @@ bool MenuScene::Start()
 
 	close_game = false;
 
-	App->audio->PlayMusic("");
+	//App->audio->PlayMusic(""); <-- WTF IS THIS??!?
 
 	return true;
 }
