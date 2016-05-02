@@ -78,7 +78,8 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 				LOG("(Enemy):  I've been attack");
 			else
 				LOG("(Friend): I've been attack");
-			SetEvent(ENEMY_TARGET, unit, target);
+			if (unit->type != MEDIC)
+				SetEvent(ENEMY_TARGET, unit, target);
 		}
 		break;
 	case ENEMY_TARGET:

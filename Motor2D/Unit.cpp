@@ -341,11 +341,7 @@ void Unit::ApplyDamage(uint dmg, Unit* source)
 					App->audio->PlayFx(source->attack_fx);
 				}
 				else
-				{
-					if (type != MEDIC)
-						App->tactical_ai->SetEvent(ATTACKED, this, source);
-				}
-
+					App->tactical_ai->SetEvent(ATTACKED, this, source);
 			}
 		}
 	}
