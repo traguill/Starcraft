@@ -57,6 +57,8 @@ private:
 
 	bool OverlapRectangles(const SDL_Rect r1,const SDL_Rect r2)const;
 
+	void CheckPatrolPath(Unit* unit);
+
 	//If one unit sees another kill him
 	void Vision();
 

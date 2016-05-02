@@ -194,6 +194,9 @@ public:
 	int path_offset_x; //Offset to the original path
 	int path_offset_y;
 	bool waiting_for_path = false;
+	//Patrol
+	bool patrol;
+	vector<iPoint> patrol_path;
 
 	//Attacking
 	float cool_timer = 0;

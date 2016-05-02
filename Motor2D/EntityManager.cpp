@@ -1247,6 +1247,14 @@ void j1EntityManager::Debug()
 		LOG("Enemy Marine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
 		CreateUnit(MARINE, p.x, p.y, true);
+
+		//PATROL
+		Unit* tmp = enemy_units.back();
+		tmp->patrol = true;
+		iPoint pos = App->map->WorldToMap(p.x, p.y, COLLIDER_MAP);
+		tmp->patrol_path.push_back(pos);
+		tmp->patrol_path.push_back(pos += {10, 0});
+		tmp->SetPath(tmp->patrol_path);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
