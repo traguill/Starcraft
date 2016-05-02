@@ -12,6 +12,7 @@
 #include "GameScene.h"
 #include "j1Audio.h"
 #include "Marine.h"
+#include "Medic.h"
 #include "Projectile.h"
 #include "Firebat.h"
 
@@ -664,6 +665,12 @@ bool j1EntityManager::LoadUnitsInfo()
 			delete unit_db;
 			break;
 
+		case(MEDIC) :
+			Medic* medic; medic = new Medic(unit_db);
+			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), medic));
+			delete unit_db;
+			break;
+
 		default:
 			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 			break;
@@ -1105,6 +1112,18 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 
 			else
 				friendly_units.push_back(marine);
+			break;
+
+		case (MEDIC) :
+			Medic* medic_db; medic_db = (Medic*)(it->second);
+			Medic* medic; medic = new Medic(medic_db, is_enemy);
+			medic->SetPosition(x, y);
+
+			if (is_enemy)
+				enemy_units.push_back(medic);
+
+			else
+				friendly_units.push_back(medic);
 			break;
 
 		case (FIREBAT) :
