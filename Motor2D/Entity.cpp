@@ -11,7 +11,6 @@ Entity::Entity()
 // Destructor
 Entity::~Entity()
 {
-	auxiliar_texture = NULL;
 	sprite.texture = NULL;
 }
 

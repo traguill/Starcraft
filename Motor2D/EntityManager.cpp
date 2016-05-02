@@ -11,6 +11,9 @@
 #include "j1UIManager.h"
 #include "GameScene.h"
 #include "j1Audio.h"
+#include "Marine.h"
+#include "Projectile.h"
+#include "Firebat.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -561,15 +564,17 @@ bool j1EntityManager::LoadUnitsInfo()
 			unit_db->death.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), unit_db->death_size.x, unit_db->death_size.y });
 		}
 
+		unit_db->walk_anim_speed = unit.child("animwalkspeed").attribute("value").as_float();
+		unit_db->idle_anim_speed = unit.child("animidlespeed").attribute("value").as_float();
+		unit_db->attack_anim_speed = unit.child("animattackspeed").attribute("value").as_float();
+		unit_db->death_anim_speed = unit.child("deathanimspeed").attribute("value").as_float();
+
+		pugi::xml_node projectile = unit.child("projectile");
 		
-
-		//FIREBATATTACK
-		//projectiles, gotta implement everything except UP
-		if (unit_db->type == FIREBAT)
+		switch (unit_db->type)
 		{
-			pugi::xml_node projectile = unit.child("projectile");
-
-			Projectile* p = new Projectile();
+		case(FIREBAT):
+			Projectile* p; p = new Projectile();
 
 			p->sprite.texture = App->tex->Load(projectile.child("path").attribute("value").as_string());
 
@@ -645,18 +650,25 @@ bool j1EntityManager::LoadUnitsInfo()
 				p->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
 			}
 
-			unit_db->p = p;
+			Firebat* firebat; firebat = new Firebat(unit_db, *p);
+			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), firebat));
+			delete unit_db;
 
 			delete p;
 			p = NULL;
-		}
+			break;
 
-		unit_db->walk_anim_speed = unit.child("animwalkspeed").attribute("value").as_float();
-		unit_db->idle_anim_speed = unit.child("animidlespeed").attribute("value").as_float();
-		unit_db->attack_anim_speed = unit.child("animattackspeed").attribute("value").as_float();
-		unit_db->death_anim_speed = unit.child("deathanimspeed").attribute("value").as_float();
+		case(MARINE) :
+			Marine* marine; marine = new Marine(unit_db);
+			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), marine));
+			delete unit_db;
+			break;
 
-		units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
+		default:
+			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
+			break;
+
+		}			
 	}
 
 	//Print all database (DEBUG)
@@ -698,11 +710,6 @@ string j1EntityManager::UnitTypeToString(UNIT_TYPE type)const
 	if (type == GHOST) return "GHOST";
 	if (type == MEDIC) return "MEDIC";
 	if (type == OBSERVER) return "OBSERVER";
-	if (type == ENGINEER) return "ENGINEER";
-	if (type == SHIP) return "SHIP";
-	if (type == GOLIATH) return "GOLIATH";
-	if (type == TANK) return "TANK";
-	if (type == VALKYRIE) return "VALKYRIE";
 
 	return NULL;
 }
@@ -713,11 +720,6 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 	if (type == "GHOST") return GHOST;
 	if (type == "MEDIC") return MEDIC;
 	if (type == "OBSERVER") return OBSERVER;
-	if (type == "ENGINEER") return ENGINEER;
-	if (type == "SHIP") return SHIP;
-	if (type == "GOLIATH") return GOLIATH;
-	if (type == "TANK") return TANK;
-	if (type == "VALKYRIE") return VALKYRIE;
 
 	return MARINE; //Should return empty type
 }
@@ -1043,24 +1045,53 @@ void j1EntityManager::CheckUnderCursor()
 
 //CREATES -----------------------------------------------------------------------------------------------------
 
-Unit* j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
+void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 {
 	map<string, Unit*>::iterator it = units_database.find(UnitTypeToString(type));
 
 	if (it != units_database.end())
 	{
-		Unit* unit = new Unit(it->second, is_enemy);
-		unit->SetPosition(x, y);
+		switch (type)
+		{
+		case (MARINE) :
+			Marine* marine_db; marine_db = (Marine*)(it->second);
+			Marine* marine; marine = new Marine(marine_db, is_enemy);
+			marine->SetPosition(x, y);
+			
+			if (is_enemy)
+				enemy_units.push_back(marine);
 
-		if (is_enemy)
-			enemy_units.push_back(unit);
-		else
-			friendly_units.push_back(unit);
+			else
+				friendly_units.push_back(marine);
+			break;
 
-		return unit;
+		case (FIREBAT) :
+			Firebat* firebat_db; firebat_db = (Firebat*)(it->second);
+			Firebat* firebat; firebat = new Firebat(firebat_db, is_enemy);
+			firebat->SetPosition(x, y);
+
+			if (is_enemy)
+				enemy_units.push_back(firebat);
+
+			else
+				friendly_units.push_back(firebat);
+			break;
+
+		default:
+			Unit* unit = new Unit(it->second, is_enemy);
+			unit->SetPosition(x, y);
+
+			if (is_enemy)
+				enemy_units.push_back(unit);
+
+			else
+				friendly_units.push_back(unit);
+			break;
+		}
+		return;
 	}
 	else
-		return NULL; //Unit type not found
+		return; //Unit type not found
 }
 
 

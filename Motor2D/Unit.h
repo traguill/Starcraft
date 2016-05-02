@@ -19,12 +19,8 @@ enum UNIT_TYPE{
 	FIREBAT, 
 	GHOST, 
 	MEDIC, 
-	OBSERVER, 
-	ENGINEER, 
-	SHIP, 
-	GOLIATH, 
-	TANK, 
-	VALKYRIE };
+	OBSERVER
+};
 
 enum UNIT_STATE{
 	UNIT_IDLE, 
@@ -40,45 +36,6 @@ enum UNIT_ABILITY
 	HEAL
 };
 
-//FIREBATATTACK
-struct Projectile
-{
-	Sprite sprite;
-
-	float anim_speed;
-
-	iPoint pos_up;
-	iPoint pos_down;
-	iPoint pos_right;
-	iPoint pos_left;
-	iPoint pos_up_right;
-	iPoint pos_down_right;
-	iPoint pos_up_left;
-	iPoint pos_down_left;
-
-	Animation up;
-	Animation down;
-	Animation right;
-	Animation left;
-	Animation up_right;
-	Animation down_right;
-	Animation up_left;
-	Animation down_left;
-
-	iPoint current_pos;
-	Animation* current_animation;
-
-	Projectile(){}
-
-	Projectile(Projectile* p);
-
-	~Projectile()
-	{
-		sprite.texture = NULL;
-		current_animation = NULL;
-	}
-};
-
 class Unit : public Entity
 {
 	friend class j1EntityManager;	//Provisional
@@ -92,7 +49,7 @@ public:
 
 
 	void Update(float dt);
-	void Draw();
+	virtual void Draw();
 
 	void SetPath(vector<iPoint> _path);
 	void AddPath(vector<iPoint> _path); //Adds the path to the existing one combining them
@@ -118,14 +75,17 @@ public:
 	int GetMaxLife()const;
 	int GetMaxMana()const;
 
+	SDL_Texture* GetAuxiliarTexture() const;
+
+protected:
+	virtual void SetAnimation();
+
 private:
 
 	void Move(float dt);
 	void Attack(float dt);
 	void SetDirection();
 	void CenterUnit();
-
-	void SetAnimation();
 
 	bool CheckTargetRange();
 
@@ -142,7 +102,8 @@ private:
 	void DisableSnipper();
 	void Shoot(int x, int y);
 
-private:
+protected:
+	SDL_Texture* auxiliar_texture;
 
 	uint speed;
 	uint damage;
@@ -210,8 +171,6 @@ public:
 	iPoint death_pos_corrector;
 	iPoint death_size;
 	Animation death;
-
-	Projectile p;
 
 	//Has to be updated inside update();
 	Animation* current_animation;

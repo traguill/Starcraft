@@ -539,10 +539,6 @@ void j1UIManager::ShowIndividualWireframe()
 	case OBSERVER:
 		App->game_scene->observer_wireframe->is_visible = true;
 		break;
-
-	case ENGINEER:
-			
-		break;
 	}
 }
 

@@ -39,7 +39,7 @@ public:
 
 public:
 
-	Unit* CreateUnit(UNIT_TYPE type, int x, int y,bool is_enemy);
+	void CreateUnit(UNIT_TYPE type, int x, int y,bool is_enemy);
 
 	void RemoveUnit(Unit* _unit);
 	void RemoveBullet(Bullet* _bullet);

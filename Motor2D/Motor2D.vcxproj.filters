@@ -100,6 +100,15 @@
     <ClCompile Include="UIMiniMap.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Marine.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Firebat.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventsManager.h" />
@@ -220,6 +229,15 @@
     </ClInclude>
     <ClInclude Include="UIMiniMap.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Marine.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Firebat.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
