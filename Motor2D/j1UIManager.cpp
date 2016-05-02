@@ -157,10 +157,14 @@ bool j1UIManager::Update(float dt)
 
 	GetMouseInput();
 
-	/*if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
+	//UI Focus disabled for now
+	/*if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) 
 	{
 		SetNextFocus();
 	}*/
+
+	//Draw lifes & mana
+	DrawLifeMana();
 
 	RectangleSelection();
 
@@ -178,8 +182,7 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
-	//Draw lifes & mana
-	DrawLifeMana();
+
 
 	if (App->entity->selected_units.size() > 1)
 		ShowMiniWireframes(dt);

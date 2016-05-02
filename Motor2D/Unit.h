@@ -54,6 +54,7 @@ public:
 	void SetPath(vector<iPoint> _path);
 	void AddPath(vector<iPoint> _path); //Adds the path to the existing one combining them
 	vector<iPoint> GetPath()const;
+	void SetPathId(uint id);
 
 	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
@@ -76,6 +77,8 @@ public:
 	int GetMaxMana()const;
 
 	SDL_Texture* GetAuxiliarTexture() const;
+
+	bool GetSnipping();
 
 protected:
 	virtual void SetAnimation();
@@ -102,9 +105,12 @@ private:
 	void DisableSnipper();
 	void Shoot(int x, int y);
 
-protected:
-	SDL_Texture* auxiliar_texture;
+	//AsignPath with offset
+	void AsignPath(vector<iPoint> main_path);
 
+protected:
+
+	SDL_Texture* auxiliar_texture;
 	uint speed;
 	uint damage;
 	uint range;
@@ -183,6 +189,11 @@ public:
 	fPoint direction;
 	bool has_destination = false;
 	iPoint	dst_point; //Tile point
+	//Path
+	uint path_id;
+	int path_offset_x; //Offset to the original path
+	int path_offset_y;
+	bool waiting_for_path = false;
 
 	//Attacking
 	float cool_timer = 0;
@@ -195,6 +206,6 @@ public:
 	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)
 
 
-	bool GetSnipping();
+
 };
 #endif

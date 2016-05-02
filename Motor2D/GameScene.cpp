@@ -38,41 +38,7 @@ bool GameScene::Awake(pugi::xml_node& conf)
 bool GameScene::Start()
 {
 
-	//Setting fx volume
-	App->audio->SetFxVolume(10);
-	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
-	App->audio->SetFxVolume(5, "sounds/ghost_shot.ogg");
-	App->audio->SetFxVolume(5, "sounds/firebat_shot.ogg");
-
-	//Load all fx uint sounds
-	//Select
-	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
-	ghost_select = App->audio->LoadFx("FX/Terran/Ghost/ImHere.wav");
-	firebat_select = App->audio->LoadFx("FX/Terran/Firebat/GoodSmoke.wav");
-	medic_select = App->audio->LoadFx("FX/Terran/Medic/MedicalAttention.wav");
-	observer_select = App->audio->LoadFx("FX/protoss/probe/pprerr00.wav");
-
-
-	//order
-	marine_order = App->audio->LoadFx("FX/Terran/Marine/RockndRoll.wav");
-	ghost_order = App->audio->LoadFx("FX/Terran/Ghost/Gone.wav");
-	firebat_order = App->audio->LoadFx("FX/Terran/Firebat/GotIt.wav");
-	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnTheJob.wav");
-	observer_order = App->audio->LoadFx("FX/protoss/probe/ppryes02.wav");
-
-	//attack order
-	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
-	ghost_attack_order = App->audio->LoadFx("FX/Terran/Ghost/CallShot.wav");
-	firebat_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
-	medic_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
-	//observer_order_attack_order;
-
-	//death
-	marine_death = App->audio->LoadFx("FX/Terran/Marine/tmadth00.wav");
-	ghost_death = App->audio->LoadFx("FX/Terran/Ghost/tghdth01.wav");
-	firebat_death = App->audio->LoadFx("FX/Terran/Firebat/tfbdth02.wav");
-	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
-	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
+	LoadAudio();
 
 
 	//Load Map
@@ -88,87 +54,9 @@ bool GameScene::Start()
 		App->pathfinding->SetMap(width, height, buffer);
 		delete[] buffer;
 		buffer = NULL;
-
-
-		//Create HUD
-		App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
-
-		//Creating Mini Map
-		App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 });
-
-
-		//MARINE
-		SDL_Rect s_armourM{ 621, 62, 34, 33 };
-		marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440, false);
-
-
-		SDL_Rect s_weaponM{ 507, 62, 34, 33 };
-		marine_weapon_icon = App->ui->CreateImage(s_weaponM, 275, 440, false);
-
-
-		SDL_Rect s_wireframeM{ 705, 126, 54, 70 };
-		marine_wireframe = App->ui->CreateImage(s_wireframeM, 180, 390, false);
-
-
-		//GHOST
-		SDL_Rect s_weaponG{ 543, 62, 34, 33 };
-		ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440, false);
-
-
-		SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
-		ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390, false);
-
-
-		//FIREBAT
-		SDL_Rect s_weaponF{ 582, 62, 34, 33 };
-		firebat_weapon_icon = App->ui->CreateImage(s_weaponF, 275, 440, false);
-
-
-		SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
-		firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390, false);
-
-
-		//MEDIC
-		SDL_Rect s_wireframeMed{ 797, 208, 47, 66 };
-		medic_wireframe = App->ui->CreateImage(s_wireframeMed, 180, 390, false);
-
-
-		//OBSERVER
-		SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
-		observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
-
-		//CREATE EVENT
-		objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
-		objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
-		objective_info_2 = App->ui->CreateLabel("from the southern enemy", 477, 15);
-		objective_info_3 = App->ui->CreateLabel("base", 477, 25);
-		pause_mark = App->ui->CreateImage(SDL_Rect{66, 162, 56, 38}, 470 - 56, 0, false);
-		run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
-
-		//Pathfinding Label
-		pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
-		pathfinding_label->is_visible = false;
-
-		App->events->game_event = INITIAL_STATE;
-
-		//Life in HUD
-		life_HUD = App->ui->CreateLabel("", 177, 458);
-		
-		//Sniper
-		snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);		
 	}
 
-	//Win image & button
-	win_background = App->ui->CreateImage({ 847, 1, 221, 108 }, 220, 150, false, true);
-	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
-	//win_button->SetParent(win_background);
-	win_button->SetVisible(false);
-
-	//Loose image & button
-	loose_background = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
-	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 }, this);
-	//loose_button->SetParent(loose_background);
-	loose_button->SetVisible(false);
+	LoadHUD();
 
 	//Bomb
 	bomb = App->tex->Load("sprites/Bomb.png");
@@ -497,4 +385,132 @@ void GameScene::AttackFX(UNIT_TYPE type)
 		App->audio->PlayFx(medic_attack_order);
 		break;
 	}
+}
+
+void GameScene::LoadAudio()
+{
+	//Why you load sounds that you don't have?
+
+	//Also unload the sounds in the clean up
+
+	/*
+	//Setting fx volume
+	App->audio->SetFxVolume(10);
+	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
+	App->audio->SetFxVolume(5, "sounds/ghost_shot.ogg");
+	App->audio->SetFxVolume(5, "sounds/firebat_shot.ogg");
+
+	//Load all fx uint sounds
+	//Select
+	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
+	ghost_select = App->audio->LoadFx("FX/Terran/Ghost/ImHere.wav");
+	firebat_select = App->audio->LoadFx("FX/Terran/Firebat/GoodSmoke.wav");
+	medic_select = App->audio->LoadFx("FX/Terran/Medic/MedicalAttention.wav");
+	observer_select = App->audio->LoadFx("FX/protoss/probe/pprerr00.wav");
+
+
+	//order
+	marine_order = App->audio->LoadFx("FX/Terran/Marine/RockndRoll.wav");
+	ghost_order = App->audio->LoadFx("FX/Terran/Ghost/Gone.wav");
+	firebat_order = App->audio->LoadFx("FX/Terran/Firebat/GotIt.wav");
+	medic_order = App->audio->LoadFx("FX/Terran/Medic/OnTheJob.wav");
+	observer_order = App->audio->LoadFx("FX/protoss/probe/ppryes02.wav");
+
+	//attack order
+	marine_attack_order = App->audio->LoadFx("FX/Terran/Marine/GoGoGo.wav");
+	ghost_attack_order = App->audio->LoadFx("FX/Terran/Ghost/CallShot.wav");
+	firebat_attack_order = App->audio->LoadFx("FX/Terran/Firebat/LetsBurn.wav");
+	medic_attack_order = App->audio->LoadFx("FX/Terran/Medic/SpongeBath.wav");
+	//observer_order_attack_order;
+
+	//death
+	marine_death = App->audio->LoadFx("FX/Terran/Marine/tmadth00.wav");
+	ghost_death = App->audio->LoadFx("FX/Terran/Ghost/tghdth01.wav");
+	firebat_death = App->audio->LoadFx("FX/Terran/Firebat/tfbdth02.wav");
+	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
+	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
+
+	*/
+}
+
+void GameScene::LoadHUD()
+{
+	//Create HUD
+	App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
+
+	//Creating Mini Map
+	App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 });
+
+
+	//MARINE
+	SDL_Rect s_armourM{ 621, 62, 34, 33 };
+	marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440, false);
+
+
+	SDL_Rect s_weaponM{ 507, 62, 34, 33 };
+	marine_weapon_icon = App->ui->CreateImage(s_weaponM, 275, 440, false);
+
+
+	SDL_Rect s_wireframeM{ 705, 126, 54, 70 };
+	marine_wireframe = App->ui->CreateImage(s_wireframeM, 180, 390, false);
+
+
+	//GHOST
+	SDL_Rect s_weaponG{ 543, 62, 34, 33 };
+	ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440, false);
+
+
+	SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
+	ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390, false);
+
+
+	//FIREBAT
+	SDL_Rect s_weaponF{ 582, 62, 34, 33 };
+	firebat_weapon_icon = App->ui->CreateImage(s_weaponF, 275, 440, false);
+
+
+	SDL_Rect s_wireframeF{ 791, 128, 54, 70 };
+	firebat_wireframe = App->ui->CreateImage(s_wireframeF, 180, 390, false);
+
+
+	//MEDIC
+	SDL_Rect s_wireframeMed{ 797, 208, 47, 66 };
+	medic_wireframe = App->ui->CreateImage(s_wireframeMed, 180, 390, false);
+
+
+	//OBSERVER
+	SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
+	observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
+
+	//CREATE EVENT
+	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
+	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
+	objective_info_2 = App->ui->CreateLabel("from the southern enemy", 477, 15);
+	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
+	pause_mark = App->ui->CreateImage(SDL_Rect{ 66, 162, 56, 38 }, 470 - 56, 0, false);
+	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
+
+	//Pathfinding Label
+	pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
+	pathfinding_label->is_visible = false;
+
+	App->events->game_event = INITIAL_STATE;
+
+	//Life in HUD
+	life_HUD = App->ui->CreateLabel("", 177, 458);
+
+	//Sniper
+	snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);
+
+	//Win image & button
+	win_background = App->ui->CreateImage({ 847, 1, 221, 108 }, 220, 150, false, true);
+	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
+	//win_button->SetParent(win_background);
+	win_button->SetVisible(false);
+
+	//Loose image & button
+	loose_background = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
+	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 }, this);
+	//loose_button->SetParent(loose_background);
+	loose_button->SetVisible(false);
 }

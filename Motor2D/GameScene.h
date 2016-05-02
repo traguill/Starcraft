@@ -50,6 +50,9 @@ private:
 	void LoadLevel();
 	void SaveLevelDesign();
 
+	void LoadAudio();
+
+	void LoadHUD();
 
 private:
 

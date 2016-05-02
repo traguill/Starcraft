@@ -65,7 +65,8 @@ private:
 	//Pathfinding
 	void SetMovement();
 	void CalculateMovementRect();
-	void AssignPath(Unit* u, vector<iPoint> path, iPoint* center);
+	void AssignPath(Unit* u, uint path_id, iPoint* center); //For pathfinding id ->Need to wait
+	void AssignPath(Unit* unit, vector<iPoint> path, iPoint* center); //For lines
 
 
 	//Removing
