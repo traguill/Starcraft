@@ -109,8 +109,13 @@
     <ClCompile Include="Firebat.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+
     <ClCompile Include="DevScene.cpp">
       <Filter>Scenes</Filter>
+
+    <ClCompile Include="Medic.cpp">
+      <Filter>Entity</Filter>
+
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,8 +247,13 @@
     <ClInclude Include="Firebat.h">
       <Filter>Entity</Filter>
     </ClInclude>
+
     <ClInclude Include="DevScene.h">
       <Filter>Scenes</Filter>
+
+    <ClInclude Include="Medic.h">
+      <Filter>Entity</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -121,6 +121,8 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	collider.h = u->collider.h;
 
 	avoid_change_state = false;
+
+	patrol = false;
 }
 
 Unit::~Unit()
@@ -132,6 +134,7 @@ Unit::~Unit()
 void Unit::Delete()
 {
 	path.clear();
+	patrol_path.clear();
 	target = NULL;
 	attacking_units.clear();
 	current_animation = NULL;
@@ -167,7 +170,8 @@ void Unit::Update(float dt)
 	switch (state)
 	{
 	case UNIT_IDLE:
-		//Is this really necessary?
+		if (patrol)
+			SetPath(patrol_path);
 		break;
 	case UNIT_MOVE:
 		Move(dt);
@@ -308,6 +312,8 @@ void Unit::ApplyDamage(uint dmg, Unit* source)
 		list<Unit*>::iterator a_unit = attacking_units.begin();
 		while (a_unit != attacking_units.end())
 		{
+		
+			//App->tactical_ai->SetEvent(ENEMY_KILLED, (*a_unit), source);
 			(*a_unit)->target = NULL;
 			++a_unit;
 		}
@@ -341,11 +347,7 @@ void Unit::ApplyDamage(uint dmg, Unit* source)
 					App->audio->PlayFx(source->attack_fx);
 				}
 				else
-				{
-					if (type != MEDIC)
-						App->tactical_ai->SetEvent(ATTACKED, this, source);
-				}
-
+					App->tactical_ai->SetEvent(ATTACKED, this, source);
 			}
 		}
 	}
@@ -965,6 +967,12 @@ void Unit::AsignPath(vector<iPoint> main_path)
 	{
 		path.push_back(iPoint((*it).x + path_offset_x, (*it).y + path_offset_y));
 		++it;
+	}
+
+	//PATROL
+	if (patrol && patrol_path.empty())
+	{
+		patrol_path = path;
 	}
 }
 

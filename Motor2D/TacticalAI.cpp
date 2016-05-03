@@ -78,7 +78,8 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 				LOG("(Enemy):  I've been attack");
 			else
 				LOG("(Friend): I've been attack");
-			SetEvent(ENEMY_TARGET, unit, target);
+			if (unit->type != MEDIC)
+				SetEvent(ENEMY_TARGET, unit, target);
 		}
 		break;
 	case ENEMY_TARGET:
@@ -128,14 +129,29 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	case END_MOVING:
 		if (unit->events.empty() == true)
 		{
-			unit->state = UNIT_IDLE;
+			if (unit->patrol == false)
+				unit->state = UNIT_IDLE;
+
+			else
+			{
+				CheckPatrolPath(unit);
+			}
 		}
+
 		else
 		{
 			UNIT_EVENT event = unit->events.front();
 			unit->events.pop();
 			if (unit->GetTarget() == NULL)
-				unit->state = UNIT_IDLE;
+			{
+				if (unit->patrol)
+				{
+					CheckPatrolPath(unit);
+					
+				}
+				else
+					unit->state = UNIT_IDLE;
+			}
 			else
 				SetEvent(event, unit, unit->GetTarget());
 		}
@@ -159,12 +175,18 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		
 		if (enemy_found == false)
 		{
-			if (unit->is_enemy)
-				LOG("(Enemy):  I've killed one enemy and no one is near");
+			//if (unit->is_enemy)
+			//	LOG("(Enemy):  I've killed one enemy and no one is near");
+			//else
+			//	LOG("(Friend): I've killed one enemy and no one is near");
+
+			if (unit->patrol)
+			{
+				unit->SetPath(unit->patrol_path);
+			}
+				
 			else
-				LOG("(Friend): I've killed one enemy and no one is near");
-			
-			unit->state = UNIT_IDLE;
+				unit->state = UNIT_IDLE;
 
 		}
 		break;
@@ -481,4 +503,21 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 	}
 	
 	
+}
+
+void TacticalAI::CheckPatrolPath(Unit* unit)
+{
+	iPoint unit_pos = unit->GetPosition();
+
+	iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, COLLIDER_MAP);
+
+	//SET PATH IF PATROLLING
+	if (unit->dst_point == unit->patrol_path.front())
+		unit->SetPath(unit->patrol_path);
+	if (unit->dst_point == unit->patrol_path.back())
+	{
+		reverse(unit->patrol_path.begin(), unit->patrol_path.end());
+		unit->SetPath(unit->patrol_path);
+		reverse(unit->patrol_path.begin(), unit->patrol_path.end());
+	}
 }
