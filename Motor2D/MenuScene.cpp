@@ -91,7 +91,7 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{
 		if ((UIButton*)gui == start && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene();
+			App->scene_manager->WantToChangeScene(GAME);
 		}
 
 		else if ((UIButton*)gui == quit && event == MOUSE_BUTTON_RIGHT_UP)

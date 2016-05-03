@@ -8,6 +8,7 @@
 #include "j1Input.h"
 #include "j1UIManager.h"
 #include "EventsManager.h"
+#include "DevScene.h"
 
 SceneManager::SceneManager() : j1Module()
 {
@@ -29,13 +30,16 @@ bool SceneManager::Awake(pugi::xml_node& conf)
 	App->entity->DisableModule();
 	App->tactical_ai->DisableModule();
 
+	//Disable dev_scene
+	App->dev_scene->DisableModule();
+
 	return ret;
 }
 
 // Called before the first frame
 bool SceneManager::Start()
 {
-
+	actual_scene = MENU;
 
 	return true;
 }
@@ -62,11 +66,11 @@ bool SceneManager::PostUpdate()
 
 	if (changing_scene == true)
 	{
-		if (in_game == false)
-			StartGame();
+		DisableScene(actual_scene);
+		EnableScene(new_scene);
 
-		else
-			StartMenu();
+		actual_scene = new_scene;
+		changing_scene = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -85,32 +89,75 @@ bool SceneManager::CleanUp()
 	return true;
 }
 
-void SceneManager::WantToChangeScene()
+void SceneManager::WantToChangeScene(SCENES scene)
 {
 	changing_scene = true;
+
+	new_scene = scene;
 }
 
-void SceneManager::StartGame()
+void SceneManager::DisableScene(SCENES scene)
+{
+	switch (scene)
+	{
+	case MENU:
+		DisableMenu();
+		break;
+	case GAME:
+		DisableGame();
+		break;
+	case DEV:
+		DisableDev();
+		break;
+	}
+}
+
+void SceneManager::EnableScene(SCENES scene)
+{
+	switch (scene)
+	{
+	case MENU:
+		EnableMenu();
+		break;
+	case GAME:
+		EnableGame();
+		break;
+	case DEV:
+		EnableDev();
+		break;
+	}
+}
+
+void SceneManager::EnableMenu()
+{
+	App->menu->EnableModule();
+	App->menu->Start();
+}
+
+void SceneManager::DisableMenu()
 {
 	App->menu->DisableModule();
 
+	App->ui->CleanUpList();
+	App->menu->CleanUp();
+}
+
+void SceneManager::EnableGame()
+{
 	App->game_scene->EnableModule();
 	App->entity->EnableModule();
 	App->tactical_ai->EnableModule();
 	App->events->EnableModule();
 
-	App->ui->CleanUpList();
-	App->menu->CleanUp();
-
 	App->entity->Start();
 	App->game_scene->Start();
 	App->tactical_ai->Start();
+	App->events->Start();
 
 	in_game = true;
-	changing_scene = false;
 }
 
-void SceneManager::StartMenu()
+void SceneManager::DisableGame()
 {
 	App->tactical_ai->DisableModule();
 	App->entity->DisableModule();
@@ -120,9 +167,20 @@ void SceneManager::StartMenu()
 	App->ui->CleanUpList();
 	App->entity->CleanUpList();
 
-	App->menu->EnableModule();
-	App->menu->Start();
-
+	App->events->CleanUp();
+	App->tactical_ai->CleanUp();
+	App->entity->CleanUp();
+	App->game_scene->CleanUp();
+	
 	in_game = false;
-	changing_scene = false;
+}
+
+void SceneManager::EnableDev()
+{
+
+}
+
+void SceneManager::DisableDev()
+{
+
 }

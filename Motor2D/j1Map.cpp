@@ -239,6 +239,43 @@ bool j1Map::CleanUp()
 	return true;
 }
 
+void j1Map::UnLoad(const uint& id)
+{
+	map<uint, MapData*>::iterator map_it = maps.find(id);
+
+	if (map_it != maps.end())
+	{
+		list<TileSet*>::iterator i = map_it->second->tilesets.begin();
+
+		while (i != map_it->second->tilesets.end())
+		{
+			delete *i;
+			++i;
+		}
+
+		map_it->second->tilesets.clear();
+
+		// Remove all layers
+
+		list<MapLayer*>::iterator i2 = map_it->second->layers.begin();
+
+		while (i2 != map_it->second->layers.end())
+		{
+			delete *i2;
+			++i2;
+		}
+
+		map_it->second->layers.clear();
+
+		//delete MapData
+		delete map_it->second;
+
+		maps.erase(map_it);
+	}
+
+	
+}
+
 // Load new map
 bool j1Map::Load(const char* file_name, uint &id)
 {

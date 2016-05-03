@@ -118,6 +118,7 @@ public:
 
 	// Load new map and get the id of the map
 	bool Load(const char* path,uint &id);
+	void UnLoad(const uint& id);
 
 	iPoint MapToWorld(int x, int y, uint map_id);
 	iPoint WorldToMap(int x, int y, uint map_id);

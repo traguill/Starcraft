@@ -40,7 +40,6 @@ bool GameScene::Start()
 
 	LoadAudio();
 
-
 	//Load Map
 	App->map->Load("0.5_game_map.tmx", map_id);
 
@@ -78,7 +77,7 @@ bool GameScene::Start()
 	
 	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
-	LoadLevel();
+	LoadLevel("my_level.xml");
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
@@ -205,6 +204,44 @@ bool GameScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
 
+	App->map->UnLoad(map_id);
+	App->map->UnLoad(collider_id);
+
+	life_HUD = NULL;
+	
+	marine_weapon_icon = NULL;
+	marine_armour_icon = NULL;
+	marine_wireframe = NULL;
+
+	ghost_weapon_icon = NULL;
+	ghost_wireframe = NULL;;
+
+	firebat_weapon_icon = NULL;
+	firebat_wireframe = NULL;
+
+	medic_wireframe = NULL;
+
+	observer_wireframe = NULL;
+
+	snipper_ui = NULL;
+
+	objective_info_1 = NULL;
+	objective_info_2 = NULL;
+	objective_info_3 = NULL;
+	objectives_box = NULL;
+	pause_mark = NULL;
+	run_mark = NULL;
+
+	pathfinding_label = NULL;
+
+	App->tex->UnLoad(bomb);
+	bomb = NULL;
+
+	win_background = NULL;
+	win_button = NULL;
+
+	loose_background = NULL;
+	loose_button = NULL;
 
 
 	return true;
@@ -216,13 +253,13 @@ bool GameScene::GamePaused()const
 	return game_paused;
 }
 
-void GameScene::LoadLevel()
+void GameScene::LoadLevel(const char* path)
 {
 	pugi::xml_document	level_file;
 	pugi::xml_node		level;
 
 	char* buf;
-	int size = App->fs->Load("my_level.xml", &buf);
+	int size = App->fs->Load(path, &buf);
 	pugi::xml_parse_result result = level_file.load_buffer(buf, size);
 	delete[] buf;
 	buf = NULL;
@@ -258,7 +295,7 @@ void GameScene::LoadLevel()
 	}
 }
 
-void GameScene::SaveLevelDesign()
+void GameScene::SaveLevelDesign(const char* path)
 {
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -304,7 +341,7 @@ void GameScene::SaveLevelDesign()
 	data.save(stream);
 
 	// we are done, so write data to disk
-	App->fs->Save("my_level.xml", stream.str().c_str(), stream.str().length());
+	App->fs->Save(path, stream.str().c_str(), stream.str().length());
 	
 }
 
@@ -314,12 +351,12 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{
 		if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene();
+			App->scene_manager->WantToChangeScene(MENU);
 		}
 
 		else if ((UIButton*)gui == loose_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene();
+			App->scene_manager->WantToChangeScene(MENU);
 		}
 	}
 }

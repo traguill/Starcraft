@@ -21,6 +21,7 @@
 #include "EventsManager.h"
 #include "MenuScene.h"
 #include "SceneManager.h"
+#include "DevScene.h"
 
 
 // Constructor
@@ -44,6 +45,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tactical_ai = new TacticalAI();
 	menu = new MenuScene();
 	scene_manager = new SceneManager();
+	dev_scene = new DevScene();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -59,6 +61,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene_manager);
 
 	// scene last
+	AddModule(dev_scene);
 	AddModule(game_scene);
 	AddModule(menu);
 

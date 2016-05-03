@@ -109,6 +109,9 @@
     <ClCompile Include="Firebat.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="DevScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventsManager.h" />
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="Firebat.h">
       <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="DevScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

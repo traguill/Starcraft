@@ -26,6 +26,7 @@ class GameScene;
 class EventsManager;
 class MenuScene;
 class SceneManager;
+class DevScene;
 
 class j1App
 {
@@ -106,6 +107,7 @@ public:
 	EventsManager*		events = NULL;
 	MenuScene*			menu = NULL;
 	SceneManager*		scene_manager = NULL;
+	DevScene*			dev_scene = NULL;
 
 private:
 

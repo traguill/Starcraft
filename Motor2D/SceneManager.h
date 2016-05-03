@@ -3,6 +3,13 @@
 
 #include "j1Module.h"
 
+enum SCENES
+{
+	MENU,
+	GAME,
+	DEV
+};
+
 
 class SceneManager : public j1Module
 {
@@ -34,14 +41,33 @@ public:
 
 public:
 
-	void StartGame();
-	void StartMenu();
+	void WantToChangeScene(SCENES scene);
 
-	void WantToChangeScene();
+private:
+
+	void DisableScene(SCENES scene);
+	void EnableScene(SCENES scene);
+
+	//Enable/Disable scenes ---------------------------------
+	void EnableMenu();
+	void DisableMenu();
+
+	void EnableGame();
+	void DisableGame();
+
+	void EnableDev();
+	void DisableDev();
+
+public:
 
 	bool changing_scene = false;
 
 	bool in_game = false;
+
+private:
+
+	SCENES actual_scene; //Scene that we are now
+	SCENES new_scene; //Scene that we want to load
 
 
 };

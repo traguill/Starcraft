@@ -47,8 +47,8 @@ public:
 
 private:
 
-	void LoadLevel();
-	void SaveLevelDesign();
+	void LoadLevel(const char* path);
+	void SaveLevelDesign(const char* path);
 
 	void LoadAudio();
 
