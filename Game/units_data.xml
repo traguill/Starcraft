@@ -218,7 +218,7 @@
       <rect x="449" y="846"/>
     </death>
 
-    <animwalkspeed value="0.1"/>
+    <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
     <deathanimspeed value="0.1"/>
@@ -415,7 +415,7 @@
     </death>
     <deathanimspeed value="0.05"/>
 
-    <animwalkspeed value="0.1"/>
+    <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
   </unit>
@@ -572,7 +572,7 @@
     <rect x="421" y="33"/>
   </adownleft>
 
-    <animwalkspeed value="0.1"/>
+    <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
 
@@ -783,7 +783,7 @@
       <rect x="82" y="40"/>
     </idownleft>
 
-    <animwalkspeed value="0.1"/>
+    <animwalkspeed value="0.13"/>
 
     
   </unit>
@@ -983,7 +983,7 @@
     </death>
     
     <deathanimspeed value="0.05"/>
-    <animwalkspeed value="0.1"/>
+    <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
 
