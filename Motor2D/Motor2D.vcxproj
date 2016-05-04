@@ -89,6 +89,7 @@
     <ClCompile Include="Firebat.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Main.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Firebat.h" />
     <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Map.h" />

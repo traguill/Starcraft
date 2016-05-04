@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "Entity.h"
 #include "Unit.h"
+#include "Bullet.h"
 #include <map>
 
 #define COLLIDER_MAP 2

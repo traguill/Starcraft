@@ -20,8 +20,7 @@
 #include "GameScene.h"
 #include "MenuScene.h"
 #include "UIMiniMap.h"
-
-
+#include "Ghost.h"
 
 j1UIManager::j1UIManager() : j1Module()
 {
@@ -200,9 +199,14 @@ bool j1UIManager::Update(float dt)
 		list<Unit*>::iterator it = App->entity->selected_units.begin();
 		for (it; it != App->entity->selected_units.end(); it++)
 		{
-			if ((*it)->GetType() == GHOST && (*it)->GetSnipping() == true){
-				rec = (*it)->current_animation->getCurrentFrame();
-				pos = (*it)->GetDrawPosition();
+			if ((*it)->GetType() == GHOST) 
+			{
+				Ghost* ghost = (Ghost*)(*it);
+				if (ghost->GetSnipping() == true)
+				{
+					rec = (*it)->current_animation->getCurrentFrame();
+					pos = (*it)->GetDrawPosition();
+				}
 			}
 		}
 		rec = { rec.x - 5, rec.y - 5, rec.w + 10, rec.h + 15 };

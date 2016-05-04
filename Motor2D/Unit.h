@@ -6,7 +6,6 @@
 #include "p2Point.h"
 #include "Entity.h"
 #include "UIProgressBar.h"
-#include "Bullet.h"
 #include <vector>
 #include <queue>
 
@@ -14,7 +13,8 @@
 
 #define INVISIBILITY_ALPHA 155 //Load this from xml...
 
-enum UNIT_TYPE{ 
+enum UNIT_TYPE
+{ 
 	MARINE, 
 	FIREBAT, 
 	GHOST, 
@@ -22,7 +22,8 @@ enum UNIT_TYPE{
 	OBSERVER
 };
 
-enum UNIT_STATE{
+enum UNIT_STATE
+{
 	UNIT_IDLE, 
 	UNIT_MOVE,
 	UNIT_ATTACK,
@@ -38,7 +39,8 @@ enum UNIT_ABILITY
 
 class Unit : public Entity
 {
-	friend class j1EntityManager;	//Provisional
+	friend class j1EntityManager;
+	friend class Ghost;
 
 public:
 
@@ -48,7 +50,7 @@ public:
 	~Unit();
 
 
-	void Update(float dt);
+	virtual void Update(float dt);
 	virtual void Draw();
 
 	void SetPath(vector<iPoint> _path);
@@ -78,15 +80,13 @@ public:
 
 	SDL_Texture* GetAuxiliarTexture() const;
 
-	bool GetSnipping();
-
 protected:
 	virtual void SetAnimation();
 
 private:
 
 	void Move(float dt);
-	void Attack(float dt);
+	virtual void Attack(float dt);
 	void SetDirection();
 	void CenterUnit();
 
@@ -95,15 +95,7 @@ private:
 	void Delete(); 
 
 	void UseAbility(uint id); //Unit use the ability asigned to the id number
-	void CastAbility(const UNIT_ABILITY ability); //Actual method to USE the ability
-
-	//Abilities
-	void Invisibility();
-	void SetVisible();
-
-	void Snipper();
-	void DisableSnipper();
-	void Shoot(int x, int y);
+	virtual void CastAbility(const UNIT_ABILITY ability); //Actual method to USE the ability
 
 	//AsignPath with offset
 	void AsignPath(vector<iPoint> main_path);
@@ -118,6 +110,7 @@ protected:
 	vector<iPoint> path;
 	bool costume;
 	bool selected = false;
+	bool invisible = false;
 	Unit* target = NULL;
 
 	float max_mana;
@@ -125,12 +118,8 @@ protected:
 	int mana_regen;
 
 	list<Unit*> attacking_units; //Units that are attacking me
-
-	//For abilities
-	bool invisible = false;
-	bool snipping = false;
-
 	list<UNIT_ABILITY> abilities;
+
 public:
 	UNIT_STATE state;
 	queue<UNIT_EVENT> events;
@@ -178,7 +167,6 @@ public:
 	iPoint death_size;
 	Animation death;
 
-	//Has to be updated inside update();
 	Animation* current_animation;
 	float walk_anim_speed;
 	float idle_anim_speed;
@@ -200,15 +188,5 @@ public:
 
 	//Attacking
 	float cool_timer = 0;
-
-	//HP bar
-	//UIProgressBar* hp_bar;
-	//UIProgressBar* mana_bar;
-
-	//Sniping
-	bool has_hit = false; //If the bullet that I've shoot have hit something (wall, end, enemy)
-
-
-
 };
 #endif

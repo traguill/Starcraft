@@ -1,8 +1,7 @@
 #ifndef __BULLET_H__
 #define __BULLET_H__
 
-#include "Entity.h"
-#include "Unit.h"
+#include "Ghost.h"
 
 #define HIT_RADIUS 50
 
@@ -33,7 +32,7 @@ public:
 
 	iPoint destination;
 
-	Unit* source;
+	Ghost* source;
 private:
 	float speed = 900;
 

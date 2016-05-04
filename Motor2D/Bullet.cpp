@@ -145,6 +145,6 @@ void Bullet::Draw()
 void Bullet::Destroy()
 {
 	if (source != NULL)
-	source->has_hit = true;
+	source->BulletHits();
 	App->entity->RemoveBullet(this);
 }

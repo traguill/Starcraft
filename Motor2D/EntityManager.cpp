@@ -15,6 +15,7 @@
 #include "Medic.h"
 #include "Projectile.h"
 #include "Firebat.h"
+#include "Ghost.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -99,14 +100,14 @@ bool j1EntityManager::Update(float dt)
 		
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 		{
-			//DISABLE snipper mode
-			selected_units.front()->DisableSnipper();
+			Ghost* ghost = (Ghost*)(selected_units.front());
+			ghost->DisableSnipper();
 		}
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 		{
-			//Shoot
-			selected_units.front()->Shoot(mouse.x, mouse.y);
+			Ghost* ghost = (Ghost*)(selected_units.front());
+			ghost->Shoot(mouse.x, mouse.y);
 		}
 	}
 	else
@@ -678,6 +679,12 @@ bool j1EntityManager::LoadUnitsInfo()
 			delete unit_db;
 			break;
 
+		case(GHOST) :
+			Ghost* ghost; ghost = new Ghost(unit_db);
+			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), ghost));
+			delete unit_db;
+			break;
+
 		default:
 			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), unit_db));
 			break;
@@ -1151,6 +1158,18 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 
 			else
 				friendly_units.push_back(medic);
+			break;
+
+		case (GHOST) :
+			Ghost* ghost_db; ghost_db = (Ghost*)(it->second);
+			Ghost* ghost; ghost = new Ghost(ghost_db, is_enemy);
+			ghost->SetPosition(x, y);
+
+			if (is_enemy)
+				enemy_units.push_back(ghost);
+			else
+				friendly_units.push_back(ghost);
+
 			break;
 
 		case (FIREBAT) :

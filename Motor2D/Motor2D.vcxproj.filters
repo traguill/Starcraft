@@ -119,6 +119,9 @@
     <ClCompile Include="TacticalAI.cpp">
       <Filter>AI</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h" />
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="TacticalAI.h">
       <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,3 @@
-#include "Unit.h"
 #include "Marine.h"
 
 Marine::Marine() : Unit()
