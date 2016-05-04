@@ -145,13 +145,7 @@ void DevScene::LoadLevel()
 		pos.x = unit_f.child("position").attribute("x").as_int();
 		pos.y = unit_f.child("position").next_sibling("position").attribute("y").as_int();
 		bool is_enemy = unit_f.child("is_enemy").attribute("value").as_bool();
-		bool patrolling = unit_f.child("patrol").attribute("value").as_bool();
-		vector<iPoint> point_path;
-		for (pugi::xml_node point = unit_f.child("patrol").child("point"); point; point = point.next_sibling("point"))
-		{
-			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
-		}
-		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy);
 	}
 
 	pugi::xml_node unit_e;
@@ -162,13 +156,7 @@ void DevScene::LoadLevel()
 		pos.x = unit_e.child("position").attribute("x").as_int();
 		pos.y = unit_e.child("position").next_sibling("position").attribute("y").as_int();
 		bool is_enemy = unit_e.child("is_enemy").attribute("value").as_bool();
-		bool patrolling = unit_e.child("patrol").attribute("value").as_bool();
-		vector<iPoint> point_path;
-		for (pugi::xml_node point = unit_e.child("patrol").child("point"); point; point = point.next_sibling("point"))
-		{
-			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
-		}
-		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy);
 	}
 }
 

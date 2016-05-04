@@ -1101,11 +1101,9 @@ void j1EntityManager::CheckUnderCursor()
 
 //CREATES -----------------------------------------------------------------------------------------------------
 
-void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bool patrolling, vector<iPoint> point_path)
+void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy)
 {
 	map<string, Unit*>::iterator it = units_database.find(UnitTypeToString(type));
-
-	iPoint pos;
 
 	if (it != units_database.end())
 	{
@@ -1115,15 +1113,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			Marine* marine_db; marine_db = (Marine*)(it->second);
 			Marine* marine; marine = new Marine(marine_db, is_enemy);
 			marine->SetPosition(x, y);
-
-			//Patrol Stuff
-			marine->patrol = patrolling;
-			pos = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
-			marine->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
-			{
-				marine->patrol_path.push_back(pos + point_path[i]);
-			}
 			
 			if (is_enemy)
 				enemy_units.push_back(marine);
@@ -1137,15 +1126,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			Medic* medic; medic = new Medic(medic_db, is_enemy);
 			medic->SetPosition(x, y);
 
-			//Patrol Stuff
-			medic->patrol = patrolling;
-			pos = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
-			medic->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
-			{
-				medic->patrol_path.push_back(pos + point_path[i]);
-			}
-
 			if (is_enemy)
 				enemy_units.push_back(medic);
 
@@ -1157,15 +1137,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			Firebat* firebat_db; firebat_db = (Firebat*)(it->second);
 			Firebat* firebat; firebat = new Firebat(firebat_db, is_enemy);
 			firebat->SetPosition(x, y);
-			
-			//Patrol Stuff
-			firebat->patrol = patrolling;
-			pos = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
-			firebat->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
-			{
-				firebat->patrol_path.push_back(pos + point_path[i]);
-			}
 
 			if (is_enemy)
 				enemy_units.push_back(firebat);
@@ -1177,15 +1148,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 		default:
 			Unit* unit = new Unit(it->second, is_enemy);
 			unit->SetPosition(x, y);
-			
-			//Patrol Stuff
-			unit->patrol = patrolling;
-			pos = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
-			unit->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
-			{
-				unit->patrol_path.push_back(pos + point_path[i]);
-			}
 
 			if (is_enemy)
 				enemy_units.push_back(unit);
@@ -1273,27 +1235,25 @@ void j1EntityManager::CleanUpList()
 
 void j1EntityManager::Debug()
 {
-	vector<iPoint> empty;
-
 	if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
 	{
 		LOG("Ghost created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(GHOST, p.x, p.y, false, false, empty);
+		CreateUnit(GHOST, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
 		LOG("MAarine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MARINE, p.x, p.y, false, false, empty);
+		CreateUnit(MARINE, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 	{
 		LOG("Enemy Marine created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MARINE, p.x, p.y, true, false, empty);
+		CreateUnit(MARINE, p.x, p.y, true);
 
 		//PATROL
 		Unit* tmp = enemy_units.back();
@@ -1301,8 +1261,6 @@ void j1EntityManager::Debug()
 		iPoint pos = App->map->WorldToMap(p.x, p.y, COLLIDER_MAP);
 		tmp->patrol_path.push_back(pos);
 		tmp->patrol_path.push_back(pos += {10, 0});
-		tmp->patrol_path.push_back(pos += {0, 10});
-		tmp->patrol_path.push_back(pos += {-10, 0});
 		tmp->SetPath(tmp->patrol_path);
 	}
 
@@ -1310,27 +1268,27 @@ void j1EntityManager::Debug()
 	{
 		LOG("Firebat created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(FIREBAT, p.x, p.y, false, false, empty);
+		CreateUnit(FIREBAT, p.x, p.y, false);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
 	{
 		LOG("Firebat created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(FIREBAT, p.x, p.y, true, false, empty);
+		CreateUnit(FIREBAT, p.x, p.y, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 	{
 		LOG("Observer created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(OBSERVER, p.x, p.y, false, false, empty);
+		CreateUnit(OBSERVER, p.x, p.y, false);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
 		LOG("Medic created");
 		iPoint p;  App->input->GetMouseWorld(p.x, p.y);
-		CreateUnit(MEDIC, p.x, p.y, false, false, empty);
+		CreateUnit(MEDIC, p.x, p.y, false);
 
 	}
 
@@ -1345,5 +1303,4 @@ void j1EntityManager::Debug()
 			++unit;
 		}
 	}
-	
 }

@@ -513,5 +513,17 @@ void TacticalAI::SeparateIdleUnits(Unit* unit_a, Unit* unit_b, bool both_idle)
 
 void TacticalAI::CheckPatrolPath(Unit* unit)
 {
-	unit->SetPath(unit->patrol_path);
+	iPoint unit_pos = unit->GetPosition();
+
+	iPoint map_pos = App->map->WorldToMap(unit_pos.x, unit_pos.y, COLLIDER_MAP);
+
+	//SET PATH IF PATROLLING
+	if (unit->dst_point == unit->patrol_path.front())
+		unit->SetPath(unit->patrol_path);
+	if (unit->dst_point == unit->patrol_path.back())
+	{
+		reverse(unit->patrol_path.begin(), unit->patrol_path.end());
+		unit->SetPath(unit->patrol_path);
+		reverse(unit->patrol_path.begin(), unit->patrol_path.end());
+	}
 }
