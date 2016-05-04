@@ -94,6 +94,11 @@ bool GameScene::PreUpdate()
 // Called each loop iteration
 bool GameScene::Update(float dt)
 {
+
+	//Debug (go to menu)
+	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_UP)
+		App->scene_manager->WantToChangeScene(MENU);
+
 	App->map->Draw(map_id);
 
 	if (App->entity->debug)

@@ -3,7 +3,6 @@
 
 #include "p2Point.h"
 #include "j1Textures.h"
-#include "SDL/include/SDL.h"
 #include <list>
 
 using namespace std;

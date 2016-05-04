@@ -165,7 +165,6 @@ void SceneManager::DisableGame()
 	App->events->DisableModule();
 
 	App->ui->CleanUpList();
-	App->entity->CleanUpList();
 
 	App->events->CleanUp();
 	App->tactical_ai->CleanUp();
