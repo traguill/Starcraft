@@ -37,6 +37,7 @@ bool GameScene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool GameScene::Start()
 {
+	LOG("Starting GameScene");
 
 	LoadAudio();
 

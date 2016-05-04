@@ -38,6 +38,7 @@ bool j1EntityManager::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1EntityManager::Start()
 {
+	LOG("Starting EntityManager");
 	bool ret = true;
 
 	LoadUnitsInfo();
@@ -203,6 +204,11 @@ bool j1EntityManager::CleanUp()
 	map<string, Unit*>::iterator it_db = units_database.begin();
 	while (it_db != units_database.end())
 	{
+		if (it_db->second->auxiliar_texture != NULL)
+			App->tex->UnLoad(it_db->second->auxiliar_texture);
+
+		if (it_db->second->sprite.texture != NULL)
+			App->tex->UnLoad(it_db->second->sprite.texture);
 		delete it_db->second;
 		++it_db;
 	}
@@ -233,6 +239,7 @@ bool j1EntityManager::CleanUp()
 	bullets.clear();
 
 	App->tex->UnLoad(gui_cursor);
+	gui_cursor = NULL;
 
 	if (db_bullet != NULL)
 	{
@@ -399,8 +406,8 @@ bool j1EntityManager::LoadUnitsInfo()
 		string at_fx = unit.child("attack_fx").attribute("value").as_string();
 		string dth_fx = unit.child("death_fx").attribute("value").as_string();
 
-		unit_db->attack_fx = App->audio->LoadFx(at_fx.c_str());
-		unit_db->death_fx = App->audio->LoadFx(dth_fx.c_str());
+		//unit_db->attack_fx = App->audio->LoadFx(at_fx.c_str());
+		//unit_db->death_fx = App->audio->LoadFx(dth_fx.c_str());
 
 		//Abilities check if the unit has any
 		if (unit.child("abilities").attribute("value").as_bool() == true)

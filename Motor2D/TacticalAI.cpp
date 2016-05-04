@@ -24,6 +24,12 @@ bool TacticalAI::Awake(pugi::xml_node& conf)
 	return true;
 }
 
+bool TacticalAI::Start()
+{
+	LOG("Start tactical AI");
+	return true;
+}
+
 // Called before quitting
 bool TacticalAI::CleanUp()
 {

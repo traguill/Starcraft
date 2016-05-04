@@ -32,6 +32,8 @@ bool MenuScene::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool MenuScene::Start()
 {
+	LOG("Starting MenuScene");
+
 	background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
 	logo = App->ui->CreateImage({ 0, 202, 569, 132 }, 0, 50, true);
 	

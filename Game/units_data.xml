@@ -230,6 +230,7 @@
     <death_fx value="sounds/ghost_death.ogg"/>
 
     <texture_path value="sprites/blue_ghost.png"/>
+    <auxiliar_texture value="sprites/red_marine.png"/>
     <width value="24" />
     <height value="32" />
     <life value="100" />
@@ -720,6 +721,7 @@
     <death_fx value="sounds/observer_death.ogg"/>
 
     <texture_path value="sprites/observer.png"/>
+    <auxiliar_texture value="sprites/red_marine.png"/>
     <width value="37" />
     <height value="37" />
     <life value="100" />
@@ -792,6 +794,7 @@
 
 
     <texture_path value="sprites/blue_medic.png"/>
+    <auxiliar_texture value="sprites/red_marine.png"/>
     <width value="24" />
     <height value="32" />
     <life value="60" />

@@ -139,14 +139,6 @@ void Unit::Delete()
 	attacking_units.clear();
 	current_animation = NULL;
 
-	/*if (hp_bar != NULL)
-		delete hp_bar;
-	hp_bar = NULL;
-
-	if (mana_bar != NULL)
-		delete mana_bar;
-	mana_bar = NULL;*/
-
 	queue<UNIT_EVENT> empty;
 	swap(events, empty);
 }
