@@ -54,6 +54,9 @@ private:
 
 	//Load data
 	bool LoadUnitsInfo();
+	void LoadBulletInfo(pugi::xml_node& units);
+	void LoadUnitInfo(pugi::xml_node& units);
+	void LoadUnitAnimationInfo(pugi::xml_node& unit, Unit* unit_db);
 	void LoadSounds();
 
 	//Selection
