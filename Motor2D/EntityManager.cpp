@@ -1129,7 +1129,7 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			marine->patrol_path.push_back(pos);
 			for (int i = 0; i < point_path.size(); i++)
 			{
-				marine->patrol_path.push_back(pos + point_path[i]);
+				marine->patrol_path.push_back(point_path[i]);
 			}
 			
 			if (is_enemy)
@@ -1150,7 +1150,7 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			medic->patrol_path.push_back(pos);
 			for (int i = 0; i < point_path.size(); i++)
 			{
-				medic->patrol_path.push_back(pos + point_path[i]);
+				medic->patrol_path.push_back(point_path[i]);
 			}
 
 			if (is_enemy)
@@ -1183,7 +1183,7 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			firebat->patrol_path.push_back(pos);
 			for (int i = 0; i < point_path.size(); i++)
 			{
-				firebat->patrol_path.push_back(pos + point_path[i]);
+				firebat->patrol_path.push_back(point_path[i]);
 			}
 
 			if (is_enemy)
@@ -1203,7 +1203,7 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			unit->patrol_path.push_back(pos);
 			for (int i = 0; i < point_path.size(); i++)
 			{
-				unit->patrol_path.push_back(pos + point_path[i]);
+				unit->patrol_path.push_back(point_path[i]);
 			}
 
 			if (is_enemy)

@@ -56,8 +56,7 @@
 		<direction x="0" />
 		<direction y="1" />
     <patrol value="true">
-      <point tile_x="10" tile_y="0"/>
-      <point tile_x="5" tile_y="10"/>
+      <point tile_x="125" tile_y="155"/>
     </patrol>
 	</enemy_unit>
 	<enemy_unit>
@@ -68,8 +67,8 @@
 		<direction x="0" />
 		<direction y="1" />
     <patrol value="true">
-      <point tile_x="0" tile_y="15"/>
-      <point tile_x="0" tile_y="-15"/>
+      <point tile_x="130" tile_y="114"/>
+      <point tile_x="130" tile_y="134"/>
     </patrol>
 	</enemy_unit>
 	<enemy_unit>
@@ -367,12 +366,6 @@
 		<position y="2575" />
 		<direction x="0" />
 		<direction y="1" />
-    <patrol value="true">
-      <point tile_x="0" tile_y="-10"/>
-      <point tile_x="15" tile_y="0"/>
-      <point tile_x="-15" tile_y="0"/>
-      <point tile_x="0" tile_y="10"/>
-    </patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
@@ -381,12 +374,6 @@
 		<position y="2601" />
 		<direction x="0" />
 		<direction y="1" />
-    <patrol value="true">
-      <point tile_x="0" tile_y="-10"/>
-      <point tile_x="15" tile_y="0"/>
-      <point tile_x="-15" tile_y="0"/>
-      <point tile_x="0" tile_y="10"/>
-    </patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
@@ -395,12 +382,6 @@
 		<position y="2627" />
 		<direction x="0" />
 		<direction y="1" />
-    <patrol value="true">
-      <point tile_x="0" tile_y="-10"/>
-      <point tile_x="15" tile_y="0"/>
-      <point tile_x="-15" tile_y="0"/>
-      <point tile_x="0" tile_y="10"/>
-    </patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
