@@ -22,6 +22,7 @@ public:
 
 private:
 	SDL_Rect section;
+	iPoint init_pos;
 
 };
 

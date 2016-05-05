@@ -26,7 +26,7 @@ bool UIEntity::CleanUp()
 void UIEntity::GUIEvents()
 {
 	SDL_Point mouse_position;
-	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
+	App->input->GetMouseWorld(mouse_position.x, mouse_position.y);
 
 	SDL_Rect rec_screen = GetScreenRect();
 

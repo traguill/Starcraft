@@ -768,9 +768,10 @@ UNIT_TYPE j1EntityManager::UnitTypeToEnum(string type)const
 void j1EntityManager::SelectUnits()
 {
 	iPoint mouse_pos;
-	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->ui->GetMouseHover() == NULL)
 	{
 		list<Unit*>::iterator it = selected_units.begin();
 		list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();

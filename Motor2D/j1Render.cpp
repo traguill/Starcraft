@@ -86,7 +86,13 @@ bool j1Render::Update(float dt)
 	if (!lock_camera)
 	{
 		if (transitioning == true)
+		{
 			DoTransition();
+			
+			if (App->scene_manager->in_game == true)
+				CursorMovement(dt);
+		}
+			
 		else
 		{
 			if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_UP && App->entity->friendly_units.size() != 0)
@@ -364,51 +370,60 @@ void j1Render::CursorMovement(float dt)
 	//Move camera LEFT
 	if (mouse_x  < offset_x)
 	{
+		DiscardTransition();
 		camera.x += dt * camera_speed;
 		App->ui->cursor_state = TO_LEFT;
 	}
 	//Move camera RIGHT
 	if (mouse_x > camera.w - offset_x)
 	{
+		DiscardTransition();
 		camera.x -= dt * camera_speed;
 		App->ui->cursor_state = TO_RIGHT;
 	}
 	//Move camera UP
 	if (mouse_y < offset_y)
 	{
+		DiscardTransition();
 		camera.y += dt * camera_speed;
 		App->ui->cursor_state = UP;
 	}
 	//Move camera DOWN
 	if (mouse_y > camera.h - offset_y)
 	{
+		DiscardTransition();
 		camera.y -= dt * camera_speed;
 		App->ui->cursor_state = DOWN;
 	}	
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
+		DiscardTransition();
 		camera.x += dt * camera_speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
+		DiscardTransition();
 		camera.x -= dt * camera_speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
+		DiscardTransition();
 		camera.y += dt * camera_speed;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
+		DiscardTransition();
 		camera.y -= dt * camera_speed;
 	}
 
 	//Move camera RIGHT UP
 	if (mouse_x > camera.w - offset_x && mouse_y < offset_y)
 	{
+		DiscardTransition();
 		camera.x -= dt * (camera_speed / 3);
 		camera.y += dt * (camera_speed / 3);
 		App->ui->cursor_state = TO_RIGHT_UP;
@@ -417,6 +432,7 @@ void j1Render::CursorMovement(float dt)
 	//Move camera RIGHT DOWN
 	if (mouse_x > camera.w - offset_x && mouse_y > camera.h - offset_y)
 	{
+		DiscardTransition();
 		camera.x -= dt * (camera_speed / 3);
 		camera.y -= dt * (camera_speed / 3);
 		App->ui->cursor_state = TO_RIGHT_DOWN;
@@ -425,6 +441,7 @@ void j1Render::CursorMovement(float dt)
 	//Move camera LEFT_UP
 	if (mouse_x  < offset_x && mouse_y < offset_y)
 	{
+		DiscardTransition();
 		camera.x += dt * (camera_speed / 3);
 		camera.y += dt * (camera_speed / 3);
 		App->ui->cursor_state = TO_LEFT_UP;
@@ -433,6 +450,7 @@ void j1Render::CursorMovement(float dt)
 	//Move camera LEFT DOWN
 	if (mouse_x  < offset_x && mouse_y > camera.h - offset_y)
 	{
+		DiscardTransition();
 		camera.x += dt * (camera_speed / 3);
 		camera.y -= dt * (camera_speed / 3);
 		App->ui->cursor_state = TO_LEFT_DOWN;
@@ -453,6 +471,9 @@ void j1Render::SetTransition(int x, int y,bool end_locking)
 	if (end_point.x < limit_x)		end_point.x = limit_x;
 	if (end_point.y > 0)			end_point.y = 0;
 	if (end_point.y < limit_y)		end_point.y = limit_y;
+
+	x = end_point.x;
+	y = end_point.y;
 
 	if (end_locking)
 		lock_after_transition = true;

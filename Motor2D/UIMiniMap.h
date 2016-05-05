@@ -11,7 +11,8 @@ enum MAP_STATE
 {
 	IDLE_MAP,
 	HOVER_MAP,
-	PRESSED_MAP
+	PRESSED_MAP,
+	CONTINUE_PRESS_MAP
 };
 
 class UIMiniMap : public UIEntity
@@ -33,7 +34,7 @@ public:
 private:
 
 	void GetState();
-	iPoint GetRectLocalPos();
+	iPoint WhiteRectUpdatedPos();
 
 	void UpdateRect();
 	void UpdateUnitsMiniMap();
@@ -44,12 +45,17 @@ private:
 
 	MAP_STATE map_state;
 
-	int x_mouse;
-	int y_mouse;
+	iPoint init_pos;
 
 	//To get scale
 	int div_x;
 	int div_y;
+
+	//Map offset
+	iPoint offset;
+
+	//Position where the white rect is drawn
+	iPoint draw_pos;
 
 	bool click_transition = false;
 };

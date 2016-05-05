@@ -19,6 +19,10 @@ UIImage::UIImage(SDL_Rect _section, const int x, const int y) : UIEntity()
 
 	rect.x = x;
 	rect.y = y;
+	rect.w = _section.w;
+	rect.h = _section.h;
+	init_pos.x = x;
+	init_pos.y = y;
 }
 
 // Destructor
@@ -31,10 +35,10 @@ bool UIImage::Update(float dt)
 	bool ret = true;
 
 	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
+	rect.x = init_pos.x - cam_pos.x;
+	rect.y = init_pos.y - cam_pos.y;
 
-	int x, y;
-	GetScreenPos(x, y);
-	App->render->Blit(App->ui->GetAtlas(), x - cam_pos.x, y - cam_pos.y, &section);
+	App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &section);
 
 	return ret;
 }

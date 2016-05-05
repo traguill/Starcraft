@@ -356,7 +356,7 @@ return ibox;
 UIEntity* j1UIManager::GetMouseHover() const
 {
 	p2Point<int> mouse;
-	App->input->GetMousePosition(mouse.x, mouse.y);
+	App->input->GetMouseWorld(mouse.x, mouse.y);
 
 	list<UIEntity*>::const_reverse_iterator item = gui_elements.rbegin();
 

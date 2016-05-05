@@ -20,7 +20,9 @@ UILabel::UILabel(const char* txt, const int x, const int y) : UIEntity()
 
 	rect.x = x;
 	rect.y = y;
-	
+	init_pos.x = x;
+	init_pos.y = y;
+
 	SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 }
 
@@ -39,9 +41,11 @@ bool UILabel::Update(float dt)
 	if (texture != NULL)
 	{
 		iPoint cam_pos(App->render->camera.x, App->render->camera.y);
-		int x, y;
-		GetScreenPos(x, y);
-		App->render->Blit(texture, x - cam_pos.x, y - cam_pos.y);
+
+		rect.x = init_pos.x - cam_pos.x;
+		rect.y = init_pos.y - cam_pos.y;
+
+		App->render->Blit(texture, rect.x, rect.y);
 	}
 
 	return ret;

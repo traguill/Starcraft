@@ -31,6 +31,7 @@ private:
 
 	string	text;
 	string	password;
+	iPoint	init_pos;
 
 public:
 
