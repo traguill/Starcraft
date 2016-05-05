@@ -33,7 +33,7 @@ UIMiniMap::UIMiniMap() : UIEntity()
 }
 
 
-UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn) : UIEntity()
+UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_map_size) : UIEntity()
 {
 
 
@@ -45,8 +45,11 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn) : UIEntity()
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
-	div_x = 1728 / 130;
-	div_y = 3988 / 130;
+	//div_x = 1728 / section_drawn.w;
+	//div_y = 3988 / section_drawn.h;
+
+	div_x = original_map_size.x / section_drawn.w;
+	div_y = original_map_size.y / section_drawn.h;
 
 	uint _w, _h;
 	App->win->GetWindowSize(_w, _h);

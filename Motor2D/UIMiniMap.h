@@ -21,7 +21,7 @@ public:
 
 	UIMiniMap();
 
-	UIMiniMap(SDL_Rect position, SDL_Rect section_drawn);
+	UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_map_size);
 
 	// Destructor
 	virtual ~UIMiniMap();

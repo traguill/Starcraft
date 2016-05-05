@@ -335,9 +335,9 @@ UICursor* j1UIManager::CreateCursor(vector<SDL_Rect> sections, float anim_speed,
 	return cursor;
 }
 
-UIMiniMap* j1UIManager::CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, j1Module* listener)
+UIMiniMap* j1UIManager::CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, iPoint original_map_size, j1Module* listener)
 {
-	UIMiniMap* mini_map = new UIMiniMap(_rec, section_drawn);
+	UIMiniMap* mini_map = new UIMiniMap(_rec, section_drawn, original_map_size);
 	mini_map->listener = listener;
 	gui_elements.push_back(mini_map);
 

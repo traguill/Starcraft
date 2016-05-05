@@ -769,7 +769,7 @@ void j1EntityManager::SelectUnits()
 {
 	iPoint mouse_pos;
 
-	App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->ui->GetMouseHover() == NULL)
 	{

@@ -72,7 +72,7 @@ public:
 
 	UICursor* CreateCursor(vector<SDL_Rect> sections, float anim_speed, j1Module* listener = NULL);
 
-	UIMiniMap* CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, j1Module* listener = NULL);
+	UIMiniMap* CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, iPoint original_map_size, j1Module* listener = NULL);
 
 	void CreateMiniWireframe(UNIT_TYPE type, uint pos);
 
