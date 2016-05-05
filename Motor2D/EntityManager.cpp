@@ -417,12 +417,12 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 
 		LoadUnitAnimationInfo(unit, unit_db);
 
-		pugi::xml_node projectile;
+		pugi::xml_node projectile = unit.child("projectile");
 
 		switch (unit_db->type)
 		{
 		case(FIREBAT) :
-			projectile = unit.child("projectile");
+			
 
 			Projectile* p; p = new Projectile();
 
@@ -500,9 +500,9 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 				p->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
 			}
 
-			p->current_animation = &p->up;
+			
 
-			Firebat* firebat; firebat = new Firebat(unit_db, p);
+			Firebat* firebat; firebat = new Firebat(unit_db, *p);
 			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), firebat));
 			delete unit_db;
 
