@@ -58,7 +58,7 @@ public:
 	void AddPath(vector<iPoint> _path); //Adds the path to the existing one combining them
 	vector<iPoint> GetPath()const;
 
-	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
+	fPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
 	UNIT_TYPE GetType()const;
 	uint GetRange()const;

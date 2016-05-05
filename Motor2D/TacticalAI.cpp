@@ -380,15 +380,15 @@ void TacticalAI::Vision()
 						Iterate friend list searching for enemies
 						Iterate enemy list searching for friends
 					*/
-					iPoint distance((*unit_e)->GetPosition().x - (*unit_f)->GetPosition().x, (*unit_e)->GetPosition().y- (*unit_f)->GetPosition().y);
-					iPoint direction = (*unit_e)->GetDirection();
+					fPoint distance((*unit_f)->GetPosition().x - (*unit_e)->GetPosition().x, (*unit_f)->GetPosition().y- (*unit_e)->GetPosition().y);
+					fPoint direction = (*unit_e)->GetDirection();
+					distance.Normalize();
 
-					int dot = direction.x * distance.x + direction.y * distance.y;
-					int module = sqrt(direction.x * direction.x + direction.y * direction.y) * sqrt(distance.x * distance.x + distance.y * distance.y);
+					float dot_product = direction.x * distance.x + direction.y * distance.y;
 
-					float angle = acos(dot / module);
+					float angle = acos(dot_product) * 180 / M_PI;
 					
-					if (angle < CONE_VISION / 2)
+					if (angle < (30))
 					{
 						iPoint e_tile = App->map->WorldToMap((*unit_e)->GetPosition().x, (*unit_e)->GetPosition().y, COLLIDER_MAP);
 						iPoint f_tile = App->map->WorldToMap((*unit_f)->GetPosition().x, (*unit_f)->GetPosition().y, COLLIDER_MAP);
