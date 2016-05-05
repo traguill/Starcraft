@@ -149,6 +149,8 @@ void SceneManager::EnableGame()
 	App->tactical_ai->EnableModule();
 	App->events->EnableModule();
 
+	App->ui->StartGameUI();
+
 	App->entity->Start();
 	App->game_scene->Start();
 	App->tactical_ai->Start();
@@ -165,6 +167,7 @@ void SceneManager::DisableGame()
 	App->events->DisableModule();
 
 	App->ui->CleanUpList();
+	App->ui->CleanUpGameUI();
 
 	App->events->CleanUp();
 	App->tactical_ai->CleanUp();

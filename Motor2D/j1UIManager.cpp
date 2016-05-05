@@ -65,8 +65,6 @@ bool j1UIManager::Start()
 	sections.push_back({ 85, 62, 20, 21 });
 	cursor = App->ui->CreateCursor(sections, 0.08);
 
-	LoadUiInfo();
-
 	return ret;
 }
 
@@ -248,6 +246,17 @@ bool j1UIManager::CleanUp()
 
 	gui_elements.clear();
 
+	
+
+
+	delete cursor;
+
+
+	return ret;
+}
+
+void j1UIManager::CleanUpGameUI()
+{
 	map<string, UIEntity*>::iterator it = gui_database.begin();
 	while (it != gui_database.end())
 	{
@@ -258,12 +267,11 @@ bool j1UIManager::CleanUp()
 	}
 
 	gui_database.clear();
+}
 
-
-	delete cursor;
-
-
-	return ret;
+void j1UIManager::StartGameUI()
+{
+	LoadUiInfo(); //Change names. This is really stupid
 }
 
 void j1UIManager::CleanUpList()
@@ -280,6 +288,7 @@ void j1UIManager::CleanUpList()
 	}
 
 	gui_elements.clear();
+
 }
 
 
@@ -380,14 +389,14 @@ void j1UIManager::GetMouseInput()
 	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		gui_pressed = GetMouseHover();
-		if (gui_pressed != NULL)
+		/*if (gui_pressed != NULL)
 		if (gui_pressed->focusable)
 		{
 			if (focus)
 				focus->isFocus = false;
 			focus = gui_pressed;
 			gui_pressed->isFocus = true;
-		}
+		}*/
 	}
 
 	if (gui_pressed)

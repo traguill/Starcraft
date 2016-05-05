@@ -215,6 +215,8 @@ bool j1EntityManager::CleanUp()
 	}
 	units_database.clear();
 
+	selected_units.clear();
+
 	list<Unit*>::iterator it_fu = friendly_units.begin();
 	while (it_fu != friendly_units.end())
 	{

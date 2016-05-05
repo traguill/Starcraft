@@ -200,13 +200,6 @@ void Unit::Draw()
 		SDL_Rect selected1{ 46, 48, 41, 43 };
 		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 
-		//Drawing health bar
-		/*hp_bar->SetValue(life);
-		hp_bar->Draw(logic_pos.x, logic_pos.y);
-
-		//Drawing mana bar
-		mana_bar->SetValue(mana);
-		mana_bar->Draw(logic_pos.x, logic_pos.y + 8);*/
 	}
 
 	if (state == UNIT_DIE)

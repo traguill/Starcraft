@@ -88,6 +88,9 @@ public:
 
 	void CleanUpList();
 
+	void StartGameUI();
+	void CleanUpGameUI();
+
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
