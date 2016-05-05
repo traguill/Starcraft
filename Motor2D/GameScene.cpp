@@ -79,6 +79,7 @@ bool GameScene::Start()
 	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
 
 	LoadLevel("my_level.xml");
+	LoadAudio();
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
@@ -446,11 +447,9 @@ void GameScene::AttackFX(UNIT_TYPE type)
 
 void GameScene::LoadAudio()
 {
-	//Why you load sounds that you don't have?
+	
 
-	//Also unload the sounds in the clean up
-
-	/*
+	
 	//Setting fx volume
 	App->audio->SetFxVolume(10);
 	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
@@ -487,7 +486,7 @@ void GameScene::LoadAudio()
 	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
 	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
 
-	*/
+	
 }
 
 void GameScene::LoadHUD()
