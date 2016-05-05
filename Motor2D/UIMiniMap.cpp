@@ -236,7 +236,7 @@ void UIMiniMap::GetState()
 		map_state = IDLE_MAP;
 	}	
 
-	if (gui_event == MOUSE_BUTTON_RIGHT_UP)
+	if (App->input->GetMouseButtonDown(1) == KEY_UP)
 	{	
 			map_state = IDLE_MAP;
 		

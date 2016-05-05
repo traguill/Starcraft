@@ -493,7 +493,7 @@ void GameScene::LoadAudio()
 void GameScene::LoadHUD()
 {
 	//Create HUD
-	App->ui->CreateImage({ 0, 396, 637, 192 }, 2, 290, true);
+	App->ui->CreateImage({ 0, 396, 640, 192 }, 0, 291, true);
 
 	//Creating Mini Map
 	App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 }, { 1728, 3988 });
