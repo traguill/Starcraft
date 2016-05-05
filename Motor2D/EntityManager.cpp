@@ -249,6 +249,13 @@ bool j1EntityManager::CleanUp()
 		db_bullet = NULL;
 	}
 
+	if (db_projectile != NULL)
+	{
+		App->tex->UnLoad(db_projectile->sprite.texture);
+		delete db_projectile;
+		db_projectile = NULL;
+	}
+
 	//Wireframes change THIS!!
 	list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();
 
@@ -351,6 +358,8 @@ bool j1EntityManager::LoadUnitsInfo()
 	//Bullet
 	LoadBulletInfo(units);
 
+	LoadProjectileInfo(units);
+
 	//UNITS
 	LoadUnitInfo(units);
 
@@ -358,6 +367,87 @@ bool j1EntityManager::LoadUnitsInfo()
 	PrintUnitDatabase();
 
 	return ret;
+}
+
+void j1EntityManager::LoadProjectileInfo(pugi::xml_node& units)
+{
+	db_projectile = new Projectile();
+
+	pugi::xml_node projectile = units.child("projectile");
+
+	db_projectile->sprite.texture = App->tex->Load(projectile.child("path").attribute("value").as_string());
+
+	db_projectile->anim_speed = projectile.child("anim_speed").attribute("value").as_float();
+
+	db_projectile->sprite.rect.w = projectile.child("width").attribute("value").as_int();
+	db_projectile->sprite.rect.h = projectile.child("height").attribute("value").as_int();
+
+	//positions
+	db_projectile->pos_up.x = projectile.child("up").child("pos").attribute("x").as_int();
+	db_projectile->pos_up.y = projectile.child("up").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_down.x = projectile.child("down").child("pos").attribute("x").as_int();
+	db_projectile->pos_down.y = projectile.child("down").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_right.x = projectile.child("right").child("pos").attribute("x").as_int();
+	db_projectile->pos_right.y = projectile.child("right").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_left.x = projectile.child("left").child("pos").attribute("x").as_int();
+	db_projectile->pos_left.y = projectile.child("left").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_up_right.x = projectile.child("upright").child("pos").attribute("x").as_int();
+	db_projectile->pos_up_right.y = projectile.child("upright").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_down_right.x = projectile.child("downright").child("pos").attribute("x").as_int();
+	db_projectile->pos_down_right.y = projectile.child("downright").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_up_left.x = projectile.child("upleft").child("pos").attribute("x").as_int();
+	db_projectile->pos_up_left.y = projectile.child("upleft").child("pos").attribute("y").as_int();
+
+	db_projectile->pos_down_left.x = projectile.child("downleft").child("pos").attribute("x").as_int();
+	db_projectile->pos_down_left.y = projectile.child("downleft").child("pos").attribute("y").as_int();
+
+	//animations
+	db_projectile->up.frames.clear();
+	for (pugi::xml_node rect = projectile.child("up").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->up.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->down.frames.clear();
+	for (pugi::xml_node rect = projectile.child("down").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->down.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->right.frames.clear();
+	for (pugi::xml_node rect = projectile.child("right").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->left.frames.clear();
+	for (pugi::xml_node rect = projectile.child("left").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->up_right.frames.clear();
+	for (pugi::xml_node rect = projectile.child("upright").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->up_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->down_right.frames.clear();
+	for (pugi::xml_node rect = projectile.child("downright").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->down_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->up_left.frames.clear();
+	for (pugi::xml_node rect = projectile.child("upleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->up_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
+	db_projectile->down_left.frames.clear();
+	for (pugi::xml_node rect = projectile.child("downleft").child("rect"); rect; rect = rect.next_sibling("rect"))
+	{
+		db_projectile->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), db_projectile->sprite.rect.w, db_projectile->sprite.rect.h });
+	}
 }
 
 void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
@@ -417,97 +507,14 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 
 		LoadUnitAnimationInfo(unit, unit_db);
 
-		pugi::xml_node projectile = unit.child("projectile");
+		
 
 		switch (unit_db->type)
 		{
-		case(FIREBAT) :
-			
-
-			Projectile* p; p = new Projectile();
-
-			p->sprite.texture = App->tex->Load(projectile.child("path").attribute("value").as_string());
-
-			p->anim_speed = projectile.child("anim_speed").attribute("value").as_float();
-
-			p->sprite.rect.w = projectile.child("width").attribute("value").as_int();
-			p->sprite.rect.h = projectile.child("height").attribute("value").as_int();
-
-			//positions
-			p->pos_up.x = projectile.child("up").child("pos").attribute("x").as_int();
-			p->pos_up.y = projectile.child("up").child("pos").attribute("y").as_int();
-
-			p->pos_down.x = projectile.child("down").child("pos").attribute("x").as_int();
-			p->pos_down.y = projectile.child("down").child("pos").attribute("y").as_int();
-
-			p->pos_right.x = projectile.child("right").child("pos").attribute("x").as_int();
-			p->pos_right.y = projectile.child("right").child("pos").attribute("y").as_int();
-
-			p->pos_left.x = projectile.child("left").child("pos").attribute("x").as_int();
-			p->pos_left.y = projectile.child("left").child("pos").attribute("y").as_int();
-
-			p->pos_up_right.x = projectile.child("upright").child("pos").attribute("x").as_int();
-			p->pos_up_right.y = projectile.child("upright").child("pos").attribute("y").as_int();
-
-			p->pos_down_right.x = projectile.child("downright").child("pos").attribute("x").as_int();
-			p->pos_down_right.y = projectile.child("downright").child("pos").attribute("y").as_int();
-
-			p->pos_up_left.x = projectile.child("upleft").child("pos").attribute("x").as_int();
-			p->pos_up_left.y = projectile.child("upleft").child("pos").attribute("y").as_int();
-
-			p->pos_down_left.x = projectile.child("downleft").child("pos").attribute("x").as_int();
-			p->pos_down_left.y = projectile.child("downleft").child("pos").attribute("y").as_int();
-
-			//animations
-			p->up.frames.clear();
-			for (pugi::xml_node rect = projectile.child("up").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->up.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->down.frames.clear();
-			for (pugi::xml_node rect = projectile.child("down").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->down.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->right.frames.clear();
-			for (pugi::xml_node rect = projectile.child("right").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->left.frames.clear();
-			for (pugi::xml_node rect = projectile.child("left").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->up_right.frames.clear();
-			for (pugi::xml_node rect = projectile.child("upright").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->up_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->down_right.frames.clear();
-			for (pugi::xml_node rect = projectile.child("downright").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->down_right.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->up_left.frames.clear();
-			for (pugi::xml_node rect = projectile.child("upleft").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->up_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-			p->down_left.frames.clear();
-			for (pugi::xml_node rect = projectile.child("downleft").child("rect"); rect; rect = rect.next_sibling("rect"))
-			{
-				p->down_left.frames.push_back({ rect.attribute("x").as_int(), rect.attribute("y").as_int(), p->sprite.rect.w, p->sprite.rect.h });
-			}
-
-			
-
-			Firebat* firebat; firebat = new Firebat(unit_db, *p);
+		case(FIREBAT) :	
+			Firebat* firebat; firebat = new Firebat(unit_db, db_projectile);
 			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), firebat));
 			delete unit_db;
-
-			delete p;
-			p = NULL;
 			break;
 
 		case(MARINE) :

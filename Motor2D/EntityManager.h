@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "Unit.h"
 #include "Bullet.h"
+#include "Projectile.h"
 #include <map>
 
 #define COLLIDER_MAP 2
@@ -58,6 +59,7 @@ private:
 	void LoadUnitInfo(pugi::xml_node& units);
 	void LoadUnitAnimationInfo(pugi::xml_node& unit, Unit* unit_db);
 	void LoadSounds();
+	void LoadProjectileInfo(pugi::xml_node& units);
 
 	//Selection
 	void SelectUnits();
@@ -123,6 +125,7 @@ public:
 
 	//Reference bullet
 	Bullet* db_bullet = NULL;
+	Projectile* db_projectile = NULL;
 
 	//Audio
 	uint sound_shoot;

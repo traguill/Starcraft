@@ -8,7 +8,7 @@ class Firebat : public Unit
 {
 public:
 	Firebat();
-	Firebat(Unit* unit, Projectile projectile);
+	Firebat(Unit* unit, Projectile* projectile);
 	Firebat(Firebat* firebat, bool _is_enemy);
 
 	~Firebat();
@@ -16,7 +16,7 @@ public:
 	void Draw();
 
 private:
-	Projectile p;
+	Projectile* p;
 
 private:
 	void SetAnimation();
