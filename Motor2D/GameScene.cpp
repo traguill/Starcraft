@@ -42,7 +42,7 @@ bool GameScene::Start()
 	LoadAudio();
 
 	//Load Map
-	App->map->Load("Jungle Map.tmx", map_id);
+	App->map->Load("Jungle Map 32.tmx", map_id);
 
 	//Load collision map
 	if (App->map->Load("Collision Jungle.tmx", collider_id) == true)
