@@ -157,8 +157,6 @@ bool j1EntityManager::Update(float dt)
 	}
 	
 
-	Debug();
-
 	return true;
 
 }
