@@ -208,7 +208,20 @@ void Unit::Draw()
 		App->render->Blit(&sprite);
 	}
 	else
+	{
 		App->render->Blit(&sprite);
+
+		//Draw vision
+		fPoint left_vision(direction);
+		fPoint right_vision(left_vision);
+		left_vision.Rotate(M_PI / 6);
+		right_vision.Rotate(-M_PI / 6);
+		left_vision.Scale(vision);
+		right_vision.Scale(vision);
+		App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + left_vision.x, logic_pos.y + left_vision.y, 255, 0, 0, 255, true);
+		App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + right_vision.x, logic_pos.y + right_vision.y, 255, 0, 0, 255, true);
+	}
+		
 }
 
 void Unit::Attack(float dt)
@@ -460,12 +473,9 @@ void Unit::SetDirection()
 	
 }
 
-iPoint Unit::GetDirection()const
+fPoint Unit::GetDirection()const
 {
-	iPoint ret(round(direction.x), round(direction.y));
-
-	return ret;
-
+	return direction;
 }
 
 void Unit::SetAnimation()

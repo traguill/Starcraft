@@ -409,25 +409,48 @@ void TacticalAI::Vision()
 		{
 			if ((*unit_f)->state != UNIT_DIE && (*unit_e)->state != UNIT_DIE && (*unit_f)->IsVisible() == true && (*unit_e)->IsVisible() == true)
 			{
-				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_f)->vision)
+				//If this doesn't work properly change distanceNoSqrt for distance(this uses a sqrt)
+				if ((*unit_f)->GetPosition().DistanceTo((*unit_e)->GetPosition()) <= (*unit_e)->vision)
 				{
 					/*
-						TODO: both share the same vision now. Only send ONE unit to attack depend on HIS vision.
-						Iterate friend list searching for enemies
-						Iterate enemy list searching for friends
+					TODO: both share the same vision now. Only send ONE unit to attack depend on HIS vision.
+					Iterate friend list searching for enemies
+					Iterate enemy list searching for friends
 					*/
-					if ((*unit_f)->GetTarget() == NULL && (*unit_f)->GetType() != MEDIC) //MEDICS DOESN'T ATTACK
+					fPoint distance((*unit_f)->GetPosition().x - (*unit_e)->GetPosition().x, (*unit_f)->GetPosition().y - (*unit_e)->GetPosition().y);
+					fPoint direction = (*unit_e)->GetDirection();
+					distance.Normalize();
+
+					float dot_product = direction.x * distance.x + direction.y * distance.y;
+
+					float angle = acos(dot_product) * 180 / M_PI;
+
+					if (angle < (30))
 					{
-						//LOG("Friend: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+						iPoint e_tile = App->map->WorldToMap((*unit_e)->GetPosition().x, (*unit_e)->GetPosition().y, COLLIDER_MAP);
+						iPoint f_tile = App->map->WorldToMap((*unit_f)->GetPosition().x, (*unit_f)->GetPosition().y, COLLIDER_MAP);
+
+						if (App->pathfinding->CreateLine(e_tile, f_tile) == true)
+						{
+
+							if ((*unit_f)->GetTarget() == NULL && (*unit_f)->type != MEDIC)
+							{
+								LOG("Friend: I've found someone near");
+								SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
+							}
+
+							if ((*unit_e)->GetTarget() == NULL)
+							{
+								LOG("Enemy: I've found someone near");
+								SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
+							}
+						}
 					}
 
-					if ((*unit_e)->GetTarget() == NULL)
-					{
-						//LOG("Enemy: I've found someone near");
-						SetEvent(ENEMY_TARGET, *unit_e, *unit_f);
-					}
+
+
 				}
+				
 			}
 			++unit_e;
 		}

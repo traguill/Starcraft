@@ -58,7 +58,7 @@ public:
 	vector<iPoint> GetPath()const;
 	void SetPathId(uint id);
 
-	iPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
+	fPoint GetDirection()const; //Returns the direction in form of a vector. Ex: (1,1) -north-east (-1) south etc
 
 	UNIT_TYPE GetType()const;
 	uint GetRange()const;
