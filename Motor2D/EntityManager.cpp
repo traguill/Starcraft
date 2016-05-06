@@ -157,6 +157,8 @@ bool j1EntityManager::Update(float dt)
 	}
 	
 
+	Debug();
+
 	return true;
 
 }
@@ -479,8 +481,8 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 		string at_fx = unit.child("attack_fx").attribute("value").as_string();
 		string dth_fx = unit.child("death_fx").attribute("value").as_string();
 
-		//unit_db->attack_fx = App->audio->LoadFx(at_fx.c_str());
-		//unit_db->death_fx = App->audio->LoadFx(dth_fx.c_str());
+		unit_db->attack_fx = App->audio->LoadFx(at_fx.c_str());
+		unit_db->death_fx = App->audio->LoadFx(dth_fx.c_str());
 
 		//Abilities check if the unit has any
 		if (unit.child("abilities").attribute("value").as_bool() == true)
