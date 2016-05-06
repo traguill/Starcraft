@@ -372,7 +372,7 @@ UIEntity* j1UIManager::GetMouseHover() const
 	while (item != gui_elements.rend())
 	{
 		SDL_Rect rect = (*item)->GetScreenRect();
-		if (mouse.PointInRect(rect.x, rect.y, rect.w, rect.h) == true)
+		if (mouse.PointInRect(rect.x, rect.y, rect.w, rect.h) == true && (*item)->IsVisible() == true)
 		{
 			return (*item);
 		}
