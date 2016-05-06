@@ -175,6 +175,23 @@ public:
 		x = point.x;
 		y = point.y;
 	}
+
+	float sign(p2Point<float> p1, p2Point<float> p2, p2Point<float> p3)
+	{
+		return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+	}
+
+	bool PointInTriangle(p2Point<float> p1, p2Point<float> p2, p2Point<float> p3)
+	{
+		bool b1, b2, b3;
+		fPoint p0(x, y);
+
+		b1 = sign(p0, p1, p2) < 0.0f;
+		b2 = sign(p0, p2, p3) < 0.0f;
+		b3 = sign(p0, p3, p1) < 0.0f;
+
+		return ((b1 == b2) && (b2 == b3));
+	}
 };
 
 typedef p2Point<int> iPoint;

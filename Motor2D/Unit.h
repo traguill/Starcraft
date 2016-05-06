@@ -100,6 +100,10 @@ private:
 	//AsignPath with offset
 	void AsignPath(vector<iPoint> main_path);
 
+	//Draw Vision Cone
+	void DrawVisionCone()const;
+	vector<iPoint> CollidersInsideConeVision(fPoint p0, fPoint p2, fPoint p3)const;
+
 protected:
 
 	SDL_Texture* auxiliar_texture;

@@ -211,17 +211,76 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		//Draw vision
-		fPoint left_vision(direction);
-		fPoint right_vision(left_vision);
-		left_vision.Rotate(M_PI / 6);
-		right_vision.Rotate(-M_PI / 6);
-		left_vision.Scale(vision);
-		right_vision.Scale(vision);
-		App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + left_vision.x, logic_pos.y + left_vision.y, 255, 0, 0, 255, true);
-		App->render->DrawLine(logic_pos.x, logic_pos.y, logic_pos.x + right_vision.x, logic_pos.y + right_vision.y, 255, 0, 0, 255, true);
+		if (selected)
+			DrawVisionCone();
 	}
 		
+}
+
+void Unit::DrawVisionCone()const
+{
+
+	//Lateral Lines
+	fPoint left_vision(direction);
+	fPoint right_vision(left_vision);
+	left_vision.Rotate(M_PI / 6);
+	right_vision.Rotate(-M_PI / 6);
+	left_vision.Scale(vision);
+	right_vision.Scale(vision);
+
+	left_vision.x += logic_pos.x;
+	left_vision.y += logic_pos.y;
+	right_vision.x += logic_pos.x;
+	right_vision.y += logic_pos.y;
+
+	fPoint position(logic_pos.x, logic_pos.y);
+
+	CollidersInsideConeVision(position, right_vision, left_vision);
+
+	//Actual Draw
+	App->render->DrawLine(logic_pos.x, logic_pos.y, left_vision.x,  left_vision.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(logic_pos.x, logic_pos.y,  right_vision.x,  right_vision.y, 255, 0, 0, 255, true);
+
+}
+
+vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)const
+{
+	vector<iPoint> colliders;
+
+	//Get Up-Left point (START) and down-right point (END) of the cone (transform it to a rectangle)
+	iPoint start, end;
+
+	start.x = min(p0.x, min(p1.x, p2.x));
+	start.y = min(p0.y, min(p1.y, p2.y));
+
+	end.x = max(p0.x, max(p1.x, p2.x));
+	end.y = max(p0.y, max(p1.y, p2.y));
+
+	iPoint start_tile = App->map->WorldToMap(start.x, start.y, COLLIDER_MAP);
+	iPoint end_tile = App->map->WorldToMap(end.x, end.y, COLLIDER_MAP);
+
+	for (int x = start_tile.x; x <= end_tile.x; x++)
+	{
+		for (int y = start_tile.y; y <= end_tile.y; y++)
+		{
+			iPoint colliding_tile(x, y);
+			if (App->pathfinding->IsWalkable(colliding_tile) == false)
+			{
+				iPoint colliding_position = App->map->MapToWorld(x, y, COLLIDER_MAP);
+				colliding_position.x += 4; //Tile correction to center it
+				colliding_position.y += 4;
+
+				if (colliding_position.PointInTriangle(p0, p1, p2) == true)
+				{
+					colliders.push_back(colliding_tile);
+					App->render->DrawQuad({ colliding_position.x, colliding_position.y, 5, 5 }, 0, 0, 255, 255, true, true);
+				}
+					
+			}
+		}
+	}
+
+	return colliders;
 }
 
 void Unit::Attack(float dt)
