@@ -39,10 +39,10 @@ bool DevScene::Start()
 {
 
 	//Load Map
-	App->map->Load("Jungle Map.tmx", map_id);
+	App->map->Load("0.5_game_map.tmx", map_id);
 
 	//Load collision map
-	if (App->map->Load("Collision Jungle.tmx", collider_id) == true)
+	if (App->map->Load("collision.tmx", collider_id) == true)
 	{
 		int width, height;
 		uchar* buffer = NULL;
