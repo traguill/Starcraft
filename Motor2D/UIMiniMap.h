@@ -57,7 +57,6 @@ private:
 	//Position where the white rect is drawn
 	iPoint draw_pos;
 
-	bool click_transition = false;
 };
 
 #endif

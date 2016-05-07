@@ -44,6 +44,9 @@ private:
 	iPoint pos_down_right;
 	iPoint pos_up_left;
 	iPoint pos_down_left;
+
+	fPoint float_pos;
+	bool bullet_started = false;
 };
 
 #endif

@@ -6,11 +6,14 @@
 
 Bullet::Bullet()
 {
-
+	bullet_started = true;
+	float_pos.x = logic_pos.x;
+	float_pos.y = logic_pos.y;
 }
 
 Bullet::Bullet(Bullet* b)
 {
+	bullet_started = true;
 	sprite.texture = b->sprite.texture;
 	sprite.rect.w = b->sprite.rect.w;
 	sprite.rect.h = b->sprite.rect.h;
@@ -23,6 +26,7 @@ Bullet::Bullet(Bullet* b)
 	pos_down_right = b->pos_down_right;
 	pos_up_left	= b->pos_up_left;
 	pos_down_left =b->pos_down_left;
+	
 }
 
 // Destructor
@@ -34,16 +38,22 @@ Bullet::~Bullet()
 
 void Bullet::Update(float dt)
 {
-	fPoint float_pos; float_pos.x = logic_pos.x, float_pos.y = logic_pos.y;
+	//fPoint float_pos; float_pos.x = logic_pos.x, float_pos.y = logic_pos.y;
+	if (bullet_started == true)
+	{
+		float_pos.x = logic_pos.x;
+		float_pos.y = logic_pos.y;
+		bullet_started = false;
+	}
 
-	float_pos.x += (direction.x * speed) * dt;
-	float_pos.y += (direction.y * speed) * dt;
+	float_pos.x += (direction.x * speed) *dt;
+	float_pos.y += (direction.y * speed) *dt;
 
-	float_pos.x = roundf(float_pos.x);
-	float_pos.y = roundf(float_pos.y);
+	//float_pos.x = roundf(float_pos.x);
+	//float_pos.y = roundf(float_pos.y);
 
-	logic_pos.x = float_pos.x;
-	logic_pos.y = float_pos.y;
+	logic_pos.x = roundf(float_pos.x);
+	logic_pos.y = roundf(float_pos.y);
 
 	//Check if hits an enemy
 	list<Unit*>::iterator enemy = App->entity->enemy_units.begin();
