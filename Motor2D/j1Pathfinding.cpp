@@ -2,6 +2,8 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1PathFinding.h"
+#include "j1Map.h"
+#include "EntityManager.h"
 
 
 j1PathFinding::j1PathFinding() :
@@ -511,9 +513,75 @@ int j1PathFinding::CalculatePath(Path* path, int max_iterations)
 	return it_time;
 }
 
+bool j1PathFinding::CreateLineWorld(const iPoint& origin, const iPoint& destination)
+{
+	bool ret = true;
+
+	iPoint p1 = origin;
+	iPoint p2 = destination;
+
+	bool steep = (abs(p2.y - p1.y) > abs(p2.x - p1.x));
+
+	if (steep)
+	{
+		swap(p1.x, p1.y);
+		swap(p2.x, p2.y);
+	}
+
+	if (p1.x > p2.x)
+	{
+		swap(p1.x, p2.x);
+		swap(p1.y, p2.y);
+	}
+
+	int dx = p2.x - p1.x;
+	int dy = abs(p2.y - p1.y);
+
+	int error = dx / 2;
+	int ystep = (p1.y < p2.y) ? 1 : -1;
+	int y = p1.y;
+
+	const int max_x = p2.x;
+
+	for (int x = p1.x; x < max_x; x++)
+	{
+		if (steep)
+		{
+			iPoint p = App->map->WorldToMap(y, x, COLLIDER_MAP);
+			if (IsWalkable(p) == false)
+			{
+				hitted_world.x = y;
+				hitted_world.y = x;
+				return false;
+			}
+
+		}
+		else
+		{
+			iPoint p = App->map->WorldToMap(x, y, COLLIDER_MAP);
+			if (IsWalkable(p) == false)
+			{
+				hitted_world.x = x;
+				hitted_world.y = y;
+				return false;
+			}
+		}
+
+		error -= dy;
+		if (error < 0)
+		{
+			y += ystep;
+			error += dx;
+		}
+	}
+
+	return true;
+}
+
 
 bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 {
+
 	bool ret = true;
 
 	iPoint p1 = origin;
@@ -548,12 +616,11 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 		{
 			if (IsWalkable(iPoint(y, x)) == false)
 			{
-				hitted_tile.x = x;
-				hitted_tile.y = y;
+				hitted_tile.x = y;
+				hitted_tile.y = x;
 				return false;
 			}
 				
-			
 		}
 		else
 		{
@@ -563,7 +630,6 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 				hitted_tile.y = y;
 				return false;
 			}
-			
 		}
 
 		error -= dy;
@@ -574,9 +640,6 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 		}
 	}
 
-
-
-
 	return true;
 }
 
@@ -585,6 +648,11 @@ bool j1PathFinding::CreateLine(const iPoint& origin, const iPoint& destination)
 iPoint j1PathFinding::GetLineTile()const
 {
 	return hitted_tile;
+}
+
+iPoint j1PathFinding::GetLineWorld()const
+{
+	return hitted_world;
 }
 
 bool j1PathFinding::PathFinished(uint id)const

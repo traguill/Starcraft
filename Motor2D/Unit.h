@@ -101,8 +101,10 @@ private:
 	void AsignPath(vector<iPoint> main_path);
 
 	//Draw Vision Cone
-	void DrawVisionCone()const;
-	vector<iPoint> CollidersInsideConeVision(fPoint p0, fPoint p2, fPoint p3)const;
+	void DrawVisionCone();
+	vector<iPoint> CollidersInsideConeVision(fPoint p0, fPoint p2, fPoint p3);
+	void GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_points,const fPoint& origin);
+	bool HitAdjacentTile(iPoint origin, iPoint hit);
 
 protected:
 

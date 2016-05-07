@@ -211,13 +211,14 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		if (selected)
+		/*if (selected)
 			DrawVisionCone();
+			*/
 	}
 		
 }
 
-void Unit::DrawVisionCone()const
+void Unit::DrawVisionCone()
 {
 
 	//Lateral Lines
@@ -233,9 +234,31 @@ void Unit::DrawVisionCone()const
 	right_vision.x += logic_pos.x;
 	right_vision.y += logic_pos.y;
 
-	fPoint position(logic_pos.x, logic_pos.y);
+	fPoint origin(logic_pos.x, logic_pos.y);
+	vector<iPoint> open_points, key_points;
 
-	CollidersInsideConeVision(position, right_vision, left_vision);
+	open_points= CollidersInsideConeVision(origin, right_vision, left_vision);
+
+	GetKeyPointsConeVision(open_points, key_points, origin);
+
+	//Draw key_points
+	vector<iPoint>::iterator k = key_points.begin();
+	while (k != key_points.end())
+	{
+		iPoint k_tile = App->map->WorldToMap(k->x, k->y, COLLIDER_MAP);
+
+		vector<iPoint>::iterator k2 = key_points.begin();
+		while (k2 != key_points.end())
+		{
+			iPoint k2_tile = App->map->WorldToMap(k2->x, k2->y, COLLIDER_MAP);
+			if (HitAdjacentTile(k_tile, k2_tile) == true)
+			{
+				App->render->DrawLine(k->x, k->y, k2->x, k2->y, 255, 0, 0, 255, true);
+			}
+			++k2;
+		}
+		++k;
+	}
 
 	//Actual Draw
 	App->render->DrawLine(logic_pos.x, logic_pos.y, left_vision.x,  left_vision.y, 255, 0, 0, 255, true);
@@ -243,7 +266,87 @@ void Unit::DrawVisionCone()const
 
 }
 
-vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)const
+void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_points, const fPoint& origin)
+{
+	//Iterate all points
+	//Create line from point to origin
+	//Add point to final points
+	//Create line to the end
+	//Yes: add end to final points
+	//No: add collision point to final points
+
+	key_points.clear();
+
+	iPoint origin_tile = App->map->WorldToMap(origin.x, origin.y, COLLIDER_MAP);
+
+	vector<iPoint>::iterator point = points.begin();
+	while (point != points.end())
+	{		
+		if (App->pathfinding->CreateLineWorld((*point), iPoint(origin.x, origin.y)) == true)
+		{
+			
+			//Calculate end point
+			fPoint end((*point).x - origin.x, (*point).y - origin.y);
+			end.Normalize();
+			end.Scale(vision);
+			
+			end.x += origin.x;
+			end.y += origin.y;
+
+			iPoint end_tile = App->map->WorldToMap(end.x, end.y, COLLIDER_MAP);
+
+			key_points.push_back((*point));
+
+			//Check if something hits the line (point-->end)
+			if (App->pathfinding->CreateLineWorld((*point), iPoint(end.x, end.y)) == true)
+			{
+				//Nothing hits -> Line point-->end
+				if (App->pathfinding->IsWalkable(end_tile) == true)
+				{
+					key_points.push_back(iPoint(end.x, end.y));
+					App->render->DrawLine((*point).x, (*point).y, end.x, end.y, 255, 0, 0, 255, true);
+				}
+			}
+			else
+			{
+				iPoint hit_pos = App->pathfinding->GetLineWorld();
+				hit_pos = App->map->WorldToMap(hit_pos.x, hit_pos.y, COLLIDER_MAP);
+				iPoint p_tile = App->map->WorldToMap((*point).x, (*point).y, COLLIDER_MAP);
+				
+				if (HitAdjacentTile(p_tile, hit_pos) == false && App->pathfinding->IsWalkable(hit_pos))
+				{
+					hit_pos = App->map->MapToWorld(hit_pos.x, hit_pos.y, COLLIDER_MAP);
+					
+					key_points.push_back(hit_pos);
+
+					App->render->DrawLine((*point).x, (*point).y, hit_pos.x, hit_pos.y, 255, 0, 0, 255, true);
+				}
+					
+			}
+		}
+		++point;
+	}
+	
+}
+
+bool Unit::HitAdjacentTile(iPoint origin, iPoint hit)
+{
+	bool ret = false;
+
+	if (hit.x == origin.x + 1 && hit.y == origin.y) return true;
+	if (hit.x == origin.x + 1 && hit.y == origin.y + 1) return true;
+	if (hit.x == origin.x + 1 && hit.y == origin.y - 1) return true;
+	if (hit.x == origin.x && hit.y == origin.y) return true;
+	if (hit.x == origin.x && hit.y == origin.y + 1) return true;
+	if (hit.x == origin.x && hit.y == origin.y - 1) return true;
+	if (hit.x == origin.x - 1 && hit.y == origin.y) return true;
+	if (hit.x == origin.x - 1 && hit.y == origin.y + 1) return true;
+	if (hit.x == origin.x - 1 && hit.y == origin.y - 1) return true;
+
+	return ret;
+}
+
+vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)
 {
 	vector<iPoint> colliders;
 
@@ -272,8 +375,11 @@ vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)c
 
 				if (colliding_position.PointInTriangle(p0, p1, p2) == true)
 				{
-					colliders.push_back(colliding_tile);
-					App->render->DrawQuad({ colliding_position.x, colliding_position.y, 5, 5 }, 0, 0, 255, 255, true, true);
+					//Push all the corners
+					colliders.push_back(iPoint(colliding_position.x - 4, colliding_position.y - 4));
+					colliders.push_back(iPoint(colliding_position.x + 4, colliding_position.y - 4));
+					colliders.push_back(iPoint(colliding_position.x - 4, colliding_position.y + 4));
+					colliders.push_back(iPoint(colliding_position.x + 4, colliding_position.y + 4));
 				}
 					
 			}

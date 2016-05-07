@@ -47,8 +47,10 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 	bool CreateLine(const iPoint& origin, const iPoint& destination);
+	bool CreateLineWorld(const iPoint& origin, const iPoint& destination); //Uses world coordinates
 
 	iPoint GetLineTile()const; //Returns the last hitted tile
+	iPoint GetLineWorld()const; //Return the last hitted position
 
 	bool Jump(int cx, int cy, int dx, int dy, iPoint start, iPoint end, PathNode& new_node);
 
@@ -68,11 +70,13 @@ private:
 	uint height;
 	uchar* map;
 	iPoint hitted_tile;
+	iPoint hitted_world;
 	std::map<uint, Path*> paths_to_calculate;
 
 	uint current_id = 0;
 
 	j1Timer timer;
+
 
 };
 
