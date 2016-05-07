@@ -41,9 +41,17 @@ private:
 	iPoint pos_right;
 	iPoint pos_left;
 	iPoint pos_up_right;
+	iPoint pos_up_right_1;
+	iPoint pos_up_right_2;
 	iPoint pos_down_right;
+	iPoint pos_down_right_1;
+	iPoint pos_down_right_2;
 	iPoint pos_up_left;
+	iPoint pos_up_left_1;
+	iPoint pos_up_left_2;
 	iPoint pos_down_left;
+	iPoint pos_down_left_1;
+	iPoint pos_down_left_2;
 
 	fPoint float_pos;
 	bool bullet_started = false;

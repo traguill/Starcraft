@@ -23,9 +23,17 @@ Bullet::Bullet(Bullet* b)
 	pos_right = b->pos_right;
 	pos_left = b->pos_left;
 	pos_up_right = b->pos_up_right;
+	pos_up_right_1 = b->pos_up_right_1;
+	pos_up_right_2 = b->pos_up_right_2;
 	pos_down_right = b->pos_down_right;
+	pos_down_right_1 = b->pos_down_right_1;
+	pos_down_right_2 = b->pos_down_right_2;
 	pos_up_left	= b->pos_up_left;
+	pos_up_left_1 = b->pos_up_left_1;
+	pos_up_left_2 = b->pos_up_left_2;
 	pos_down_left =b->pos_down_left;
+	pos_down_left_1 = b->pos_down_left_1;
+	pos_down_left_2 = b->pos_down_left_2;
 	
 }
 
@@ -82,64 +90,138 @@ void Bullet::Update(float dt)
 	}
 
 	//Update bullet animation
-	iPoint dir(round(direction.x), round(direction.y));
+	//iPoint dir(roundf(direction.x), roundf(direction.y));
+	
+	float angle;
 
+	if (direction.x == 0)
+	{
+		if (-direction.y < 0)
+			angle = 90;
+		if (-direction.y > 0)
+			angle = 270;
+	}
+	else
+	{
+		fPoint direc = direction;
+		direc.y = -direction.y;
+		angle = RADTODEG*(direc.AngleFromVector());
+
+	}
+	
 	//Up
-	if (dir.x == 0 && dir.y == -1)
+	if (angle <= (90 + 45/4) && angle >= (90 - 45/4))
 	{
 		sprite.rect.x = pos_up.x;
 		sprite.rect.y = pos_up.y;
 	}
 
 	//Up-Right
-	if (dir.x == 1 && dir.y == -1)
+	if (angle <= (45 + 45 / 4) && angle >= (45 - 45 / 4))
 	{
 		sprite.rect.x = pos_up_right.x;
 		sprite.rect.y = pos_up_right.y;
 	}
 
+	//Up-Right 1
+	if (angle < (90 - 45 / 4) && angle > (45 + 45 / 4))
+	{
+		sprite.rect.x = pos_up_right_1.x;
+		sprite.rect.y = pos_up_right_1.y;
+	}
+
+	//Up-Right 2
+	if (angle < (45 - 45 / 4) && angle >(45 / 4))
+	{
+		sprite.rect.x = pos_up_right_2.x;
+		sprite.rect.y = pos_up_right_2.y;
+	}
+
 	//Right
-	if (dir.x == 1 && dir.y == 0)
+	if (angle <= (45 / 4) && angle >= (- 45 / 4))
 	{
 		sprite.rect.x = pos_right.x;
 		sprite.rect.y = pos_right.y;
 	}
 
 	//Down-right
-	if (dir.x == 1 && dir.y == 1)
+	if (angle >= -(45 + 45 / 4) && angle <= -(45 - 45 / 4))
 	{
 		sprite.rect.x = pos_down_right.x;
 		sprite.rect.y = pos_down_right.y;
 	}
 
+	//Down-right 1
+	if (angle > -(90 - 45 / 4) && angle < -(45 + 45 / 4))
+	{
+		sprite.rect.x = pos_down_right_1.x;
+		sprite.rect.y = pos_down_right_1.y;
+	}
+
+	//Down-right 2
+	if (angle > -(45 - 45 / 4) && angle < -(45 / 4))
+	{
+		sprite.rect.x = pos_down_right_2.x;
+		sprite.rect.y = pos_down_right_2.y;
+	}
+
 	//Down
-	if (dir.x == 0 && dir.y == 1)
+	if (angle >= -(90 + 45 / 4) && angle <= -(90 - 45 / 4))
 	{
 		sprite.rect.x = pos_down.x;
 		sprite.rect.y = pos_down.y;
 	}
 
 	//Down-left
-	if (dir.x == -1 && dir.y == 1)
+	if (angle >= -(135 + 45 / 4) && angle <= -(135 - 45 / 4))
 	{
 		sprite.rect.x = pos_down_left.x;
 		sprite.rect.y = pos_down_left.y;
 	}
 
+	//Down-left 1
+	if (angle < -(135 + 45 / 4) && angle > -(90 + 45 / 4))
+	{
+		sprite.rect.x = pos_down_left_1.x;
+		sprite.rect.y = pos_down_left_1.y;
+	}
+
+	//Down-left 2
+	if (angle > -(180 - 45 / 4) && angle < -(135 + 45 / 4))
+	{
+		sprite.rect.x = pos_down_left_2.x;
+		sprite.rect.y = pos_down_left_2.y;
+	}
+
 	//Left
-	if (dir.x == -1 && dir.y == 0)
+	if (angle <= (180 + 45 / 4) && angle >= (180 - 45 / 4))
 	{
 		sprite.rect.x = pos_left.x;
 		sprite.rect.y = pos_left.y;
 	}
 
 	//Up-Left
-	if (dir.x == -1 && dir.y == -1)
+	if (angle > (135 - 45 / 4) && angle < (135 + 45 / 4))
 	{
 		sprite.rect.x = pos_up_left.x;
 		sprite.rect.y = pos_up_left.y;
 	}
 
+	//Up-Left 1
+	if (angle > (90 + 45 / 4) && angle < (135 - 45 / 4))
+	{
+		sprite.rect.x = pos_up_left_1.x;
+		sprite.rect.y = pos_up_left_1.y;
+	}
+
+	//Up-Left 2
+	if (angle > (135 + 45 / 4) && angle < (180 - 45 / 4))
+	{
+		sprite.rect.x = pos_up_left_2.x;
+		sprite.rect.y = pos_up_left_2.y;
+	}
+
+	
 }
 
 void Bullet::Draw()

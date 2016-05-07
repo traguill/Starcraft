@@ -19,17 +19,41 @@
       <pos x="256" y="0"/>
     </left>
     <upright>
-      <pos x="64" y="32"/>
+      <pos x="96" y="32"/>
     </upright>
+    <upright1>
+      <pos x="64" y="32"/>
+    </upright1>
+    <upright2>
+      <pos x="160" y="32"/>
+    </upright2>
     <downright>
       <pos x="416" y="32"/>
     </downright>
+    <downright1>
+      <pos x="448" y="32"/>
+    </downright1>
+    <downright2>
+      <pos x="320" y="32"/>
+    </downright2>
     <upleft>
       <pos x="416" y="0"/>
     </upleft>
+    <upleft1>
+      <pos x="448" y="0"/>
+    </upleft1>
+    <upleft2>
+      <pos x="320" y="0"/>
+    </upleft2>
     <downleft>
-      <pos x="64" y="0"/>
+      <pos x="96" y="0"/>
     </downleft>
+    <downleft1>
+      <pos x="64" y="0"/>
+    </downleft1>
+    <downleft2>
+      <pos x="160" y="0"/>
+    </downleft2>
   </bullet>
 
   <projectile>

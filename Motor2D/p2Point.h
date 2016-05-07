@@ -149,6 +149,16 @@ public:
 		y = y / module;
 	}
 
+
+	float AngleFromVector()
+	{
+		float angle;
+
+		angle = atan2f(y, x);
+
+		return angle;
+	}
+
 	//Scales the vector in x units
 	void Scale(int value)
 	{

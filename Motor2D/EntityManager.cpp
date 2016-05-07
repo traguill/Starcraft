@@ -722,14 +722,39 @@ void j1EntityManager::LoadBulletInfo(pugi::xml_node& units)
 	db_bullet->pos_up_right.x = bul.child("upright").child("pos").attribute("x").as_int();
 	db_bullet->pos_up_right.y = bul.child("upright").child("pos").attribute("y").as_int();
 
+	db_bullet->pos_up_right_1.x = bul.child("upright1").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_right_1.y = bul.child("upright1").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_up_right_2.x = bul.child("upright2").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_right_2.y = bul.child("upright2").child("pos").attribute("y").as_int();
+
 	db_bullet->pos_down_right.x = bul.child("downright").child("pos").attribute("x").as_int();
 	db_bullet->pos_down_right.y = bul.child("downright").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_right_1.x = bul.child("downright1").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_right_1.y = bul.child("downright1").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_right_2.x = bul.child("downright2").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_right_2.y = bul.child("downright2").child("pos").attribute("y").as_int();
 
 	db_bullet->pos_up_left.x = bul.child("upleft").child("pos").attribute("x").as_int();
 	db_bullet->pos_up_left.y = bul.child("upleft").child("pos").attribute("y").as_int();
 
+	db_bullet->pos_up_left_1.x = bul.child("upleft1").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_left_1.y = bul.child("upleft1").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_up_left_2.x = bul.child("upleft2").child("pos").attribute("x").as_int();
+	db_bullet->pos_up_left_2.y = bul.child("upleft2").child("pos").attribute("y").as_int();
+
 	db_bullet->pos_down_left.x = bul.child("downleft").child("pos").attribute("x").as_int();
 	db_bullet->pos_down_left.y = bul.child("downleft").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_left_1.x = bul.child("downleft1").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_left_1.y = bul.child("downleft1").child("pos").attribute("y").as_int();
+
+	db_bullet->pos_down_left_2.x = bul.child("downleft2").child("pos").attribute("x").as_int();
+	db_bullet->pos_down_left_2.y = bul.child("downleft2").child("pos").attribute("y").as_int();
+
 }
 
 void j1EntityManager::PrintUnitDatabase()const
