@@ -179,10 +179,22 @@ void SceneManager::DisableGame()
 
 void SceneManager::EnableDev()
 {
+	App->dev_scene->EnableModule();
+	App->entity->EnableModule();
+
+
+	App->entity->Start();
+	App->dev_scene->Start();
 
 }
 
 void SceneManager::DisableDev()
 {
+	App->dev_scene->DisableModule();
+	App->entity->DisableModule();
+
+	App->entity->CleanUp();
+	App->dev_scene->CleanUp();
+
 
 }

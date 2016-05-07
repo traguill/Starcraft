@@ -211,16 +211,15 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		/*if (selected)
+		if (selected)
 			DrawVisionCone();
-			*/
+			
 	}
 		
 }
 
 void Unit::DrawVisionCone()
 {
-
 	//Lateral Lines
 	fPoint left_vision(direction);
 	fPoint right_vision(left_vision);

@@ -9,6 +9,7 @@
 
 struct SDL_Texture;
 enum UNIT_TYPE;
+class Unit;
 
 class DevScene : public j1Module
 {
@@ -46,7 +47,18 @@ private:
 	void LoadLevel();
 	void SaveLevelDesign();
 
+	void UnitCreation();
+	void UnitMovement();
 
+	void DrawSelection();
+	void DeleteUnits();
+
+	void AsignPatrol();
+	void SetDirection();
+
+	//Utilities
+	bool PointInRect(iPoint p, SDL_Rect rec);
+	bool Find(Unit* u);
 
 private:
 
@@ -56,6 +68,8 @@ private:
 	bool game_paused;
 
 	bool debug;
+
+	list<Unit*> selected_units;
 
 
 public:

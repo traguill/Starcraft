@@ -7,7 +7,7 @@
 #include "j1UIManager.h"
 #include "SceneManager.h"
 #include "j1Audio.h"
-
+#include "j1Input.h"
 
 MenuScene::MenuScene() : j1Module()
 {
@@ -58,7 +58,10 @@ bool MenuScene::PreUpdate()
 bool MenuScene::Update(float dt)
 {
 	
-
+	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_UP)
+	{
+		App->scene_manager->WantToChangeScene(DEV);
+	}
 
 	return true;
 }

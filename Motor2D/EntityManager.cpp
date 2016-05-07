@@ -16,6 +16,7 @@
 #include "Projectile.h"
 #include "Firebat.h"
 #include "Ghost.h"
+#include "SceneManager.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -112,14 +113,18 @@ bool j1EntityManager::Update(float dt)
 	}
 	else
 	{
-		SelectUnits();
-
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+		if (App->scene_manager->in_game == true)
 		{
-			CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
-		}
+			SelectUnits();
 
-		ActivateAbilities();
+			if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+			{
+				CheckUnderCursor(); //Checks whats under the cursor position (enemy->attack, nothing->move)
+			}
+
+			ActivateAbilities();
+		}
+		
 	}
 	
 
