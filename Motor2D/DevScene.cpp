@@ -82,6 +82,8 @@ bool DevScene::Update(float dt)
 
 	SetDirection();
 
+	App->render->CursorMovement(dt);
+
 	//Draw
 	App->map->Draw(map_id);
 
@@ -165,6 +167,8 @@ void DevScene::AsignPatrol()
 {
 	if (selected_units.size() == 1)
 	{
+		
+		//Assign patrol
 		Unit* unit = selected_units.front();
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 		{
@@ -187,6 +191,33 @@ void DevScene::AsignPatrol()
 			}
 		}
 	}
+	list<Unit*>::iterator unit = selected_units.begin();
+	while (unit != selected_units.end())
+	{
+		//Start or Stop patrol
+		if (App->input->GetKey(SDL_SCANCODE_KP_ENTER) == KEY_UP)
+		{
+			//Start
+			if ((*unit)->patrol == false && (*unit)->patrol_path.size() != 0)
+			{
+				(*unit)->patrol = true;
+			}
+			else
+			{
+				//Stop
+				if ((*unit)->patrol == true && (*unit)->patrol_path.size() != 0)
+				{
+					(*unit)->patrol = false;
+					iPoint origin = App->map->MapToWorld((*unit)->patrol_path.front().x, (*unit)->patrol_path.front().y, COLLIDER_MAP);
+					(*unit)->SetPosition(origin.x, origin.y);
+					(*unit)->state = UNIT_IDLE;
+				}
+			}
+
+		}
+		++unit;
+	}
+	
 }
 
 void DevScene::DeleteUnits()
@@ -276,7 +307,7 @@ void DevScene::DrawSelection()
 		iPoint up_left = (*it)->GetDrawPosition();
 		App->render->DrawQuad({ up_left.x, up_left.y, (*it)->width, (*it)->height }, 0, 255, 255, 255, false, true);
 
-		if ((*it)->patrol == true)
+		if ((*it)->patrol_path.size() != 0)
 		{
 			vector<iPoint>::iterator point = (*it)->patrol_path.begin();
 			iPoint p0(-1, -1);
@@ -414,7 +445,6 @@ void DevScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 {
 	
 }
-
 
 
 

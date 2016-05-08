@@ -212,7 +212,7 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		if (is_enemy)
+		if (is_enemy && type == FIREBAT)
 			DrawVisionCone();
 			
 	}

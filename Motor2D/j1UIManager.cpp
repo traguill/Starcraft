@@ -507,6 +507,8 @@ void j1UIManager::RectangleSelection()
 
 void j1UIManager::OcultWireframes()
 {
+	if (App->scene_manager->in_game == false)
+		return;
 	App->game_scene->marine_armour_icon->is_visible = false;
 	App->game_scene->marine_weapon_icon->is_visible = false;
 	App->game_scene->marine_wireframe->is_visible = false;

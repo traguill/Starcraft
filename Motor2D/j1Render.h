@@ -59,9 +59,9 @@ public:
 
 	bool GetTransitioning();
 
-private:
+	void CursorMovement(float dt); //Only dev_scene should be allowed to use this
 
-	void CursorMovement(float dt);
+private:
 	void DoTransition();
 
 	void CheckBoundaries();

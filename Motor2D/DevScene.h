@@ -11,6 +11,8 @@ struct SDL_Texture;
 enum UNIT_TYPE;
 class Unit;
 
+#define CAMERA_SPEED 1000
+
 class DevScene : public j1Module
 {
 public:
