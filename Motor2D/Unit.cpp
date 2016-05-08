@@ -250,33 +250,121 @@ void Unit::DrawVisionCone()
 	GetKeyPointsConeVision(open_points, key_points, origin);
 
 	//Add limits to key_points
+	ConePoint source(logic_pos); 
+	if (App->pathfinding->CreateLineWorld(logic_pos, iPoint(left_vision.x, left_vision.y)) == true)
+		source.point_a = iPoint(left_vision.x, left_vision.y);
+	else
+		source.point_a = App->pathfinding->GetLineWorld();
+	if (App->pathfinding->CreateLineWorld(logic_pos, iPoint(right_vision.x, right_vision.y)) == true)
+		source.point_b = iPoint(right_vision.x, right_vision.y);
+	else
+		source.point_b = App->pathfinding->GetLineWorld();
+
+	key_points.push_back(source);
 
 	//Draw key_points
-	//ConnectKeyPoints(key_points);
-
-	//Actual Draw
-	App->render->DrawLine(logic_pos.x, logic_pos.y, left_vision.x,  left_vision.y, 255, 0, 0, 255, true);
-	App->render->DrawLine(logic_pos.x, logic_pos.y,  right_vision.x,  right_vision.y, 255, 0, 0, 255, true);
+	ConnectKeyPoints(key_points);
 
 }
 
 void Unit::ConnectKeyPoints(vector<ConePoint>& list)
 {
+	//Use known Lines and vertical-horizontal connections
 	vector<ConePoint>::iterator it = list.begin();
 	while (it != list.end())
 	{
 		if (it->point_a.x != -1) //Point A to connect
 		{
-			App->render->DrawLine(it->point.x, it->point.y, it->point_a.x, it->point_b.y, 255, 0, 0, 255, true);
+			App->render->DrawLine(it->point.x, it->point.y, it->point_a.x, it->point_a.y, 255, 0, 0, 255, true);
 			if (it->point_b.x != -1)
 			{
 				App->render->DrawLine(it->point.x, it->point.y, it->point_b.x, it->point_b.y, 255, 0, 0, 255, true);
 				it = list.erase(it); //Both connections are made.The point is no longer need
 			}
+			else
+			{
+				if (ConnectDirections(it->point, list) == true) //Point B found by direction search
+				{
+					it = list.erase(it);
+				}
+				else
+					++it;
+			}
 		}
-		else
-			++it;
+		else //NO points connected
+		{
+			if (ConnectDirections(it->point, list, true, false) == true) //Find by X (A)
+			{
+				it->point_a.create(1, 1); //Change to (-1,-1) to avoid null
+			}
+			if (ConnectDirections(it->point, list, false, true) == true) //Find by Y (B)
+			{
+				it->point_b.create(1, 1);
+			}
+
+			if (it->point_a.x != -1 && it->point_b.x != -1) //Both points found (delete point)
+				it = list.erase(it);
+			else
+				++it;
+		}
 	}
+
+	//Draw unconnected points
+	vector<ConePoint>::iterator item = list.begin();
+	while (item != list.end())
+	{
+		App->render->DrawQuad({ item->point.x, item->point.y, 2, 2 }, 0, 255, 0, 255, true, true);
+		++item;
+	}
+}
+
+bool Unit::ConnectDirections(const iPoint& point, const vector<ConePoint>& list, bool by_x, bool by_y)
+{
+	bool ret = false;
+
+	int best_x = 635000;
+	int best_y = 635000;
+
+	iPoint connection(-1, -1);
+
+	vector<ConePoint>::const_iterator it = list.begin();
+	while (it != list.end())
+	{
+		if (it->point.x == point.x && it->point.y == point.y) //Same point
+		{
+			++it;
+			continue;
+		}
+
+		if (it->point.x == point.x && by_x == true)
+		{
+			int distance = abs(it->point.x - point.x);
+			if (distance < best_x)
+			{
+				best_x = distance;
+				connection = it->point;
+			}
+		}
+		if (it->point.y == point.y && by_y == true)
+		{
+			int distance = abs(it->point.y - point.y);
+			if (distance < best_y)
+			{
+				best_y = distance;
+				connection = it->point;
+			}
+		}
+
+		++it;
+	}
+
+	if (connection.x != -1 && connection.y != -1)
+	{
+		App->render->DrawLine(point.x, point.y, connection.x, connection.y, 255, 0, 0, 255, true);
+		ret = true;
+	}
+
+	return ret;
 }
 
 void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<ConePoint>& key_points, const fPoint& origin)
@@ -309,7 +397,7 @@ void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<ConePoint>& key
 			iPoint end_tile = App->map->WorldToMap(end.x, end.y, COLLIDER_MAP);
 
 			ConePoint c_point(*point);
-			key_points.push_back(c_point);
+			
 
 			//Check if something hits the line (point-->end)
 			if (App->pathfinding->CreateLineWorld((*point), iPoint(end.x, end.y), 2) == true)
@@ -334,6 +422,8 @@ void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<ConePoint>& key
 				}
 					
 			}
+
+			key_points.push_back(c_point);
 		}
 		++point;
 	}
@@ -390,19 +480,19 @@ vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)
 					iPoint corner;
 
 					corner.create(colliding_position.x - 4, colliding_position.y - 4);
-					if (CheckAdjacent(corner) == true)
+					if (FindInVector(corner, colliders) == false && CheckAdjacent(corner) == true)
 						colliders.push_back(corner);
 
 					corner.create(colliding_position.x + 4, colliding_position.y - 4);
-					if (CheckAdjacent(corner) == true)
+					if (FindInVector(corner, colliders) == false && CheckAdjacent(corner) == true)
 						colliders.push_back(corner);
 
 					corner.create(colliding_position.x - 4, colliding_position.y + 4);
-					if (CheckAdjacent(corner) == true)
+					if (FindInVector(corner, colliders) == false && CheckAdjacent(corner) == true)
 						colliders.push_back(corner);
 
 					corner.create(colliding_position.x + 4, colliding_position.y + 4);
-					if (CheckAdjacent(corner) == true)
+					if (FindInVector(corner, colliders) == false && CheckAdjacent(corner) == true)
 						colliders.push_back(corner);
 
 				}
@@ -412,6 +502,19 @@ vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)
 	}
 
 	return colliders;
+}
+
+bool Unit::FindInVector(const iPoint& point, const vector<iPoint>& list)
+{
+	vector<iPoint>::const_iterator it = list.begin();
+	while (it != list.end())
+	{
+		if (point.x == it->x && point.y == it->y)
+			return true;
+		++it;
+	}
+
+	return false;
 }
 
 bool Unit::CheckAdjacent(const iPoint& position)

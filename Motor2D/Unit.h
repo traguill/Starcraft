@@ -121,6 +121,8 @@ private:
 	bool HitAdjacentTile(iPoint origin, iPoint hit);
 	bool CheckAdjacent(const iPoint& point);
 	void ConnectKeyPoints(vector<ConePoint>& list);
+	bool FindInVector(const iPoint& point, const vector<iPoint>& list);
+	bool ConnectDirections(const iPoint& point, const vector<ConePoint>& list, bool by_x = false, bool by_y = false); //Search near connections by same x or y or both
 
 protected:
 
