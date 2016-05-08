@@ -6,6 +6,7 @@
 #include "j1Audio.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
+#include "GameScene.h"
 
 Ghost::Ghost() : Unit()
 {
@@ -206,12 +207,27 @@ void Ghost::Snipper()
 
 void Ghost::Shoot(int x, int y)
 {
-	if (mana - App->entity->snipper_cost < 0)
+
+	if (App->game_scene->sniper_ammo == 0)
+	{
+		App->game_scene->no_ammo->is_visible = true;
+		App->game_scene->sniper_ui_timer.Start();
 		return;
+	}
+
+	if (mana - App->entity->snipper_cost < 0)
+	{
+		App->game_scene->no_energy->SetVisible(true);
+		App->game_scene->sniper_ui_timer.Start();
+		return;
+	}
+
 	else
 	{
 		mana -= App->entity->snipper_cost;
+		App->game_scene->sniper_ammo--;
 	}
+	
 	fPoint destination(x - logic_pos.x, y - logic_pos.y);
 	destination.Normalize();
 	destination.Scale(800);

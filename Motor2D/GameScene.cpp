@@ -56,6 +56,10 @@ bool GameScene::Start()
 		buffer = NULL;
 	}
 
+	//Ammunition set
+	sniper_ammo = 3;
+	grenades_ammo = 3;
+
 	LoadHUD();
 
 	//Bomb
@@ -112,6 +116,12 @@ bool GameScene::Update(float dt)
 	if (parthfinding_label_timer.ReadSec() >= 3)
 	{
 		pathfinding_label->is_visible = false;
+	}
+
+	if (sniper_ui_timer.ReadSec() >= 3)
+	{
+		no_energy->is_visible = false;
+		no_ammo->is_visible = false;
 	}
 
 	if (bomb_available == false)
@@ -190,8 +200,14 @@ bool GameScene::Update(float dt)
 			++f_unit;
 		}
 	}
-	
 
+	char ui_sniper_ammo[20];
+	sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
+	sniper_ammo_label->Print(ui_sniper_ammo, false);
+
+	char ui_grenade_ammo[20];
+	sprintf_s(ui_grenade_ammo, sizeof(ui_grenade_ammo), "Hand grenades: %d", grenades_ammo);
+	grenade_ammo_label->Print(ui_grenade_ammo, false);
 
 	return true;
 }
@@ -240,6 +256,10 @@ bool GameScene::CleanUp()
 	run_mark = NULL;
 
 	pathfinding_label = NULL;
+
+	no_ammo = NULL;
+
+	no_energy = NULL;
 
 	App->tex->UnLoad(bomb);
 	bomb = NULL;
@@ -549,6 +569,8 @@ void GameScene::LoadHUD()
 	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
 	pause_mark = App->ui->CreateImage(SDL_Rect{ 66, 162, 56, 38 }, 470 - 56, 0, false);
 	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
+	sniper_ammo_label = App->ui->CreateLabel("cal. 50 bullets: 3", 477, 50);
+	grenade_ammo_label = App->ui->CreateLabel("hand grenades: 3", 477, 62);
 
 	//Pathfinding Label
 	pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
@@ -562,6 +584,14 @@ void GameScene::LoadHUD()
 	//Sniper
 	snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);
 
+	//Ammo
+	no_ammo = App->ui->CreateLabel("Out of ammo!", 280, 300, true);
+	no_ammo->is_visible = false;
+
+	//Energy
+	no_energy = App->ui->CreateLabel("Not enough energy!", 280, 350, true);
+	no_energy->is_visible = false;
+
 	//Win image & button
 	win_background = App->ui->CreateImage({ 847, 1, 221, 108 }, 220, 150, false, true);
 	win_button = App->ui->CreateButton("", 304, 246, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
@@ -571,6 +601,7 @@ void GameScene::LoadHUD()
 	//Loose image & button
 	loose_background = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
 	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 }, this);
+	
 	//loose_button->SetParent(loose_background);
 	loose_button->SetVisible(false);
 }

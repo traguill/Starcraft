@@ -91,6 +91,7 @@ public:
 	UIImage*				observer_wireframe;
 
 	//Sniper
+	j1Timer					sniper_ui_timer;
 	UIImage*                snipper_ui;
 
 	//EVENT MANAGER
@@ -100,6 +101,8 @@ public:
 	UIImage* objectives_box;
 	UIImage* pause_mark;
 	UIImage* run_mark;
+	UILabel* sniper_ammo_label;
+	UILabel* grenade_ammo_label;
 
 	//Pathfinding Label
 	UILabel* pathfinding_label;
@@ -151,6 +154,13 @@ public:
 	uint medic_death;
 	uint observer_death;
 
+	//ammo
+	uint sniper_ammo;
+	uint grenades_ammo;
+	UILabel* no_ammo;
+
+	//Energy
+	UILabel* no_energy;
 };
 
 #endif // __GAME_SCENE_H__
