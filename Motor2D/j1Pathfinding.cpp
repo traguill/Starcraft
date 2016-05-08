@@ -513,8 +513,9 @@ int j1PathFinding::CalculatePath(Path* path, int max_iterations)
 	return it_time;
 }
 
-bool j1PathFinding::CreateLineWorld(const iPoint& origin, const iPoint& destination)
+bool j1PathFinding::CreateLineWorld(const iPoint& origin, const iPoint& destination, int max_error)
 {
+	int count_error = 0; //3 hits to non walkable tiles are allowed 
 	bool ret = true;
 
 	iPoint p1 = origin;
@@ -547,23 +548,37 @@ bool j1PathFinding::CreateLineWorld(const iPoint& origin, const iPoint& destinat
 	{
 		if (steep)
 		{
-			iPoint p = App->map->WorldToMap(y, x, COLLIDER_MAP);
-			if (IsWalkable(p) == false)
+			if (iPoint(y,x) != origin)
 			{
-				hitted_world.x = y;
-				hitted_world.y = x;
-				return false;
+				iPoint p = App->map->WorldToMap(y, x, COLLIDER_MAP);
+				if (IsWalkable(p) == false)
+				{
+					++count_error;
+					if (count_error >= max_error)
+					{
+						hitted_world.x = y;
+						hitted_world.y = x;
+						return false;
+					}
+					
+				}
 			}
-
 		}
 		else
 		{
-			iPoint p = App->map->WorldToMap(x, y, COLLIDER_MAP);
-			if (IsWalkable(p) == false)
+			if (iPoint(x,y) != origin)
 			{
-				hitted_world.x = x;
-				hitted_world.y = y;
-				return false;
+				iPoint p = App->map->WorldToMap(x, y, COLLIDER_MAP);
+				if (IsWalkable(p) == false)
+				{
+					++count_error;
+					if (count_error >= max_error)
+					{
+						hitted_world.x = x;
+						hitted_world.y = y;
+						return false;
+					}
+				}
 			}
 		}
 

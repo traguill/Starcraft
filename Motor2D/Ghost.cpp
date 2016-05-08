@@ -235,6 +235,7 @@ void Ghost::Shoot(int x, int y)
 	bullet->source = this;
 	bullet->destination.x = destination.x;
 	bullet->destination.y = destination.y;
+	bullet->origin = bullet->GetPosition();
 
 	fPoint direction(x - logic_pos.x, y - logic_pos.y);
 	direction.Normalize();

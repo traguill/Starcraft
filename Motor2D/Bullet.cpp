@@ -9,6 +9,7 @@ Bullet::Bullet()
 	bullet_started = true;
 	float_pos.x = logic_pos.x;
 	float_pos.y = logic_pos.y;
+	origin = logic_pos;
 }
 
 Bullet::Bullet(Bullet* b)
@@ -34,6 +35,8 @@ Bullet::Bullet(Bullet* b)
 	pos_down_left =b->pos_down_left;
 	pos_down_left_1 = b->pos_down_left_1;
 	pos_down_left_2 = b->pos_down_left_2;
+
+	origin = logic_pos;
 	
 }
 
@@ -77,7 +80,7 @@ void Bullet::Update(float dt)
 		{
 			if ((*enemy)->state != UNIT_DIE)
 			{
-				(*enemy)->ApplyDamage(1000, source);
+				(*enemy)->ApplyDamage(1000, source, this);
 			}
 			
 		}

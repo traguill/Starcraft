@@ -11,7 +11,19 @@
 
 #define MOVE_RADIUS 8
 
-#define INVISIBILITY_ALPHA 155 //Load this from xml...
+#define INVISIBILITY_ALPHA 155 
+
+class Bullet;
+
+struct ConePoint
+{
+	iPoint point;
+	iPoint point_a;
+	iPoint point_b;
+
+	ConePoint();
+	ConePoint(iPoint p);
+};
 
 enum UNIT_TYPE
 { 
@@ -70,7 +82,7 @@ public:
 
 	bool IsVisible()const;
 
-	void ApplyDamage(uint dmg, Unit* source);
+	void ApplyDamage(uint dmg, Unit* source, Bullet* bullet = NULL);
 
 	int GetLife()const;
 	int GetMana()const;
@@ -100,12 +112,15 @@ private:
 	//AsignPath with offset
 	void AsignPath(vector<iPoint> main_path);
 
+	void AlertNearUnits(iPoint destination, list<Unit*> list); //Near units will go to destination point
+
 	//Draw Vision Cone
 	void DrawVisionCone();
 	vector<iPoint> CollidersInsideConeVision(fPoint p0, fPoint p2, fPoint p3);
-	void GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_points,const fPoint& origin);
+	void GetKeyPointsConeVision(vector<iPoint>& points, vector<ConePoint>& key_points,const fPoint& origin);
 	bool HitAdjacentTile(iPoint origin, iPoint hit);
 	bool CheckAdjacent(const iPoint& point);
+	void ConnectKeyPoints(vector<ConePoint>& list);
 
 protected:
 

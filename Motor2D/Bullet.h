@@ -29,7 +29,7 @@ public:
 
 	fPoint direction;
 
-
+	iPoint origin;
 	iPoint destination;
 
 	Ghost* source;

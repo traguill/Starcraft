@@ -47,7 +47,7 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 	bool CreateLine(const iPoint& origin, const iPoint& destination);
-	bool CreateLineWorld(const iPoint& origin, const iPoint& destination); //Uses world coordinates
+	bool CreateLineWorld(const iPoint& origin, const iPoint& destination, int max_error = 0); //Uses world coordinates
 
 	iPoint GetLineTile()const; //Returns the last hitted tile
 	iPoint GetLineWorld()const; //Return the last hitted position

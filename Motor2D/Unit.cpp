@@ -11,6 +11,7 @@
 #include "math.h"
 #include "j1UIManager.h"
 #include "j1Audio.h"
+#include "Bullet.h"
 
 Unit::Unit() : Entity()
 {
@@ -234,32 +235,24 @@ void Unit::DrawVisionCone()
 	right_vision.y += logic_pos.y;
 
 	fPoint origin(logic_pos.x, logic_pos.y);
-	vector<iPoint> open_points, key_points;
+	vector<iPoint> open_points;
+	vector<ConePoint> key_points;
 
 	open_points= CollidersInsideConeVision(origin, right_vision, left_vision);
 
+	/*vector<iPoint>::iterator corner = open_points.begin();
+	while (corner != open_points.end())
+	{
+		App->render->DrawQuad({ corner->x, corner->y, 2, 2 }, 0, 255, 255, 255, true, true);
+		++corner;
+	}*/
+
 	GetKeyPointsConeVision(open_points, key_points, origin);
 
+	//Add limits to key_points
+
 	//Draw key_points
-	vector<iPoint>::iterator k = key_points.begin();
-	while (k != key_points.end())
-	{
-		iPoint k_tile = App->map->WorldToMap(k->x, k->y, COLLIDER_MAP);
-
-		App->render->DrawQuad({ k->x, k->y, 2, 2 }, 0, 255, 0, 255, true, true);
-
-		/*vector<iPoint>::iterator k2 = key_points.begin();
-		while (k2 != key_points.end())
-		{
-			iPoint k2_tile = App->map->WorldToMap(k2->x, k2->y, COLLIDER_MAP);
-			if (HitAdjacentTile(k_tile, k2_tile) == true)
-			{
-				App->render->DrawLine(k->x, k->y, k2->x, k2->y, 255, 0, 0, 255, true);
-			}
-			++k2;
-		}*/
-		++k;
-	}
+	//ConnectKeyPoints(key_points);
 
 	//Actual Draw
 	App->render->DrawLine(logic_pos.x, logic_pos.y, left_vision.x,  left_vision.y, 255, 0, 0, 255, true);
@@ -267,7 +260,26 @@ void Unit::DrawVisionCone()
 
 }
 
-void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_points, const fPoint& origin)
+void Unit::ConnectKeyPoints(vector<ConePoint>& list)
+{
+	vector<ConePoint>::iterator it = list.begin();
+	while (it != list.end())
+	{
+		if (it->point_a.x != -1) //Point A to connect
+		{
+			App->render->DrawLine(it->point.x, it->point.y, it->point_a.x, it->point_b.y, 255, 0, 0, 255, true);
+			if (it->point_b.x != -1)
+			{
+				App->render->DrawLine(it->point.x, it->point.y, it->point_b.x, it->point_b.y, 255, 0, 0, 255, true);
+				it = list.erase(it); //Both connections are made.The point is no longer need
+			}
+		}
+		else
+			++it;
+	}
+}
+
+void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<ConePoint>& key_points, const fPoint& origin)
 {
 	//Iterate all points
 	//Create line from point to origin
@@ -283,7 +295,7 @@ void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_po
 	vector<iPoint>::iterator point = points.begin();
 	while (point != points.end())
 	{		
-		if (App->pathfinding->CreateLineWorld((*point), iPoint(origin.x, origin.y)) == true)
+		if (App->pathfinding->CreateLineWorld((*point), iPoint(origin.x, origin.y), 2) == true)
 		{
 			
 			//Calculate end point
@@ -296,16 +308,16 @@ void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_po
 
 			iPoint end_tile = App->map->WorldToMap(end.x, end.y, COLLIDER_MAP);
 
-			key_points.push_back((*point));
+			ConePoint c_point(*point);
+			key_points.push_back(c_point);
 
 			//Check if something hits the line (point-->end)
-			if (App->pathfinding->CreateLineWorld((*point), iPoint(end.x, end.y)) == true)
+			if (App->pathfinding->CreateLineWorld((*point), iPoint(end.x, end.y), 2) == true)
 			{
 				//Nothing hits -> Line point-->end
 				if (App->pathfinding->IsWalkable(end_tile) == true)
 				{
-					key_points.push_back(iPoint(end.x, end.y));
-					App->render->DrawLine((*point).x, (*point).y, end.x, end.y, 255, 0, 0, 255, true);
+					c_point.point_a = iPoint(end.x, end.y);
 				}
 			}
 			else
@@ -318,9 +330,7 @@ void Unit::GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_po
 				{
 					hit_pos = App->map->MapToWorld(hit_pos.x, hit_pos.y, COLLIDER_MAP);
 					
-					key_points.push_back(hit_pos);
-
-					App->render->DrawLine((*point).x, (*point).y, hit_pos.x, hit_pos.y, 255, 0, 0, 255, true);
+					c_point.point_a = hit_pos;
 				}
 					
 			}
@@ -446,16 +456,22 @@ void Unit::Attack(float dt)
 
 
 
-void Unit::ApplyDamage(uint dmg, Unit* source)
+void Unit::ApplyDamage(uint dmg, Unit* source, Bullet* bullet)
 {
 	if (source->state == UNIT_DIE) //Just check this case, erase if never happens
 	{
 		LOG("A death unit is attacking me");
 	}
 
+	if (bullet != NULL)
+	{
+		if (is_enemy)
+			AlertNearUnits(bullet->origin, App->entity->enemy_units);
+		else
+			AlertNearUnits(bullet->origin, App->entity->friendly_units);
+	}
+		
 	
-	
-
 	//ACTUAL MOMENT WHEN THE UNIT ATTACK
 	if (source->GetType() != MEDIC)
 	{
@@ -938,6 +954,41 @@ void Unit::CastAbility(const UNIT_ABILITY ability)
 {
 }
 
+void Unit::AlertNearUnits(iPoint destination, list<Unit*> search_list)
+{
+	
+	list<Unit*>::iterator unit = search_list.begin();
+	while (unit != search_list.end())
+	{
+		if ((*unit)->GetPosition().DistanceManhattan(logic_pos) <= vision)
+		{
+			if ((*unit)->target == NULL && (*unit)->state == UNIT_IDLE && (*unit)->state != UNIT_DIE)
+			{
+				//Create path to destination
+				iPoint unit_tile =  App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
+				iPoint dst_tile = App->map->WorldToMap(destination.x, destination.y, COLLIDER_MAP);
+				if (App->pathfinding->CreateLine(unit_tile, dst_tile) == true)
+				{
+					vector<iPoint> new_path;
+					new_path.push_back(unit_tile);
+					new_path.push_back(dst_tile);
+
+					(*unit)->SetPath(new_path);		
+				}
+				else
+				{
+					uint u_path_id = App->pathfinding->CreatePath(unit_tile, dst_tile);
+					if (u_path_id != -1)
+					{
+						(*unit)->SetPathId(u_path_id);
+					}
+				}
+			}
+		}
+		++unit;
+	}
+	
+}
 /*
 ** ABILITIES -------------------------------------------------------------------------------
 */
@@ -976,4 +1027,13 @@ int Unit::GetMaxLife()const
 int Unit::GetMaxMana()const
 {
 	return max_mana;
+}
+
+ConePoint::ConePoint()
+{}
+
+ConePoint::ConePoint(iPoint p)
+{
+	point = p;
+	point_a = point_b = iPoint(-1, -1);
 }
