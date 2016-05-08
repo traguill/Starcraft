@@ -868,14 +868,8 @@ void j1EntityManager::SelectUnits()
 			it++;
 		}
 
-		if (selected_units.size() > 1)
-			App->ui->OcultWireframes();
-
 		if (selected_units.empty() == false)
 			App->game_scene->SelectFX((*selected_units.begin())->type);
-
-		select_start = { 0, 0 };
-		select_end = { 0, 0 };
 	}
 }
 

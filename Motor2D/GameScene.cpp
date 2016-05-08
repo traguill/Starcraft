@@ -447,6 +447,9 @@ void GameScene::AttackFX(UNIT_TYPE type)
 
 void GameScene::LoadAudio()
 {
+	
+
+	
 	//Setting fx volume
 	App->audio->SetFxVolume(10);
 	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
