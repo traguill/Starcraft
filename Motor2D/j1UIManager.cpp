@@ -97,11 +97,9 @@ bool j1UIManager::LoadUiInfo()
 	for (element = ui_elements.child("gui"); element; element = element.next_sibling("gui"))
 	{
 		string progress_bar = "PROGRESS_BAR";
-		string image = "IMAGE";
-		string gui_type = element.attribute("type").as_string();
 
 		//Progressbar
-		if (gui_type == progress_bar)
+		if (element.attribute("type").as_string() == progress_bar)
 		{
 			UIProgressBar* bar = new UIProgressBar();
 
@@ -130,24 +128,8 @@ bool j1UIManager::LoadUiInfo()
 			gui_database.insert(pair<string, UIEntity*>(element.attribute("key").as_string(), bar));
 		}
 
-		else if (gui_type == image)
-		{
-			SDL_Rect section = { element.child("section").attribute("x").as_int(), element.child("section").attribute("y").as_int(),
-								 element.child("section").attribute("w").as_int(), element.child("section").attribute("h").as_int() };
-
-			int x = ui_elements.child("mini_wireframe_pos").attribute("x").as_int();
-			int y = ui_elements.child("mini_wireframe_pos").attribute("y").as_int();
-			
-			UIImage* image = new UIImage(section, x, y);
-
-			image->SetVisible(false);
-
-			gui_database.insert(pair<string, UIEntity*>(element.attribute("key").as_string(), image));
-		}
+		
 	}
-
-	mw_width = ui_elements.child("mini_wireframe_width").attribute("value").as_int();
-	mw_height = ui_elements.child("mini_wireframe_height").attribute("value").as_int();
 
 	return ret;
 }
@@ -197,8 +179,10 @@ bool j1UIManager::Update(float dt)
 		++i;
 	}
 
+
+
 	if (App->entity->selected_units.size() > 1)
-		ShowMiniWireframes();
+		ShowMiniWireframes(dt);
 	
 	else if (App->entity->selected_units.size() == 1)
 		ShowIndividualWireframe();
@@ -514,50 +498,16 @@ void j1UIManager::OcultWireframes()
 	App->game_scene->medic_wireframe->is_visible = false;
 }
 
-void j1UIManager::ShowMiniWireframes()
+void j1UIManager::ShowMiniWireframes(float dt)
 {
-	uint i = 0;
-	for (list<Unit*>::iterator it = App->entity->selected_units.begin(); it != App->entity->selected_units.end(); it++, i++)
+	list<UIImage*>::iterator it = mini_wireframes.begin();
+	while (it != mini_wireframes.end())
 	{
-		switch ((*it)->GetType())
-		{
-		case(MARINE) :
-			ShowMiniWireframe("MARINE", i);
-			break;
-
-		case(FIREBAT) :
-			ShowMiniWireframe("FIREBAT", i);
-			break;
-
-		case(GHOST) :
-			ShowMiniWireframe("GHOST", i);
-			break;
-
-		case(MEDIC) :
-			ShowMiniWireframe("MEDIC", i);
-			break;
-
-		case(OBSERVER) :
-			ShowMiniWireframe("OBSERVER", i);
-			break;
-		}
+		(*it)->Update(dt);
+		if (debug)
+			(*it)->Debug();
+		++it;
 	}
-}
-
-void j1UIManager::ShowMiniWireframe(const char* mw_key, uint pos)
-{
-	UIImage* mini_wireframe = (UIImage*)gui_database.find(mw_key)->second;
-	int x, y;
-	mini_wireframe->GetLocalPos(x, y);
-
-	if (pos < 6)
-		mini_wireframe->SetLocalPos(x + pos * mw_width, y);
-	
-	else if (pos < 12)
-		mini_wireframe->SetLocalPos(x + (pos - 6) * mw_width, y + mw_height);
-
-	mini_wireframe->Draw();
-	mini_wireframe->SetLocalPos(x, y);
 }
 
 void j1UIManager::ShowIndividualWireframe()
@@ -607,6 +557,97 @@ void j1UIManager::ShowIndividualWireframe()
 		break;
 	}
 }
+
+void j1UIManager::CreateMiniWireframe(UNIT_TYPE type, uint pos)
+{
+	uint width = 35; uint height = 40;
+
+	switch (type)
+	{
+	case MARINE:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 736, 445, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 736, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+
+		break;
+
+	case GHOST:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 814, 445, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 814, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+
+		break;
+
+	case FIREBAT:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 776, 445, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 776, 445, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+		break;
+
+	case MEDIC:
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 736, 485, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 736, 485, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+		break;
+
+	case OBSERVER :
+		if (pos < 6)
+			mini_wireframes.push_back(CreateImage({ 776, 485, 33, 34 }, 170 + pos * width, 400, true, false));
+
+		else if (pos < 12)
+			mini_wireframes.push_back(CreateImage({ 776, 485, 33, 34 }, 170 + (pos - 6) * width, 400 + height, true, false));
+		break;
+	}
+}
+
+
+
+void j1UIManager::DeleteMiniWIreframe(uint pos)
+{
+	if (mini_wireframes.size() > 2)
+	{
+		list<UIImage*>::iterator it = mini_wireframes.begin();
+		for (uint i = 0; i < pos; i++)
+			it++;
+
+		delete (*it);
+		it = mini_wireframes.erase(it);
+
+
+		for (uint i = pos; i < mini_wireframes.size(); i++, it++)
+		{
+			int x, y;
+			(*it)->GetLocalPos(x, y);
+
+			if (i != 5)
+				(*it)->SetLocalPos(x - 35, y);
+
+			else
+				(*it)->SetLocalPos(x + 35 * 5, y - 40);
+		}
+	}
+
+	else
+	{
+		list<UIImage*>::iterator it = mini_wireframes.begin();
+		while (it != mini_wireframes.end())
+		{
+			delete *it;
+			*it = NULL;
+			it++;
+		}
+		mini_wireframes.clear();
+	}
+}
+
 
 void j1UIManager::DrawLifeMana()
 {

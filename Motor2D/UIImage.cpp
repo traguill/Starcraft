@@ -43,16 +43,6 @@ bool UIImage::Update(float dt)
 	return ret;
 }
 
-//For images that make more than one blit
-bool UIImage::Draw()
-{
-	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
-	rect.x -= cam_pos.x;
-	rect.y -= cam_pos.y;
-
-	return App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &section);
-}
-
 bool UIImage::CleanUp()
 {
 	bool ret = true;

@@ -74,6 +74,10 @@ public:
 
 	UIMiniMap* CreateMiniMap(SDL_Rect _rec, SDL_Rect section_drawn, iPoint original_map_size, j1Module* listener = NULL);
 
+	void CreateMiniWireframe(UNIT_TYPE type, uint pos);
+
+	void DeleteMiniWIreframe(uint pos);
+
 	void OcultWireframes();
 
 	//UIInputBox* CreateInputBox(const char* text, const int x, const int y, const char* path, j1Module* listener = NULL);
@@ -93,8 +97,7 @@ private:
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
 	void SetNextFocus(); //Sets the focus to the next element
 	void ShowIndividualWireframe();
-	void ShowMiniWireframes();
-	void ShowMiniWireframe(const char* mw_key, uint pos);
+	void ShowMiniWireframes(float dt);
 	void RectangleSelection();
 
 	bool LoadUiInfo();
@@ -122,13 +125,11 @@ private:
 
 	map<string, UIEntity*>	gui_database;
 
-	int						mw_width;
-	int						mw_height;
-
 public:
 	bool					debug;
 	SDL_Rect				selection_rect;
 	CURSOR_STATE			cursor_state;
+	list<UIImage*>			mini_wireframes;
 };
 
 #endif

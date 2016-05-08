@@ -263,6 +263,18 @@ bool j1EntityManager::CleanUp()
 		db_projectile = NULL;
 	}
 
+	//Wireframes change THIS!!
+	list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();
+
+	while (wire_it != App->ui->mini_wireframes.end())
+	{
+		delete *wire_it;
+		*wire_it = NULL;
+
+		wire_it++;
+	}
+	App->ui->mini_wireframes.clear();
+
 	return true;
 }
 
@@ -292,6 +304,11 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 			{
 				if (*s_unit == _unit)
 				{
+					if (selected_units.size() > 1)
+						App->ui->DeleteMiniWIreframe(i);
+					else
+						App->ui->OcultWireframes();
+
 					s_unit = selected_units.erase(s_unit);
 					s_unit--;
 					delete _unit;
@@ -303,9 +320,6 @@ void j1EntityManager::DestroyUnit(Unit* _unit)
 		}
 		++f_unit;
 	}
-
-	if (selected_units.size() < 1)
-		App->ui->OcultWireframes();
 
 	//Destroy from enemy units
 	list<Unit*>::iterator e_unit = enemy_units.begin();
@@ -799,13 +813,24 @@ void j1EntityManager::SelectUnits()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->ui->GetMouseHover() == NULL)
 	{
 		list<Unit*>::iterator it = selected_units.begin();
+		list<UIImage*>::iterator wire_it = App->ui->mini_wireframes.begin();
+
 		while (it != selected_units.end())
 		{
 			(*it)->selected = false;
-			it++;
+
+			if (App->ui->mini_wireframes.size() > 0)
+			{
+				delete *wire_it;
+				*wire_it = NULL;
+			}
+
+			it++; wire_it++;
 		}
+
 		App->ui->OcultWireframes();
 		selected_units.clear();
+		App->ui->mini_wireframes.clear();
 		App->input->GetMouseWorld(select_start.x, select_start.y);
 	}
 
@@ -870,6 +895,15 @@ void j1EntityManager::SelectUnits()
 
 		if (selected_units.empty() == false)
 			App->game_scene->SelectFX((*selected_units.begin())->type);
+
+		if (selected_units.size() > 1)
+		{
+			list<Unit*>::iterator select_it = selected_units.begin();
+			for (uint i = 0; select_it != selected_units.end(); i++, select_it++)
+			{
+				App->ui->CreateMiniWireframe((*select_it)->type, i);
+			}
+		}
 	}
 }
 

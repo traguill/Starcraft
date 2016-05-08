@@ -21,29 +21,6 @@
     <middle x="0" y="0"/>
     <bar_type value="MANA"/>
   </gui>
-  
-  <gui type="IMAGE" key="MARINE">
-    <section x="736" y="445" w="33" h="34"/>
-  </gui>
 
-  <gui type="IMAGE" key="GHOST">
-    <section x="814" y="445" w="33" h="34"/>
-  </gui>
-
-  <gui type="IMAGE" key="FIREBAT">
-    <section x="776" y="445" w="33" h="34"/>
-  </gui>
-
-  <gui type="IMAGE" key="MEDIC">
-    <section x="736" y="485" w="33" h="34"/>
-  </gui>
-
-  <gui type="IMAGE" key="OBSERVER">
-    <section x="776" y="485" w="33" h="34"/>
-  </gui>
-  
-  <mini_wireframe_pos x="170" y="400"/>
-  <mini_wireframe_width value = "35"/>
-  <mini_wireframe_height value = "40"/>  
 
 </gui_elements>
