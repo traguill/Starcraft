@@ -15,7 +15,11 @@ public:
 	// Destructor
 	virtual ~UIImage();
 
+	//For 90% of images
 	bool Update(float dt);
+
+	//For images that make more than one blit
+	bool Draw();
 
 	// Called before quitting
 	bool CleanUp();
