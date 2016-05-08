@@ -212,7 +212,7 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		if (selected)
+		if (is_enemy)
 			DrawVisionCone();
 			
 	}

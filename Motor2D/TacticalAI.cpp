@@ -131,6 +131,20 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			if (unit->events.size() == 0)
 				unit->events.push(ENEMY_TARGET);
 		}
+
+		//Enemy units warn near partners, maybe we need another variable, not range
+		if (unit->is_enemy == true)
+		{
+			list<Unit*>::iterator partner = App->entity->enemy_units.begin();
+			while (partner != App->entity->enemy_units.end())
+			{
+				if ((*partner)->GetTarget() != target && unit->GetPosition().DistanceTo((*partner)->GetPosition()) < unit->GetRange())
+					SetEvent(ENEMY_TARGET, (*partner), target);
+
+				partner++;
+			}
+		}
+
 		break;
 	case END_MOVING:
 		if (unit->events.empty() == true)

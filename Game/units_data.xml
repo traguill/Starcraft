@@ -207,8 +207,8 @@
     <cool value="1" />
     <collider width="15" height="15"/>
     <abilities value="false"/>
-    <mana value="100" />
-    <mana_regen value="5" />
+    <mana value="0" />
+    <mana_regen value="0" />
     <up>
       <rect x="20" y="271"/>
       <rect x="20" y="336"/>
@@ -596,8 +596,8 @@
     <range value="50" />
     <cool value="1" />
     <collider width="15" height="15"/>
-    <mana value="100" />
-    <mana_regen value="5" />
+    <mana value="0" />
+    <mana_regen value="0" />
     <abilities value="false"/>
 
   <up>
@@ -757,8 +757,8 @@
     <range value="50" />
     <collider width="15" height="15"/>
     <cool value="1" />
-    <mana value="100" />
-    <mana_regen value="5" />
+    <mana value="0" />
+    <mana_regen value="0" />
     <up>
       <rect x="3" y="2"/>   
     </up>
@@ -830,8 +830,8 @@
     <range value="30" />
     <cool value="1" />
     <collider width="15" height="15"/>
-    <mana value="100" />
-    <mana_regen value="5" />
+    <mana value="0" />
+    <mana_regen value="0" />
     <abilities value="false"/>
     <up>
       

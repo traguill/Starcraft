@@ -615,9 +615,9 @@ void j1UIManager::DrawLifeMana()
 		UIProgressBar* life = (UIProgressBar*)(*gui_database.find("HEALTH_BAR")).second;
 		UIProgressBar* mana = (UIProgressBar*)(*gui_database.find("MANA_BAR")).second;
 
-		list<Unit*>::iterator unit = App->entity->selected_units.begin();
+		list<Unit*>::iterator unit = App->entity->friendly_units.begin();
 
-		while (unit != App->entity->selected_units.end())
+		while (unit != App->entity->friendly_units.end())
 		{
 			if ((*unit)->state != UNIT_DIE)
 			{
