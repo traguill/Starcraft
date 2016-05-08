@@ -51,6 +51,9 @@ bool j1EntityManager::Start()
 
 	gui_cursor = App->tex->Load("gui/gui_atlas.png");
 
+	select_start = { 0, 0 };
+	select_end = { 0, 0 };
+
 	LoadSounds();
 
 	return ret;
@@ -869,7 +872,7 @@ void j1EntityManager::SelectUnits()
 	}
 
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && (select_start.x == select_start.y == 0))
 	{
 		App->input->GetMouseWorld(select_end.x, select_end.y);
 
