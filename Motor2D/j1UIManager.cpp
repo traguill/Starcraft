@@ -638,6 +638,7 @@ void j1UIManager::DrawLifeMana()
 				mana->SetValue((*unit)->GetMana());
 
 				life->Draw((*unit)->GetPosition().x, (*unit)->GetPosition().y);
+				if ((*unit)->type == GHOST)
 				mana->Draw((*unit)->GetPosition().x, (*unit)->GetPosition().y);
 			}
 			

@@ -51,6 +51,7 @@ private:
 
 	void UnitCreation();
 	void UnitMovement();
+	void BombMovement();
 
 	void DrawSelection();
 	void DeleteUnits();
@@ -72,6 +73,13 @@ private:
 	bool debug;
 
 	list<Unit*> selected_units;
+
+	//Bomb
+	SDL_Texture* bomb;
+	iPoint bomb_pos;
+	SDL_Rect bomb_rect;
+
+	SDL_Rect bomb_zone;
 
 
 public:

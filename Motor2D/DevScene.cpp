@@ -59,6 +59,14 @@ bool DevScene::Start()
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
+	bomb = App->tex->Load("sprites/Bomb.png");
+	bomb_rect = { 30, 12, 32, 32 };
+	bomb_zone = { 700, 150, 50, 50 };
+	bomb_pos.x = 900;
+	bomb_pos.y = 150;
+
+	LoadLevel();
+
 	return true;
 }
 
@@ -82,6 +90,8 @@ bool DevScene::Update(float dt)
 
 	SetDirection();
 
+	BombMovement();
+
 	App->render->CursorMovement(dt);
 
 	//Draw
@@ -89,6 +99,21 @@ bool DevScene::Update(float dt)
 
 	//DrawSelection
 	DrawSelection();
+
+	//Draw Bomb & Zone
+	App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
+	
+	App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
+
+	//Save and load
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+		SaveLevelDesign();
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_UP)
+		debug = !debug;
+
+	if (debug)
+		App->map->Draw(COLLIDER_MAP);
 
 	return true;
 }
@@ -106,6 +131,8 @@ bool DevScene::CleanUp()
 {
 	LOG("Freeing Game Scene");
 
+	App->tex->UnLoad(bomb);
+	bomb = NULL;
 	selected_units.clear();
 
 	return true;
@@ -115,6 +142,33 @@ bool DevScene::CleanUp()
 bool DevScene::GamePaused()const
 {
 	return game_paused;
+}
+
+void DevScene::BombMovement()
+{
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		iPoint mouse;
+		App->input->GetMouseWorld(mouse.x, mouse.y);
+		//Bomb
+		if (PointInRect(mouse, { bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }))
+		{
+			iPoint motion;
+			App->input->GetMouseMotion(motion.x, motion.y);
+			bomb_pos.x += motion.x;
+			bomb_pos.y += motion.y;
+		}
+
+		//End zone
+		if (PointInRect(mouse, bomb_zone))
+		{
+			iPoint motion;
+			App->input->GetMouseMotion(motion.x, motion.y);
+			bomb_zone.x += motion.x;
+			bomb_zone.y += motion.y;
+		}
+		
+	}
 }
 
 void DevScene::SetDirection()
@@ -356,6 +410,11 @@ void DevScene::LoadLevel()
 	else
 		level = level_file.child("level");
 
+	bomb_pos.x = level.child("bomb").attribute("x").as_int();
+	bomb_pos.y = level.child("bomb").attribute("y").as_int();
+	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
+	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
+
 	pugi::xml_node unit_f;
 	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
 	{
@@ -399,6 +458,12 @@ void DevScene::SaveLevelDesign()
 
 	root = data.append_child("level");
 
+	root.append_child("bomb").append_attribute("x") = bomb_pos.x;
+	root.child("bomb").append_attribute("y") = bomb_pos.y;
+	
+	root.append_child("bomb_zone").append_attribute("x") = bomb_zone.x;
+	root.child("bomb_zone").append_attribute("y") = bomb_zone.y;
+
 	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
 	while (unit_f != App->entity->friendly_units.end())
 	{
@@ -412,6 +477,8 @@ void DevScene::SaveLevelDesign()
 
 		friend_unit.append_child("direction").append_attribute("x") = (*unit_f)->direction.x;
 		friend_unit.append_child("direction").append_attribute("y") = (*unit_f)->direction.y;
+
+		friend_unit.append_child("patrol").append_attribute("value") = false; //Friendly Units dont patrol
 
 		++unit_f;
 	}
@@ -429,6 +496,33 @@ void DevScene::SaveLevelDesign()
 
 		enemy_unit.append_child("direction").append_attribute("x") = (*unit_e)->direction.x;
 		enemy_unit.append_child("direction").append_attribute("y") = (*unit_e)->direction.y;
+		
+		//Make sure patrol is activated if patrol path exists
+		if ((*unit_e)->patrol_path.size() > 0)
+			(*unit_e)->patrol = true;
+
+		enemy_unit.append_child("patrol").append_attribute("value") = (*unit_e)->patrol;
+
+		pugi::xml_node patrol = enemy_unit.child("patrol");
+		pugi::xml_node point(NULL);
+
+		if ((*unit_e)->patrol_path.size() > 0)
+		{
+			vector<iPoint>::iterator tile = (*unit_e)->patrol_path.begin();
+			while (tile != (*unit_e)->patrol_path.end())
+			{
+				
+				enemy_unit.child("patrol").append_child("point").append_attribute("tile_x") = tile->x;
+
+				if (point == NULL)
+					point = patrol.child("point");
+				else
+					point = point.next_sibling("point");
+			
+				point.append_attribute("tile_y") = tile->y;
+				++tile;
+			}
+		}
 
 		++unit_e;
 	}

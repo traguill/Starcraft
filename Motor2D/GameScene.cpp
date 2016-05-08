@@ -65,9 +65,9 @@ bool GameScene::Start()
 	//Bomb
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
-	bomb_zone = { 815, 3080, 50, 50 };
-	bomb_pos.x = 926;
-	bomb_pos.y = 1403;
+	bomb_zone = { 815, 1780, 50, 50 };
+	bomb_pos.x = 600;
+	bomb_pos.y = 1503;
 
 	bomb_available = false;
 
@@ -286,7 +286,7 @@ void GameScene::LoadLevel(const char* path)
 	pugi::xml_node		level;
 
 	char* buf;
-	int size = App->fs->Load(path, &buf);
+	int size = App->fs->Load("my_level.xml", &buf);
 	pugi::xml_parse_result result = level_file.load_buffer(buf, size);
 	delete[] buf;
 	buf = NULL;
@@ -298,6 +298,11 @@ void GameScene::LoadLevel(const char* path)
 	}
 	else
 		level = level_file.child("level");
+
+	bomb_pos.x = level.child("bomb").attribute("x").as_int();
+	bomb_pos.y = level.child("bomb").attribute("y").as_int();
+	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
+	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
 
 	pugi::xml_node unit_f;
 	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
@@ -313,7 +318,6 @@ void GameScene::LoadLevel(const char* path)
 		{
 			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
-
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 	}
 
@@ -329,9 +333,8 @@ void GameScene::LoadLevel(const char* path)
 		vector<iPoint> point_path;
 		for (pugi::xml_node point = unit_e.child("patrol").child("point"); point; point = point.next_sibling("point"))
 		{
-			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int()});
+			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
-
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 	}
 }

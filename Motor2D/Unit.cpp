@@ -212,7 +212,7 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		if (is_enemy && type == FIREBAT)
+		if (is_enemy && type == FIREBAT && logic_pos.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
 			DrawVisionCone();
 			
 	}
