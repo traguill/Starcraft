@@ -365,7 +365,7 @@ void j1Render::CursorMovement(float dt)
 
 	// doesnt enter none if
 	if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
-	App->ui->cursor_state = STANDARD;
+		App->ui->cursor_state = STANDARD;
 	
 	
 	//Move camera LEFT

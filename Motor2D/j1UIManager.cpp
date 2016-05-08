@@ -477,8 +477,14 @@ void j1UIManager::RectangleSelection()
 	{
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && pressed_last_frame == false)
 		{
-			App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
-			pressed_last_frame = true;
+			if (GetMouseHover() == NULL)
+			{
+				App->input->GetMouseWorld(selection_rect.x, selection_rect.y);
+				pressed_last_frame = true;
+				selection_valid = true;
+			}
+			else
+				selection_valid = false;
 		}
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -490,9 +496,11 @@ void j1UIManager::RectangleSelection()
 		}
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && pressed_last_frame == true)
+		{
 			pressed_last_frame = false;
+		}
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && selection_valid == true)
 			App->render->DrawQuad(selection_rect, 0, 255, 0, 255, false);
 	}
 }

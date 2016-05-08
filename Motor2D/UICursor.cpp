@@ -175,7 +175,7 @@ bool UICursor::Update(float dt)
 	rect.x -= cam_pos.x;
 	rect.y -= cam_pos.y;
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && App->scene_manager->in_game == true)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && App->scene_manager->in_game == true && App->ui->selection_valid == true)
 	{
 		//MARTI: dont' use operate new inside Blit method Blit(new SDL_Rect{x,y,w,h}) 
 		//DO NOT use magic numbers pls...

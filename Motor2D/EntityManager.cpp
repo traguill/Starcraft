@@ -799,17 +799,23 @@ void j1EntityManager::SelectUnits()
 
 	App->input->GetMouseWorld(mouse_pos.x, mouse_pos.y);
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->ui->GetMouseHover() == NULL)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		list<Unit*>::iterator it = selected_units.begin();
-		while (it != selected_units.end())
+		if (App->ui->GetMouseHover() == NULL)
 		{
-			(*it)->selected = false;
-			it++;
+			list<Unit*>::iterator it = selected_units.begin();
+			while (it != selected_units.end())
+			{
+				(*it)->selected = false;
+				it++;
+			}
+			App->ui->OcultWireframes();
+			App->ui->selection_valid = true;
+			selected_units.clear();
+			App->input->GetMouseWorld(select_start.x, select_start.y);
 		}
-		App->ui->OcultWireframes();
-		selected_units.clear();
-		App->input->GetMouseWorld(select_start.x, select_start.y);
+		else
+			App->ui->selection_valid = false;
 	}
 
 	list<Unit*>::iterator friendly_it = friendly_units.begin();

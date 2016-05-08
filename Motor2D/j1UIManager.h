@@ -129,6 +129,7 @@ public:
 	bool					debug;
 	SDL_Rect				selection_rect;
 	CURSOR_STATE			cursor_state;
+	bool					selection_valid = true;
 };
 
 #endif
