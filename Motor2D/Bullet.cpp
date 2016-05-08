@@ -180,7 +180,7 @@ void Bullet::Update(float dt)
 	}
 
 	//Down-left 1
-	if (angle < -(135 + 45 / 4) && angle > -(90 + 45 / 4))
+	if (angle > -(135 + 45 / 4) && angle < -(90 + 45 / 4))
 	{
 		sprite.rect.x = pos_down_left_1.x;
 		sprite.rect.y = pos_down_left_1.y;
@@ -194,7 +194,7 @@ void Bullet::Update(float dt)
 	}
 
 	//Left
-	if (angle <= (180 + 45 / 4) && angle >= (180 - 45 / 4))
+	if ((angle <= -(180 - 45 / 4) && angle >= (-180) ) || angle >= (180 - 45 / 4))
 	{
 		sprite.rect.x = pos_left.x;
 		sprite.rect.y = pos_left.y;
