@@ -105,6 +105,7 @@ private:
 	vector<iPoint> CollidersInsideConeVision(fPoint p0, fPoint p2, fPoint p3);
 	void GetKeyPointsConeVision(vector<iPoint>& points, vector<iPoint>& key_points,const fPoint& origin);
 	bool HitAdjacentTile(iPoint origin, iPoint hit);
+	bool CheckAdjacent(const iPoint& point);
 
 protected:
 

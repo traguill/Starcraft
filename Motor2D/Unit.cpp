@@ -246,7 +246,9 @@ void Unit::DrawVisionCone()
 	{
 		iPoint k_tile = App->map->WorldToMap(k->x, k->y, COLLIDER_MAP);
 
-		vector<iPoint>::iterator k2 = key_points.begin();
+		App->render->DrawQuad({ k->x, k->y, 2, 2 }, 0, 255, 0, 255, true, true);
+
+		/*vector<iPoint>::iterator k2 = key_points.begin();
 		while (k2 != key_points.end())
 		{
 			iPoint k2_tile = App->map->WorldToMap(k2->x, k2->y, COLLIDER_MAP);
@@ -255,7 +257,7 @@ void Unit::DrawVisionCone()
 				App->render->DrawLine(k->x, k->y, k2->x, k2->y, 255, 0, 0, 255, true);
 			}
 			++k2;
-		}
+		}*/
 		++k;
 	}
 
@@ -375,10 +377,24 @@ vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)
 				if (colliding_position.PointInTriangle(p0, p1, p2) == true)
 				{
 					//Push all the corners
-					colliders.push_back(iPoint(colliding_position.x - 4, colliding_position.y - 4));
-					colliders.push_back(iPoint(colliding_position.x + 4, colliding_position.y - 4));
-					colliders.push_back(iPoint(colliding_position.x - 4, colliding_position.y + 4));
-					colliders.push_back(iPoint(colliding_position.x + 4, colliding_position.y + 4));
+					iPoint corner;
+
+					corner.create(colliding_position.x - 4, colliding_position.y - 4);
+					if (CheckAdjacent(corner) == true)
+						colliders.push_back(corner);
+
+					corner.create(colliding_position.x + 4, colliding_position.y - 4);
+					if (CheckAdjacent(corner) == true)
+						colliders.push_back(corner);
+
+					corner.create(colliding_position.x - 4, colliding_position.y + 4);
+					if (CheckAdjacent(corner) == true)
+						colliders.push_back(corner);
+
+					corner.create(colliding_position.x + 4, colliding_position.y + 4);
+					if (CheckAdjacent(corner) == true)
+						colliders.push_back(corner);
+
 				}
 					
 			}
@@ -386,6 +402,20 @@ vector<iPoint> Unit::CollidersInsideConeVision(fPoint p0, fPoint p1, fPoint p2)
 	}
 
 	return colliders;
+}
+
+bool Unit::CheckAdjacent(const iPoint& position)
+{
+	int walkable_count = 0;
+
+	iPoint tile = App->map->WorldToMap(position.x, position.y, COLLIDER_MAP);
+
+	if (App->pathfinding->IsWalkable(tile)) ++walkable_count;
+	if (App->pathfinding->IsWalkable(iPoint(tile.x - 1, tile.y))) ++walkable_count;
+	if (App->pathfinding->IsWalkable(iPoint(tile.x, tile.y - 1))) ++walkable_count;
+	if (App->pathfinding->IsWalkable(iPoint(tile.x - 1, tile.y - 1))) ++walkable_count;
+
+	return (walkable_count == 1 || walkable_count == 3) ? true : false;
 }
 
 void Unit::Attack(float dt)
