@@ -8,6 +8,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "EntityManager.h"
+#include "GameScene.h"
 
 UIMiniMap::UIMiniMap() : UIEntity()
 {
@@ -77,7 +78,7 @@ bool UIMiniMap::Update(float dt)
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
 	rect.x = init_pos.x - cam.x;
-	rect.y = init_pos.y - cam.y;
+	rect.y = init_pos.y - cam.y + 3;
 
 	App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &draw_section);
 	
@@ -201,6 +202,18 @@ void UIMiniMap::UpdateUnitsMiniMap()
 		it_ue++;
 	}
 
+
+	list<iPoint>::iterator it_b = App->game_scene->bomb_pos.begin();
+
+	while (it_b != App->game_scene->bomb_pos.end())
+	{
+		int x = it_b->x;
+		int y = it_b->y;
+
+		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 255, 255, 0, 255, true, true);
+
+		it_b++;
+	}
 
 }
 
