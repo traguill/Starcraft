@@ -56,6 +56,8 @@ private:
 
 	void LoadHUD();
 
+	void LoadTutorial();
+
 private:
 
 	uint map_id; //Drawable map
@@ -72,6 +74,9 @@ private:
 public:
 
 	//It maybe has to be public
+	UIImage*				tutorial_window;
+	UILabel*				tutorial_text;
+	UIButton*				tutorial_button;
 
 	UILabel*				life_HUD;
 	j1Timer					pause_timer;
