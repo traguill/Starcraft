@@ -62,8 +62,7 @@ bool DevScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
 	bomb_zone = { 700, 150, 50, 50 };
-	bomb_pos.x = 900;
-	bomb_pos.y = 150;
+
 
 	LoadLevel();
 
@@ -90,7 +89,7 @@ bool DevScene::Update(float dt)
 
 	SetDirection();
 
-	BombMovement();
+	BombMovement(); //Put bombs & move
 
 	App->render->CursorMovement(dt);
 
@@ -101,8 +100,14 @@ bool DevScene::Update(float dt)
 	DrawSelection();
 
 	//Draw Bomb & Zone
-	App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
-	
+	list<iPoint>::iterator bomb_position = bomb_pos.begin();
+	while (bomb_position != bomb_pos.end())
+	{
+		App->render->Blit(bomb, (*bomb_position).x, (*bomb_position).y, &bomb_rect);
+		++bomb_position;
+	}
+
+
 	App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
 
 	//Save and load
@@ -134,6 +139,7 @@ bool DevScene::CleanUp()
 	App->tex->UnLoad(bomb);
 	bomb = NULL;
 	selected_units.clear();
+	bomb_pos.clear();
 
 	return true;
 }
@@ -146,18 +152,32 @@ bool DevScene::GamePaused()const
 
 void DevScene::BombMovement()
 {
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_UP)
+	{
+		iPoint mouse;
+		App->input->GetMouseWorld(mouse.x, mouse.y);
+		bomb_pos.push_back(mouse);
+	}
+
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		iPoint mouse;
 		App->input->GetMouseWorld(mouse.x, mouse.y);
-		//Bomb
-		if (PointInRect(mouse, { bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }))
+
+		list<iPoint>::iterator bomb_position = bomb_pos.begin();
+		while (bomb_position != bomb_pos.end())
 		{
-			iPoint motion;
-			App->input->GetMouseMotion(motion.x, motion.y);
-			bomb_pos.x += motion.x;
-			bomb_pos.y += motion.y;
+			//Bomb
+			if (PointInRect(mouse, { (*bomb_position).x, (*bomb_position).y, bomb_rect.w, bomb_rect.h }))
+			{
+				iPoint motion;
+				App->input->GetMouseMotion(motion.x, motion.y);
+				(*bomb_position).x += motion.x;
+				(*bomb_position).y += motion.y;
+			}
+			++bomb_position;
 		}
+
 
 		//End zone
 		if (PointInRect(mouse, bomb_zone))
@@ -167,7 +187,7 @@ void DevScene::BombMovement()
 			bomb_zone.x += motion.x;
 			bomb_zone.y += motion.y;
 		}
-		
+
 	}
 }
 
@@ -221,7 +241,7 @@ void DevScene::AsignPatrol()
 {
 	if (selected_units.size() == 1)
 	{
-		
+
 		//Assign patrol
 		Unit* unit = selected_units.front();
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
@@ -271,7 +291,7 @@ void DevScene::AsignPatrol()
 		}
 		++unit;
 	}
-	
+
 }
 
 void DevScene::DeleteUnits()
@@ -301,7 +321,7 @@ void DevScene::UnitMovement()
 		{
 			if (PointInRect(mouse, { (*f_unit)->GetDrawPosition().x, (*f_unit)->GetDrawPosition().y, (*f_unit)->width, (*f_unit)->height }) == true)
 			{
-				if(Find(*f_unit) == false)
+				if (Find(*f_unit) == false)
 					selected_units.push_back(*f_unit);
 				return;
 			}
@@ -335,7 +355,7 @@ void DevScene::UnitMovement()
 			(*it)->SetPosition((*it)->GetPosition().x + motion.x, (*it)->GetPosition().y + motion.y);
 
 			++it;
-		}	
+		}
 	}
 
 }
@@ -410,8 +430,16 @@ void DevScene::LoadLevel()
 	else
 		level = level_file.child("level");
 
-	bomb_pos.x = level.child("bomb").attribute("x").as_int();
-	bomb_pos.y = level.child("bomb").attribute("y").as_int();
+	pugi::xml_node bomb_root = level.child("bomb");
+	pugi::xml_node bomb_node;
+	for (bomb_node = bomb_root.child("position"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
+	{
+		iPoint bomb_position;
+		bomb_position.x = bomb_node.attribute("x").as_int();
+		bomb_position.y = bomb_node.attribute("y").as_int();
+
+		bomb_pos.push_back(bomb_position);
+	}
 	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
 	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
 
@@ -458,9 +486,30 @@ void DevScene::SaveLevelDesign()
 
 	root = data.append_child("level");
 
-	root.append_child("bomb").append_attribute("x") = bomb_pos.x;
-	root.child("bomb").append_attribute("y") = bomb_pos.y;
-	
+	root.append_child("bomb");
+	pugi::xml_node bomb_node = root.child("bomb");
+
+	list<iPoint>::iterator bomb_position = bomb_pos.begin();
+	pugi::xml_node bomb_position_node(NULL);
+
+	while (bomb_position != bomb_pos.end())
+	{
+		bomb_node.append_child("position").append_attribute("x") = (*bomb_position).x;
+
+		if (bomb_position_node == NULL)
+		{
+			bomb_position_node = bomb_node.child("position");
+		}
+		else
+		{
+			bomb_position_node = bomb_position_node.next_sibling("position");
+		}
+
+		bomb_position_node.append_attribute("y") = (*bomb_position).y;
+
+		++bomb_position;
+	}
+
 	root.append_child("bomb_zone").append_attribute("x") = bomb_zone.x;
 	root.child("bomb_zone").append_attribute("y") = bomb_zone.y;
 
@@ -496,7 +545,7 @@ void DevScene::SaveLevelDesign()
 
 		enemy_unit.append_child("direction").append_attribute("x") = (*unit_e)->direction.x;
 		enemy_unit.append_child("direction").append_attribute("y") = (*unit_e)->direction.y;
-		
+
 		//Make sure patrol is activated if patrol path exists
 		if ((*unit_e)->patrol_path.size() > 0)
 			(*unit_e)->patrol = true;
@@ -511,14 +560,14 @@ void DevScene::SaveLevelDesign()
 			vector<iPoint>::iterator tile = (*unit_e)->patrol_path.begin();
 			while (tile != (*unit_e)->patrol_path.end())
 			{
-				
+
 				enemy_unit.child("patrol").append_child("point").append_attribute("tile_x") = tile->x;
 
 				if (point == NULL)
 					point = patrol.child("point");
 				else
 					point = point.next_sibling("point");
-			
+
 				point.append_attribute("tile_y") = tile->y;
 				++tile;
 			}
@@ -537,8 +586,14 @@ void DevScene::SaveLevelDesign()
 
 void DevScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 {
-	
+
 }
+
+
+
+
+
+
 
 
 

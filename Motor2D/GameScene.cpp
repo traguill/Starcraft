@@ -66,7 +66,7 @@ bool GameScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
 	bomb_zone = { 815, 1780, 50, 50 };
-	
+	bomb_pos.clear();
 
 	debug = false;
 	game_paused = false;
@@ -83,6 +83,7 @@ bool GameScene::Start()
 	LoadAudio();
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
+
 
 	game_finished = false;
 
@@ -145,7 +146,7 @@ bool GameScene::Update(float dt)
 		LoseGame();
 	}
 
-	if (bomb_pos.size() >= 0)
+	if (bomb_pos.size() > 0)
 	{
 		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
 		while (f_unit != App->entity->friendly_units.end())
@@ -324,8 +325,9 @@ void GameScene::LoadLevel(const char* path)
 	else
 		level = level_file.child("level");
 
+	pugi::xml_node bomb_root = level.child("bomb");
 	pugi::xml_node bomb_node;
-	for (bomb_node = level.child("poisition"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
+	for (bomb_node = bomb_root.child("position"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
 	{
 		iPoint bomb_position;
 		bomb_position.x = bomb_node.attribute("x").as_int();
