@@ -45,6 +45,8 @@ public:
 	void MoveFX(UNIT_TYPE type);
 	void AttackFX(UNIT_TYPE type);
 
+	void LoseGame();
+
 private:
 
 	void LoadLevel(const char* path);
@@ -64,6 +66,8 @@ private:
 	bool debug;
 
 	uint music;
+
+	bool game_finished;
 
 public:
 

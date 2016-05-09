@@ -87,6 +87,8 @@ bool GameScene::Start()
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
+	game_finished = false;
+
 	return true;
 }
 
@@ -161,9 +163,7 @@ bool GameScene::Update(float dt)
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
 	{
-		loose_background->is_visible = true;
-		loose_button->is_visible = true;
-		game_paused = true;
+		LoseGame();
 	}
 
 	if (bomb_available == false)
@@ -607,4 +607,16 @@ void GameScene::LoadHUD()
 	
 	//loose_button->SetParent(loose_background);
 	loose_button->SetVisible(false);
+}
+
+void GameScene::LoseGame()
+{
+	if (game_finished == false)
+	{
+		loose_background->is_visible = true;
+		loose_button->is_visible = true;
+		game_paused = true;
+
+		game_finished = true;
+	}
 }
