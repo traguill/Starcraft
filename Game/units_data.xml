@@ -746,7 +746,7 @@
       <rect x="0" y="1342"/> 
    </death>
     
-    <deathanimspeed value="0.005"/>
+    <deathanimspeed value="0.05"/>
     <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
