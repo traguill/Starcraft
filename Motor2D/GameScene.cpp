@@ -312,7 +312,7 @@ void GameScene::LoadLevel(const char* path)
 	pugi::xml_node		level;
 
 	char* buf;
-	int size = App->fs->Load("my_level.xml", &buf);
+	int size = App->fs->Load(path, &buf);
 	pugi::xml_parse_result result = level_file.load_buffer(buf, size);
 	delete[] buf;
 	buf = NULL;
@@ -353,6 +353,10 @@ void GameScene::LoadLevel(const char* path)
 			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+
+		Unit* u = App->entity->friendly_units.back();
+		u->direction.x = unit_f.child("direction").attribute("x").as_int();
+		u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
 	}
 
 	pugi::xml_node unit_e;
@@ -370,6 +374,10 @@ void GameScene::LoadLevel(const char* path)
 			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+
+		Unit* u = App->entity->enemy_units.back();
+		u->direction.x = unit_e.child("direction").attribute("x").as_int();
+		u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
 	}
 }
 

@@ -62,11 +62,12 @@
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="601" />
+		<position x="522" />
 		<position y="216" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
+			<point tile_x="75" tile_y="27" />
 			<point tile_x="64" tile_y="27" />
 			<point tile_x="68" tile_y="27" />
 			<point tile_x="79" tile_y="27" />
@@ -78,10 +79,11 @@
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
 		<position x="632" />
-		<position y="210" />
+		<position y="164" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
+			<point tile_x="79" tile_y="26" />
 			<point tile_x="79" tile_y="23" />
 			<point tile_x="79" tile_y="33" />
 			<point tile_x="79" tile_y="19" />
@@ -93,10 +95,11 @@
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
 		<position x="384" />
-		<position y="327" />
+		<position y="340" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
+			<point tile_x="48" tile_y="40" />
 			<point tile_x="48" tile_y="41" />
 			<point tile_x="48" tile_y="41" />
 			<point tile_x="48" tile_y="33" />
@@ -107,11 +110,12 @@
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="430" />
+		<position x="598" />
 		<position y="504" />
-		<direction x="1" />
+		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
+			<point tile_x="53" tile_y="63" />
 			<point tile_x="63" tile_y="63" />
 			<point tile_x="51" tile_y="63" />
 			<point tile_x="79" tile_y="63" />
@@ -126,7 +130,9 @@
 		<position y="823" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="154" tile_y="102" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -135,7 +141,9 @@
 		<position y="771" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="152" tile_y="96" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
@@ -144,7 +152,9 @@
 		<position y="753" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="310" tile_y="94" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -153,7 +163,9 @@
 		<position y="427" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="227" tile_y="53" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -162,7 +174,9 @@
 		<position y="430" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="234" tile_y="53" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -171,7 +185,9 @@
 		<position y="487" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="227" tile_y="60" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -180,52 +196,63 @@
 		<position y="488" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="234" tile_y="61" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1824" />
 		<position y="663" />
-		<direction x="5" />
-		<direction y="9" />
-		<patrol value="false" />
+		<direction x="-65" />
+		<direction y="-2" />
+		<patrol value="true">
+			<point tile_x="228" tile_y="82" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1876" />
 		<position y="667" />
-		<direction x="0" />
-		<direction y="1" />
-		<patrol value="false" />
+		<direction x="64" />
+		<direction y="-4" />
+		<patrol value="true">
+			<point tile_x="234" tile_y="83" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1817" />
 		<position y="720" />
-		<direction x="0" />
-		<direction y="1" />
-		<patrol value="false" />
+		<direction x="-52" />
+		<direction y="-10" />
+		<patrol value="true">
+			<point tile_x="227" tile_y="90" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1878" />
 		<position y="723" />
-		<direction x="0" />
-		<direction y="1" />
-		<patrol value="false" />
+		<direction x="35" />
+		<direction y="-9" />
+		<patrol value="true">
+			<point tile_x="234" tile_y="90" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="2122" />
+		<position x="2129" />
 		<position y="640" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
+			<point tile_x="265" tile_y="80" />
 			<point tile_x="283" tile_y="80" />
 			<point tile_x="283" tile_y="80" />
 			<point tile_x="259" tile_y="80" />
@@ -236,11 +263,12 @@
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="2122" />
+		<position x="2129" />
 		<position y="592" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
+			<point tile_x="265" tile_y="74" />
 			<point tile_x="283" tile_y="74" />
 			<point tile_x="283" tile_y="74" />
 			<point tile_x="259" tile_y="74" />
@@ -255,7 +283,9 @@
 		<position y="89" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="156" tile_y="11" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -264,7 +294,9 @@
 		<position y="90" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="144" tile_y="11" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -273,7 +305,9 @@
 		<position y="171" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="143" tile_y="21" />
+		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
@@ -282,6 +316,8 @@
 		<position y="171" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="false" />
+		<patrol value="true">
+			<point tile_x="157" tile_y="21" />
+		</patrol>
 	</enemy_unit>
 </level>

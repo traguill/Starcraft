@@ -458,6 +458,10 @@ void DevScene::LoadLevel()
 			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+
+		Unit* u = App->entity->friendly_units.back();
+		u->direction.x = unit_f.child("direction").attribute("x").as_int();
+		u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
 	}
 
 	pugi::xml_node unit_e;
@@ -475,6 +479,10 @@ void DevScene::LoadLevel()
 			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 		}
 		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+
+		Unit* u = App->entity->enemy_units.back();
+		u->direction.x = unit_e.child("direction").attribute("x").as_int();
+		u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
 	}
 }
 
