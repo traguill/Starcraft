@@ -308,8 +308,9 @@ void GameScene::LoadLevel(const char* path)
 	else
 		level = level_file.child("level");
 
+	pugi::xml_node bomb_root = level.child("bomb");
 	pugi::xml_node bomb_node;
-	for (bomb_node = level.child("poisition"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
+	for (bomb_node = bomb_root.child("position"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
 	{
 		iPoint bomb_position;
 		bomb_position.x = bomb_node.attribute("x").as_int();
@@ -319,7 +320,6 @@ void GameScene::LoadLevel(const char* path)
 	}
 	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
 	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
-
 	pugi::xml_node unit_f;
 	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
 	{
