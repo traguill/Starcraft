@@ -247,7 +247,7 @@ bool j1UIManager::CleanUp()
 	LOG("Freeing UIManager");
 	bool ret = true;
 
-
+	CleanUpGameUI();
 
 	list<UIEntity*>::iterator i = gui_elements.begin();
 
