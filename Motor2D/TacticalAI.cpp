@@ -149,12 +149,14 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 	case END_MOVING:
 		if (unit->events.empty() == true)
 		{
-			if (unit->patrol == false)
+			iPoint unit_pos = unit->GetPosition();
+			if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
 				unit->state = UNIT_IDLE;
-
-			else
+			else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 			{
-				CheckPatrolPath(unit);
+				vector<iPoint> tmp;
+				tmp.push_back(unit->original_point);
+				unit->SetPath(tmp);
 			}
 		}
 
@@ -164,13 +166,15 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			unit->events.pop();
 			if (unit->GetTarget() == NULL)
 			{
-				if (unit->patrol)
-				{
-					CheckPatrolPath(unit);
-					
-				}
-				else
+				iPoint unit_pos = unit->GetPosition();
+				if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
 					unit->state = UNIT_IDLE;
+				else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
+				{
+					vector<iPoint> tmp;
+					tmp.push_back(unit->original_point);
+					unit->SetPath(tmp);
+				}
 			}
 			else
 				SetEvent(event, unit, unit->GetTarget());
@@ -200,13 +204,15 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			//else
 			//	LOG("(Friend): I've killed one enemy and no one is near");
 
-			if (unit->patrol)
-			{
-				unit->SetPath(unit->patrol_path);
-			}
-				
-			else
+			iPoint unit_pos = unit->GetPosition();
+			if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
 				unit->state = UNIT_IDLE;
+			else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
+			{
+				vector<iPoint> tmp;
+				tmp.push_back(unit->original_point);
+				unit->SetPath(tmp);
+			}
 
 		}
 		break;
