@@ -139,7 +139,7 @@ bool GameScene::Update(float dt)
 		LoseGame();
 	}
 
-	if (bomb_pos.size() >= 0)
+	if (bomb_pos.size() > 0)
 	{
 		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
 		while (f_unit != App->entity->friendly_units.end())
@@ -151,6 +151,7 @@ bool GameScene::Update(float dt)
 			{
 				if (pos.x > (*bomb_position).x && pos.x < (*bomb_position).x + bomb_rect.w && pos.y > (*bomb_position).y && pos.y < (*bomb_position).y + bomb_rect.w && (*f_unit)->IsVisible())
 				{
+					App->game_scene->intel_left--;
 					bomb_position = bomb_pos.erase(bomb_position);
 				}
 				++bomb_position;
