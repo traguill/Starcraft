@@ -732,7 +732,21 @@
   <adownleft>
     <rect x="421" y="33"/>
   </adownleft>
-
+    <death>
+      <pos x="-50" y="-50"/>
+      <size w="128" h="128"/>
+      <rect x="0" y="318"/>
+      <rect x="0" y="446"/>
+      <rect x="0" y="574"/>
+      <rect x="0" y="702"/>
+      <rect x="0" y="830"/>
+      <rect x="0" y="958"/>
+      <rect x="0" y="1086"/>
+      <rect x="0" y="1214"/>
+      <rect x="0" y="1342"/> 
+   </death>
+    
+    <deathanimspeed value="0.005"/>
     <animwalkspeed value="0.13"/>
     <animidlespeed value="0.005"/>
     <animattackspeed value="0.05"/>
