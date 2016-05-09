@@ -66,7 +66,10 @@ bool GameScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
 	bomb_zone = { 815, 1780, 50, 50 };
-	
+	bomb_pos.x = 600;
+	bomb_pos.y = 1503;
+
+	bomb_available = false;
 
 	debug = false;
 	game_paused = false;
@@ -106,6 +109,10 @@ bool GameScene::Update(float dt)
 
 	App->map->Draw(map_id);
 
+	if (App->entity->debug)
+	{
+		App->render->DrawQuad({ bomb_pos.x, bomb_pos.y, bomb_rect.w, bomb_rect.h }, 255, 255, 0, 255, true, true);
+	}
 
 	//Updating timer
 	if (parthfinding_label_timer.ReadSec() >= 3)
@@ -119,6 +126,10 @@ bool GameScene::Update(float dt)
 		no_ammo->is_visible = false;
 	}
 
+	if (bomb_available == false)
+		App->render->Blit(bomb, bomb_pos.x, bomb_pos.y, &bomb_rect);
+	else
+		App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
@@ -155,23 +166,19 @@ bool GameScene::Update(float dt)
 		LoseGame();
 	}
 
-	if (bomb_pos.size() >= 0)
+	if (bomb_available == false)
 	{
 		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
 		while (f_unit != App->entity->friendly_units.end())
 		{
 			iPoint pos = (*f_unit)->GetPosition();
 
-			list<iPoint>::iterator bomb_position = bomb_pos.begin();
-			while (bomb_position != bomb_pos.end())
+			if (pos.x > bomb_pos.x && pos.x < bomb_pos.x + bomb_rect.w && pos.y > bomb_pos.y && pos.y < bomb_pos.y + bomb_rect.w && (*f_unit)->IsVisible())
 			{
-				if (pos.x > (*bomb_position).x && pos.x < (*bomb_position).x + bomb_rect.w && pos.y > (*bomb_position).y && pos.y < (*bomb_position).y + bomb_rect.w && (*f_unit)->IsVisible())
-				{
-					bomb_position = bomb_pos.erase(bomb_position);
-				}
-				++bomb_position;
+				LOG("YOU HAVE THE BOMB");
+				App->events->game_event = BOMB_RETRIVED;
+				bomb_available = true;
 			}
-			
 
 			++f_unit;
 		}
@@ -201,19 +208,6 @@ bool GameScene::Update(float dt)
 	char ui_grenade_ammo[20];
 	sprintf_s(ui_grenade_ammo, sizeof(ui_grenade_ammo), "Hand grenades: %d", grenades_ammo);
 	grenade_ammo_label->Print(ui_grenade_ammo, false);
-
-	if (bomb_pos.size() > 0)
-	{
-		list<iPoint>::iterator bomb_position = bomb_pos.begin();
-		while (bomb_position != bomb_pos.end())
-		{
-			App->render->Blit(bomb, (*bomb_position).x, (*bomb_position).y, &bomb_rect);
-			++bomb_position;
-		}
-		
-	}
-	else
-		App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
 
 	return true;
 }
@@ -276,7 +270,7 @@ bool GameScene::CleanUp()
 	loose_background = NULL;
 	loose_button = NULL;
 
-	bomb_pos.clear();
+
 	return true;
 }
 
@@ -305,15 +299,8 @@ void GameScene::LoadLevel(const char* path)
 	else
 		level = level_file.child("level");
 
-	pugi::xml_node bomb_node;
-	for (bomb_node = level.child("poisition"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
-	{
-		iPoint bomb_position;
-		bomb_position.x = bomb_node.attribute("x").as_int();
-		bomb_position.y = bomb_node.attribute("y").as_int();
-
-		bomb_pos.push_back(bomb_position);
-	}
+	bomb_pos.x = level.child("bomb").attribute("x").as_int();
+	bomb_pos.y = level.child("bomb").attribute("y").as_int();
 	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
 	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
 
