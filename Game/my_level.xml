@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <level>
 	<bomb>
-		<position x="564" y="247" />
-		<position x="1312" y="391" />
+		<position x="508" y="245" />
+		<position x="3343" y="346" />
+		<position x="3449" y="3827" />
 	</bomb>
-	<bomb_zone x="2411" y="531" />
+	<bomb_zone x="1516" y="3304" />
 	<friendly_unit>
 		<type value="MARINE" />
 		<is_enemy value="false" />
-		<position x="270" />
-		<position y="1438" />
+		<position x="988" />
+		<position y="1791" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
@@ -17,8 +18,8 @@
 	<friendly_unit>
 		<type value="MARINE" />
 		<is_enemy value="false" />
-		<position x="323" />
-		<position y="1439" />
+		<position x="1036" />
+		<position y="1788" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
@@ -26,8 +27,8 @@
 	<friendly_unit>
 		<type value="MARINE" />
 		<is_enemy value="false" />
-		<position x="381" />
-		<position y="1438" />
+		<position x="1079" />
+		<position y="1789" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
@@ -35,8 +36,8 @@
 	<friendly_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="false" />
-		<position x="323" />
-		<position y="1391" />
+		<position x="1035" />
+		<position y="1757" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
@@ -44,8 +45,8 @@
 	<friendly_unit>
 		<type value="MEDIC" />
 		<is_enemy value="false" />
-		<position x="298" />
-		<position y="1494" />
+		<position x="1001" />
+		<position y="1725" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
@@ -53,271 +54,960 @@
 	<friendly_unit>
 		<type value="GHOST" />
 		<is_enemy value="false" />
-		<position x="353" />
-		<position y="1495" />
+		<position x="1064" />
+		<position y="1727" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="false" />
 	</friendly_unit>
 	<enemy_unit>
-		<type value="FIREBAT" />
+		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="522" />
-		<position y="216" />
-		<direction x="-1" />
-		<direction y="0" />
-		<patrol value="true">
-			<point tile_x="75" tile_y="27" />
-			<point tile_x="64" tile_y="27" />
-			<point tile_x="68" tile_y="27" />
-			<point tile_x="79" tile_y="27" />
-			<point tile_x="79" tile_y="27" />
-			<point tile_x="51" tile_y="27" />
-		</patrol>
+		<position x="2928" />
+		<position y="97" />
+		<direction x="-85" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2929" />
+		<position y="125" />
+		<direction x="-71" />
+		<direction y="-10" />
+		<patrol value="false" />
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
 		<position x="632" />
-		<position y="164" />
+		<position y="240" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="79" tile_y="26" />
-			<point tile_x="79" tile_y="23" />
-			<point tile_x="79" tile_y="33" />
-			<point tile_x="79" tile_y="19" />
-			<point tile_x="79" tile_y="19" />
-			<point tile_x="79" tile_y="60" />
+			<point tile_x="79" tile_y="30" />
+			<point tile_x="79" tile_y="55" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="384" />
-		<position y="340" />
-		<direction x="0" />
-		<direction y="1" />
+		<position x="584" />
+		<position y="440" />
+		<direction x="-0.99996084" />
+		<direction y="0.00884921104" />
 		<patrol value="true">
-			<point tile_x="48" tile_y="40" />
-			<point tile_x="48" tile_y="41" />
-			<point tile_x="48" tile_y="41" />
-			<point tile_x="48" tile_y="33" />
-			<point tile_x="48" tile_y="33" />
-			<point tile_x="48" tile_y="56" />
+			<point tile_x="73" tile_y="55" />
+			<point tile_x="34" tile_y="55" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="598" />
+		<position x="576" />
 		<position y="504" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
-			<point tile_x="53" tile_y="63" />
-			<point tile_x="63" tile_y="63" />
-			<point tile_x="51" tile_y="63" />
-			<point tile_x="79" tile_y="63" />
-			<point tile_x="79" tile_y="63" />
-			<point tile_x="29" tile_y="63" />
+			<point tile_x="72" tile_y="63" />
+			<point tile_x="33" tile_y="63" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1237" />
-		<position y="823" />
+		<position x="882" />
+		<position y="196" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="154" tile_y="102" />
+			<point tile_x="110" tile_y="24" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1223" />
-		<position y="771" />
+		<position x="939" />
+		<position y="195" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="152" tile_y="96" />
+			<point tile_x="117" tile_y="24" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="939" />
+		<position y="260" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="true">
+			<point tile_x="117" tile_y="32" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="885" />
+		<position y="258" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="true">
+			<point tile_x="110" tile_y="32" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="936" />
+		<position y="499" />
+		<direction x="0" />
+		<direction y="-84" />
+		<patrol value="true">
+			<point tile_x="117" tile_y="62" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="882" />
+		<position y="498" />
+		<direction x="-2" />
+		<direction y="-95" />
+		<patrol value="true">
+			<point tile_x="110" tile_y="62" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="879" />
+		<position y="549" />
+		<direction x="-2" />
+		<direction y="-136" />
+		<patrol value="true">
+			<point tile_x="110" tile_y="68" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="933" />
+		<position y="544" />
+		<direction x="6" />
+		<direction y="-129" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="336" />
+		<position y="305" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1066" />
+		<position y="839" />
+		<direction x="-52" />
+		<direction y="-2" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1066" />
+		<position y="800" />
+		<direction x="-48" />
+		<direction y="-9" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1007" />
+		<position y="800" />
+		<direction x="37" />
+		<direction y="0" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1004" />
+		<position y="838" />
+		<direction x="146" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1176" />
+		<position y="176" />
+		<direction x="0.890951693" />
+		<direction y="0.454097986" />
+		<patrol value="true">
+			<point tile_x="147" tile_y="22" />
+			<point tile_x="173" tile_y="36" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1216" />
+		<position y="136" />
+		<direction x="0.929203153" />
+		<direction y="0.369569421" />
+		<patrol value="true">
+			<point tile_x="152" tile_y="17" />
+			<point tile_x="181" tile_y="30" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2104" />
+		<position y="464" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="263" tile_y="58" />
+			<point tile_x="229" tile_y="58" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2096" />
+		<position y="408" />
+		<direction x="-121" />
+		<direction y="-4" />
+		<patrol value="true">
+			<point tile_x="262" tile_y="51" />
+			<point tile_x="225" tile_y="51" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1699" />
+		<position y="408" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1751" />
+		<position y="409" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1697" />
+		<position y="446" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1749" />
+		<position y="446" />
+		<direction x="0" />
+		<direction y="1" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3147" />
+		<position y="276" />
+		<direction x="-98" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3149" />
+		<position y="334" />
+		<direction x="-123" />
+		<direction y="-5" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3147" />
+		<position y="399" />
+		<direction x="-180" />
+		<direction y="-8" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3280" />
+		<position y="248" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="410" tile_y="31" />
+			<point tile_x="400" tile_y="31" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3280" />
+		<position y="216" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="410" tile_y="27" />
+			<point tile_x="400" tile_y="27" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="2487" />
-		<position y="753" />
+		<position x="2976" />
+		<position y="616" />
+		<direction x="-0.812233984" />
+		<direction y="-0.583331704" />
+		<patrol value="true">
+			<point tile_x="372" tile_y="77" />
+			<point tile_x="386" tile_y="87" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3048" />
+		<position y="536" />
+		<direction x="0.867530406" />
+		<direction y="0.497384101" />
+		<patrol value="true">
+			<point tile_x="381" tile_y="67" />
+			<point tile_x="393" tile_y="75" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3425" />
+		<position y="424" />
+		<direction x="-55" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3423" />
+		<position y="460" />
+		<direction x="-47" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3380" />
+		<position y="419" />
+		<direction x="122" />
+		<direction y="4" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3376" />
+		<position y="457" />
+		<direction x="121" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3432" />
+		<position y="952" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="310" tile_y="94" />
+			<point tile_x="429" tile_y="119" />
+			<point tile_x="429" tile_y="156" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1822" />
-		<position y="427" />
+		<position x="3488" />
+		<position y="952" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="227" tile_y="53" />
+			<point tile_x="436" tile_y="119" />
+			<point tile_x="436" tile_y="158" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1876" />
-		<position y="430" />
+		<position x="3528" />
+		<position y="1248" />
+		<direction x="0" />
+		<direction y="-1" />
+		<patrol value="true">
+			<point tile_x="441" tile_y="156" />
+			<point tile_x="441" tile_y="121" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3568" />
+		<position y="1248" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="234" tile_y="53" />
+			<point tile_x="446" tile_y="156" />
+			<point tile_x="446" tile_y="122" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1823" />
-		<position y="487" />
+		<position x="3082" />
+		<position y="1134" />
+		<direction x="78" />
+		<direction y="-11" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3078" />
+		<position y="1177" />
+		<direction x="87" />
+		<direction y="-8" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3256" />
+		<position y="1205" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="true">
-			<point tile_x="227" tile_y="60" />
-		</patrol>
+		<patrol value="false" />
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1877" />
-		<position y="488" />
-		<direction x="0" />
-		<direction y="1" />
-		<patrol value="true">
-			<point tile_x="234" tile_y="61" />
-		</patrol>
+		<position x="3211" />
+		<position y="1202" />
+		<direction x="2" />
+		<direction y="74" />
+		<patrol value="false" />
 	</enemy_unit>
 	<enemy_unit>
-		<type value="MARINE" />
+		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="1824" />
-		<position y="663" />
-		<direction x="-65" />
-		<direction y="-2" />
-		<patrol value="true">
-			<point tile_x="228" tile_y="82" />
-		</patrol>
-	</enemy_unit>
-	<enemy_unit>
-		<type value="MARINE" />
-		<is_enemy value="true" />
-		<position x="1876" />
-		<position y="667" />
-		<direction x="64" />
-		<direction y="-4" />
-		<patrol value="true">
-			<point tile_x="234" tile_y="83" />
-		</patrol>
-	</enemy_unit>
-	<enemy_unit>
-		<type value="MARINE" />
-		<is_enemy value="true" />
-		<position x="1817" />
-		<position y="720" />
-		<direction x="-52" />
+		<position x="3410" />
+		<position y="1591" />
+		<direction x="-99" />
 		<direction y="-10" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3410" />
+		<position y="1671" />
+		<direction x="-121" />
+		<direction y="-10" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2768" />
+		<position y="969" />
+		<direction x="45" />
+		<direction y="-55" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2825" />
+		<position y="988" />
+		<direction x="69" />
+		<direction y="-81" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2803" />
+		<position y="1012" />
+		<direction x="68" />
+		<direction y="-85" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2742" />
+		<position y="987" />
+		<direction x="65" />
+		<direction y="-87" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3672" />
+		<position y="2480" />
+		<direction x="0" />
+		<direction y="-1" />
 		<patrol value="true">
-			<point tile_x="227" tile_y="90" />
+			<point tile_x="459" tile_y="310" />
+			<point tile_x="459" tile_y="258" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3576" />
+		<position y="2480" />
+		<direction x="0.00434778491" />
+		<direction y="-0.999990582" />
+		<patrol value="true">
+			<point tile_x="447" tile_y="310" />
+			<point tile_x="447" tile_y="248" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1878" />
-		<position y="723" />
-		<direction x="35" />
-		<direction y="-9" />
-		<patrol value="true">
-			<point tile_x="234" tile_y="90" />
-		</patrol>
+		<position x="3169" />
+		<position y="2152" />
+		<direction x="115" />
+		<direction y="-2" />
+		<patrol value="false" />
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="2129" />
-		<position y="640" />
+		<position x="3165" />
+		<position y="2232" />
+		<direction x="82" />
+		<direction y="-4" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3616" />
+		<position y="3488" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
-			<point tile_x="265" tile_y="80" />
-			<point tile_x="283" tile_y="80" />
-			<point tile_x="283" tile_y="80" />
-			<point tile_x="259" tile_y="80" />
-			<point tile_x="286" tile_y="80" />
-			<point tile_x="245" tile_y="80" />
+			<point tile_x="452" tile_y="436" />
+			<point tile_x="434" tile_y="436" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
-		<type value="MARINE" />
+		<type value="FIREBAT" />
 		<is_enemy value="true" />
-		<position x="2129" />
-		<position y="592" />
+		<position x="3616" />
+		<position y="3536" />
 		<direction x="-1" />
 		<direction y="0" />
 		<patrol value="true">
-			<point tile_x="265" tile_y="74" />
-			<point tile_x="283" tile_y="74" />
-			<point tile_x="283" tile_y="74" />
-			<point tile_x="259" tile_y="74" />
-			<point tile_x="286" tile_y="74" />
-			<point tile_x="245" tile_y="74" />
+			<point tile_x="452" tile_y="442" />
+			<point tile_x="436" tile_y="442" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1252" />
-		<position y="89" />
+		<position x="3352" />
+		<position y="3848" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="156" tile_y="11" />
+			<point tile_x="419" tile_y="481" />
+			<point tile_x="419" tile_y="471" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1154" />
-		<position y="90" />
+		<position x="3312" />
+		<position y="3848" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="144" tile_y="11" />
+			<point tile_x="414" tile_y="481" />
+			<point tile_x="414" tile_y="471" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1149" />
-		<position y="171" />
+		<position x="3312" />
+		<position y="3808" />
 		<direction x="0" />
-		<direction y="1" />
+		<direction y="-1" />
 		<patrol value="true">
-			<point tile_x="143" tile_y="21" />
+			<point tile_x="414" tile_y="476" />
+			<point tile_x="414" tile_y="463" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>
 		<type value="MARINE" />
 		<is_enemy value="true" />
-		<position x="1259" />
-		<position y="171" />
+		<position x="3344" />
+		<position y="3808" />
 		<direction x="0" />
 		<direction y="1" />
 		<patrol value="true">
-			<point tile_x="157" tile_y="21" />
+			<point tile_x="418" tile_y="476" />
+			<point tile_x="418" tile_y="463" />
 		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3512" />
+		<position y="3664" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="439" tile_y="458" />
+			<point tile_x="429" tile_y="458" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3512" />
+		<position y="3624" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="439" tile_y="453" />
+			<point tile_x="429" tile_y="453" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2834" />
+		<position y="3611" />
+		<direction x="107" />
+		<direction y="51" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2801" />
+		<position y="3639" />
+		<direction x="100" />
+		<direction y="64" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2765" />
+		<position y="3669" />
+		<direction x="86" />
+		<direction y="55" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3256" />
+		<position y="2632" />
+		<direction x="1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="407" tile_y="329" />
+			<point tile_x="369" tile_y="329" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="3256" />
+		<position y="2688" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="407" tile_y="336" />
+			<point tile_x="370" tile_y="336" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="FIREBAT" />
+		<is_enemy value="true" />
+		<position x="2912" />
+		<position y="2576" />
+		<direction x="-0.714212835" />
+		<direction y="0.699928582" />
+		<patrol value="true">
+			<point tile_x="364" tile_y="322" />
+			<point tile_x="349" tile_y="334" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2430" />
+		<position y="2720" />
+		<direction x="64" />
+		<direction y="-10" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2431" />
+		<position y="2678" />
+		<direction x="52" />
+		<direction y="-7" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2431" />
+		<position y="2633" />
+		<direction x="45" />
+		<direction y="-5" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1968" />
+		<position y="3496" />
+		<direction x="0.707106769" />
+		<direction y="-0.707106769" />
+		<patrol value="true">
+			<point tile_x="246" tile_y="437" />
+			<point tile_x="223" tile_y="460" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2008" />
+		<position y="3528" />
+		<direction x="0.733962893" />
+		<direction y="-0.679189563" />
+		<patrol value="true">
+			<point tile_x="251" tile_y="441" />
+			<point tile_x="223" tile_y="467" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1928" />
+		<position y="3536" />
+		<direction x="0.758276641" />
+		<direction y="-0.651932955" />
+		<patrol value="true">
+			<point tile_x="241" tile_y="442" />
+			<point tile_x="213" tile_y="467" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1976" />
+		<position y="3560" />
+		<direction x="-0.618872225" />
+		<direction y="0.785491705" />
+		<patrol value="true">
+			<point tile_x="247" tile_y="445" />
+			<point tile_x="218" tile_y="475" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1745" />
+		<position y="3927" />
+		<direction x="7" />
+		<direction y="-104" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1796" />
+		<position y="3930" />
+		<direction x="10" />
+		<direction y="-104" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="96" />
+		<position y="1136" />
+		<direction x="1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="12" tile_y="142" />
+			<point tile_x="48" tile_y="142" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="96" />
+		<position y="1184" />
+		<direction x="-1" />
+		<direction y="0" />
+		<patrol value="true">
+			<point tile_x="12" tile_y="148" />
+			<point tile_x="48" tile_y="148" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="480" />
+		<position y="1000" />
+		<direction x="0" />
+		<direction y="-1" />
+		<patrol value="true">
+			<point tile_x="60" tile_y="125" />
+			<point tile_x="60" tile_y="158" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="408" />
+		<position y="992" />
+		<direction x="0" />
+		<direction y="-1" />
+		<patrol value="true">
+			<point tile_x="51" tile_y="124" />
+			<point tile_x="51" tile_y="158" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2200" />
+		<position y="3656" />
+		<direction x="-0.99998796" />
+		<direction y="-0.00490190182" />
+		<patrol value="true">
+			<point tile_x="275" tile_y="457" />
+			<point tile_x="319" tile_y="457" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2192" />
+		<position y="3712" />
+		<direction x="-0.999508262" />
+		<direction y="-0.0313571207" />
+		<patrol value="true">
+			<point tile_x="274" tile_y="464" />
+			<point tile_x="321" tile_y="464" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="2256" />
+		<position y="3976" />
+		<direction x="0.999610066" />
+		<direction y="-0.0279220697" />
+		<patrol value="true">
+			<point tile_x="282" tile_y="497" />
+			<point tile_x="329" tile_y="497" />
+		</patrol>
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1439" />
+		<position y="3558" />
+		<direction x="155" />
+		<direction y="-2" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1438" />
+		<position y="3599" />
+		<direction x="188" />
+		<direction y="-12" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1506" />
+		<position y="3556" />
+		<direction x="83" />
+		<direction y="-3" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="1504" />
+		<position y="3592" />
+		<direction x="83" />
+		<direction y="0" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3323" />
+		<position y="3164" />
+		<direction x="-162" />
+		<direction y="-5" />
+		<patrol value="false" />
+	</enemy_unit>
+	<enemy_unit>
+		<type value="MARINE" />
+		<is_enemy value="true" />
+		<position x="3321" />
+		<position y="3218" />
+		<direction x="-119" />
+		<direction y="-3" />
+		<patrol value="false" />
 	</enemy_unit>
 </level>
