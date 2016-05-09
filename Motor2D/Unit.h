@@ -208,7 +208,6 @@ public:
 	bool waiting_for_path = false;
 	//Patrol
 	bool patrol;
-	iPoint original_point;
 	vector<iPoint> patrol_path;
 
 	//Attacking

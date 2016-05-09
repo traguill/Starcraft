@@ -1172,7 +1172,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			marine->SetPosition(x, y);
 
 			//Patrol Stuff
-			marine->original_point = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
 			marine->patrol = patrolling;
 			pos = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
 			marine->patrol_path.push_back(pos);
@@ -1194,7 +1193,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			medic->SetPosition(x, y);
 
 			//Patrol Stuff
-			medic->original_point = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
 			medic->patrol = patrolling;
 			pos = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
 			medic->patrol_path.push_back(pos);
@@ -1228,7 +1226,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			firebat->SetPosition(x, y);
 			
 			//Patrol Stuff
-			firebat->original_point = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
 			firebat->patrol = patrolling;
 			pos = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
 			firebat->patrol_path.push_back(pos);
@@ -1249,7 +1246,6 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			unit->SetPosition(x, y);
 			
 			//Patrol Stuff
-			unit->original_point = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
 			unit->patrol = patrolling;
 			pos = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
 			unit->patrol_path.push_back(pos);
