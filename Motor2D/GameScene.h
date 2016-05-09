@@ -74,6 +74,8 @@ public:
 	//It maybe has to be public
 
 	UILabel*				life_HUD;
+	j1Timer					pause_timer;
+	bool					active_timer = false;
 
 	//Marine
 	UIImage*				marine_weapon_icon;

@@ -136,17 +136,7 @@ bool GameScene::Update(float dt)
 	}*/
 
 
-	if (GamePaused())
-	{
-		run_mark->is_visible = false;
-		pause_mark->is_visible = true;
-	}
 
-	else
-	{
-		run_mark->is_visible = true;
-		pause_mark->is_visible = false;
-	}
 
 
 	//Check win or lose
@@ -214,6 +204,35 @@ bool GameScene::Update(float dt)
 	}
 	else
 		App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
+
+	if (GamePaused())
+	{
+		run_mark->is_visible = false;
+		pause_mark->is_visible = true;
+
+		if (active_timer == false)
+		{
+			pause_timer.Start();
+			active_timer = true;
+		}
+
+		if (pause_timer.ReadSec() <= 0.8)
+		{
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 1, -App->render->camera.y + 1, App->render->camera.w - 2, App->render->camera.h - 2 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 2, -App->render->camera.y + 2, App->render->camera.w - 4, App->render->camera.h - 4 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 3, -App->render->camera.y + 3, App->render->camera.w - 6, App->render->camera.h - 6 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 4, -App->render->camera.y + 4, App->render->camera.w - 8, App->render->camera.h - 8 }, 255, 0, 0, 255, false, true);
+		}
+
+		if (pause_timer.ReadSec() > 1.6)
+			active_timer = false;
+	}
+
+	else
+	{
+		run_mark->is_visible = true;
+		pause_mark->is_visible = false;
+	}
 
 	return true;
 }
