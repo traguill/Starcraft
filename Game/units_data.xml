@@ -200,8 +200,10 @@
     <width value="24" />
     <height value="32" />
     <life value="100" />
+    <friendly_life value="300" />
     <speed value="100" />
     <damage value="10" />
+    <friendly_damage value="12" />
     <vision value="130" />
     <range value="80" />
     <cool value="1" />

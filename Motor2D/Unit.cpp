@@ -32,11 +32,15 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	sprite.rect.w = u->width;
 	sprite.rect.h = u->height;
 	speed = u->speed;
+
 	damage = u->damage;
+
 	vision = u->vision;
 	range = u->range;
 	cool = u->cool;
+
 	life = u->life;
+
 	type = u->type;
 	width = u->width;
 	height = u->height;
@@ -48,7 +52,11 @@ Unit::Unit(Unit* u, bool _is_enemy) : Entity()
 	direction.x = 0;
 	direction.y = 1;
 
-	max_life = u->max_life;
+	if (is_enemy == false && type == MARINE)
+		max_life = u->friendly_max_life;
+	else
+		max_life = u->max_life;
+
 	max_mana = u->max_mana;
 	mana = u->mana;
 	mana_regen = u->mana_regen;

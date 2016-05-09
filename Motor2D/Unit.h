@@ -53,6 +53,7 @@ class Unit : public Entity
 {
 	friend class j1EntityManager;
 	friend class Ghost;
+	friend class Marine;
 
 public:
 
@@ -129,6 +130,8 @@ protected:
 	SDL_Texture* auxiliar_texture;
 	uint speed;
 	uint damage;
+	uint friendly_damage;
+	uint friendly_life;
 	uint range;
 	uint cool;
 	vector<iPoint> path;

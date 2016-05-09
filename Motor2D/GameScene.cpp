@@ -71,20 +71,14 @@ bool GameScene::Start()
 	debug = false;
 	game_paused = false;
 
-	//UI TESTS
-	//
-	//Not able to use labels, missing font;
-	//----------App->ui->CreateLabel("hola", 100, 100);
-	//----------App->ui->CreateButton("hola", 100, 100, { 0,0,50,50 }, { 0, 0, 0, 500 }, { 0, 0, 0, 0 });
-	
-	//music = App->audio->PlayMusic("StarcraftTerrantheme1.wav");
-
 	LoadLevel("my_level.xml");
 	LoadAudio();
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
 	game_finished = false;
+
+	LoadTutorial();
 
 	return true;
 }
@@ -279,8 +273,20 @@ bool GameScene::CleanUp()
 	loose_background = NULL;
 	loose_button = NULL;
 
+	tutorial_text = NULL;
+	tutorial_window = NULL;
+	tutorial_button = NULL;
+
 	bomb_pos.clear();
 	return true;
+}
+
+void GameScene::LoadTutorial()
+{
+	//tutorial_window = App->ui->CreateImage({ 1320, 125, 412, 292 }, 194, 130, true);
+	
+		/*tutorial_button = App->ui->CreateButton()
+		tutorial_label = App->ui->CreateLabel*/
 }
 
 

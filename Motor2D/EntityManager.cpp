@@ -468,6 +468,7 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 		unit_db->mana = unit.child("mana").attribute("value").as_int();
 		unit_db->mana_regen = unit.child("mana_regen").attribute("value").as_int();
 		unit_db->max_life = unit_db->life;
+		unit_db->friendly_max_life = unit_db->friendly_life;
 		unit_db->max_mana = unit_db->mana;
 
 		string at_fx = unit.child("attack_fx").attribute("value").as_string();
@@ -514,6 +515,8 @@ void j1EntityManager::LoadUnitInfo(pugi::xml_node& units)
 			break;
 
 		case(MARINE) :
+			unit_db->friendly_life = unit.child("friendly_life").attribute("value").as_int();
+			unit_db->friendly_damage = unit.child("friendly_damage").attribute("value").as_int();
 			Marine* marine; marine = new Marine(unit_db);
 			units_database.insert(pair<string, Unit*>(unit.attribute("TYPE").as_string(), marine));
 			delete unit_db;
