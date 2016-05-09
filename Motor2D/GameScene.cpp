@@ -66,7 +66,7 @@ bool GameScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bomb_rect = { 30, 12, 32, 32 };
 	bomb_zone = { 815, 1780, 50, 50 };
-	bomb_pos.clear();
+	
 
 	debug = false;
 	game_paused = false;
@@ -83,7 +83,6 @@ bool GameScene::Start()
 	LoadAudio();
 
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
-
 
 	game_finished = false;
 
@@ -146,7 +145,7 @@ bool GameScene::Update(float dt)
 		LoseGame();
 	}
 
-	if (bomb_pos.size() > 0)
+	if (bomb_pos.size() >= 0)
 	{
 		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
 		while (f_unit != App->entity->friendly_units.end())
@@ -211,22 +210,6 @@ bool GameScene::Update(float dt)
 		run_mark->is_visible = false;
 		pause_mark->is_visible = true;
 
-		if (active_timer == false)
-		{
-			pause_timer.Start();
-			active_timer = true;
-		}
-
-		if (pause_timer.ReadSec() <= 0.8)
-		{
-			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 1, -App->render->camera.y + 1, App->render->camera.w - 2, App->render->camera.h - 2 }, 255, 0, 0, 255, false, true);
-			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 2, -App->render->camera.y + 2, App->render->camera.w - 4, App->render->camera.h - 4 }, 255, 0, 0, 255, false, true);
-			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 3, -App->render->camera.y + 3, App->render->camera.w - 6, App->render->camera.h - 6 }, 255, 0, 0, 255, false, true);
-			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 4, -App->render->camera.y + 4, App->render->camera.w - 8, App->render->camera.h - 8 }, 255, 0, 0, 255, false, true);
-		}
-
-		if (pause_timer.ReadSec() > 1.6)
-			active_timer = false;
 	}
 
 	else
@@ -325,9 +308,8 @@ void GameScene::LoadLevel(const char* path)
 	else
 		level = level_file.child("level");
 
-	pugi::xml_node bomb_root = level.child("bomb");
 	pugi::xml_node bomb_node;
-	for (bomb_node = bomb_root.child("position"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
+	for (bomb_node = level.child("poisition"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
 	{
 		iPoint bomb_position;
 		bomb_position.x = bomb_node.attribute("x").as_int();

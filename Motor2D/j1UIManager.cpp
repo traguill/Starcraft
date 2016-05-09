@@ -237,7 +237,25 @@ bool j1UIManager::Update(float dt)
 
 	cursor->Update(dt);
 
+	if (App->game_scene->GamePaused())
+	{
+		if (App->game_scene->active_timer == false)
+		{
+			App->game_scene->pause_timer.Start();
+			App->game_scene->active_timer = true;
+		}
 
+		if (App->game_scene->pause_timer.ReadSec() <= 0.8)
+		{
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 1, -App->render->camera.y + 1, App->render->camera.w - 2, App->render->camera.h - 2 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 2, -App->render->camera.y + 2, App->render->camera.w - 4, App->render->camera.h - 4 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 3, -App->render->camera.y + 3, App->render->camera.w - 6, App->render->camera.h - 6 }, 255, 0, 0, 255, false, true);
+			App->render->DrawQuad(SDL_Rect{ -App->render->camera.x + 4, -App->render->camera.y + 4, App->render->camera.w - 8, App->render->camera.h - 8 }, 255, 0, 0, 255, false, true);
+		}
+
+		if (App->game_scene->pause_timer.ReadSec() > 1.6)
+			App->game_scene->active_timer = false;
+	}
 	return ret;
 }
 
