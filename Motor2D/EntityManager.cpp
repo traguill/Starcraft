@@ -1119,6 +1119,11 @@ void j1EntityManager::CheckUnderCursor()
 					(*sel_unit)->avoid_change_state = false;
 					App->tactical_ai->SetEvent(ENEMY_TARGET, (*sel_unit), (*i));
 				}
+
+				else if (selected_units.size() > 1 && (*sel_unit)->GetType() == MEDIC)
+				{
+					App->tactical_ai->CalculatePath((*sel_unit), (*i));
+				}
 				++sel_unit;
 			}
 

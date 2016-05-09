@@ -39,12 +39,11 @@ public:
 	bool CleanUp();
 
 	void SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target = NULL);
-	
-private:
 
 	//Calculates the path to the target
 	bool CalculatePath(Unit* unit, Unit* target);
-
+	
+private:
 	//Search near enemies and target them (enemy->friendly friendly->enemy)
 	bool SearchNearEnemyUnit(Unit* unit, list<Unit*> search_list);
 
