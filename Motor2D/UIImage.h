@@ -24,6 +24,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void SetImageRect(SDL_Rect img_rec);
+
 private:
 	SDL_Rect section;
 	iPoint init_pos;

@@ -39,6 +39,8 @@ bool GameScene::Start()
 {
 	LOG("Starting GameScene");
 
+	tutorial_finished = false;
+
 	LoadAudio();
 
 	//Load Map
@@ -93,6 +95,8 @@ bool GameScene::PreUpdate()
 // Called each loop iteration
 bool GameScene::Update(float dt)
 {
+	if (tutorial_finished == false)
+		game_paused = true;
 
 	//Debug (go to menu)
 	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_UP)
@@ -277,6 +281,7 @@ bool GameScene::CleanUp()
 	tutorial_text = NULL;
 	tutorial_window = NULL;
 	tutorial_button = NULL;
+	tutorial_image = NULL;
 
 	bomb_pos.clear();
 	return true;
@@ -284,10 +289,22 @@ bool GameScene::CleanUp()
 
 void GameScene::LoadTutorial()
 {
-	//tutorial_window = App->ui->CreateImage({ 1320, 125, 412, 292 }, 194, 130, true);
-	
-		/*tutorial_button = App->ui->CreateButton()
-		tutorial_label = App->ui->CreateLabel*/
+	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
+	tutorial_button = App->ui->CreateButton("", 290, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
+	tutorial_text = App->ui->CreateLabel("COLLECT the 3 bombs that the enemies have in their bases.", 140, 300);
+	tutorial_image = App->ui->CreateImage({ 1290, 461, 65, 71 }, 310, 150, true);
+
+	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
+	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
+	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies");
+	tutorial_text_queue.push("Press W to activate sniper mode. CLICK RIGHT to shoot.");
+
+	tutorial_images_queue.push({1434,438, 184, 183});
+	tutorial_images_queue.push({1466, 705, 62, 78});
+	tutorial_images_queue.push({1406, 720, 52, 64});
+	tutorial_images_queue.push({1407, 648, 283, 71});
+
+	LOG("QUEUE SIZE %i", tutorial_images_queue.size());
 }
 
 
@@ -432,6 +449,29 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		else if ((UIButton*)gui == loose_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(MENU);
+		}
+
+		if ((UIButton*)gui == tutorial_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			if (tutorial_text_queue.size() > 0)
+			{
+				tutorial_text->Print(tutorial_text_queue.front());
+				tutorial_text_queue.pop();
+
+				tutorial_image->SetImageRect(tutorial_images_queue.front());
+				tutorial_images_queue.pop();
+			}
+			else
+			{
+				tutorial_button->SetVisible(false);
+				tutorial_window->SetVisible(false);
+				tutorial_text->SetVisible(false);
+				tutorial_image->SetVisible(false);
+
+				tutorial_finished = true;
+				game_paused = false;
+			}
+
 		}
 	}
 }

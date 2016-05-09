@@ -59,3 +59,11 @@ bool UIImage::CleanUp()
 
 	return ret;
 }
+
+void UIImage::SetImageRect(SDL_Rect image_rect)
+{
+	section = image_rect;
+
+	rect.w = section.w;
+	rect.h = section.h;
+}

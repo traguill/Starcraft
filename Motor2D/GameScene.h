@@ -6,8 +6,10 @@
 #include "UILabel.h"
 #include "UIButton.h"
 #include "j1Timer.h"
+#include <queue>
 
 struct SDL_Texture;
+struct SDL_Rect;
 enum UNIT_TYPE;
 
 class GameScene : public j1Module
@@ -70,6 +72,7 @@ private:
 	uint music;
 
 	bool game_finished;
+	bool tutorial_finished;
 
 public:
 
@@ -77,6 +80,9 @@ public:
 	UIImage*				tutorial_window;
 	UILabel*				tutorial_text;
 	UIButton*				tutorial_button;
+	UIImage*				tutorial_image;
+	queue<SDL_Rect>			tutorial_images_queue;
+	queue<char*>			tutorial_text_queue;
 
 	UILabel*				life_HUD;
 	j1Timer					pause_timer;
