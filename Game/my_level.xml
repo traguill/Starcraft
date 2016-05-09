@@ -121,7 +121,7 @@
 		<position y="196" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="110" tile_y="24" />
 		</patrol>
 	</enemy_unit>
@@ -132,7 +132,7 @@
 		<position y="195" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="117" tile_y="24" />
 		</patrol>
 	</enemy_unit>
@@ -143,7 +143,7 @@
 		<position y="260" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="117" tile_y="32" />
 		</patrol>
 	</enemy_unit>
@@ -154,7 +154,7 @@
 		<position y="258" />
 		<direction x="0" />
 		<direction y="1" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="110" tile_y="32" />
 		</patrol>
 	</enemy_unit>
@@ -165,7 +165,7 @@
 		<position y="499" />
 		<direction x="0" />
 		<direction y="-84" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="117" tile_y="62" />
 		</patrol>
 	</enemy_unit>
@@ -176,7 +176,7 @@
 		<position y="498" />
 		<direction x="-2" />
 		<direction y="-95" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="110" tile_y="62" />
 		</patrol>
 	</enemy_unit>
@@ -187,7 +187,7 @@
 		<position y="549" />
 		<direction x="-2" />
 		<direction y="-136" />
-		<patrol value="true">
+		<patrol value="false">
 			<point tile_x="110" tile_y="68" />
 		</patrol>
 	</enemy_unit>

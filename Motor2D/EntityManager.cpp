@@ -1177,11 +1177,14 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			//Patrol Stuff
 			marine->original_point = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
 			marine->patrol = patrolling;
-			pos = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
-			marine->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
+			if (marine->patrol)
 			{
-				marine->patrol_path.push_back(point_path[i]);
+				pos = App->map->WorldToMap(marine->GetPosition().x, marine->GetPosition().y, COLLIDER_MAP);
+				marine->patrol_path.push_back(pos);
+				for (int i = 0; i < point_path.size(); i++)
+				{
+					marine->patrol_path.push_back(point_path[i]);
+				}
 			}
 			
 			if (is_enemy)
@@ -1199,13 +1202,15 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			//Patrol Stuff
 			medic->original_point = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
 			medic->patrol = patrolling;
-			pos = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
-			medic->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
+			if (medic->patrol)
 			{
-				medic->patrol_path.push_back(point_path[i]);
+				pos = App->map->WorldToMap(medic->GetPosition().x, medic->GetPosition().y, COLLIDER_MAP);
+				medic->patrol_path.push_back(pos);
+				for (int i = 0; i < point_path.size(); i++)
+				{
+					medic->patrol_path.push_back(point_path[i]);
+				}
 			}
-
 			if (is_enemy)
 				enemy_units.push_back(medic);
 
@@ -1233,13 +1238,15 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			//Patrol Stuff
 			firebat->original_point = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
 			firebat->patrol = patrolling;
-			pos = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
-			firebat->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
+			if (firebat->patrol)
 			{
-				firebat->patrol_path.push_back(point_path[i]);
+				pos = App->map->WorldToMap(firebat->GetPosition().x, firebat->GetPosition().y, COLLIDER_MAP);
+				firebat->patrol_path.push_back(pos);
+				for (int i = 0; i < point_path.size(); i++)
+				{
+					firebat->patrol_path.push_back(point_path[i]);
+				}
 			}
-
 			if (is_enemy)
 				enemy_units.push_back(firebat);
 
@@ -1254,13 +1261,15 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 			//Patrol Stuff
 			unit->original_point = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
 			unit->patrol = patrolling;
-			pos = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
-			unit->patrol_path.push_back(pos);
-			for (int i = 0; i < point_path.size(); i++)
+			if (unit->patrol)
 			{
-				unit->patrol_path.push_back(point_path[i]);
+				pos = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP);
+				unit->patrol_path.push_back(pos);
+				for (int i = 0; i < point_path.size(); i++)
+				{
+					unit->patrol_path.push_back(point_path[i]);
+				}
 			}
-
 			if (is_enemy)
 				enemy_units.push_back(unit);
 
