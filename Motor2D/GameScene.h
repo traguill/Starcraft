@@ -161,7 +161,7 @@ public:
 
 	//ammo
 	uint sniper_ammo;
-	uint grenades_ammo;
+	uint intel_left;
 	UILabel* no_ammo;
 
 	//Energy

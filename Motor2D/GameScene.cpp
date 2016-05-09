@@ -58,7 +58,7 @@ bool GameScene::Start()
 
 	//Ammunition set
 	sniper_ammo = 3;
-	grenades_ammo = 3;
+	intel_left = 3;
 
 	LoadHUD();
 
@@ -189,9 +189,9 @@ bool GameScene::Update(float dt)
 	sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
 	sniper_ammo_label->Print(ui_sniper_ammo, false);
 
-	char ui_grenade_ammo[20];
-	sprintf_s(ui_grenade_ammo, sizeof(ui_grenade_ammo), "Hand grenades: %d", grenades_ammo);
-	grenade_ammo_label->Print(ui_grenade_ammo, false);
+	char ui_intel_left[20];
+	sprintf_s(ui_intel_left, sizeof(ui_intel_left), "Intel left: %d", intel_left);
+	grenade_ammo_label->Print(ui_intel_left, false);
 
 	if (bomb_pos.size() > 0)
 	{
