@@ -39,7 +39,9 @@ protected:
 
 	Sprite sprite;
 	int life;
+	int friendly_life;
 	int max_life;
+	int friendly_max_life;
 
 	SDL_Rect collider;
 	iPoint logic_pos;
