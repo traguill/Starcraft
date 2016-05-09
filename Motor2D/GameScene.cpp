@@ -156,6 +156,7 @@ bool GameScene::Update(float dt)
 				if (pos.x > (*bomb_position).x && pos.x < (*bomb_position).x + bomb_rect.w && pos.y > (*bomb_position).y && pos.y < (*bomb_position).y + bomb_rect.w && (*f_unit)->IsVisible())
 				{
 					App->game_scene->intel_left--;
+					App->game_scene->sniper_ammo++;
 					bomb_position = bomb_pos.erase(bomb_position);
 				}
 				++bomb_position;
