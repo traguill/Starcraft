@@ -237,7 +237,7 @@ bool j1UIManager::Update(float dt)
 
 	cursor->Update(dt);
 
-	if (App->game_scene->GamePaused())
+	if (App->game_scene->GamePaused() && App->scene_manager->in_game)
 	{
 		if (App->game_scene->active_timer == false)
 		{
