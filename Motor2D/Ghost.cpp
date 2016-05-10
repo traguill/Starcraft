@@ -95,7 +95,6 @@ void Ghost::Invisibility()
 			return;
 
 		sprite.alpha = INVISIBILITY_ALPHA;
-		state = UNIT_IDLE;
 		invisible = true;
 
 		//Discard the target
