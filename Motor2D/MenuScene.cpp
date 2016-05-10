@@ -43,6 +43,7 @@ bool MenuScene::Start()
 	close_game = false;
 
 	//App->audio->PlayMusic(""); <-- WTF IS THIS??!?
+	App->ui->cursor_state = STANDARD;
 
 	return true;
 }
