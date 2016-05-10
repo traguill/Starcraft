@@ -57,8 +57,6 @@ private:
 	//Position where the white rect is drawn
 	iPoint draw_pos;
 
-
-	iPoint last_cam_pos;
 	MAP_STATE last_state;
 };
 

@@ -124,10 +124,12 @@ void UIMiniMap::UpdateRect()
 	
 		else
 		{
-			App->render->SetTransition(new_pos.x, new_pos.y);
+			App->render->camera.x = new_pos.x;
+			App->render->camera.y = new_pos.y;
 			
 		}
 
+		last_state = PRESSED_MAP;
 	}
 
 	if (map_state == CONTINUE_PRESS_MAP)
@@ -230,7 +232,12 @@ bool UIMiniMap::CleanUp()
 void UIMiniMap::GetState()
 {
 
-	
+	if (last_state == PRESSED_MAP && App->input->GetMouseButtonDown(1) != KEY_UP)
+	{
+		map_state = CONTINUE_PRESS_MAP;
+		last_state = CONTINUE_PRESS_MAP;
+	}
+
 	if (gui_event == MOUSE_ENTER && map_state != CONTINUE_PRESS_MAP)
 	{
 		map_state = HOVER_MAP;
@@ -259,11 +266,10 @@ void UIMiniMap::GetState()
 		last_state = PRESSED_MAP;
 	}
 
-	if (App->input->GetMouseButtonDown(1) == KEY_UP && map_state == CONTINUE_PRESS_MAP)
-	{	
-			last_state = map_state;
-			map_state = PRESSED_MAP;
-		
+	if (App->input->GetMouseButtonDown(1) == KEY_UP)
+	{
+		map_state = IDLE_MAP;
 	}
+	
 
 }
