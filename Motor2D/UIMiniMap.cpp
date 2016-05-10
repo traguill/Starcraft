@@ -219,6 +219,16 @@ void UIMiniMap::UpdateUnitsMiniMap()
 		it_b++;
 	}
 
+	if (App->game_scene->bomb_pos.size() == 0)
+	{
+		int x = App->game_scene->bomb_zone.x;
+		int y = App->game_scene->bomb_zone.y;
+
+		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 255, 255, 0, 255, true, true);
+
+	}
+
+
 }
 
 bool UIMiniMap::CleanUp()
