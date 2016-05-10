@@ -557,12 +557,6 @@ void GameScene::AttackFX(UNIT_TYPE type)
 
 void GameScene::LoadAudio()
 {
-	//Setting fx volume
-	App->audio->SetFxVolume(10);
-	App->audio->SetFxVolume(5, "sounds/marine_shot.ogg");
-	App->audio->SetFxVolume(5, "sounds/ghost_shot.ogg");
-	App->audio->SetFxVolume(5, "sounds/firebat_shot.ogg");
-
 	//Load all fx uint sounds
 	//Select
 	marine_select = App->audio->LoadFx("FX/Terran/Marine/PieceOfMe.wav");
@@ -593,7 +587,12 @@ void GameScene::LoadAudio()
 	medic_death = App->audio->LoadFx("FX/Terran/Medic/tmddth00.wav");
 	observer_death = App->audio->LoadFx("FX/protoss/probe/pprdth00.wav");
 
-	
+	//Setting fx volume
+	App->audio->SetFxVolume(15);
+	App->audio->SetFxVolume(6, "sounds/marine_shot.ogg");
+	App->audio->SetFxVolume(6, "sounds/ghost_shot.ogg");
+	App->audio->SetFxVolume(6, "sounds/firebat_shot.ogg");
+
 }
 
 void GameScene::LoadHUD()
