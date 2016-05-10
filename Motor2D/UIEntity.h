@@ -73,6 +73,7 @@ public:
 	
 protected:
 	SDL_Rect rect; //Local
+	iPoint	init_pos;
 
 private:
 	UIEntity*			parent = NULL;

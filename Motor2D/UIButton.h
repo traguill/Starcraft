@@ -38,7 +38,6 @@ private:
 	SDL_Rect idle;
 	SDL_Rect pressed;
 	SDL_Rect hover;
-	iPoint	 init_pos;
 public:
 	UILabel*		text;
 	BUTTON_STATE state;

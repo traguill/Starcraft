@@ -45,8 +45,6 @@ private:
 
 	MAP_STATE map_state;
 
-	iPoint init_pos;
-
 	//To get scale
 	int div_x;
 	int div_y;

@@ -667,7 +667,10 @@ void Unit::Move(float dt)
 			waiting_for_path = false;
 		}
 		else
+		{
+			//current_animation = 
 			return;
+		}
 	}
 
 	if (has_destination)
@@ -822,7 +825,7 @@ void Unit::SetAnimation()
 
 	if (direction.x >= 0 && direction.y >= 0)
 	{
-		if (state == UNIT_MOVE)
+		if (state == UNIT_MOVE && waiting_for_path == false)
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &right;
@@ -831,7 +834,7 @@ void Unit::SetAnimation()
 			else if (section >= 1.5 && section <= 2)
 				current_animation = &down;
 		}
-		else if (state == UNIT_IDLE)
+		else if (state == UNIT_IDLE || (waiting_for_path == true && state != UNIT_ATTACK))
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &i_right;
@@ -854,7 +857,7 @@ void Unit::SetAnimation()
 	}
 	else if (direction.x <= 0 && direction.y >= 0)
 	{
-		if (state == UNIT_MOVE)
+		if (state == UNIT_MOVE && waiting_for_path == false)
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &left;
@@ -863,7 +866,7 @@ void Unit::SetAnimation()
 			else if (section >= 1.5 && section <= 2)
 				current_animation = &down;
 		}
-		else if (state == UNIT_IDLE)
+		else if (state == UNIT_IDLE || (waiting_for_path == true && state != UNIT_ATTACK))
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &i_left;
@@ -886,7 +889,7 @@ void Unit::SetAnimation()
 	}
 	else if (direction.x <= 0 && direction.y <= 0)
 	{
-		if (state == UNIT_MOVE)
+		if (state == UNIT_MOVE && waiting_for_path == false)
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &left;
@@ -895,7 +898,7 @@ void Unit::SetAnimation()
 			else if (section >= 1.5 && section <= 2)
 				current_animation = &up;
 		}
-		else if (state == UNIT_IDLE)
+		else if (state == UNIT_IDLE || (waiting_for_path == true && state != UNIT_ATTACK))
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &i_left;
@@ -918,7 +921,7 @@ void Unit::SetAnimation()
 	}
 	else if (direction.x >= 0 && direction.y <= 0)
 	{
-		if (state == UNIT_MOVE)
+		if (state == UNIT_MOVE && waiting_for_path == false)
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &right;
@@ -927,7 +930,7 @@ void Unit::SetAnimation()
 			else if (section >= 1.5 && section <= 2)
 				current_animation = &up;
 		}
-		else if (state == UNIT_IDLE)
+		else if (state == UNIT_IDLE || (waiting_for_path == true && state != UNIT_ATTACK))
 		{
 			if (section >= 0 && section <= 0.5)
 				current_animation = &i_right;

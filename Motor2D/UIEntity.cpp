@@ -115,8 +115,8 @@ SDL_Rect UIEntity::GetLocalRect()const
 
 void UIEntity::SetLocalPos(int x, int y)
 {
-	rect.x = x;
-	rect.y = y;
+	init_pos.x = rect.x = x;
+	init_pos.y = rect.y = y;
 }
 
 void UIEntity::Drag()
