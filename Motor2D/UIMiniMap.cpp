@@ -153,9 +153,9 @@ void UIMiniMap::UpdateRect()
 			white_rec.x = (rect.w - white_rec.w) + rect.x;
 		}
 
-		if (white_rec.y - rect.y > rect.h - (5 + white_rec.h))
+		if (white_rec.y - rect.y > rect.h - (white_rec.h - 4))
 		{
-			white_rec.y = (rect.h - (white_rec.h + 5)) + rect.y;
+			white_rec.y = (rect.h - (white_rec.h - 4)) + rect.y;
 		}
 
 		iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));

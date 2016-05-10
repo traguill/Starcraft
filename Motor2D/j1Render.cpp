@@ -369,7 +369,7 @@ void j1Render::CursorMovement(float dt)
 	
 	
 	//Move camera LEFT
-	if (mouse_x  < offset_x)
+	if (mouse_x  < offset_x && mouse_y <= 335)
 	{
 		if (!lock_after_transition)
 			DiscardTransition();
@@ -393,7 +393,7 @@ void j1Render::CursorMovement(float dt)
 		App->ui->cursor_state = UP;
 	}
 	//Move camera DOWN
-	if (mouse_y > camera.h - offset_y)
+	if (mouse_y > camera.h - offset_y && mouse_x >= 130)
 	{
 		if (!lock_after_transition)
 			DiscardTransition();
@@ -459,7 +459,7 @@ void j1Render::CursorMovement(float dt)
 		App->ui->cursor_state = TO_LEFT_UP;
 	}
 
-	//Move camera LEFT DOWN
+	/*//Move camera LEFT DOWN
 	if (mouse_x  < offset_x && mouse_y > camera.h - offset_y)
 	{
 		if (!lock_after_transition)
@@ -468,7 +468,7 @@ void j1Render::CursorMovement(float dt)
 		camera.y -= dt * (camera_speed / 3);
 		App->ui->cursor_state = TO_LEFT_DOWN;
 	}
-
+	*/
 	CheckBoundaries();
 
 }
