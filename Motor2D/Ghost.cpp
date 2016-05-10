@@ -29,7 +29,8 @@ Ghost::Ghost(Ghost* ghost, bool _is_enemy) : Unit(ghost, _is_enemy)
 
 Ghost::~Ghost()
 {
-
+	//This could cause trouble if there are more than one sniper
+	App->entity->SNIPPER_MODE = false;
 }
 
 void Ghost::Update(float dt)

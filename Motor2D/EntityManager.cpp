@@ -56,6 +56,8 @@ bool j1EntityManager::Start()
 
 	LoadSounds();
 
+	SNIPPER_MODE = false;
+
 	return ret;
 }
 
