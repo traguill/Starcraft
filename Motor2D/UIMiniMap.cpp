@@ -14,6 +14,7 @@ UIMiniMap::UIMiniMap() : UIEntity()
 {
 	type = MINI_MAP;
 	map_state = IDLE_MAP;
+	last_state = map_state;
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
@@ -43,6 +44,7 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 	draw_section = section_drawn;
 	type = MINI_MAP;
 	map_state = IDLE_MAP;
+	last_state = map_state;
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
@@ -115,7 +117,7 @@ void UIMiniMap::UpdateRect()
 		int x, y;
 		App->input->GetMouseMotion(x, y);
 
-		if (x != 0 || y != 0)
+		if ((x != 0 || y != 0) && last_state != CONTINUE_PRESS_MAP)
 		{
 			map_state = CONTINUE_PRESS_MAP;
 		}
@@ -232,26 +234,35 @@ void UIMiniMap::GetState()
 	if (gui_event == MOUSE_ENTER && map_state != CONTINUE_PRESS_MAP)
 	{
 		map_state = HOVER_MAP;
+		last_state = HOVER_MAP;
 	}
 	
 	if (gui_event == MOUSE_BUTTON_RIGHT_DOWN && map_state != CONTINUE_PRESS_MAP)
 	{
 			map_state = PRESSED_MAP;
+			last_state = PRESSED_MAP;
+	}
 
+	if (gui_event == MOUSE_EXIT && map_state != CONTINUE_PRESS_MAP)
+	{
+		map_state = IDLE_MAP;
+		last_state = IDLE_MAP;
 	}
 
 	int of_x, of_y;
 
 	App->input->GetMouseWorld(of_x, of_y);
 
-	if (gui_event == MOUSE_EXIT && (map_state != CONTINUE_PRESS_MAP || (of_x > rect.x + rect.w + offset.x) || (of_y < rect.y - offset.y)))
+	if (gui_event == MOUSE_EXIT && map_state == CONTINUE_PRESS_MAP && ((of_x > rect.x + rect.w + offset.x) || (of_y < rect.y - offset.y)))
 	{
-		map_state = IDLE_MAP;
-	}	
+		map_state = PRESSED_MAP;
+		last_state = PRESSED_MAP;
+	}
 
-	if (App->input->GetMouseButtonDown(1) == KEY_UP)
+	if (App->input->GetMouseButtonDown(1) == KEY_UP && map_state == CONTINUE_PRESS_MAP)
 	{	
-			map_state = IDLE_MAP;
+			last_state = map_state;
+			map_state = PRESSED_MAP;
 		
 	}
 
