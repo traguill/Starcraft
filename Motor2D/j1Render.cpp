@@ -11,6 +11,7 @@
 #include "UICursor.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
+#include "GameScene.h"
 
 #define VSYNC true
 
@@ -132,9 +133,7 @@ bool j1Render::Update(float dt)
 		}
 	}
 
-
-
-	//Sort Sprites and blit
+	//Sort Sprites and blit them
 	blit_sprites.sort([](const Sprite* a, const Sprite* b) { return a->position.y < b->position.y; });
 
 	list<Sprite*>::iterator i = blit_sprites.begin();
@@ -145,6 +144,16 @@ bool j1Render::Update(float dt)
 		++i;
 	}
 
+	//Sort Priority Sprites and blit them
+	priority_sprites.sort([](const Sprite* a, const Sprite* b) { return a->position.y < b->position.y; });
+
+	list<Sprite*>::iterator j = priority_sprites.begin();
+
+	while (j != priority_sprites.end())
+	{
+		Blit((*j)->texture, (*j)->position.x, (*j)->position.y, &(*j)->rect, (*j)->alpha);
+		++j;
+	}
 
 
 	return true;
@@ -216,10 +225,16 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 
 // Blit to screen
 
-void j1Render::Blit(Sprite* _sprite)
+void j1Render::Blit(Sprite* _sprite, bool priority)
 {
 	if (_sprite != NULL)
-		blit_sprites.push_back(_sprite);
+	{
+		if (priority == false)
+			blit_sprites.push_back(_sprite);
+
+		else
+			priority_sprites.push_back(_sprite);
+	}
 }
 bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,uint alpha, float speed, double angle, int pivot_x, int pivot_y) const
 {
@@ -367,66 +382,68 @@ void j1Render::CursorMovement(float dt)
 	if (App->ui->cursor_state != ON_FRIENDLY && App->ui->cursor_state != ON_ENEMY)
 		App->ui->cursor_state = STANDARD;
 	
-	
-	//Move camera LEFT
-	if (mouse_x  < offset_x && mouse_y <= 335)
+	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
 	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.x += dt * camera_speed;
-		App->ui->cursor_state = TO_LEFT;
-	}
-	//Move camera RIGHT
-	if (mouse_x > camera.w - offset_x)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.x -= dt * camera_speed;
-		App->ui->cursor_state = TO_RIGHT;
-	}
-	//Move camera UP
-	if (mouse_y < offset_y)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.y += dt * camera_speed;
-		App->ui->cursor_state = UP;
-	}
-	//Move camera DOWN
-	if (mouse_y > camera.h - offset_y && mouse_x >= 130)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.y -= dt * camera_speed;
-		App->ui->cursor_state = DOWN;
-	}	
+		//Move camera LEFT
+		if (mouse_x < offset_x && mouse_y <= 335)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.x += dt * camera_speed;
+			App->ui->cursor_state = TO_LEFT;
+		}
+		//Move camera RIGHT
+		if (mouse_x > camera.w - offset_x)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.x -= dt * camera_speed;
+			App->ui->cursor_state = TO_RIGHT;
+		}
+		//Move camera UP
+		if (mouse_y < offset_y)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.y += dt * camera_speed;
+			App->ui->cursor_state = UP;
+		}
+		//Move camera DOWN
+		if (mouse_y > camera.h - offset_y && mouse_x >= 130)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.y -= dt * camera_speed;
+			App->ui->cursor_state = DOWN;
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.x += dt * camera_speed;
-	}
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.x += dt * camera_speed;
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.x -= dt * camera_speed;
-	}
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.x -= dt * camera_speed;
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.y += dt * camera_speed;
-	}
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.y += dt * camera_speed;
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		if (!lock_after_transition)
-			DiscardTransition();
-		camera.y -= dt * camera_speed;
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			if (!lock_after_transition)
+				DiscardTransition();
+			camera.y -= dt * camera_speed;
+		}
 	}
 
 	//Move camera RIGHT UP

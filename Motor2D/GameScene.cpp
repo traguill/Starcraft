@@ -178,6 +178,7 @@ bool GameScene::Update(float dt)
 				win_background->is_visible = true;
 				win_button->is_visible = true;
 				game_paused = true;
+				game_finished = true;
 			}
 
 			++f_unit;
@@ -705,4 +706,14 @@ void GameScene::LoseGame()
 
 		game_finished = true;
 	}
+}
+
+bool GameScene::GetFinishedGame()
+{
+	return game_finished;
+}
+
+bool GameScene::GetTutorialState()
+{
+	return tutorial_finished;
 }
