@@ -858,7 +858,7 @@
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1745" />
-		<position y="3927" />
+		<position y="3840" />
 		<direction x="7" />
 		<direction y="-104" />
 		<patrol value="false" />
@@ -867,7 +867,7 @@
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="1796" />
-		<position y="3930" />
+		<position y="3840" />
 		<direction x="10" />
 		<direction y="-104" />
 		<patrol value="false" />
@@ -948,12 +948,12 @@
 		<type value="MARINE" />
 		<is_enemy value="true" />
 		<position x="2256" />
-		<position y="3976" />
+		<position y="3840" />
 		<direction x="0.999610066" />
 		<direction y="-0.0279220697" />
 		<patrol value="true">
-			<point tile_x="282" tile_y="497" />
-			<point tile_x="329" tile_y="497" />
+			<point tile_x="282" tile_y="480" />
+			<point tile_x="329" tile_y="480" />
 		</patrol>
 	</enemy_unit>
 	<enemy_unit>

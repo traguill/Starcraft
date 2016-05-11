@@ -245,6 +245,25 @@ void Ghost::Shoot(int x, int y)
 		destination.y = result.y;
 	}
 
+	//Check if bullet collides with buildings
+
+	iPoint start_tile = App->map->WorldToMap(origin.x, origin.y, COLLIDER_MAP);
+	iPoint end_tile = App->map->WorldToMap(dst.x, dst.y, COLLIDER_MAP);
+
+	for (int x = start_tile.x; x <= end_tile.x; x++)
+	{
+		for (int y = start_tile.y; y <= end_tile.y; y++)
+		{
+			iPoint colliding_tile(x, y);
+			if (App->pathfinding->IsWalkable(colliding_tile) == false)
+			{
+				iPoint result = App->map->MapToWorld(App->pathfinding->GetLineTile().x, App->pathfinding->GetLineTile().y, COLLIDER_MAP);
+				destination.x = result.x;
+				destination.y = result.y;
+			}
+		}
+	}
+
 	//Create bullet 
 	Bullet* bullet = new Bullet(App->entity->db_bullet);
 	bullet->SetPosition(logic_pos.x, logic_pos.y);
