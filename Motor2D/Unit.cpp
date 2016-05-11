@@ -204,6 +204,14 @@ void Unit::Draw()
 	r.y = draw_pos.y;
 	r.w = width;
 	r.h = height;
+
+	SDL_Rect cam = App->render->camera;
+
+	if (r.x >= -cam.x && r.x + r.w <= -cam.x + cam.w && r.y >= -cam.y && r.y + r.h <= -cam.y + cam.h)
+	{}
+	else
+		return;
+
 	if (selected == true)
 	{
 		SDL_Rect selected1{ 46, 48, 41, 43 };
