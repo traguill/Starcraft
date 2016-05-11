@@ -296,17 +296,17 @@ void GameScene::LoadTutorial()
 	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
 	tutorial_button = App->ui->CreateButton("", 275, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
 	tutorial_text = App->ui->CreateLabel("COLLECT the 3 bombs that the enemies have in their bases.", 140, 300);
-	tutorial_image = App->ui->CreateImage({ 1290, 461, 65, 71 }, 275, 175, true);
+	tutorial_image = App->ui->CreateImage({ 1300, 475, 69, 63 }, 275, 175, true);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
 	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies");
 	tutorial_text_queue.push("Press W to activate sniper mode. CLICK RIGHT to shoot.");
 
-	tutorial_images_queue.push({1434,438, 184, 183});
-	tutorial_images_queue.push({1466, 705, 62, 78});
-	tutorial_images_queue.push({1406, 720, 52, 64});
-	tutorial_images_queue.push({1407, 648, 283, 71});
+	tutorial_images_queue.push({1435, 470, 345, 281});
+	tutorial_images_queue.push({ 1400, 880, 62, 78 });
+	tutorial_images_queue.push({1403, 968, 96, 79});
+	tutorial_images_queue.push({ 1405, 810, 340, 63 });
 
 	LOG("QUEUE SIZE %i", tutorial_images_queue.size());
 }
@@ -465,16 +465,16 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 				switch (tutorial_images_queue.size())
 				{
 				case 4:
-					tutorial_image->SetLocalPos(200, 100);
+					tutorial_image->SetLocalPos(170, 15);
 					break;
 				case 3:
-					tutorial_image->SetLocalPos(275, 175);
+					tutorial_image->SetLocalPos(270, 175);
 					break;
 				case 2:
-					tutorial_image->SetLocalPos(280, 175);
+					tutorial_image->SetLocalPos(250, 175);
 					break;
 				case 1:
-					tutorial_image->SetLocalPos(200, 175);
+					tutorial_image->SetLocalPos(145, 175);
 					break;
 				}
 				tutorial_image->SetImageRect(tutorial_images_queue.front());
