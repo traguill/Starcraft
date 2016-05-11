@@ -291,9 +291,9 @@ bool GameScene::CleanUp()
 void GameScene::LoadTutorial()
 {
 	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
-	tutorial_button = App->ui->CreateButton("", 290, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
+	tutorial_button = App->ui->CreateButton("", 275, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
 	tutorial_text = App->ui->CreateLabel("COLLECT the 3 bombs that the enemies have in their bases.", 140, 300);
-	tutorial_image = App->ui->CreateImage({ 1290, 461, 65, 71 }, 290, 175, true);
+	tutorial_image = App->ui->CreateImage({ 1290, 461, 65, 71 }, 275, 175, true);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
@@ -465,10 +465,10 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 					tutorial_image->SetLocalPos(200, 100);
 					break;
 				case 3:
-					tutorial_image->SetLocalPos(290, 175);
+					tutorial_image->SetLocalPos(275, 175);
 					break;
 				case 2:
-					tutorial_image->SetLocalPos(260, 175);
+					tutorial_image->SetLocalPos(280, 175);
 					break;
 				case 1:
 					tutorial_image->SetLocalPos(200, 175);
