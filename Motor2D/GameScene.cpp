@@ -76,6 +76,8 @@ bool GameScene::Start()
 	LoadLevel("my_level.xml");
 	LoadAudio();
 
+	App->audio->PlayMusic("StarcraftTerrantheme1.wav");
+
 	App->render->camera = SDL_Rect{ -700, -150, App->render->camera.w, App->render->camera.h };
 
 	game_finished = false;
