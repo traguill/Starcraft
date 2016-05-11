@@ -150,13 +150,25 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		if (unit->events.empty() == true)
 		{
 			iPoint unit_pos = unit->GetPosition();
-			if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
+			if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
 				unit->state = UNIT_IDLE;
-			else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
+
+			else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 			{
-				vector<iPoint> tmp;
-				tmp.push_back(unit->original_point);
-				unit->SetPath(tmp);
+				vector<iPoint> path;
+				path.push_back(App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP));
+				path.push_back(unit->original_point);
+
+				if (App->pathfinding->CreateLine(path.front(), path.back()))
+					unit->SetPath(path);
+
+				else
+				{
+					uint path_id = App->pathfinding->CreatePath(path.front(), path.back());
+					if (path_id != -1)
+						unit->SetPathId(path_id);
+				}
+
 			}
 		}
 
@@ -167,13 +179,25 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			if (unit->GetTarget() == NULL)
 			{
 				iPoint unit_pos = unit->GetPosition();
-				if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
+				if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
 					unit->state = UNIT_IDLE;
-				else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
+
+				else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 				{
-					vector<iPoint> tmp;
-					tmp.push_back(unit->original_point);
-					unit->SetPath(tmp);
+					vector<iPoint> path;
+					path.push_back(App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP));
+					path.push_back(unit->original_point);
+
+					if (App->pathfinding->CreateLine(path.front(), path.back()))
+						unit->SetPath(path);
+
+					else
+					{
+						uint path_id = App->pathfinding->CreatePath(path.front(), path.back());
+						if (path_id != -1)
+							unit->SetPathId(path_id);
+					}
+
 				}
 			}
 			else
@@ -199,20 +223,28 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		
 		if (enemy_found == false)
 		{
-			//if (unit->is_enemy)
-			//	LOG("(Enemy):  I've killed one enemy and no one is near");
-			//else
-			//	LOG("(Friend): I've killed one enemy and no one is near");
 			if (unit->is_enemy == true)
 			{
 				iPoint unit_pos = unit->GetPosition();
-				if (unit_pos.DistanceNoSqrt(unit->original_point) <= MOVE_RADIUS)
+				if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
 					unit->state = UNIT_IDLE;
-				else if (unit_pos.DistanceNoSqrt(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
+
+				else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 				{
-					vector<iPoint> tmp;
-					tmp.push_back(unit->original_point);
-					unit->SetPath(tmp);
+					vector<iPoint> path;
+					path.push_back(App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y, COLLIDER_MAP));
+					path.push_back(unit->original_point);
+
+					if (App->pathfinding->CreateLine(path.front(), path.back()))
+						unit->SetPath(path);
+
+					else
+					{
+						uint path_id = App->pathfinding->CreatePath(path.front(), path.back());
+						if (path_id != -1)
+							unit->SetPathId(path_id);
+					}
+
 				}
 			}
 
