@@ -341,7 +341,7 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
-bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera, int min, int max) const
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
@@ -350,20 +350,20 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	int result = -1;
-	SDL_Point points[360];
+	SDL_Point points[720];
 
 	float factor = (float)M_PI / 180.0f;
 
 	if (use_camera)
 	{
-		for (uint i = 0; i < 360; ++i)
+		for (uint i = min; i < max; ++i)
 		{
 			points[i].x = (int)(camera.x + x + radius * cos(i * factor) * scale);
 			points[i].y = (int)(camera.y + y + radius * sin(i * factor) * scale);
 		}
 	}
 
-	result = SDL_RenderDrawPoints(renderer, points, 360);
+	result = SDL_RenderDrawPoints(renderer, points, 720);
 
 	if(result != 0)
 	{

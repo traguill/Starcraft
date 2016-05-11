@@ -237,23 +237,46 @@ void Unit::DrawVisionCone()
 	left_vision.Scale(vision);
 	right_vision.Scale(vision);
 
+	float angle1 = RADTODEG * atan2(left_vision.y, left_vision.x);
+	float angle2 = RADTODEG * atan2(right_vision.y, right_vision.x);
+
+	if (angle2 > angle1 && angle1 > 0)
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, vision, 0, 255, 0, 255, true, angle1, angle2);
+
+	else if (angle2 < 0 && angle1 > 0)
+	{
+		angle2 = angle1 + 60;
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, vision, 0, 255, 0, 255, true, angle1, angle2);
+	}
+
+	else if (angle1 < 0 && angle2 > 0)
+	{
+		angle1 = 360 + angle1;
+		angle2 = angle1 + 60;
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, vision, 0, 255, 0, 255, true, angle1, angle2);
+	}
+
+	else if (angle1 < 0 && angle2 < 0)
+	{
+		angle1 = 360 + angle1;
+		angle2 = 360 + angle2;
+		App->render->DrawCircle(logic_pos.x, logic_pos.y, vision, 0, 255, 0, 255, true, angle1, angle2);
+	}
+
 	left_vision.x += logic_pos.x;
 	left_vision.y += logic_pos.y;
 	right_vision.x += logic_pos.x;
 	right_vision.y += logic_pos.y;
 
-	fPoint origin(logic_pos.x, logic_pos.y);
+	App->render->DrawLine(logic_pos.x, logic_pos.y, left_vision.x, left_vision.y, 0, 255, 0);
+	App->render->DrawLine(logic_pos.x, logic_pos.y, right_vision.x, right_vision.y, 0, 255, 0);
+
+	/*fPoint origin(logic_pos.x, logic_pos.y);
 	vector<iPoint> open_points;
 	vector<ConePoint> key_points;
 
 	open_points= CollidersInsideConeVision(origin, right_vision, left_vision);
 
-	/*vector<iPoint>::iterator corner = open_points.begin();
-	while (corner != open_points.end())
-	{
-		App->render->DrawQuad({ corner->x, corner->y, 2, 2 }, 0, 255, 255, 255, true, true);
-		++corner;
-	}*/
 
 	GetKeyPointsConeVision(open_points, key_points, origin);
 
@@ -271,7 +294,7 @@ void Unit::DrawVisionCone()
 	key_points.push_back(source);
 
 	//Draw key_points
-	ConnectKeyPoints(key_points);
+	ConnectKeyPoints(key_points);*/
 
 }
 
