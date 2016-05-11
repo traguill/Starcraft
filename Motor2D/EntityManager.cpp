@@ -120,7 +120,11 @@ bool j1EntityManager::Update(float dt)
 	{
 		if (App->scene_manager->in_game == true)
 		{
-			SelectUnits();
+			if(App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
+				SelectUnits();
+
+			else if (App->game_scene->GetFinishedGame())
+				selected_units.clear();
 
 			if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 			{

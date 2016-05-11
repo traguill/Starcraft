@@ -84,7 +84,8 @@ bool UIMiniMap::Update(float dt)
 	
 	GetState();
 	UpdateUnitsMiniMap();
-	UpdateRect();
+	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
+		UpdateRect();
 
 	return ret;
 }

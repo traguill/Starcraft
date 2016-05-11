@@ -45,7 +45,7 @@ void Firebat::Draw()
 {
 	Unit::Draw();
 	if (state == UNIT_ATTACK)
-		App->render->Blit(&p->sprite);
+		App->render->Blit(&p->sprite, true);
 }
 
 void Firebat::SetAnimation()

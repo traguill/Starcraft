@@ -47,6 +47,9 @@ public:
 	void MoveFX(UNIT_TYPE type);
 	void AttackFX(UNIT_TYPE type);
 
+	bool GetTutorialState();
+	bool GetFinishedGame();
+
 	void LoseGame();
 
 private:
