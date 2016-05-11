@@ -165,6 +165,7 @@ bool j1Render::PostUpdate()
 	SDL_RenderPresent(renderer);
 
 	blit_sprites.clear();
+	priority_sprites.clear();
 
 	return true;
 }
