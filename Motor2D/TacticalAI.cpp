@@ -462,14 +462,13 @@ void TacticalAI::Vision()
 									SetEvent(ENEMY_TARGET, *unit_f, *unit_e);
 								}
 
-								if ((*unit_e)->GetTarget() == NULL)
+								
+								if ((*unit_e)->type == FIREBAT)
 								{
-									if ((*unit_e)->type == FIREBAT)
-									{
-										App->game_scene->LoseGame();
-										return;
-									}
+									App->game_scene->LoseGame();
+									return;
 								}
+								
 							}
 						}
 					}
