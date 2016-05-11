@@ -26,6 +26,7 @@ bool MenuScene::Awake(pugi::xml_node& conf)
 
 
 
+
 	return ret;
 }
 
@@ -34,7 +35,7 @@ bool MenuScene::Start()
 {
 	LOG("Starting MenuScene");
 
-	background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
+	//background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
 	logo = App->ui->CreateImage({ 0, 202, 569, 132 }, 0, 50, true);
 	
 	start = App->ui->CreateButton(" START", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
@@ -43,7 +44,22 @@ bool MenuScene::Start()
 	close_game = false;
 
 	App->audio->PlayMusic("MenuTheme.wav");
-	
+
+	background_anim.frames.clear();
+	SDL_Rect section;
+	section.x = 1477; section.y = 0; section.w = 640; section.h = 480;
+	background_anim.frames.push_back(section);
+	section.x = 1477 + 640; section.y = 0; section.w = 640; section.h = 480;
+	background_anim.frames.push_back(section);
+	section.x = 1477 + 640; section.y = 480; section.w = 640; section.h = 480;
+	background_anim.frames.push_back(section);
+	section.x = 1477 + 640 + 640; section.y = 480; section.w = 640; section.h = 480;
+	background_anim.frames.push_back(section);
+
+	section.x = section.y = section.w = section.h = 0;
+
+	background_anim.loop = true;
+	background_anim.speed = 0.2f;
 
 	App->ui->cursor_state = STANDARD;
 
@@ -65,6 +81,8 @@ bool MenuScene::Update(float dt)
 	{
 		App->scene_manager->WantToChangeScene(DEV);
 	}
+
+	App->render->Blit(App->ui->GetAtlas(), 0, 0, &background_anim.getCurrentFrame());
 
 	return true;
 }
@@ -89,6 +107,7 @@ bool MenuScene::CleanUp()
 	quit = NULL;
 	background = NULL;
 	logo = NULL;
+	background_anim.frames.clear();
 
 	return true;
 }

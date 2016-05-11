@@ -2,6 +2,7 @@
 #define __MENU_SCENE_H__
 
 #include "j1Module.h"
+#include "Animation.h"
 
 
 class UIImage;
@@ -39,6 +40,7 @@ public:
 private:
 
 	UIImage* background;
+	Animation background_anim;
 	UIImage* logo;
 
 	bool close_game;
