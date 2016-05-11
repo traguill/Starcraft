@@ -239,7 +239,7 @@ bool GameScene::CleanUp()
 	App->map->UnLoad(map_id);
 	App->map->UnLoad(collider_id);
 
-	life_HUD = NULL;
+	//life_HUD = NULL;
 	
 	marine_weapon_icon = NULL;
 	marine_armour_icon = NULL;
@@ -668,7 +668,7 @@ void GameScene::LoadHUD()
 	App->events->game_event = INITIAL_STATE;
 
 	//Life in HUD
-	life_HUD = App->ui->CreateLabel("", 177, 458);
+	//life_HUD = App->ui->CreateLabel("", 177, 458);
 
 	//Sniper
 	snipper_ui = App->ui->CreateImage({ 0, 651, 640, 480 }, 0, 0, false);

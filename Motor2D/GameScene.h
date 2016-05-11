@@ -84,7 +84,7 @@ public:
 	queue<SDL_Rect>			tutorial_images_queue;
 	queue<char*>			tutorial_text_queue;
 
-	UILabel*				life_HUD;
+	//UILabel*				life_HUD;
 	j1Timer					pause_timer;
 	bool					active_timer = false;
 

@@ -37,8 +37,6 @@ UIMiniMap::UIMiniMap() : UIEntity()
 
 UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_map_size) : UIEntity()
 {
-
-
 	rect = position;
 
 	draw_section = section_drawn;
