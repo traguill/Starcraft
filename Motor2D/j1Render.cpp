@@ -356,10 +356,19 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 	if (use_camera)
 	{
-		for (uint i = min; i < max; ++i)
+		for (uint i = 0; i < 720; ++i)
 		{
-			points[i].x = (int)(camera.x + x + radius * cos(i * factor) * scale);
-			points[i].y = (int)(camera.y + y + radius * sin(i * factor) * scale);
+			if (i >= min && i <= max)
+			{
+				points[i].x = (int)(camera.x + x + radius * cos(i * factor) * scale);
+				points[i].y = (int)(camera.y + y + radius * sin(i * factor) * scale);
+			}
+			else
+			{
+				points[i].x = -10;
+				points[i].y = -10;
+			}
+			
 		}
 	}
 
