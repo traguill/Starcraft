@@ -198,6 +198,15 @@ void Unit::Update(float dt)
 
 void Unit::Draw()
 {
+	iPoint draw_pos = GetDrawPosition();
+	SDL_Rect r;
+	r.x = draw_pos.x;
+	r.y = draw_pos.y;
+	r.w = width;
+	r.h = height;
+
+	SDL_Rect cam = App->render->camera;
+
 	if (logic_pos.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
 	{
 		if (selected == true)
