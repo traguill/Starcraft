@@ -198,17 +198,28 @@ void Unit::Update(float dt)
 
 void Unit::Draw()
 {
-	iPoint draw_pos = GetDrawPosition();
-	SDL_Rect r;
-	r.x = draw_pos.x;
-	r.y = draw_pos.y;
-	r.w = width;
-	r.h = height;
+	if (logic_pos.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+	{
+		if (selected == true)
+		{
+			SDL_Rect selected1{ 46, 48, 41, 43 };
+			App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
 
-	SDL_Rect cam = App->render->camera;
+		}
 
-	if (r.x >= -cam.x && r.x + r.w <= -cam.x + cam.w && r.y >= -cam.y && r.y + r.h <= -cam.y + cam.h)
-	{}
+		if (state == UNIT_DIE)
+		{
+			sprite.position = GetDrawPosition() + death_pos_corrector;
+			App->render->Blit(&sprite);
+		}
+		else
+		{
+			App->render->Blit(&sprite);
+
+			if (is_enemy && type == FIREBAT)
+				DrawVisionCone();
+		}
+	}
 	else if (is_enemy && type == FIREBAT)
 	{
 		fPoint left_vision(direction);
@@ -218,34 +229,22 @@ void Unit::Draw()
 		left_vision.Scale(vision);
 		right_vision.Scale(vision);
 
+		left_vision.x += logic_pos.x;
+		left_vision.y += logic_pos.y;
+		right_vision.x += logic_pos.x;
+		right_vision.y += logic_pos.y;
+
 		if (left_vision.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+		{
 			DrawVisionCone();
-		if (right_vision.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+		}
+		else if (right_vision.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+		{
 			DrawVisionCone();
+		}
 	}
 	else
 		return;
-
-	if (selected == true)
-	{
-		SDL_Rect selected1{ 46, 48, 41, 43 };
-		App->render->Blit(App->entity->gui_cursor, r.x - 7, r.y + 8, &selected1);
-
-	}
-
-	if (state == UNIT_DIE)
-	{
-		sprite.position = GetDrawPosition() + death_pos_corrector;
-		App->render->Blit(&sprite);
-	}
-	else
-	{
-		App->render->Blit(&sprite);
-
-		if (is_enemy && type == FIREBAT)
-			DrawVisionCone();
-	}
-		
 }
 
 void Unit::DrawVisionCone()
