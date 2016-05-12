@@ -66,8 +66,9 @@ bool GameScene::Start()
 
 	//Bomb
 	bomb = App->tex->Load("sprites/Bomb.png");
+	bzone = App->tex->Load("sprites/extraction.png");
 	bomb_rect = { 30, 12, 32, 32 };
-	bomb_zone = { 815, 1780, 50, 50 };
+	bomb_zone = { 815, 1780, 82, 41 };
 	
 
 	debug = false;
@@ -211,11 +212,14 @@ bool GameScene::Update(float dt)
 		{
 			App->render->Blit(bomb, (*bomb_position).x, (*bomb_position).y, &bomb_rect);
 			++bomb_position;
+			
 		}
-		
 	}
 	else
-		App->render->DrawQuad(bomb_zone, 255, 255, 0, 125, true, true);
+	{
+		SDL_Rect rec = { 0, 0, bomb_zone.w, bomb_zone.h };
+		App->render->Blit(bzone, bomb_zone.x, bomb_zone.y, &rec);
+	}
 
 	if (GamePaused())
 	{
@@ -283,7 +287,9 @@ bool GameScene::CleanUp()
 	no_energy = NULL;
 
 	App->tex->UnLoad(bomb);
+	App->tex->UnLoad(bzone);
 	bomb = NULL;
+	bzone = NULL;
 
 	win_background = NULL;
 	win_button = NULL;

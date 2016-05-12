@@ -130,6 +130,8 @@ public:
 
 	//Bomb
 	SDL_Texture* bomb;
+	SDL_Texture* bzone;
+
 	list<iPoint> bomb_pos;
 	SDL_Rect bomb_rect;
 
