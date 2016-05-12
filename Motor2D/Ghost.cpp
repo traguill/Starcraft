@@ -217,6 +217,10 @@ void Ghost::Shoot(int x, int y)
 	else
 	{
 		App->game_scene->sniper_ammo--;
+
+		char ui_sniper_ammo[20];
+		sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", App->game_scene->sniper_ammo);
+		App->game_scene->sniper_ammo_label->Print(ui_sniper_ammo, false);
 	}
 	
 	fPoint destination(x - logic_pos.x, y - logic_pos.y);

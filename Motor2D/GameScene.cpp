@@ -159,6 +159,23 @@ bool GameScene::Update(float dt)
 				{
 					App->game_scene->intel_left--;
 					App->game_scene->sniper_ammo++;
+
+					char ui_sniper_ammo[20];
+					sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
+					sniper_ammo_label->Print(ui_sniper_ammo, false);
+
+					if (intel_left > 0)
+					{
+						char ui_intel_left[20];
+						sprintf_s(ui_intel_left, sizeof(ui_intel_left), "Bombs left: %d", intel_left);
+						grenade_ammo_label->Print(ui_intel_left, false);
+					}
+
+					else
+					{
+						grenade_ammo_label->Print("Go to extraction point", false);
+					}
+
 					bomb_position = bomb_pos.erase(bomb_position);
 				}
 				++bomb_position;
@@ -186,14 +203,6 @@ bool GameScene::Update(float dt)
 			++f_unit;
 		}
 	}
-
-	char ui_sniper_ammo[20];
-	sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
-	sniper_ammo_label->Print(ui_sniper_ammo, false);
-
-	char ui_intel_left[20];
-	sprintf_s(ui_intel_left, sizeof(ui_intel_left), "Intel left: %d", intel_left);
-	grenade_ammo_label->Print(ui_intel_left, false);
 
 	if (bomb_pos.size() > 0)
 	{
@@ -656,13 +665,13 @@ void GameScene::LoadHUD()
 
 	//CREATE EVENT
 	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
-	objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
-	objective_info_2 = App->ui->CreateLabel("from the southern enemy", 477, 15);
-	objective_info_3 = App->ui->CreateLabel("base", 477, 25);
+	//objective_info_1 = App->ui->CreateLabel("You must retrieve the bomb ", 477, 5);
+	//objective_info_2 = App->ui->CreateLabel("from the southern enemy", 477, 15);
+	//objective_info_3 = App->ui->CreateLabel("base", 477, 25);
 	pause_mark = App->ui->CreateImage(SDL_Rect{ 66, 162, 56, 38 }, 470 - 56, 0, false);
 	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
-	sniper_ammo_label = App->ui->CreateLabel("cal. 50 bullets: 3", 477, 50);
-	grenade_ammo_label = App->ui->CreateLabel("hand grenades: 3", 477, 62);
+	sniper_ammo_label = App->ui->CreateLabel("Cal. 50 bullets: 3", 485, 7);
+	grenade_ammo_label = App->ui->CreateLabel("Bombs left: 3", 485, 22);
 
 	//Pathfinding Label
 	pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
