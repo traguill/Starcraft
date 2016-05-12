@@ -214,16 +214,8 @@ void Ghost::Shoot(int x, int y)
 		return;
 	}
 
-	if (mana - App->entity->snipper_cost < 0)
-	{
-		App->game_scene->no_energy->SetVisible(true);
-		App->game_scene->sniper_ui_timer.Start();
-		return;
-	}
-
 	else
 	{
-		mana -= App->entity->snipper_cost;
 		App->game_scene->sniper_ammo--;
 	}
 	
