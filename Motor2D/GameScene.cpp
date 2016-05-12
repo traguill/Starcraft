@@ -155,7 +155,7 @@ bool GameScene::Update(float dt)
 			list<iPoint>::iterator bomb_position = bomb_pos.begin();
 			while (bomb_position != bomb_pos.end())
 			{
-				if (pos.x > (*bomb_position).x && pos.x < (*bomb_position).x + bomb_rect.w && pos.y > (*bomb_position).y && pos.y < (*bomb_position).y + bomb_rect.w && (*f_unit)->IsVisible())
+				if (pos.x > (*bomb_position).x && pos.x < (*bomb_position).x + bomb_rect.w && pos.y > (*bomb_position).y && pos.y < (*bomb_position).y + bomb_rect.w)
 				{
 					App->game_scene->intel_left--;
 					App->game_scene->sniper_ammo++;
