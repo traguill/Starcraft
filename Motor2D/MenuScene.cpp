@@ -63,6 +63,8 @@ bool MenuScene::Start()
 
 	App->ui->cursor_state = STANDARD;
 
+	App->render->camera.x =  App->render->camera.y = 0;
+
 	return true;
 }
 
