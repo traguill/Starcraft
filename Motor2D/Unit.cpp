@@ -209,6 +209,20 @@ void Unit::Draw()
 
 	if (r.x >= -cam.x && r.x + r.w <= -cam.x + cam.w && r.y >= -cam.y && r.y + r.h <= -cam.y + cam.h)
 	{}
+	else if (is_enemy && type == FIREBAT)
+	{
+		fPoint left_vision(direction);
+		fPoint right_vision(left_vision);
+		left_vision.Rotate(M_PI / 6);
+		right_vision.Rotate(-M_PI / 6);
+		left_vision.Scale(vision);
+		right_vision.Scale(vision);
+
+		if (left_vision.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+			DrawVisionCone();
+		if (right_vision.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+			DrawVisionCone();
+	}
 	else
 		return;
 
@@ -228,9 +242,8 @@ void Unit::Draw()
 	{
 		App->render->Blit(&sprite);
 
-		if (is_enemy && type == FIREBAT && logic_pos.PointInRect(-App->render->camera.x, -App->render->camera.y, App->render->camera.w, App->render->camera.h))
+		if (is_enemy && type == FIREBAT)
 			DrawVisionCone();
-			
 	}
 		
 }
