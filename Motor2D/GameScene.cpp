@@ -303,7 +303,7 @@ void GameScene::LoadTutorial()
 	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies");
 	tutorial_text_queue.push("Press W to activate sniper mode. CLICK RIGHT to shoot.");
 
-	tutorial_images_queue.push({1435, 470, 345, 281});
+	tutorial_images_queue.push({1435, 500, 345, 281});
 	tutorial_images_queue.push({ 1400, 880, 62, 78 });
 	tutorial_images_queue.push({1403, 968, 96, 79});
 	tutorial_images_queue.push({ 1405, 810, 340, 63 });
@@ -465,7 +465,7 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 				switch (tutorial_images_queue.size())
 				{
 				case 4:
-					tutorial_image->SetLocalPos(170, 15);
+					tutorial_image->SetLocalPos(170, 45);
 					break;
 				case 3:
 					tutorial_image->SetLocalPos(270, 175);
