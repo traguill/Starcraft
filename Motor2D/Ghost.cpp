@@ -136,7 +136,7 @@ void Ghost::Snipper()
 
 
 	//Snipper CAN NOT be: death, using invisibility or attacking or already snipping
-	if (state == UNIT_DIE || invisible == true || state == UNIT_ATTACK)
+	if (state == UNIT_DIE || invisible == true)
 		return;
 
 	snipping = true;
