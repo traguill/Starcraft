@@ -395,11 +395,12 @@ void j1Render::CursorMovement(float dt)
 	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
 	{
 		//Move camera LEFT
-		if (mouse_x < offset_x && mouse_y <= 335)
+		if (mouse_x < offset_x)
 		{
 			if (!lock_after_transition)
 				DiscardTransition();
 			camera.x += dt * camera_speed;
+			if (mouse_y <= 335)
 			App->ui->cursor_state = TO_LEFT;
 		}
 		//Move camera RIGHT
@@ -419,12 +420,14 @@ void j1Render::CursorMovement(float dt)
 			App->ui->cursor_state = UP;
 		}
 		//Move camera DOWN
-		if (mouse_y > camera.h - offset_y && mouse_x >= 130)
+		if (mouse_y > camera.h - offset_y)
 		{
 			if (!lock_after_transition)
 				DiscardTransition();
 			camera.y -= dt * camera_speed;
-			App->ui->cursor_state = DOWN;
+
+			if(mouse_x >= 130)
+				App->ui->cursor_state = DOWN;
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -486,16 +489,15 @@ void j1Render::CursorMovement(float dt)
 		App->ui->cursor_state = TO_LEFT_UP;
 	}
 
-	/*//Move camera LEFT DOWN
+	//Move camera LEFT DOWN
 	if (mouse_x  < offset_x && mouse_y > camera.h - offset_y)
 	{
 		if (!lock_after_transition)
 			DiscardTransition();
 		camera.x += dt * (camera_speed / 3);
 		camera.y -= dt * (camera_speed / 3);
-		App->ui->cursor_state = TO_LEFT_DOWN;
 	}
-	*/
+	
 	CheckBoundaries();
 
 }
