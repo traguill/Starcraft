@@ -1044,7 +1044,6 @@ void j1EntityManager::AssignPath(Unit* unit, uint path_id, iPoint* center)
 	unit->SetPathId(path_id);
 	unit->path_offset_x = dst_center.x;
 	unit->path_offset_y = dst_center.y;
-	unit->CenterUnit();
 	unit->waiting_for_path = true;
 }
 
@@ -1071,7 +1070,6 @@ void j1EntityManager::AssignPath(Unit* unit, vector<iPoint> path, iPoint* center
 	unit->DiscardTarget();
 	unit->avoid_change_state = true;
 	unit->SetPath(unit_path);
-	unit->CenterUnit();
 }
 
 void j1EntityManager::CalculateMovementRect()//
