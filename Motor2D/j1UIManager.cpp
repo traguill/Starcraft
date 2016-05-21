@@ -178,6 +178,8 @@ bool j1UIManager::Update(float dt)
 		SetNextFocus();
 	}*/
 
+	UpdateAnimation(dt);
+
 	//Draw lifes & mana
 	DrawLifeMana();
 
@@ -333,7 +335,7 @@ void j1UIManager::EraseElement(UIEntity* entity)
 }
 
 // const getter for atlas
-SDL_Texture* j1UIManager::GetAtlas() const
+SDL_Texture* j1UIManager::GetAtlas()
 {
 	return atlas;
 }
@@ -665,4 +667,41 @@ void j1UIManager::DrawLifeMana()
 		}
 	}
 	
+}
+
+
+// ANIMATION
+//------------------------------------------------------------------------------------------------------------
+void j1UIManager::UpdateAnimation(float dt)
+{
+	list<AnimatedSprite>::iterator a_sprite = animated_sprites.begin();
+	while (a_sprite != animated_sprites.end())
+	{
+		float step =  (float)(255*dt)/(*a_sprite).alpha_step;
+		(*a_sprite).sprite->alpha += roundf(step);
+		if ((*a_sprite).sprite->alpha >= 255)
+		{
+			(*a_sprite).sprite->alpha = 255;
+			a_sprite = animated_sprites.erase(a_sprite);
+		}
+		else
+		{
+			++a_sprite;
+		}
+		
+	}
+}
+
+void j1UIManager::AnimFadeIn(UIEntity* ui_sprite, uint duration, uint delay)
+{
+	if (ui_sprite != NULL)
+	{
+		AnimatedSprite a_sprite;
+		a_sprite.sprite = ui_sprite->GetSprite();
+		a_sprite.alpha_step = duration;
+		a_sprite.sprite->alpha = 0;
+		a_sprite.delay = delay;
+
+		animated_sprites.push_back(a_sprite);
+	}
 }

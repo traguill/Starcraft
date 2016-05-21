@@ -57,6 +57,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(pathfinding);
 	AddModule(font);
+	AddModule(ui);
 	
 	AddModule(scene_manager);
 
@@ -73,11 +74,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(events);
 	
 
+
 	// render last to swap buffer
 	AddModule(render);
-
-	AddModule(ui);
-
 
 
 	PERF_PEEK(ptimer);

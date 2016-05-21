@@ -38,6 +38,8 @@ public:
 	Animation left_down_cursor;
 	Animation friendly_sel;
 	Animation enemy_sel;
+
+	Sprite ui_sprite;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "p2Point.h"
 #include "Animation.h"
+#include "Sprite.h"
 #include "SDL/include/SDL.h"
 #include <list>
 
@@ -46,11 +47,11 @@ public:
 
 	void GUIEvents();
 
-	void GetScreenPos(int &x, int &y)const;
-	void GetLocalPos(int &x, int &y)const;
-	SDL_Rect GetScreenRect()const;
-	SDL_Rect GetLocalRect()const;
-	void SetLocalPos(int x, int y);
+	virtual void GetScreenPos(int &x, int &y)const;
+	virtual void GetLocalPos(int &x, int &y)const;
+	virtual SDL_Rect GetScreenRect()const;
+	virtual SDL_Rect GetLocalRect()const;
+	virtual void SetLocalPos(int x, int y);
 
 	void SetParent(UIEntity* _parent);
 	
@@ -59,6 +60,8 @@ public:
 	//Hides or shows an UI element
 	void SetVisible(bool visible);
 	bool IsVisible()const;
+
+	virtual Sprite* GetSprite();
 
 public:
 
@@ -72,8 +75,8 @@ public:
 	bool				is_visible = true;
 	
 protected:
-	SDL_Rect rect; //Local
-	iPoint	init_pos;
+	SDL_Rect rect;
+	iPoint init_pos;
 
 private:
 	UIEntity*			parent = NULL;

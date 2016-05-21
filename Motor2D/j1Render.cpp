@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include "GameScene.h"
+#include "Sprite.h"
 
 #define VSYNC true
 
@@ -22,6 +23,10 @@ j1Render::j1Render() : j1Module()
 	background.g = 0;
 	background.b = 0;
 	background.a = 0;
+
+	blit_sprites.clear();
+	priority_sprites.clear();
+	ui_sprites.clear();
 }
 
 // Destructor
@@ -155,6 +160,13 @@ bool j1Render::Update(float dt)
 		++j;
 	}
 
+	list<Sprite*>::iterator u = ui_sprites.begin();
+	while (u != ui_sprites.end())
+	{
+		Blit((*u)->texture, (*u)->position.x, (*u)->position.y, &(*u)->rect, (*u)->alpha);
+		++u;
+	}
+
 
 	return true;
 }
@@ -166,6 +178,7 @@ bool j1Render::PostUpdate()
 
 	blit_sprites.clear();
 	priority_sprites.clear();
+	ui_sprites.clear();
 
 	return true;
 }
@@ -225,6 +238,15 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
+
+void j1Render::BlitUI(Sprite* _sprite)
+{
+	if (_sprite != NULL)
+	{
+		ui_sprites.push_back(_sprite);
+	}
+		
+}
 
 void j1Render::Blit(Sprite* _sprite, bool priority)
 {

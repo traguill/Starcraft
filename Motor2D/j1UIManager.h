@@ -5,6 +5,14 @@
 #include "UIProgressBar.h"
 #include <map>
 
+struct AnimatedSprite
+{
+	Sprite* sprite;
+	int alpha_step = 0;
+	int size_step = 0;
+	int delay = 0;
+};
+
 class UILabel;
 class UIImage;
 class UIEntity;
@@ -61,7 +69,7 @@ public:
 
 	// Gui creation functions
 
-	SDL_Texture* GetAtlas() const;
+	SDL_Texture* GetAtlas();
 
 	//Creators ------------------------------------------------------------------------------------------------
 	UILabel* CreateLabel(const char* text, const int x, const int y, bool on_list = true, j1Module* listener = NULL);
@@ -87,6 +95,9 @@ public:
 	void StartGameUI();
 	void CleanUpGameUI();
 
+	//Animate UI
+	void AnimFadeIn(UIEntity* ui_sprite, uint duration, uint delay = 0);
+
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
@@ -100,6 +111,7 @@ private:
 	bool LoadUiInfo();
 
 	void DrawLifeMana();
+	void UpdateAnimation(float dt);
 
 private:
 
@@ -124,6 +136,9 @@ private:
 
 	int						mw_width;
 	int						mw_height;
+
+	//Animations
+	list<AnimatedSprite>	animated_sprites;
 
 public:
 	bool					debug;
