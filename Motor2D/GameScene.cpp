@@ -301,6 +301,7 @@ bool GameScene::CleanUp()
 	tutorial_window = NULL;
 	tutorial_button = NULL;
 	tutorial_image = NULL;
+	tutorial_fadeblack = NULL;
 
 	bomb_pos.clear();
 	return true;
@@ -308,6 +309,7 @@ bool GameScene::CleanUp()
 
 void GameScene::LoadTutorial()
 {
+	tutorial_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, true);
 	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
 	tutorial_button = App->ui->CreateButton("", 275, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
 	tutorial_text = App->ui->CreateLabel("COLLECT the 3 bombs that the enemies have in their bases.", 140, 300);
@@ -501,6 +503,7 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 				tutorial_window->SetVisible(false);
 				tutorial_text->SetVisible(false);
 				tutorial_image->SetVisible(false);
+				tutorial_fadeblack->SetVisible(false);
 
 				tutorial_finished = true;
 				game_paused = false;

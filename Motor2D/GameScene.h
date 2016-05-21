@@ -84,6 +84,7 @@ public:
 	UILabel*				tutorial_text;
 	UIButton*				tutorial_button;
 	UIImage*				tutorial_image;
+	UIImage*				tutorial_fadeblack;
 	queue<SDL_Rect>			tutorial_images_queue;
 	queue<char*>			tutorial_text_queue;
 
