@@ -24,6 +24,8 @@ UIMiniMap::UIMiniMap() : UIEntity()
 	uint _w, _h;
 	App->win->GetWindowSize(_w, _h);
 
+	white_rect.rect.x = 875;
+	white_rect.rect.y = 345;
 	white_rect.rect.w = _w / div_x;
 	white_rect.rect.h = _h / div_y;
 	
@@ -54,6 +56,9 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 	uint _w, _h;
 	App->win->GetWindowSize(_w, _h);
 
+
+	white_rect.rect.x = 875;
+	white_rect.rect.y = 345;
 	white_rect.rect.w = _w / div_x;
 	white_rect.rect.h = _h / div_y;
 
