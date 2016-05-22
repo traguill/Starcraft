@@ -151,7 +151,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 		{
 			iPoint unit_pos = unit->GetPosition();
 			if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
+			{
 				unit->state = UNIT_IDLE;
+				unit->direction = unit->original_direction;
+			}
 
 			else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 			{
@@ -180,7 +183,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			{
 				iPoint unit_pos = unit->GetPosition();
 				if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
+				{
 					unit->state = UNIT_IDLE;
+					unit->direction = unit->original_direction;
+				}
 
 				else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 				{
@@ -227,7 +233,10 @@ void TacticalAI::SetEvent(UNIT_EVENT unit_event, Unit* unit, Unit* target){
 			{
 				iPoint unit_pos = unit->GetPosition();
 				if (unit_pos.DistanceManhattan(unit->original_point) <= MOVE_RADIUS)
+				{
 					unit->state = UNIT_IDLE;
+					unit->direction = unit->original_direction;
+				}
 
 				else if (unit_pos.DistanceManhattan(unit->original_point) >= MOVE_RADIUS && unit->is_enemy)
 				{

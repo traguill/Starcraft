@@ -212,6 +212,7 @@ public:
 	//Patrol
 	bool patrol;
 	iPoint original_point;
+	fPoint original_direction;
 	vector<iPoint> patrol_path;
 
 	//Attacking

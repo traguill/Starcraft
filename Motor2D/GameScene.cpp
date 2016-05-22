@@ -403,6 +403,7 @@ void GameScene::LoadLevel(const char* path)
 		Unit* u = App->entity->enemy_units.back();
 		u->direction.x = unit_e.child("direction").attribute("x").as_int();
 		u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
+		u->original_direction = u->direction;
 	}
 }
 

@@ -791,6 +791,7 @@ void Unit::Move(float dt)
 		{
 			has_destination = false;
 			state = UNIT_IDLE;
+				direction = original_direction;
 		}
 	}
 }
@@ -1128,7 +1129,7 @@ void Unit::AlertNearUnits(iPoint destination, list<Unit*> search_list)
 	{
 		if ((*unit)->GetPosition().DistanceManhattan(logic_pos) <= vision)
 		{
-			if ((*unit)->target == NULL && (*unit)->state == UNIT_IDLE && (*unit)->state != UNIT_DIE)
+			if ((*unit)->target == NULL && (*unit)->state != UNIT_DIE)
 			{
 				//Create path to destination
 				iPoint unit_tile =  App->map->WorldToMap(logic_pos.x, logic_pos.y, COLLIDER_MAP);
