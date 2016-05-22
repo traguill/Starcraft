@@ -11,7 +11,7 @@
 
 #define MOVE_RADIUS 8
 
-#define INVISIBILITY_ALPHA 155 
+#define INVISIBILITY_ALPHA 95 
 
 class Bullet;
 
