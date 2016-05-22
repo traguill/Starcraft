@@ -5,6 +5,7 @@
 #include "UICursor.h"
 #include "UILabel.h"
 #include "UIButton.h"
+#include "UIMiniMap.h"
 #include "j1Timer.h"
 #include <queue>
 
@@ -78,6 +79,9 @@ private:
 	bool tutorial_finished;
 
 public:
+
+	//Minimap
+	UIMiniMap* minimap;
 
 	//It maybe has to be public
 	UIImage*				tutorial_window;

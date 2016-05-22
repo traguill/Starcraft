@@ -256,7 +256,8 @@ bool GameScene::CleanUp()
 	App->map->UnLoad(collider_id);
 
 	//life_HUD = NULL;
-	
+	minimap = NULL;
+
 	marine_weapon_icon = NULL;
 	marine_armour_icon = NULL;
 	marine_wireframe = NULL;
@@ -629,9 +630,9 @@ void GameScene::LoadHUD()
 
 
 	//Creating Mini Map
-	App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 }, { 4096, 4096 });
+	minimap = App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 }, { 4096, 4096 });
 
-
+	
 	//MARINE
 	SDL_Rect s_armourM{ 621, 62, 34, 33 };
 	marine_armour_icon = App->ui->CreateImage(s_armourM, 240, 440, false);
