@@ -513,6 +513,12 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			App->ui->AnimResize(skip_button, 0.05f, false);
 			App->ui->AnimFade(tutorial_fadeblack, 1.5f, false, 2);
 
+			queue<SDL_Rect> empty_sdl;
+			queue<char*> empty_char;
+			tutorial_text_queue = empty_char;
+			tutorial_images_queue = empty_sdl;
+			secondary_text_queue = empty_char;
+
 			tutorial_finished = true;
 			game_paused = false;
 		}
