@@ -30,14 +30,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	Sprite* GetSprite();
-
-	void GetScreenPos(int &x, int &y)const;
-	void GetLocalPos(int &x, int &y)const;
-	SDL_Rect GetScreenRect()const;
-	SDL_Rect GetLocalRect()const;
-	void SetLocalPos(int x, int y);
-
 private:
 
 	void GetState(); //Sets the state of the button (idle, pressed, hover)
@@ -46,13 +38,9 @@ private:
 	SDL_Rect idle;
 	SDL_Rect pressed;
 	SDL_Rect hover;
-
-
 public:
 	UILabel*		text;
 	BUTTON_STATE state;
-
-	Sprite ui_sprite;
 };
 
 #endif

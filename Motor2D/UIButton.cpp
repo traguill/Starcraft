@@ -32,10 +32,6 @@ UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section
 	idle = section_idle;
 	pressed = section_pressed;
 	hover = section_hover;
-
-	ui_sprite.position = init_pos;
-	ui_sprite.rect = section_idle;
-	ui_sprite.texture = App->ui->GetAtlas();
 }
 
 
@@ -54,17 +50,17 @@ bool UIButton::Update(float dt)
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
-	ui_sprite.position.x = init_pos.x - cam.x;
-	ui_sprite.position.y = init_pos.y - cam.y;
+	rect.x = init_pos.x - cam.x;
+	rect.y = init_pos.y - cam.y;
 
 	if (state == IDLE)
-		ui_sprite.rect = idle;
+		App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &idle);
 	if (state == PRESSED)						
-		ui_sprite.rect = pressed;
+		App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &pressed);
 	if (state == HOVER)							
-		ui_sprite.rect = hover;
+		App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &hover);
 
-	App->render->BlitUI(&ui_sprite);
+
 
 	//Update text properties
 	Sprite* text_sprite = text->GetSprite();
@@ -97,43 +93,4 @@ void UIButton::GetState()
 		state = IDLE;
 	if (gui_event == MOUSE_BUTTON_RIGHT_DOWN)
 		state = PRESSED;
-}
-
-Sprite* UIButton::GetSprite()
-{
-	return &ui_sprite;
-}
-
-
-void UIButton::GetScreenPos(int &x, int &y)const
-{
-	x = y = 0;
-
-	x += ui_sprite.position.x;
-	y += ui_sprite.position.y;
-}
-
-void UIButton::GetLocalPos(int &x, int &y)const
-{
-	x = ui_sprite.position.x;
-	y = ui_sprite.position.y;
-}
-
-SDL_Rect UIButton::GetScreenRect()const
-{
-	SDL_Rect ret = ui_sprite.rect;
-	GetScreenPos(ret.x, ret.y);
-
-	return ret;
-}
-
-SDL_Rect UIButton::GetLocalRect()const
-{
-	return ui_sprite.rect;;
-}
-
-void UIButton::SetLocalPos(int x, int y)
-{
-	ui_sprite.position.x = ui_sprite.rect.x = x;
-	ui_sprite.position.y = ui_sprite.rect.y = y;
 }

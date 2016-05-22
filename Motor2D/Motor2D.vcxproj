@@ -160,7 +160,6 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="j1UIManager.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="TacticalAI.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UICursor.h" />

@@ -178,8 +178,6 @@ bool j1UIManager::Update(float dt)
 		SetNextFocus();
 	}*/
 
-	UpdateAnimation(dt);
-
 	//Draw lifes & mana
 	DrawLifeMana();
 
@@ -337,7 +335,7 @@ void j1UIManager::EraseElement(UIEntity* entity)
 }
 
 // const getter for atlas
-SDL_Texture* j1UIManager::GetAtlas()
+SDL_Texture* j1UIManager::GetAtlas() const
 {
 	return atlas;
 }
@@ -668,6 +666,7 @@ void j1UIManager::DrawLifeMana()
 		}
 	}
 	
+<<<<<<< HEAD
 }
 
 
@@ -756,3 +755,6 @@ void j1UIManager::AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, 
 		animated_sprites.push_back(a_sprite);
 	}
 }
+=======
+}
+>>>>>>> parent of b20f985... UI to Sprite

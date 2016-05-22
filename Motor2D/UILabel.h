@@ -36,7 +36,7 @@ private:
 
 public:
 
-	Sprite ui_sprite;
+	SDL_Texture* texture;
 
 };
 

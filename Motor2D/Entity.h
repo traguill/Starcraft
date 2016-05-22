@@ -3,7 +3,6 @@
 
 #include "p2Point.h"
 #include "j1Textures.h"
-#include "Sprite.h"
 #include <list>
 
 using namespace std;

@@ -7,9 +7,8 @@
 #define __j1MODULE_H__
 
 #include <string>
-#include "UIEntity.h"
 #include "PugiXml\src\pugixml.hpp"
-
+#include "UIEntity.h"
 
 using namespace std;
 

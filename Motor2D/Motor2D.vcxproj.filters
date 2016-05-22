@@ -263,9 +263,6 @@
     <ClInclude Include="Ghost.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Module</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
