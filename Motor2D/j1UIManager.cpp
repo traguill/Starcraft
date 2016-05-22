@@ -698,6 +698,8 @@ void j1UIManager::UpdateAnimation(float dt)
 			continue;
 		}
 
+		(*a_sprite).ui_element->SetVisible(true);
+
 
 		//Fade animation
 		if ((*a_sprite).alpha_step != 0)
@@ -718,6 +720,7 @@ void j1UIManager::UpdateAnimation(float dt)
 			if ((*a_sprite).sprite->alpha <= 0)
 			{
 				(*a_sprite).sprite->alpha = 0;
+				(*a_sprite).ui_element->SetVisible(false);
 				a_sprite = animated_sprites.erase(a_sprite);
 				continue;
 			}
@@ -741,6 +744,7 @@ void j1UIManager::UpdateAnimation(float dt)
 			if ((*a_sprite).sprite->size <= (*a_sprite).final_size && (*a_sprite).final_size == 0.1f)
 			{
 				(*a_sprite).sprite->size = (*a_sprite).final_size;
+				(*a_sprite).ui_element->SetVisible(false);
 				a_sprite = animated_sprites.erase(a_sprite);
 				continue;
 			}
@@ -749,11 +753,10 @@ void j1UIManager::UpdateAnimation(float dt)
 		
 		++a_sprite;
 		
-		
 	}
 }
 
-void j1UIManager::AnimFade(UIEntity* ui_sprite, float duration, bool fade_in, uint delay)
+void j1UIManager::AnimFade(UIEntity* ui_sprite, float duration, bool fade_in, float delay)
 {
 	if (ui_sprite != NULL)
 	{
@@ -763,12 +766,14 @@ void j1UIManager::AnimFade(UIEntity* ui_sprite, float duration, bool fade_in, ui
 		a_sprite.sprite->alpha = (fade_in) ? 0 : 255;
 		a_sprite.delay = delay;
 		a_sprite.timer = 0;
-
+		a_sprite.ui_element = ui_sprite;
+		if (delay != 0 && fade_in == true)
+			ui_sprite->SetVisible(false);
 		animated_sprites.push_back(a_sprite);
 	}
 }
 
-void j1UIManager::AnimResize(UIEntity* ui_sprite, float duration, bool size_big, uint delay)
+void j1UIManager::AnimResize(UIEntity* ui_sprite, float duration, bool size_big, float delay)
 {
 	if (ui_sprite != NULL)
 	{
@@ -800,7 +805,9 @@ void j1UIManager::AnimResize(UIEntity* ui_sprite, float duration, bool size_big,
 		a_sprite.timer = 0;
 
 		a_sprite.init_pos = a_sprite.sprite->position;
-
+		a_sprite.ui_element = ui_sprite;
+		if (delay != 0 && size_big)
+			ui_sprite->SetVisible(false);
 		animated_sprites.push_back(a_sprite);
 	}
 }
