@@ -298,6 +298,7 @@ bool GameScene::CleanUp()
 	tutorial_text = NULL;
 	tutorial_window = NULL;
 	tutorial_button = NULL;
+	skip_button = NULL;
 	tutorial_image = NULL;
 	tutorial_fadeblack = NULL;
 
@@ -310,16 +311,28 @@ void GameScene::LoadTutorial()
 	tutorial_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, true);
 	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
 	tutorial_button = App->ui->CreateButton("", 275, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
+	skip_button = App->ui->CreateButton("", 490, 75, {869, 189, 21, 19}, {891, 189, 21, 19}, { 847, 189, 21, 19 }, this);
 	tutorial_text = App->ui->CreateLabel("COLLECT the 3 bombs that the enemies have in their bases.", 140, 300);
+	secondary_text = App->ui->CreateLabel(" - Once you got all 3, guide your units to the extraction point", 140, 320);
 	tutorial_image = App->ui->CreateImage({ 1300, 475, 69, 63 }, 275, 175, true);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
-	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies");
+	//Falta medic
+	tutorial_text_queue.push("Target a friendly unit with your medic, it will heal it.");
+	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies.");
 	tutorial_text_queue.push("Press W to activate sniper mode. CLICK RIGHT to shoot.");
+
+	secondary_text_queue.push(" - Firebats have limited range of vision, take advantage of this!");
+	secondary_text_queue.push(" - Marines will be patroling the area.");
+	//Falta medic
+	secondary_text_queue.push(" - Medics aren't combat units, use them for support purposes!");
+	secondary_text_queue.push(" - Using invisibility consumes energy, be careful!");
+	secondary_text_queue.push(" - The squad has limited ammo, don't waste it!");
 
 	tutorial_images_queue.push({1435, 500, 345, 281});
 	tutorial_images_queue.push({ 1400, 880, 62, 78 });
+	tutorial_images_queue.push({1512, 969, 68, 78});
 	tutorial_images_queue.push({1403, 968, 96, 79});
 	tutorial_images_queue.push({ 1405, 810, 340, 63 });
 
@@ -470,22 +483,42 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			App->scene_manager->WantToChangeScene(MENU);
 		}
+		
+		if ((UIButton*)gui == skip_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			tutorial_button->SetVisible(false);
+			skip_button->SetVisible(false);
+			tutorial_window->SetVisible(false);
+			tutorial_text->SetVisible(false);
+			secondary_text->SetVisible(false);
+			tutorial_image->SetVisible(false);
+			tutorial_fadeblack->SetVisible(false);
+
+			tutorial_finished = true;
+			game_paused = false;
+		}
 
 		if ((UIButton*)gui == tutorial_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			if (tutorial_text_queue.size() > 0)
 			{
 				//Animation
+				App->ui->AnimFade(secondary_text, 1, true);
 				App->ui->AnimFade(tutorial_text, 1, true);
 				App->ui->AnimFade(tutorial_image, 1, true);
 
+				secondary_text->Print(secondary_text_queue.front());
+				secondary_text_queue.pop();
 				tutorial_text->Print(tutorial_text_queue.front());
 				tutorial_text_queue.pop();
 				
 				switch (tutorial_images_queue.size())
 				{
-				case 4:
+				case 5:
 					tutorial_image->SetLocalPos(170, 45);
+					break;
+				case 4:
+					tutorial_image->SetLocalPos(270, 175);
 					break;
 				case 3:
 					tutorial_image->SetLocalPos(270, 175);
@@ -504,8 +537,10 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			{
 
 				tutorial_button->SetVisible(false);
+				skip_button->SetVisible(false);
 				tutorial_window->SetVisible(false);
 				tutorial_text->SetVisible(false);
+				secondary_text->SetVisible(false);
 				tutorial_image->SetVisible(false);
 				tutorial_fadeblack->SetVisible(false);
 				

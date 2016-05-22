@@ -86,11 +86,15 @@ public:
 	//It maybe has to be public
 	UIImage*				tutorial_window;
 	UILabel*				tutorial_text;
+	UILabel*				secondary_text;
 	UIButton*				tutorial_button;
+	UIButton*				skip_button;
 	UIImage*				tutorial_image;
 	UIImage*				tutorial_fadeblack;
 	queue<SDL_Rect>			tutorial_images_queue;
 	queue<char*>			tutorial_text_queue;
+
+	queue<char*>			secondary_text_queue;
 
 	//UILabel*				life_HUD;
 	j1Timer					pause_timer;
