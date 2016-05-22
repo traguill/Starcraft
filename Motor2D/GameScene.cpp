@@ -68,7 +68,7 @@ bool GameScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bzone = App->tex->Load("sprites/extraction.png");
 	bomb_rect = { 30, 12, 32, 32 };
-	bomb_zone = { 815, 1780, 82, 41 };
+	bomb_zone = { 815, 1780, 164, 82 };
 	
 
 	debug = false;
