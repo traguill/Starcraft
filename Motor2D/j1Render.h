@@ -56,6 +56,8 @@ public:
 	//Set a transition to a point
 	void SetTransition(int x, int y, bool end_locking = false);
 
+	void MoveAroundQuad(int x, int y, const SDL_Rect& quad);
+
 	void DiscardTransition(); //Stops a transition
 
 	bool GetTransitioning();
@@ -74,9 +76,10 @@ public:
 	SDL_Rect		viewport;
 	SDL_Color		background;
 
-	bool lock_camera = false;
-
+	bool			lock_camera = false;
+	bool			move_around_quad = false;
 private:
+
 	int		camera_speed;
 
 	//Ofsset of the cursor to move the camera
@@ -88,6 +91,9 @@ private:
 
 	bool transitioning = false;
 	iPoint end_point;
+
+	//Next variable is needed in case the camera can only move around a rectangle
+	SDL_Rect quad_boundaries;
 
 	list<Sprite*> blit_sprites;
 	list<Sprite*> priority_sprites;

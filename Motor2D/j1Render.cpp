@@ -427,6 +427,7 @@ void j1Render::CursorMovement(float dt)
 	
 	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
 	{
+		
 		//Move camera LEFT
 		if (mouse_x < offset_x)
 		{
@@ -533,6 +534,21 @@ void j1Render::CursorMovement(float dt)
 	
 	CheckBoundaries();
 
+	if (move_around_quad)
+	{
+		if (-camera.x > quad_boundaries.x)			camera.x = -quad_boundaries.x;
+		if (((-camera.x) + camera.w) < (quad_boundaries.x + quad_boundaries.w))		camera.x = -((quad_boundaries.x + quad_boundaries.w) - camera.w);
+		if (-camera.y > quad_boundaries.y)			camera.y = -quad_boundaries.y;
+		if (((-camera.y) + camera.h) < (quad_boundaries.y + quad_boundaries.h))		camera.y = -((quad_boundaries.y + quad_boundaries.h) - camera.h);
+	}
+
+}
+
+void j1Render::MoveAroundQuad(int x, int y, const SDL_Rect& quad)
+{
+	move_around_quad = true;
+	SetTransition(x, y, false);
+	quad_boundaries = quad;
 }
 
 void j1Render::SetTransition(int x, int y,bool end_locking)

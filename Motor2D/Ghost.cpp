@@ -164,43 +164,51 @@ void Ghost::Snipper()
 	//North-West
 	if (dir.x == 1 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x, -logic_pos.y, true);
+		//App->render->SetTransition(-logic_pos.x, -logic_pos.y, false);
+		App->render->MoveAroundQuad(-logic_pos.x, -logic_pos.y, { logic_pos.x, logic_pos.y, width, height });
 	}
 	//North
 	if (dir.x == 0 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y, true);
+		//App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y, false);
+		App->render->MoveAroundQuad(-logic_pos.x + cam.w / 2, -logic_pos.y, { logic_pos.x, logic_pos.y, width, height });
 	}
 	//North-East
 	if (dir.x == -1 && dir.y == 1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y, true);
+		//App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y, false);
+		App->render->MoveAroundQuad(-logic_pos.x + cam.w, -logic_pos.y, { logic_pos.x, logic_pos.y, width, height });
 	}
 	//East
 	if (dir == iPoint(-1, 0) || dir == iPoint(-1, -1))
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2, true);
+		//App->render->SetTransition(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2, false);
+		App->render->MoveAroundQuad(-logic_pos.x + cam.w, -logic_pos.y + cam.h / 2, { logic_pos.x, logic_pos.y, width, height });
 	}
 	//Up
 	if (dir.x == 0 && dir.y == -1)
 	{
-		App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4, true);
+		//App->render->SetTransition(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4, false);
+		App->render->MoveAroundQuad(-logic_pos.x + cam.w / 2, -logic_pos.y + 3 * cam.h / 4, { logic_pos.x, logic_pos.y, width, height });
 	}
 	//West
 	if (dir == iPoint(1, 0) || dir == iPoint(1, 1))
 	{
-		App->render->SetTransition(-logic_pos.x, -logic_pos.y + cam.h / 2, true);
+		//App->render->SetTransition(-logic_pos.x, -logic_pos.y + cam.h / 2, false);
+		App->render->MoveAroundQuad(-logic_pos.x, -logic_pos.y + cam.h / 2, {logic_pos.x, logic_pos.y, width, height});
 	}
 
 	App->entity->SNIPPER_MODE = true;
 	//Activate bullet time
 	App->entity->bullet_time = 0.5f;
 
+
+
 	//Entity manager to: snipe mode
 
 	//Sound
 	App->audio->PlayFx(App->entity->sound_sniper_mode);
-	//App->game_scene->minimap->EnableMinimap(false);
+	App->game_scene->minimap->EnableMinimap(false);
 }
 
 void Ghost::Shoot(int x, int y)
@@ -293,9 +301,10 @@ void Ghost::DisableSnipper()
 	//END SNIPPING
 	snipping = false;
 	App->entity->SNIPPER_MODE = false;
+	App->render->move_around_quad = false;
 	//Disable bullet mode
 	App->entity->bullet_time = 1.0f;
 	App->render->lock_camera = false;
 	App->render->DiscardTransition();
-	//App->game_scene->minimap->EnableMinimap(true);
+	App->game_scene->minimap->EnableMinimap(true);
 }
