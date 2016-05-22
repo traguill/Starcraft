@@ -331,8 +331,8 @@ void GameScene::LoadTutorial()
 	App->ui->AnimFade(tutorial_image, 1, true, 6);
 	App->ui->AnimFade(tutorial_text, 1, true, 6);
 	App->ui->AnimFade(secondary_text, 1, true, 6);
-	App->ui->AnimFade(tutorial_button, 1, true, 7.5f);
-	App->ui->AnimFade(skip_button, 1, true, 7.5f);
+	App->ui->AnimResize(tutorial_button, 0.5f, true, 6.5f);
+	App->ui->AnimResize(skip_button, 0.1f, true, 6.5f);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
@@ -505,12 +505,12 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		if ((UIButton*)gui == skip_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			//Animation
-			App->ui->AnimResize(tutorial_window, 0.05f, false, 1.5f);
-			App->ui->AnimFade(tutorial_image, 1, false, 1);
-			App->ui->AnimFade(tutorial_text, 1, false, 1);
-			App->ui->AnimFade(secondary_text, 1, false, 1);
-			App->ui->AnimFade(tutorial_button, 1, false);
-			App->ui->AnimFade(skip_button, 1, false);
+			App->ui->AnimResize(tutorial_window, 0.05f, false, 1.0f);
+			App->ui->AnimFade(tutorial_image, 0.5f, false, 0.5f);
+			App->ui->AnimFade(tutorial_text, 0.5f, false, 0.5f);
+			App->ui->AnimFade(secondary_text, 0.5f, false, 0.5f);
+			App->ui->AnimResize(tutorial_button, 0.05f, false);
+			App->ui->AnimResize(skip_button, 0.05f, false);
 			App->ui->AnimFade(tutorial_fadeblack, 1.5f, false, 2);
 
 			tutorial_finished = true;
@@ -556,12 +556,12 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			{
 
 				//Animation
-				App->ui->AnimResize(tutorial_window, 0.05f, false, 1.5f);
-				App->ui->AnimFade(tutorial_image, 1, false, 1);
-				App->ui->AnimFade(tutorial_text, 1, false, 1);
-				App->ui->AnimFade(secondary_text, 1, false, 1);
-				App->ui->AnimFade(tutorial_button, 1, false );
-				App->ui->AnimFade(skip_button, 1, false );
+				App->ui->AnimResize(tutorial_window, 0.05f, false, 1.0f);
+				App->ui->AnimFade(tutorial_image, 0.5f, false, 0.5f);
+				App->ui->AnimFade(tutorial_text, 0.5f, false, 0.5f);
+				App->ui->AnimFade(secondary_text, 0.5f, false, 0.5f);
+				App->ui->AnimResize(tutorial_button, 0.05f, false);
+				App->ui->AnimResize(skip_button, 0.05f, false);
 				App->ui->AnimFade(tutorial_fadeblack, 1.5f, false, 2);
 				
 				tutorial_finished = true;
