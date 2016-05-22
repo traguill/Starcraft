@@ -137,9 +137,6 @@ bool GameScene::Update(float dt)
 	}*/
 
 
-
-
-
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
 	{

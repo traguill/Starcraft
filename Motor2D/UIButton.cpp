@@ -41,7 +41,9 @@ UIButton::UIButton(const char* _text, const int x, const int y, SDL_Rect section
 
 // Destructor
 UIButton::~UIButton()
-{}
+{
+	ui_sprite.texture = NULL;
+}
 
 // Called before render is available
 bool UIButton::Update(float dt)

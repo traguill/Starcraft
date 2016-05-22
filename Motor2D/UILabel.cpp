@@ -34,7 +34,9 @@ UILabel::UILabel(const char* txt, const int x, const int y) : UIEntity()
 
 // Destructor
 UILabel::~UILabel()
-{}
+{
+	ui_sprite.texture = NULL;
+}
 
 // Called before render is available
 bool UILabel::Update(float dt)

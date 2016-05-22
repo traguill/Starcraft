@@ -664,7 +664,6 @@ void j1UIManager::DrawLifeMana()
 				mana->Draw((*unit)->GetPosition().x + 4, (*unit)->GetPosition().y - 7);
 			}
 			
-
 			++unit;
 		}
 	}
@@ -722,7 +721,7 @@ void j1UIManager::UpdateAnimation(float dt)
 
 void j1UIManager::AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uint delay)
 {
-	if (ui_sprite != NULL)
+	/*if (ui_sprite != NULL)
 	{
 		AnimatedSprite a_sprite;
 		a_sprite.sprite = ui_sprite->GetSprite();
@@ -732,7 +731,7 @@ void j1UIManager::AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uin
 		a_sprite.timer = 0;
 
 		animated_sprites.push_back(a_sprite);
-	}
+	}*/
 }
 
 void j1UIManager::AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, uint delay)

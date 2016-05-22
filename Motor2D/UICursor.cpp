@@ -163,7 +163,9 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 
 // Destructor
 UICursor::~UICursor()
-{}
+{
+	ui_sprite.texture = NULL;
+}
 
 // Called before render is available
 bool UICursor::Update(float dt)

@@ -74,7 +74,9 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 }
 
 UIMiniMap::~UIMiniMap()
-{}
+{
+	ui_sprite.texture = NULL;
+}
 
 bool UIMiniMap::Update(float dt)
 {

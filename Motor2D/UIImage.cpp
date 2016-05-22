@@ -32,7 +32,9 @@ UIImage::UIImage(SDL_Rect _section, const int x, const int y) : UIEntity()
 
 // Destructor
 UIImage::~UIImage()
-{}
+{
+	ui_sprite.texture = NULL;
+}
 
 // Called before render is available
 bool UIImage::Update(float dt)
