@@ -24,16 +24,14 @@ UIMiniMap::UIMiniMap() : UIEntity()
 	uint _w, _h;
 	App->win->GetWindowSize(_w, _h);
 
-	white_rec.w = _w / div_x;
-	white_rec.h = _h / div_y;
+	white_rect.rect.w = _w / div_x;
+	white_rect.rect.h = _h / div_y;
 	
 	init_pos.x = rect.x;
 	init_pos.y = rect.y;
 
 	offset.x = 50;
 	offset.y = 50;
-
-
 }
 
 
@@ -56,8 +54,8 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 	uint _w, _h;
 	App->win->GetWindowSize(_w, _h);
 
-	white_rec.w = _w / div_x;
-	white_rec.h = _h / div_y;
+	white_rect.rect.w = _w / div_x;
+	white_rect.rect.h = _h / div_y;
 
 	init_pos.x = rect.x;
 	init_pos.y = rect.y;
@@ -67,7 +65,7 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 
 	isFocus = false;
 
-	ui_sprite.texture = App->ui->GetAtlas();
+	ui_sprite.texture = white_rect.texture = App->ui->GetAtlas();
 	ui_sprite.position = init_pos;
 	ui_sprite.rect = section_drawn;
 
@@ -76,6 +74,14 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 UIMiniMap::~UIMiniMap()
 {
 	ui_sprite.texture = NULL;
+}
+
+bool UIMiniMap::PreUpdate()
+{
+	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
+		UpdateRect();
+
+	return true;
 }
 
 bool UIMiniMap::Update(float dt)
@@ -87,12 +93,13 @@ bool UIMiniMap::Update(float dt)
 	ui_sprite.position.x = init_pos.x - cam.x;
 	ui_sprite.position.y = init_pos.y - cam.y + 3;
 
-	App->render->BlitUI(&ui_sprite);
+	App->render->BlitUI(ui_sprite);
 	
 	GetState();
 	UpdateUnitsMiniMap();
-	if (App->game_scene->GetTutorialState() && !App->game_scene->GetFinishedGame())
-		UpdateRect();
+	
+
+	App->render->BlitUI(white_rect);
 
 	return ret;
 }
@@ -108,8 +115,8 @@ iPoint UIMiniMap::WhiteRectUpdatedPos()
 {
 	iPoint tmp(App->render->camera.x, App->render->camera.y);
 	
-	tmp.x = (-tmp.x / div_x) + rect.x;
-	tmp.y = (-tmp.y / div_y) + rect.y;
+	tmp.x = (-tmp.x / div_x) + ui_sprite.position.x;
+	tmp.y = (-tmp.y / div_y) + ui_sprite.position.y;
 
 	return (tmp);
 }
@@ -121,11 +128,11 @@ void UIMiniMap::UpdateRect()
 		if (map_state == PRESSED_MAP)
 		{
 
-			App->input->GetMouseWorld(white_rec.x, white_rec.y);
-			white_rec.x = white_rec.x - (white_rec.w / 2);
-			white_rec.y = white_rec.y - (white_rec.h / 2);
+			App->input->GetMouseWorld(white_rect.position.x, white_rect.position.y);
+			white_rect.position.x = white_rect.position.x - (white_rect.rect.w / 2);
+			white_rect.position.y = white_rect.position.y - (white_rect.rect.h / 2);
 
-			iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
+			iPoint new_pos(-((white_rect.position.x - ui_sprite.position.x)*div_x), -((white_rect.position.y - ui_sprite.position.y)*div_y));
 
 			int x, y;
 			App->input->GetMouseMotion(x, y);
@@ -149,58 +156,71 @@ void UIMiniMap::UpdateRect()
 		{
 			int mouse_x, mouse_y;
 			App->input->GetMouseWorld(mouse_x, mouse_y);
-			white_rec.x = mouse_x - (white_rec.w / 2);
-			white_rec.y = mouse_y - (white_rec.h / 2);
+			white_rect.position.x = mouse_x - (white_rect.rect.w / 2);
+			white_rect.position.y = mouse_y - (white_rect.rect.h / 2);
 
 			//Limits for the minimap
-			if (white_rec.x < rect.x)
+			if (white_rect.position.x < ui_sprite.position.x)
 			{
-				white_rec.x = rect.x;
+				white_rect.position.x = ui_sprite.position.x;
 			}
 
-			if (white_rec.y < rect.y)
+			if (white_rect.position.y < ui_sprite.position.y)
 			{
-				white_rec.y = rect.y;
+				white_rect.position.y = ui_sprite.position.y;
 			}
 
-			if (white_rec.x - rect.x > rect.w - white_rec.w)
+			if (white_rect.position.x - ui_sprite.position.x > ui_sprite.rect.w - white_rect.rect.w)
 			{
-				white_rec.x = (rect.w - white_rec.w) + rect.x;
+				white_rect.position.x = (ui_sprite.rect.w - white_rect.rect.w) + ui_sprite.position.x;
 			}
 
-			if (white_rec.y - rect.y > rect.h - (white_rec.h - 4))
+			if (white_rect.position.y - ui_sprite.position.y > ui_sprite.rect.h - (white_rect.rect.h - 4))
 			{
-				white_rec.y = (rect.h - (white_rec.h - 4)) + rect.y;
+				white_rect.position.y = (ui_sprite.rect.h - (white_rect.rect.h - 4)) + ui_sprite.position.y;
 			}
 
-			iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
+			iPoint new_pos(-((white_rect.position.x - ui_sprite.position.x)*div_x), -((white_rect.position.y - ui_sprite.position.y)*div_y));
 
 			App->render->camera.x = new_pos.x;
 			App->render->camera.y = new_pos.y;
 
-			rect.x = init_pos.x - new_pos.x;
-			rect.y = init_pos.y - new_pos.y;
+			ui_sprite.position.x = init_pos.x - new_pos.x;
+			ui_sprite.position.y = init_pos.y - new_pos.y;
 
 		}
 	}
 
-	draw_pos = WhiteRectUpdatedPos();
-	App->render->DrawQuad({ draw_pos.x, draw_pos.y, white_rec.w, white_rec.h }, 255, 255, 255, 255, false, true);
+	white_rect.position = WhiteRectUpdatedPos();
+	
 }
 
 void UIMiniMap::UpdateUnitsMiniMap()
 {
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
+	Sprite point_friend, point_enemy, point_objective;
+	point_friend.texture = point_enemy.texture = point_objective.texture = App->ui->GetAtlas();
+	point_friend.rect.w = point_friend.rect.h = point_enemy.rect.w = point_enemy.rect.h = point_objective.rect.w = point_objective.rect.h = 1;
+
+	point_friend.rect.x = 871;
+	point_friend.rect.y = 365;
+
+	point_enemy.rect.x = 870;
+	point_enemy.rect.y = 365;
+
+	point_objective.rect.x = 872;
+	point_objective.rect.y = 365;
+
 	list<Unit*>::iterator it_uf = App->entity->friendly_units.begin();
 
 	while (it_uf != App->entity->friendly_units.end())
 	{
-		int x = (*it_uf)->GetPosition().x;
-		int y = (*it_uf)->GetPosition().y;
+		point_friend.position.x = (*it_uf)->GetPosition().x / div_x + ui_sprite.position.x;
+		point_friend.position.y = (*it_uf)->GetPosition().y / div_y + ui_sprite.position.y;
 
-		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 0, 0, 255, 255, true, true);
-
+		App->render->BlitUI(point_friend);
+		
 		it_uf++;
 	}
 
@@ -208,10 +228,10 @@ void UIMiniMap::UpdateUnitsMiniMap()
 
 	while (it_ue != App->entity->enemy_units.end())
 	{
-		int x = (*it_ue)->GetPosition().x;
-		int y = (*it_ue)->GetPosition().y;
+		point_enemy.position.x = (*it_ue)->GetPosition().x / div_x + ui_sprite.position.x;
+		point_enemy.position.y = (*it_ue)->GetPosition().y / div_y + ui_sprite.position.y;
 
-		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 255, 0, 0, 255, true, true);
+		App->render->BlitUI(point_enemy);
 
 		it_ue++;
 	}
@@ -221,21 +241,20 @@ void UIMiniMap::UpdateUnitsMiniMap()
 
 	while (it_b != App->game_scene->bomb_pos.end())
 	{
-		int x = it_b->x;
-		int y = it_b->y;
+		point_objective.position.x = it_b->x / div_x + ui_sprite.position.x;
+		point_objective.position.y = it_b->y / div_y + ui_sprite.position.y;
 
-		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 255, 255, 0, 255, true, true);
+		App->render->BlitUI(point_objective);
 
 		it_b++;
 	}
 
 	if (App->game_scene->bomb_pos.size() == 0)
 	{
-		int x = App->game_scene->bomb_zone.x;
-		int y = App->game_scene->bomb_zone.y;
+		point_objective.position.x = App->game_scene->bomb_zone.x / div_x + ui_sprite.position.x;
+		point_objective.position.y = App->game_scene->bomb_zone.y / div_y + ui_sprite.position.y;
 
-		App->render->DrawQuad({ (x / div_x) + rect.x, (y / div_y) + rect.y, 2, 2 }, 255, 255, 0, 255, true, true);
-
+		App->render->BlitUI(point_objective);
 	}
 
 
@@ -292,4 +311,38 @@ void UIMiniMap::GetState()
 	}
 	
 
+}
+
+
+void UIMiniMap::GetScreenPos(int &x, int &y)const
+{
+	x = y = 0;
+
+	x += ui_sprite.position.x;
+	y += ui_sprite.position.y;
+}
+
+void UIMiniMap::GetLocalPos(int &x, int &y)const
+{
+	x = ui_sprite.position.x;
+	y = ui_sprite.position.y;
+}
+
+SDL_Rect UIMiniMap::GetScreenRect()const
+{
+	SDL_Rect ret = ui_sprite.rect;
+	GetScreenPos(ret.x, ret.y);
+
+	return ret;
+}
+
+SDL_Rect UIMiniMap::GetLocalRect()const
+{
+	return ui_sprite.rect;;
+}
+
+void UIMiniMap::SetLocalPos(int x, int y)
+{
+	ui_sprite.position.x = ui_sprite.rect.x = x;
+	ui_sprite.position.y = ui_sprite.rect.y = y;
 }

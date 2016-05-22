@@ -64,7 +64,7 @@ bool UIButton::Update(float dt)
 	if (state == HOVER)							
 		ui_sprite.rect = hover;
 
-	App->render->BlitUI(&ui_sprite);
+	App->render->BlitUI(ui_sprite);
 
 	//Update text properties
 	Sprite* text_sprite = text->GetSprite();

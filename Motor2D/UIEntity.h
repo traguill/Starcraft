@@ -40,6 +40,7 @@ public:
 	// Destructor
 	virtual ~UIEntity();
 
+	virtual bool PreUpdate();
 	virtual bool Update(float dt);
 	// Called before quitting
 

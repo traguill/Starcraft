@@ -26,12 +26,19 @@ public:
 	// Destructor
 	virtual ~UIMiniMap();
 
+	bool PreUpdate();
 	bool Update(float dt);
 
 	// Called before quitting
 	bool CleanUp();
 
 	void EnableMinimap(bool enable);
+
+	void GetScreenPos(int &x, int &y)const;
+	void GetLocalPos(int &x, int &y)const;
+	SDL_Rect GetScreenRect()const;
+	SDL_Rect GetLocalRect()const;
+	void SetLocalPos(int x, int y);
 
 private:
 
@@ -44,7 +51,6 @@ private:
 private:
 
 	bool enable_minimap = true;
-	SDL_Rect white_rec;
 
 	MAP_STATE map_state;
 
@@ -61,6 +67,7 @@ private:
 	MAP_STATE last_state;
 
 	Sprite ui_sprite;
+	Sprite white_rect;
 };
 
 #endif

@@ -17,7 +17,10 @@ bool UIEntity::Update(float dt)
 {
 	return true;
 }
-
+bool UIEntity::PreUpdate()
+{
+	return true;
+}
 bool UIEntity::CleanUp()
 {
 	return true;

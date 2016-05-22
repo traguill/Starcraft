@@ -267,7 +267,7 @@ bool UICursor::Update(float dt)
 		}
 	}
 
-	App->render->BlitUI(&ui_sprite);
+	App->render->BlitUI(ui_sprite);
 
 	return ret;
 }

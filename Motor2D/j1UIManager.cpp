@@ -107,6 +107,7 @@ bool j1UIManager::LoadUiInfo()
 
 			//Fill data here
 			bar->bar_tex = App->tex->Load(element.child("texture").attribute("value").as_string());
+			bar->GetSprite()->texture = bar->bar_tex;
 
 			bar->SetLocalPos(element.child("local_pos").attribute("x").as_int(), element.child("local_pos").attribute("y").as_int());
 
@@ -154,12 +155,23 @@ bool j1UIManager::LoadUiInfo()
 // Update all UIManagers
 bool j1UIManager::PreUpdate()
 {
+	list<UIEntity*>::iterator i = gui_elements.begin();
+	while (i != gui_elements.end())
+	{
+		if ((*i)->IsVisible() == true)
+		{
+			(*i)->PreUpdate();
+		}
+		++i;
+	}
 	return true;
 }
 
 // Called after all Updates
 bool j1UIManager::PostUpdate()
 {
+
+	RectangleSelection();
 	return true;
 }
 
@@ -183,7 +195,7 @@ bool j1UIManager::Update(float dt)
 	//Draw lifes & mana
 	DrawLifeMana();
 
-	RectangleSelection();
+	
 
 	list<UIEntity*>::iterator i = gui_elements.begin();
 	while (i != gui_elements.end() && ret == true)

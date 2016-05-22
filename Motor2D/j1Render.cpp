@@ -165,10 +165,10 @@ bool j1Render::Update(float dt)
 		++j;
 	}
 
-	list<Sprite*>::iterator u = ui_sprites.begin();
+	list<Sprite>::iterator u = ui_sprites.begin();
 	while (u != ui_sprites.end())
 	{
-		Blit((*u)->texture, (*u)->position.x, (*u)->position.y, &(*u)->rect, (*u)->alpha);
+		Blit((u)->texture, (u)->position.x, (u)->position.y, &(u)->rect, (u)->alpha);
 		++u;
 	}
 
@@ -192,6 +192,11 @@ bool j1Render::PostUpdate()
 bool j1Render::CleanUp()
 {
 	LOG("Destroying SDL render");
+
+	blit_sprites.clear();
+	priority_sprites.clear();
+	ui_sprites.clear();
+
 	SDL_DestroyRenderer(renderer);
 	return true;
 }
@@ -244,12 +249,11 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 
 // Blit to screen
 
-void j1Render::BlitUI(Sprite* _sprite)
+void j1Render::BlitUI(Sprite _sprite)
 {
-	if (_sprite != NULL)
-	{
+	
 		ui_sprites.push_back(_sprite);
-	}
+	
 		
 }
 

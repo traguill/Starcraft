@@ -28,6 +28,9 @@ UIProgressBar::UIProgressBar(UIProgressBar* bar) : UIEntity()
 
 	hp_state = FULL;
 	bar_type = bar->bar_type;
+
+	ui_sprite.texture = bar_tex;
+	ui_sprite.rect = full_bar_section;
 }
 
 // Destructor
@@ -48,7 +51,7 @@ bool UIProgressBar::CleanUp(){
 	bool ret = true;
 
 	App->tex->UnLoad(bar_tex);
-
+	ui_sprite.texture = NULL;
 	bar_tex = NULL;
 
 	return ret;
@@ -76,7 +79,11 @@ void UIProgressBar::SetValue(int value)
 
 void UIProgressBar::Draw(int x, int y)
 {
-	App->render->Blit(bar_tex, x + rect.x, y + rect.y , &empty_bar_section);
+	ui_sprite.position.x = x + rect.x;
+	ui_sprite.position.y = y + rect.y;
+	ui_sprite.rect = empty_bar_section;
+	App->render->BlitUI(ui_sprite);
+
 	SDL_Rect section = empty_bar_section;
 
 	float width = ((float)current_number / (float)max_number) * (float)empty_bar_section.w;
@@ -103,5 +110,15 @@ void UIProgressBar::Draw(int x, int y)
 		break;
 	}
 
-	App->render->Blit(bar_tex, x + rect.x, y + rect.y, &section);
+	ui_sprite.position.x = x + rect.x;
+	ui_sprite.position.y = y + rect.y;
+	ui_sprite.rect = section;
+
+	App->render->BlitUI(ui_sprite);
+}
+
+
+Sprite* UIProgressBar::GetSprite()
+{
+	return &ui_sprite;
 }

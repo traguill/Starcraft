@@ -51,7 +51,7 @@ bool UILabel::Update(float dt)
 		ui_sprite.position.x = init_pos.x - cam_pos.x;
 		ui_sprite.position.y = init_pos.y - cam_pos.y;
 
-		App->render->BlitUI(&ui_sprite);
+		App->render->BlitUI(ui_sprite);
 	}
 
 	return ret;

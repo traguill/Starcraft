@@ -40,9 +40,11 @@ public:
 	void SetValue(int value);
 	void Draw(int x, int y);
 
+	Sprite* GetSprite();
+
 private:
 
-
+	Sprite ui_sprite;
 
 
 public:
