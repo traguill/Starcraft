@@ -32,6 +32,8 @@ UIMiniMap::UIMiniMap() : UIEntity()
 
 	offset.x = 50;
 	offset.y = 50;
+
+
 }
 
 
@@ -39,7 +41,6 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 {
 	rect = position;
 
-	draw_section = section_drawn;
 	type = MINI_MAP;
 	map_state = IDLE_MAP;
 	last_state = map_state;
@@ -66,6 +67,10 @@ UIMiniMap::UIMiniMap(SDL_Rect position, SDL_Rect section_drawn, iPoint original_
 
 	isFocus = false;
 
+	ui_sprite.texture = App->ui->GetAtlas();
+	ui_sprite.position = init_pos;
+	ui_sprite.rect = section_drawn;
+
 }
 
 UIMiniMap::~UIMiniMap()
@@ -77,10 +82,10 @@ bool UIMiniMap::Update(float dt)
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
-	rect.x = init_pos.x - cam.x;
-	rect.y = init_pos.y - cam.y + 3;
+	ui_sprite.position.x = init_pos.x - cam.x;
+	ui_sprite.position.y = init_pos.y - cam.y + 3;
 
-	App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &draw_section);
+	App->render->BlitUI(&ui_sprite);
 	
 	GetState();
 	UpdateUnitsMiniMap();
@@ -171,10 +176,6 @@ void UIMiniMap::UpdateRect()
 
 	draw_pos = WhiteRectUpdatedPos();
 	App->render->DrawQuad({ draw_pos.x, draw_pos.y, white_rec.w, white_rec.h }, 255, 255, 255, 255, false, true);
-
-	
-
-
 }
 
 void UIMiniMap::UpdateUnitsMiniMap()

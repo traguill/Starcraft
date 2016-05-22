@@ -476,6 +476,10 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			if (tutorial_text_queue.size() > 0)
 			{
+				//Animation
+				App->ui->AnimFade(tutorial_text, 1, true);
+				App->ui->AnimFade(tutorial_image, 1, true);
+
 				tutorial_text->Print(tutorial_text_queue.front());
 				tutorial_text_queue.pop();
 				
@@ -499,12 +503,13 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			}
 			else
 			{
+
 				tutorial_button->SetVisible(false);
 				tutorial_window->SetVisible(false);
 				tutorial_text->SetVisible(false);
 				tutorial_image->SetVisible(false);
 				tutorial_fadeblack->SetVisible(false);
-
+				
 				tutorial_finished = true;
 				game_paused = false;
 			}

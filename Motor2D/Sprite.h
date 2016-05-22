@@ -10,7 +10,7 @@ class Sprite
 {
 public:
 
-	Sprite() : texture(NULL), alpha(255)
+	Sprite() : texture(NULL), alpha(255), size(1.0f)
 	{}
 	~Sprite()
 	{
@@ -22,6 +22,7 @@ public:
 	SDL_Texture* texture;
 	SDL_Rect	 rect;
 	int			 alpha = 255;
+	float		 size = 1.0f;
 
 };
 

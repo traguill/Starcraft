@@ -293,6 +293,8 @@ bool j1UIManager::CleanUp()
 
 void j1UIManager::CleanUpGameUI()
 {
+
+	animated_sprites.clear();
 	map<string, UIEntity*>::iterator it = gui_database.begin();
 	while (it != gui_database.end())
 	{
@@ -677,30 +679,80 @@ void j1UIManager::UpdateAnimation(float dt)
 	list<AnimatedSprite>::iterator a_sprite = animated_sprites.begin();
 	while (a_sprite != animated_sprites.end())
 	{
-		float step =  (float)(255*dt)/(*a_sprite).alpha_step;
-		(*a_sprite).sprite->alpha += roundf(step);
-		if ((*a_sprite).sprite->alpha >= 255)
+
+		//Update delay time (if has)
+		if ((*a_sprite).timer < (*a_sprite).delay)
 		{
-			(*a_sprite).sprite->alpha = 255;
-			a_sprite = animated_sprites.erase(a_sprite);
-		}
-		else
-		{
+			(*a_sprite).timer += dt;
 			++a_sprite;
+			continue;
 		}
+
+
+		//Fade animation
+		if ((*a_sprite).alpha_step != 0)
+		{
+
+			float step = (float)(255 * dt) / (*a_sprite).alpha_step;
+			(*a_sprite).sprite->alpha += roundf(step);
+
+			//Max alpha
+			if ((*a_sprite).sprite->alpha >= 255)
+			{
+				(*a_sprite).sprite->alpha = 255;
+				a_sprite = animated_sprites.erase(a_sprite);
+				continue;
+			}
+
+			//Min alpha
+			if ((*a_sprite).sprite->alpha <= 0)
+			{
+				(*a_sprite).sprite->alpha = 0;
+				a_sprite = animated_sprites.erase(a_sprite);
+				continue;
+			}
+		}
+		
+		
+		++a_sprite;
+		
 		
 	}
 }
 
-void j1UIManager::AnimFadeIn(UIEntity* ui_sprite, uint duration, uint delay)
+void j1UIManager::AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uint delay)
 {
 	if (ui_sprite != NULL)
 	{
 		AnimatedSprite a_sprite;
 		a_sprite.sprite = ui_sprite->GetSprite();
-		a_sprite.alpha_step = duration;
-		a_sprite.sprite->alpha = 0;
+		a_sprite.alpha_step = (fade_in) ? duration : -(int)duration;
+		a_sprite.sprite->alpha = (fade_in) ? 0 : 255;
 		a_sprite.delay = delay;
+		a_sprite.timer = 0;
+
+		animated_sprites.push_back(a_sprite);
+	}
+}
+
+void j1UIManager::AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, uint delay)
+{
+	if (ui_sprite != NULL)
+	{
+		AnimatedSprite a_sprite;
+		a_sprite.sprite = ui_sprite->GetSprite();
+		a_sprite.size_step = (size_big) ? duration : -(int)duration;
+		//Set size
+		//Normal-->small
+			//start size = normal
+			//final size = small (10% normal)
+
+		//small-->normal
+			//start size = small(10%normal)
+			//big size = 105% normal
+			//final size = normal = 1
+		a_sprite.delay = delay;
+		a_sprite.timer = 0;
 
 		animated_sprites.push_back(a_sprite);
 	}

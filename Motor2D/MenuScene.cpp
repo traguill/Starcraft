@@ -39,6 +39,8 @@ bool MenuScene::Start()
 
 	//background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
 	logo = App->ui->CreateImage({ 0, 202, 569, 150 }, 0, 50, true);
+	App->ui->AnimFade(logo, 8, false, 5);
+
 	
 	start = App->ui->CreateButton(" START", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	quit = App->ui->CreateButton(" QUIT", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);

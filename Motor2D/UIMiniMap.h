@@ -40,7 +40,6 @@ private:
 	void UpdateUnitsMiniMap();
 
 private:
-	SDL_Rect draw_section;
 	SDL_Rect white_rec;
 
 	MAP_STATE map_state;
@@ -56,6 +55,8 @@ private:
 	iPoint draw_pos;
 
 	MAP_STATE last_state;
+
+	Sprite ui_sprite;
 };
 
 #endif
