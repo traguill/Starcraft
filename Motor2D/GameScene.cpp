@@ -199,13 +199,16 @@ bool GameScene::Update(float dt)
 
 			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w && (*f_unit)->IsVisible())
 			{
-				win_background->is_visible = true;
-				win_button->is_visible = true;
-				game_paused = true;
-				game_finished = true;
+				if (game_finished == false)
+				{
+					win_background->is_visible = true;
+					win_button->is_visible = true;
+					game_paused = true;
+					game_finished = true;
 
-				App->ui->AnimResize(win_background, 0.5f, true);
-				App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
+					App->ui->AnimResize(win_background, 0.5f, true);
+					App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
+				}
 			}
 
 			++f_unit;
