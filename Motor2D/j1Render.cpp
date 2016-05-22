@@ -536,10 +536,23 @@ void j1Render::CursorMovement(float dt)
 
 	if (move_around_quad)
 	{
-		if (-camera.x > quad_boundaries.x)			camera.x = -quad_boundaries.x;
-		if (((-camera.x) + camera.w) < (quad_boundaries.x + quad_boundaries.w))		camera.x = -((quad_boundaries.x + quad_boundaries.w) - camera.w);
-		if (-camera.y > quad_boundaries.y)			camera.y = -quad_boundaries.y;
-		if (((-camera.y) + camera.h) < (quad_boundaries.y + quad_boundaries.h))		camera.y = -((quad_boundaries.y + quad_boundaries.h) - camera.h);
+		if (-camera.x > (quad_boundaries.x - 50))
+		{
+			camera.x = -(quad_boundaries.x - 50);
+		}
+		if (((-camera.x) + camera.w) < (quad_boundaries.x + quad_boundaries.w + 20))
+		{
+			camera.x = -((quad_boundaries.x + quad_boundaries.w + 20) - camera.w);
+		}
+		if (-camera.y > (quad_boundaries.y - 40))			
+		{ 
+			camera.y = -(quad_boundaries.y - 40); 
+		
+		}
+		if (((-camera.y) + camera.h) < (quad_boundaries.y + quad_boundaries.h + 130))
+		{
+			camera.y = -((quad_boundaries.y + quad_boundaries.h + 130) - camera.h);
+		}
 	}
 
 }
