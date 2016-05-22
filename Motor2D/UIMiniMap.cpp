@@ -95,6 +95,12 @@ bool UIMiniMap::Update(float dt)
 	return ret;
 }
 
+void UIMiniMap::EnableMinimap(bool enable)
+{
+	enable_minimap = enable;
+}
+
+
 
 iPoint UIMiniMap::WhiteRectUpdatedPos()
 {
@@ -108,70 +114,72 @@ iPoint UIMiniMap::WhiteRectUpdatedPos()
 
 void UIMiniMap::UpdateRect()
 {
-
-	if (map_state == PRESSED_MAP)
+	if (enable_minimap)
 	{
-		
-		App->input->GetMouseWorld(white_rec.x, white_rec.y);
-		white_rec.x = white_rec.x - (white_rec.w / 2);
-		white_rec.y = white_rec.y - (white_rec.h / 2);
-
-		iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
-
-		int x, y;
-		App->input->GetMouseMotion(x, y);
-
-		if ((x != 0 || y != 0) && last_state != CONTINUE_PRESS_MAP)
+		if (map_state == PRESSED_MAP)
 		{
-			map_state = CONTINUE_PRESS_MAP;
+
+			App->input->GetMouseWorld(white_rec.x, white_rec.y);
+			white_rec.x = white_rec.x - (white_rec.w / 2);
+			white_rec.y = white_rec.y - (white_rec.h / 2);
+
+			iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
+
+			int x, y;
+			App->input->GetMouseMotion(x, y);
+
+			if ((x != 0 || y != 0) && last_state != CONTINUE_PRESS_MAP)
+			{
+				map_state = CONTINUE_PRESS_MAP;
+			}
+
+			else
+			{
+				App->render->camera.x = new_pos.x;
+				App->render->camera.y = new_pos.y;
+
+			}
+
+			last_state = PRESSED_MAP;
 		}
-	
-		else
+
+		if (map_state == CONTINUE_PRESS_MAP)
 		{
+			int mouse_x, mouse_y;
+			App->input->GetMouseWorld(mouse_x, mouse_y);
+			white_rec.x = mouse_x - (white_rec.w / 2);
+			white_rec.y = mouse_y - (white_rec.h / 2);
+
+			//Limits for the minimap
+			if (white_rec.x < rect.x)
+			{
+				white_rec.x = rect.x;
+			}
+
+			if (white_rec.y < rect.y)
+			{
+				white_rec.y = rect.y;
+			}
+
+			if (white_rec.x - rect.x > rect.w - white_rec.w)
+			{
+				white_rec.x = (rect.w - white_rec.w) + rect.x;
+			}
+
+			if (white_rec.y - rect.y > rect.h - (white_rec.h - 4))
+			{
+				white_rec.y = (rect.h - (white_rec.h - 4)) + rect.y;
+			}
+
+			iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
+
 			App->render->camera.x = new_pos.x;
 			App->render->camera.y = new_pos.y;
-			
+
+			rect.x = init_pos.x - new_pos.x;
+			rect.y = init_pos.y - new_pos.y;
+
 		}
-
-		last_state = PRESSED_MAP;
-	}
-
-	if (map_state == CONTINUE_PRESS_MAP)
-	{
-		int mouse_x, mouse_y;
-		App->input->GetMouseWorld(mouse_x, mouse_y);
-		white_rec.x = mouse_x - (white_rec.w / 2);
-		white_rec.y = mouse_y - (white_rec.h / 2);
-
-		//Limits for the minimap
-		if (white_rec.x < rect.x)
-		{
-			white_rec.x = rect.x;
-		}
-
-		if (white_rec.y < rect.y)
-		{
-			white_rec.y = rect.y;
-		}
-
-		if (white_rec.x - rect.x > rect.w - white_rec.w)
-		{
-			white_rec.x = (rect.w - white_rec.w) + rect.x;
-		}
-
-		if (white_rec.y - rect.y > rect.h - (white_rec.h - 4))
-		{
-			white_rec.y = (rect.h - (white_rec.h - 4)) + rect.y;
-		}
-
-		iPoint new_pos(-((white_rec.x - rect.x)*div_x), -((white_rec.y - rect.y)*div_y));
-		
-		App->render->camera.x = new_pos.x;
-		App->render->camera.y = new_pos.y;
-
-		rect.x = init_pos.x - new_pos.x;
-		rect.y = init_pos.y - new_pos.y;
-
 	}
 
 	draw_pos = WhiteRectUpdatedPos();

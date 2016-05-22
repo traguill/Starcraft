@@ -200,8 +200,7 @@ void Ghost::Snipper()
 
 	//Sound
 	App->audio->PlayFx(App->entity->sound_sniper_mode);
-
-
+	App->game_scene->minimap->EnableMinimap(false);
 }
 
 void Ghost::Shoot(int x, int y)
@@ -298,4 +297,5 @@ void Ghost::DisableSnipper()
 	App->entity->bullet_time = 1.0f;
 	App->render->lock_camera = false;
 	App->render->DiscardTransition();
+	App->game_scene->minimap->EnableMinimap(true);
 }

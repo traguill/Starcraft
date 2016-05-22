@@ -31,6 +31,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void EnableMinimap(bool enable);
+
 private:
 
 	void GetState();
@@ -40,6 +42,8 @@ private:
 	void UpdateUnitsMiniMap();
 
 private:
+
+	bool enable_minimap = true;
 	SDL_Rect white_rec;
 
 	MAP_STATE map_state;
