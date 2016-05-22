@@ -791,6 +791,7 @@ void Unit::Move(float dt)
 		{
 			has_destination = false;
 			state = UNIT_IDLE;
+			if (is_enemy && type == FIREBAT)
 				direction = original_direction;
 		}
 	}
