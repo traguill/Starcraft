@@ -99,3 +99,8 @@ string UILabel::GetText(bool is_password) const
 	else
 		return text;
 }
+
+Sprite* UILabel::GetSprite()
+{
+	return &ui_sprite;
+}

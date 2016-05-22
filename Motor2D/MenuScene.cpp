@@ -9,6 +9,7 @@
 #include "j1Audio.h"
 #include "j1Input.h"
 #include "UIImage.h"
+#include "UIButton.h"
 
 MenuScene::MenuScene() : j1Module()
 {
@@ -37,11 +38,11 @@ bool MenuScene::Start()
 	LOG("Starting MenuScene");
 
 	//background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
-	logo = App->ui->CreateImage({ 0, 202, 569, 150 }, 0, 50, false);
+	logo = App->ui->CreateImage({ 0, 202, 569, 150 }, 0, 50, true);
 	
 	start = App->ui->CreateButton(" START", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	quit = App->ui->CreateButton(" QUIT", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
-
+	
 	close_game = false;
 
 	App->audio->PlayMusic("MenuTheme.wav");
@@ -83,12 +84,6 @@ bool MenuScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_UP)
 	{
 		App->scene_manager->WantToChangeScene(DEV);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_UP)
-	{
-		logo->SetVisible(true);
-		App->ui->AnimFadeIn(logo, 5);
 	}
 
 	App->render->Blit(App->ui->GetAtlas(), 0, 0, &background_anim.getCurrentFrame());

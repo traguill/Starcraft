@@ -27,6 +27,8 @@ public:
 	
 	string GetText(bool get_password = false) const;
 
+	Sprite* GetSprite();
+
 private:
 
 	string	text;

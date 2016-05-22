@@ -64,6 +64,12 @@ bool UIButton::Update(float dt)
 
 	App->render->BlitUI(&ui_sprite);
 
+	//Update text properties
+	Sprite* text_sprite = text->GetSprite();
+	if (text_sprite != NULL)
+	{
+		text_sprite->alpha = ui_sprite.alpha;
+	}
 	text->Update(dt);
 
 
