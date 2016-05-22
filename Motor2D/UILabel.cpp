@@ -7,7 +7,7 @@
 UILabel::UILabel() : UIEntity()
 {
 	type = LABEL;
-	texture = NULL;
+	ui_sprite.texture = NULL;
 	text = "";
 }
 
@@ -16,14 +16,18 @@ UILabel::UILabel(const char* txt, const int x, const int y) : UIEntity()
 	type = LABEL;
 	text = txt;
 	
-	texture = App->font->Print(text.data());
+	ui_sprite.texture = App->font->Print(text.data());
 
 	rect.x = x;
 	rect.y = y;
 	init_pos.x = x;
 	init_pos.y = y;
 
-	SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	SDL_QueryTexture(ui_sprite.texture, NULL, NULL, &rect.w, &rect.h);
+
+	ui_sprite.position = init_pos;
+	ui_sprite.rect = rect;
+	ui_sprite.rect.x = ui_sprite.rect.y = 0;
 }
 
 
@@ -40,14 +44,14 @@ bool UILabel::Update(float dt)
 	bool ret = true;
 		
 
-	if (texture != NULL)
+	if (ui_sprite.texture != NULL)
 	{
 		iPoint cam_pos(App->render->camera.x, App->render->camera.y);
 
-		rect.x = init_pos.x - cam_pos.x;
-		rect.y = init_pos.y - cam_pos.y;
+		ui_sprite.position.x = init_pos.x - cam_pos.x;
+		ui_sprite.position.y = init_pos.y - cam_pos.y;
 
-		App->render->Blit(texture, rect.x, rect.y);
+		App->render->BlitUI(&ui_sprite);
 	}
 
 	return ret;
@@ -57,9 +61,9 @@ bool UILabel::CleanUp()
 {
 	bool ret = true;
 
-	if (texture != NULL)
+	if (ui_sprite.texture != NULL)
 	{
-		App->tex->UnLoad(texture);
+		App->tex->UnLoad(ui_sprite.texture);
 	}
 		
 
@@ -69,25 +73,25 @@ bool UILabel::CleanUp()
 
 void UILabel::Print(string _text, bool isPassword)
 {
-	App->tex->UnLoad(texture);
+	App->tex->UnLoad(ui_sprite.texture);
 
 	text = _text;
 	if (text != "")
 	{
 		if (isPassword == false)
 		{
-			texture = App->font->Print(text.data());
+			ui_sprite.texture = App->font->Print(text.data());
 		}
 		else
 		{
 			password = text;
 			password.replace(password.begin(), password.end() - strlen(text.data()), strlen(text.data()), '*');
-			texture = App->font->Print(password.data());
+			ui_sprite.texture = App->font->Print(password.data());
 		}
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+		SDL_QueryTexture(ui_sprite.texture, NULL, NULL, &ui_sprite.rect.w, &ui_sprite.rect.h);
 	}
 	else
-		texture = NULL;
+		ui_sprite.texture = NULL;
 }
 
 string UILabel::GetText(bool is_password) const

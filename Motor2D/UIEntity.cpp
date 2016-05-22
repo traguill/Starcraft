@@ -90,6 +90,7 @@ void UIEntity::GetScreenPos(int &x, int &y)const
 	x = y = 0;
 	if (parent != NULL)
 		parent->GetScreenPos(x, y);
+	
 	x += rect.x;
 	y += rect.y;
 }
@@ -157,4 +158,9 @@ void UIEntity::SetVisible(bool visible)
 bool UIEntity::IsVisible()const
 {
 	return is_visible;
+}
+
+Sprite* UIEntity::GetSprite()
+{
+	return NULL;
 }

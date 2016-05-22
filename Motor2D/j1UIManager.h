@@ -5,7 +5,6 @@
 #include "UIProgressBar.h"
 #include <map>
 
-<<<<<<< HEAD
 struct AnimatedSprite
 {
 	Sprite* sprite;
@@ -15,8 +14,6 @@ struct AnimatedSprite
 	float timer = 0;
 };
 
-=======
->>>>>>> parent of b20f985... UI to Sprite
 class UILabel;
 class UIImage;
 class UIEntity;
@@ -73,7 +70,7 @@ public:
 
 	// Gui creation functions
 
-	SDL_Texture* GetAtlas() const;
+	SDL_Texture* GetAtlas();
 
 	//Creators ------------------------------------------------------------------------------------------------
 	UILabel* CreateLabel(const char* text, const int x, const int y, bool on_list = true, j1Module* listener = NULL);
@@ -99,13 +96,10 @@ public:
 	void StartGameUI();
 	void CleanUpGameUI();
 
-<<<<<<< HEAD
 	//Animate UI
 	void AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uint delay = 0);
 	void AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, uint delay = 0);
 
-=======
->>>>>>> parent of b20f985... UI to Sprite
 
 private:
 	//Utilities ------------------------------------------------------------------------------------------------------
@@ -119,6 +113,7 @@ private:
 	bool LoadUiInfo();
 
 	void DrawLifeMana();
+	void UpdateAnimation(float dt);
 
 private:
 
@@ -143,6 +138,9 @@ private:
 
 	int						mw_width;
 	int						mw_height;
+
+	//Animations
+	list<AnimatedSprite>	animated_sprites;
 
 public:
 	bool					debug;

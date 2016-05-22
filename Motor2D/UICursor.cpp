@@ -157,6 +157,8 @@ UICursor::UICursor(vector<SDL_Rect> sections, float anim_speed) : UIEntity()
 	enemy_sel.frames.push_back(section);
 	enemy_sel.loop = true;
 	enemy_sel.speed = 0.08;
+
+	ui_sprite.rect = section;
 }
 
 // Destructor
@@ -170,84 +172,103 @@ bool UICursor::Update(float dt)
 {
 	bool ret = true;
 
-	App->input->GetMousePosition(rect.x, rect.y);
+	App->input->GetMousePosition(ui_sprite.position.x, ui_sprite.position.y);
 
 	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
 
-	rect.x -= cam_pos.x;
-	rect.y -= cam_pos.y;
+	ui_sprite.position.x -= cam_pos.x;
+	ui_sprite.position.y -= cam_pos.y;
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && App->scene_manager->in_game == true && App->ui->selection_valid == true)
 	{
-		//MARTI: dont' use operate new inside Blit method Blit(new SDL_Rect{x,y,w,h}) 
-		//DO NOT use magic numbers pls...
 		SDL_Rect section{ 310, 48, 41, 43 };
-		App->render->Blit(App->entity->gui_cursor, rect.x - 20, rect.y - 19, &section);
+		ui_sprite.position.x -= 20;
+		ui_sprite.position.y -= 19;
+		ui_sprite.texture = App->entity->gui_cursor;
+		ui_sprite.rect = section;
 	}
 
 	else
 	{
 		if (App->ui->cursor_state == TO_RIGHT)
 		{
-			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 21), rect.y, &right_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.position.x = MIN(ui_sprite.position.x, App->render->camera.w - App->render->camera.x - 21);
+			ui_sprite.rect = right_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == TO_LEFT)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &left_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.rect = left_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == UP)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &up_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.rect = up_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == DOWN)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, MIN(rect.y, App->render->camera.h - App->render->camera.y - 21), &down_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.position.y = MIN(ui_sprite.position.y, App->render->camera.h - App->render->camera.y - 21);
+			ui_sprite.rect = down_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == TO_RIGHT_UP)
 		{
-			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 30), rect.y, &right_up_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.position.x = MIN(ui_sprite.position.x, App->render->camera.w - App->render->camera.x - 30);
+			ui_sprite.rect = right_up_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == TO_RIGHT_DOWN)
 		{
-			App->render->Blit(App->ui->GetAtlas(), MIN(rect.x, App->render->camera.w - App->render->camera.x - 30), MIN(rect.y, App->render->camera.h - App->render->camera.y - 30), &right_down_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.position.x = MIN(ui_sprite.position.x, App->render->camera.w - App->render->camera.x - 30);
+			ui_sprite.position.y = MIN(ui_sprite.position.y, App->render->camera.h - App->render->camera.y - 30);
+			ui_sprite.rect = right_down_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == TO_LEFT_UP)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &left_up_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.rect = left_up_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == TO_LEFT_DOWN)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, MIN(rect.y, App->render->camera.h - App->render->camera.y - 30), &left_down_cursor.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.position.y = MIN(ui_sprite.position.y, App->render->camera.h - App->render->camera.y - 30);
+			ui_sprite.rect = left_down_cursor.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == ON_FRIENDLY)
 		{
-			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &friendly_sel.getCurrentFrame());
+			ui_sprite.texture = App->entity->gui_cursor;
+			ui_sprite.position.x -= 21;
+			ui_sprite.position.y -= 21;
+			ui_sprite.rect = friendly_sel.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == ON_ENEMY)
 		{
-			App->render->Blit(App->entity->gui_cursor, rect.x - 21, rect.y - 21, &enemy_sel.getCurrentFrame());
+			ui_sprite.texture = App->entity->gui_cursor;
+			ui_sprite.position.x -= 21;
+			ui_sprite.position.y -= 21;
+			ui_sprite.rect = enemy_sel.getCurrentFrame();
 		}
 
 		if (App->ui->cursor_state == STANDARD)
 		{
-			App->render->Blit(App->ui->GetAtlas(), rect.x, rect.y, &anim.getCurrentFrame());
+			ui_sprite.texture = App->ui->GetAtlas();
+			ui_sprite.rect = anim.getCurrentFrame();
 		}
 	}
 
-<<<<<<< HEAD
 	App->render->BlitUI(&ui_sprite);
 
-=======
->>>>>>> parent of b20f985... UI to Sprite
 	return ret;
 }
 

@@ -26,8 +26,12 @@ public:
 
 	void SetImageRect(SDL_Rect img_rec);
 
+	Sprite* GetSprite();
+
 private:
 	SDL_Rect section;
+public:
+	Sprite ui_sprite;
 
 };
 

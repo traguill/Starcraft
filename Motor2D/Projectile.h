@@ -3,7 +3,7 @@
 
 #include "Animation.h"
 #include "p2Point.h"
-#include "j1Textures.h"
+#include "Sprite.h"
 
 struct Projectile
 {
