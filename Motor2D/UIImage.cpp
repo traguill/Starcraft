@@ -50,10 +50,7 @@ bool UIImage::Update(float dt)
 bool UIImage::Draw()
 {
 	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
-
-	//int x = (width - (width * scale) )/ 2
 	
-
 	ui_sprite.position.x =  -cam_pos.x + init_pos.x ;
 	ui_sprite.position.y =  -cam_pos.y + init_pos.y ;
 
@@ -80,4 +77,15 @@ void UIImage::SetImageRect(SDL_Rect image_rect)
 Sprite* UIImage::GetSprite()
 {
 	return &ui_sprite;
+}
+
+SDL_Rect UIImage::GetScreenRect()const
+{
+	SDL_Rect ret;
+	ret.x = ui_sprite.position.x;
+	ret.y = ui_sprite.position.y;
+	ret.w = ui_sprite.rect.w;
+	ret.h = ui_sprite.rect.h;
+
+	return ret;
 }

@@ -28,6 +28,9 @@ public:
 
 	Sprite* GetSprite();
 
+	SDL_Rect GetScreenRect()const;
+	
+
 private:
 	SDL_Rect section;
 public:
