@@ -50,8 +50,12 @@ bool UIImage::Update(float dt)
 bool UIImage::Draw()
 {
 	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
-	ui_sprite.position.x = init_pos.x - cam_pos.x;
-	ui_sprite.position.y = init_pos.y - cam_pos.y;
+
+	//int x = (width - (width * scale) )/ 2
+	
+
+	ui_sprite.position.x =  -cam_pos.x + init_pos.x ;
+	ui_sprite.position.y =  -cam_pos.y + init_pos.y ;
 
 	App->render->BlitUI(ui_sprite);
 

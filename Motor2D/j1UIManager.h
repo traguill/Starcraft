@@ -8,10 +8,12 @@
 struct AnimatedSprite
 {
 	Sprite* sprite;
-	int alpha_step = 0;
-	int size_step = 0;
+	float alpha_step = 0;
+	float size_step = 0;
 	int delay = 0;
 	float timer = 0;
+	float final_size = 0;
+	iPoint init_pos;
 };
 
 class UILabel;
@@ -97,8 +99,8 @@ public:
 	void CleanUpGameUI();
 
 	//Animate UI
-	void AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uint delay = 0);
-	void AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, uint delay = 0);
+	void AnimFade(UIEntity* ui_sprite, float duration, bool fade_in, uint delay = 0);
+	void AnimResize(UIEntity* ui_sprite, float duration, bool size_big, uint delay = 0);
 
 
 private:
@@ -114,6 +116,7 @@ private:
 
 	void DrawLifeMana();
 	void UpdateAnimation(float dt);
+
 
 private:
 

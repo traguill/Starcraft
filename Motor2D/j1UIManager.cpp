@@ -296,7 +296,6 @@ bool j1UIManager::CleanUp()
 
 	
 
-
 	delete cursor;
 
 
@@ -338,7 +337,7 @@ void j1UIManager::CleanUpList()
 	}
 
 	gui_elements.clear();
-
+	animated_sprites.clear();
 }
 
 
@@ -705,7 +704,7 @@ void j1UIManager::UpdateAnimation(float dt)
 		{
 
 			float step = (float)(255 * dt) / (*a_sprite).alpha_step;
-			(*a_sprite).sprite->alpha += roundf(step);
+			(*a_sprite).sprite->alpha += step;
 
 			//Max alpha
 			if ((*a_sprite).sprite->alpha >= 255)
@@ -723,6 +722,29 @@ void j1UIManager::UpdateAnimation(float dt)
 				continue;
 			}
 		}
+
+		//Resize animation
+		if ((*a_sprite).size_step != 0)
+		{
+			float step = (float)((*a_sprite).final_size * dt) / (*a_sprite).size_step;
+			(*a_sprite).sprite->size += step;
+
+			//Small to BIG
+			if ((*a_sprite).sprite->size >= (*a_sprite).final_size && (*a_sprite).final_size == 1.0f)
+			{
+				(*a_sprite).sprite->size = (*a_sprite).final_size;
+				a_sprite = animated_sprites.erase(a_sprite);
+				continue;
+			}
+
+			//BIG to small
+			if ((*a_sprite).sprite->size <= (*a_sprite).final_size && (*a_sprite).final_size == 0.1f)
+			{
+				(*a_sprite).sprite->size = (*a_sprite).final_size;
+				a_sprite = animated_sprites.erase(a_sprite);
+				continue;
+			}
+		}
 		
 		
 		++a_sprite;
@@ -731,40 +753,55 @@ void j1UIManager::UpdateAnimation(float dt)
 	}
 }
 
-void j1UIManager::AnimFade(UIEntity* ui_sprite, uint duration, bool fade_in, uint delay)
-{
-	/*if (ui_sprite != NULL)
-	{
-		AnimatedSprite a_sprite;
-		a_sprite.sprite = ui_sprite->GetSprite();
-		a_sprite.alpha_step = (fade_in) ? duration : -(int)duration;
-		a_sprite.sprite->alpha = (fade_in) ? 0 : 255;
-		a_sprite.delay = delay;
-		a_sprite.timer = 0;
-
-		animated_sprites.push_back(a_sprite);
-	}*/
-}
-
-void j1UIManager::AnimResize(UIEntity* ui_sprite, uint duration, bool size_big, uint delay)
+void j1UIManager::AnimFade(UIEntity* ui_sprite, float duration, bool fade_in, uint delay)
 {
 	if (ui_sprite != NULL)
 	{
 		AnimatedSprite a_sprite;
 		a_sprite.sprite = ui_sprite->GetSprite();
-		a_sprite.size_step = (size_big) ? duration : -(int)duration;
-		//Set size
-		//Normal-->small
-			//start size = normal
-			//final size = small (10% normal)
-
-		//small-->normal
-			//start size = small(10%normal)
-			//big size = 105% normal
-			//final size = normal = 1
+		a_sprite.alpha_step = (fade_in) ? duration : -duration;
+		a_sprite.sprite->alpha = (fade_in) ? 0 : 255;
 		a_sprite.delay = delay;
 		a_sprite.timer = 0;
 
 		animated_sprites.push_back(a_sprite);
 	}
 }
+
+void j1UIManager::AnimResize(UIEntity* ui_sprite, float duration, bool size_big, uint delay)
+{
+	if (ui_sprite != NULL)
+	{
+		AnimatedSprite a_sprite;
+		a_sprite.sprite = ui_sprite->GetSprite();
+		a_sprite.size_step = (size_big) ? duration : -duration;
+		//Set size
+		
+		//small-->normal
+			//start size = small(10%normal)
+			//big size = 105% normal
+			//final size = normal = 1
+
+		//Normal-->small
+			//start size = normal
+			//final size = small (10% normal)
+
+		if (size_big)
+		{
+			a_sprite.sprite->size = 0.1f;
+			a_sprite.final_size = 1.0f;
+		}
+		else
+		{
+			a_sprite.sprite->size = 1.0f;
+			a_sprite.final_size = 0.1f;
+		}
+		a_sprite.delay = delay;
+		a_sprite.timer = 0;
+
+		a_sprite.init_pos = a_sprite.sprite->position;
+
+		animated_sprites.push_back(a_sprite);
+	}
+}
+

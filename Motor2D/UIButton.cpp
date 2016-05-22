@@ -71,6 +71,7 @@ bool UIButton::Update(float dt)
 	if (text_sprite != NULL)
 	{
 		text_sprite->alpha = ui_sprite.alpha;
+		text_sprite->size = ui_sprite.size;
 	}
 	text->Update(dt);
 

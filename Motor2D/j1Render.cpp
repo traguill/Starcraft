@@ -1,3 +1,4 @@
+
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
@@ -168,7 +169,7 @@ bool j1Render::Update(float dt)
 	list<Sprite>::iterator u = ui_sprites.begin();
 	while (u != ui_sprites.end())
 	{
-		Blit((u)->texture, (u)->position.x, (u)->position.y, &(u)->rect, (u)->alpha);
+		Blit((u)->texture, (u)->position.x, (u)->position.y, &(u)->rect, (u)->alpha, u->size);
 		++u;
 	}
 
@@ -268,14 +269,15 @@ void j1Render::Blit(Sprite* _sprite, bool priority)
 			priority_sprites.push_back(_sprite);
 	}
 }
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,uint alpha, float speed, double angle, int pivot_x, int pivot_y) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,uint alpha, float scale, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
-
+	
+	int dx = (section->w - (section->w * scale)) * 0.5f;
+	int dy = (section->h - (section->h * scale)) * 0.5f;
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+	rect.x = (int)(camera.x) + x + dx;
+	rect.y = (int)(camera.y) + y + dy;
 
 	if(section != NULL)
 	{
