@@ -484,6 +484,7 @@ void TacticalAI::Vision()
 						fPoint distance((*unit_f)->GetPosition().x - (*unit_e)->GetPosition().x, (*unit_f)->GetPosition().y - (*unit_e)->GetPosition().y);
 						fPoint direction = (*unit_e)->GetDirection();
 						distance.Normalize();
+						direction.Normalize();
 
 						float dot_product = direction.x * distance.x + direction.y * distance.y;
 
