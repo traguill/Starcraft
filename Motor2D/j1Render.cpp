@@ -84,21 +84,19 @@ bool j1Render::Start()
 bool j1Render::PreUpdate()
 {
 	SDL_RenderClear(renderer);
-	return true;
-}
 
-bool j1Render::Update(float dt)
-{
+	float dt = App->GetDT();
+
 	if (!lock_camera)
 	{
 		if (transitioning == true)
 		{
 			DoTransition();
-			
+
 			if (App->scene_manager->in_game && !lock_after_transition)
 				CursorMovement(dt);
 		}
-			
+
 		else
 		{
 			if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_UP && App->entity->friendly_units.size() != 0)
@@ -121,7 +119,7 @@ bool j1Render::Update(float dt)
 					++it;
 				}
 
-			
+
 				CheckBoundaries();
 			}
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
@@ -137,6 +135,13 @@ bool j1Render::Update(float dt)
 				CursorMovement(dt);
 		}
 	}
+
+	return true;
+}
+
+bool j1Render::Update(float dt)
+{
+	
 
 	//Sort Sprites and blit them
 	blit_sprites.sort([](const Sprite* a, const Sprite* b) { return a->position.y < b->position.y; });
