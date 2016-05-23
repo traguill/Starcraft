@@ -68,7 +68,7 @@ bool GameScene::Start()
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bzone = App->tex->Load("sprites/extraction.png");
 	bomb_rect = { 30, 12, 32, 32 };
-	bomb_zone = { 815, 1780, 82, 41 };
+	bomb_zone = { 815, 1780, 164, 82 };
 	
 
 	debug = false;
@@ -199,13 +199,16 @@ bool GameScene::Update(float dt)
 
 			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w && (*f_unit)->IsVisible())
 			{
-				win_background->is_visible = true;
-				win_button->is_visible = true;
-				game_paused = true;
-				game_finished = true;
+				if (game_finished == false)
+				{
+					win_background->is_visible = true;
+					win_button->is_visible = true;
+					game_paused = true;
+					game_finished = true;
 
-				App->ui->AnimResize(win_background, 0.5f, true);
-				App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
+					App->ui->AnimResize(win_background, 0.5f, true);
+					App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
+				}
 			}
 
 			++f_unit;
@@ -344,8 +347,8 @@ void GameScene::LoadTutorial()
 	App->ui->AnimFade(tutorial_image, 1, true, 6);
 	App->ui->AnimFade(tutorial_text, 1, true, 6);
 	App->ui->AnimFade(secondary_text, 1, true, 6);
-	App->ui->AnimFade(tutorial_button, 1, true, 7.5f);
-	App->ui->AnimFade(skip_button, 1, true, 7.5f);
+	App->ui->AnimResize(tutorial_button, 0.5f, true, 6.5f);
+	App->ui->AnimResize(skip_button, 0.1f, true, 6.5f);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
@@ -549,13 +552,19 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		if ((UIButton*)gui == skip_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			//Animation
-			App->ui->AnimResize(tutorial_window, 0.05f, false, 1.5f);
-			App->ui->AnimFade(tutorial_image, 1, false, 1);
-			App->ui->AnimFade(tutorial_text, 1, false, 1);
-			App->ui->AnimFade(secondary_text, 1, false, 1);
-			App->ui->AnimFade(tutorial_button, 1, false);
-			App->ui->AnimFade(skip_button, 1, false);
+			App->ui->AnimResize(tutorial_window, 0.05f, false, 1.0f);
+			App->ui->AnimFade(tutorial_image, 0.5f, false, 0.5f);
+			App->ui->AnimFade(tutorial_text, 0.5f, false, 0.5f);
+			App->ui->AnimFade(secondary_text, 0.5f, false, 0.5f);
+			App->ui->AnimResize(tutorial_button, 0.05f, false);
+			App->ui->AnimResize(skip_button, 0.05f, false);
 			App->ui->AnimFade(tutorial_fadeblack, 1.5f, false, 2);
+
+			queue<SDL_Rect> empty_sdl;
+			queue<char*> empty_char;
+			tutorial_text_queue = empty_char;
+			tutorial_images_queue = empty_sdl;
+			secondary_text_queue = empty_char;
 
 			tutorial_finished = true;
 			game_paused = false;
@@ -600,12 +609,12 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			{
 
 				//Animation
-				App->ui->AnimResize(tutorial_window, 0.05f, false, 1.5f);
-				App->ui->AnimFade(tutorial_image, 1, false, 1);
-				App->ui->AnimFade(tutorial_text, 1, false, 1);
-				App->ui->AnimFade(secondary_text, 1, false, 1);
-				App->ui->AnimFade(tutorial_button, 1, false );
-				App->ui->AnimFade(skip_button, 1, false );
+				App->ui->AnimResize(tutorial_window, 0.05f, false, 1.0f);
+				App->ui->AnimFade(tutorial_image, 0.5f, false, 0.5f);
+				App->ui->AnimFade(tutorial_text, 0.5f, false, 0.5f);
+				App->ui->AnimFade(secondary_text, 0.5f, false, 0.5f);
+				App->ui->AnimResize(tutorial_button, 0.05f, false);
+				App->ui->AnimResize(skip_button, 0.05f, false);
 				App->ui->AnimFade(tutorial_fadeblack, 1.5f, false, 2);
 				
 				tutorial_finished = true;

@@ -12,6 +12,8 @@
 #include "j1UIManager.h"
 #include "j1Audio.h"
 #include "Bullet.h"
+#include "GameScene.h"
+#include"MenuScene.h"
 
 Unit::Unit() : Entity()
 {
@@ -183,9 +185,20 @@ void Unit::Update(float dt)
 	case UNIT_DIE:
 		//Timer of the animation and delete the unit
 		if (death.finished())
+		{
 			App->entity->RemoveUnit(this);
+			if (this->is_enemy == false)
+			{
+				if (App->menu->dificulty == true)
+					App->game_scene->LoseGame();
+			}
+		}
+			
 		else if (type != MARINE && type != GHOST && type != MEDIC && type != FIREBAT)
 			App->entity->RemoveUnit(this);
+
+		
+
 		break;
 	}
 	//Update mana
@@ -662,6 +675,8 @@ void Unit::ApplyDamage(uint dmg, Unit* source, Bullet* bullet)
 			LOG("Enemy: I'm dead!");
 		else
 			LOG("Friend: I'm dead!");
+			
+			
 
 		//Send attacking units that I'm death
 		list<Unit*>::iterator a_unit = attacking_units.begin();
@@ -678,6 +693,7 @@ void Unit::ApplyDamage(uint dmg, Unit* source, Bullet* bullet)
 			target->attacking_units.remove(this);
 		}
 		
+	
 		
 		avoid_change_state = true;
 		state = UNIT_DIE;
