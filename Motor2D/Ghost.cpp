@@ -132,6 +132,7 @@ void Ghost::Snipper()
 	if (snipping == true)
 	{
 		DisableSnipper();
+		return;
 	}
 
 
@@ -294,7 +295,7 @@ void Ghost::Shoot(int x, int y)
 	App->render->camera.x += direction.x;
 	App->render->camera.y += direction.y;
 
-	App->render->SetTransition(cam_initial.x, cam_initial.y, true);
+	App->render->SetTransition(cam_initial.x, cam_initial.y);
 
 	//Play sound
 	App->audio->PlayFx(App->entity->sound_shoot);

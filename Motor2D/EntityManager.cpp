@@ -104,11 +104,7 @@ bool j1EntityManager::Update(float dt)
 			App->render->DrawLine(base.x, base.y, mouse.x, mouse.y, 255, 0, 0, 100, true);
 		}
 		
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
-		{
-			Ghost* ghost = (Ghost*)(selected_units.front());
-			ghost->DisableSnipper();
-		}
+		ActivateAbilities();
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 		{
