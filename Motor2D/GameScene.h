@@ -53,6 +53,8 @@ public:
 
 	void LoseGame();
 
+	bool IsGhostSelected();
+
 private:
 
 	void LoadLevel(const char* path);
@@ -108,6 +110,9 @@ public:
 	//Ghost
 	UIImage*				ghost_weapon_icon;
 	UIImage*				ghost_wireframe;
+	//Buttons
+	UIButton*				ghost_invisibility_button;
+	UIButton*				ghost_snipermode_button;
 
 	//Firebat
 	UIImage*				firebat_weapon_icon;

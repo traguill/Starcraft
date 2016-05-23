@@ -93,6 +93,8 @@ public:
 
 	SDL_Texture* GetAuxiliarTexture() const;
 
+	virtual void CastAbility(const UNIT_ABILITY ability); //Actual method to USE the ability
+
 protected:
 	virtual void SetAnimation();
 
@@ -108,7 +110,7 @@ private:
 	void Delete(); 
 
 	void UseAbility(uint id); //Unit use the ability asigned to the id number
-	virtual void CastAbility(const UNIT_ABILITY ability); //Actual method to USE the ability
+	
 
 	//AsignPath with offset
 	void AsignPath(vector<iPoint> main_path);

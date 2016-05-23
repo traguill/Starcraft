@@ -241,6 +241,17 @@ bool GameScene::Update(float dt)
 		pause_mark->is_visible = false;
 	}
 
+	if (IsGhostSelected())
+	{
+		ghost_invisibility_button->SetVisible(true);
+		ghost_snipermode_button->SetVisible(true);
+	}
+	else
+	{
+		ghost_invisibility_button->SetVisible(false);
+		ghost_snipermode_button->SetVisible(false);
+	}
+
 	return true;
 }
 
@@ -270,7 +281,9 @@ bool GameScene::CleanUp()
 	marine_wireframe = NULL;
 
 	ghost_weapon_icon = NULL;
-	ghost_wireframe = NULL;;
+	ghost_wireframe = NULL;
+	ghost_invisibility_button = NULL;
+	ghost_snipermode_button = NULL;
 
 	firebat_weapon_icon = NULL;
 	firebat_wireframe = NULL;
@@ -393,49 +406,49 @@ void GameScene::LoadLevel(const char* path)
 		bomb_pos.push_back(bomb_position);
 	}
 	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
-	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
-	pugi::xml_node unit_f;
-	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
+bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
+pugi::xml_node unit_f;
+for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
+{
+	UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_f.child("type").attribute("value").as_string());
+	iPoint pos;
+	pos.x = unit_f.child("position").attribute("x").as_int();
+	pos.y = unit_f.child("position").next_sibling("position").attribute("y").as_int();
+	bool is_enemy = unit_f.child("is_enemy").attribute("value").as_bool();
+	bool patrolling = unit_f.child("patrol").attribute("value").as_bool();
+	vector<iPoint> point_path;
+	for (pugi::xml_node point = unit_f.child("patrol").child("point"); point; point = point.next_sibling("point"))
 	{
-		UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_f.child("type").attribute("value").as_string());
-		iPoint pos;
-		pos.x = unit_f.child("position").attribute("x").as_int();
-		pos.y = unit_f.child("position").next_sibling("position").attribute("y").as_int();
-		bool is_enemy = unit_f.child("is_enemy").attribute("value").as_bool();
-		bool patrolling = unit_f.child("patrol").attribute("value").as_bool();
-		vector<iPoint> point_path;
-		for (pugi::xml_node point = unit_f.child("patrol").child("point"); point; point = point.next_sibling("point"))
-		{
-			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
-		}
-		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
-
-		Unit* u = App->entity->friendly_units.back();
-		u->direction.x = unit_f.child("direction").attribute("x").as_int();
-		u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
+		point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 	}
+	App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 
-	pugi::xml_node unit_e;
-	for (unit_e = level.child("enemy_unit"); unit_e; unit_e = unit_e.next_sibling("enemy_unit"))
+	Unit* u = App->entity->friendly_units.back();
+	u->direction.x = unit_f.child("direction").attribute("x").as_int();
+	u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
+}
+
+pugi::xml_node unit_e;
+for (unit_e = level.child("enemy_unit"); unit_e; unit_e = unit_e.next_sibling("enemy_unit"))
+{
+	UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_e.child("type").attribute("value").as_string());
+	iPoint pos;
+	pos.x = unit_e.child("position").attribute("x").as_int();
+	pos.y = unit_e.child("position").next_sibling("position").attribute("y").as_int();
+	bool is_enemy = unit_e.child("is_enemy").attribute("value").as_bool();
+	bool patrolling = unit_e.child("patrol").attribute("value").as_bool();
+	vector<iPoint> point_path;
+	for (pugi::xml_node point = unit_e.child("patrol").child("point"); point; point = point.next_sibling("point"))
 	{
-		UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_e.child("type").attribute("value").as_string());
-		iPoint pos;
-		pos.x = unit_e.child("position").attribute("x").as_int();
-		pos.y = unit_e.child("position").next_sibling("position").attribute("y").as_int();
-		bool is_enemy = unit_e.child("is_enemy").attribute("value").as_bool();
-		bool patrolling = unit_e.child("patrol").attribute("value").as_bool();
-		vector<iPoint> point_path;
-		for (pugi::xml_node point = unit_e.child("patrol").child("point"); point; point = point.next_sibling("point"))
-		{
-			point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
-		}
-		App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
-
-		Unit* u = App->entity->enemy_units.back();
-		u->direction.x = unit_e.child("direction").attribute("x").as_int();
-		u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
-		u->original_direction = u->direction;
+		point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
 	}
+	App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+
+	Unit* u = App->entity->enemy_units.back();
+	u->direction.x = unit_e.child("direction").attribute("x").as_int();
+	u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
+	u->original_direction = u->direction;
+}
 }
 
 void GameScene::SaveLevelDesign(const char* path)
@@ -451,12 +464,12 @@ void GameScene::SaveLevelDesign(const char* path)
 	{
 		pugi::xml_node friend_unit;
 		friend_unit = root.append_child("friendly_unit");
-		
+
 		friend_unit.append_child("type").append_attribute("value") = App->entity->UnitTypeToString((*unit_f)->GetType()).c_str();
 		friend_unit.append_child("is_enemy").append_attribute("value") = (*unit_f)->is_enemy;
 		friend_unit.append_child("position").append_attribute("x") = (*unit_f)->GetPosition().x;
 		friend_unit.append_child("position").append_attribute("y") = (*unit_f)->GetPosition().y;
-	
+
 		friend_unit.append_child("direction").append_attribute("x") = (*unit_f)->direction.x;
 		friend_unit.append_child("direction").append_attribute("y") = (*unit_f)->direction.y;
 
@@ -485,13 +498,44 @@ void GameScene::SaveLevelDesign(const char* path)
 
 	// we are done, so write data to disk
 	App->fs->Save(path, stream.str().c_str(), stream.str().length());
-	
+
 }
 
 void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 {
 	if (gui->type == BUTTON)
 	{
+		if ((UIButton*)gui == ghost_invisibility_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			//Treure la comprovació quan es pugui activar abilitats a més d'una unitat seleccionada
+			if (App->entity->selected_units.size() == 1)
+			{
+				list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
+				while (f_unit != App->entity->selected_units.end())
+				{
+					if ((*f_unit)->GetType() == GHOST)
+						(*f_unit)->CastAbility(INVISIBLE);
+
+					++f_unit;
+				}
+			}
+		}
+		if ((UIButton*)gui == ghost_snipermode_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			//Treure la comprovació quan es pugui activar abilitats a més d'una unitat seleccionada
+			if (App->entity->selected_units.size() == 1)
+			{
+				list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
+				while (f_unit != App->entity->selected_units.end())
+				{
+					if ((*f_unit)->GetType() == GHOST)
+						(*f_unit)->CastAbility(SNIPPER);
+
+					++f_unit;
+				}
+			}
+			
+		}
 		if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(MENU);
@@ -686,7 +730,6 @@ void GameScene::LoadHUD()
 	App->ui->CreateImage({ 466, 436, 21, 148 }, 466, 333, true);
 	App->ui->CreateImage({ 487, 429, 157, 155 }, 487, 326, true);
 
-
 	//Creating Mini Map
 	minimap = App->ui->CreateMiniMap({ 5, 345, 130, 130 }, { 867, 442, 130, 130 }, { 4096, 4096 });
 
@@ -730,6 +773,12 @@ void GameScene::LoadHUD()
 	//OBSERVER
 	SDL_Rect s_wireframeO{ 621, 138, 54, 55 };
 	observer_wireframe = App->ui->CreateImage(s_wireframeO, 180, 390, false);
+
+	//Create GHOST Buttons
+	ghost_invisibility_button = App->ui->CreateButton("", 508, 358, { 947, 189, 33, 34 }, { 947, 259, 33, 34 }, { 947, 224, 33, 34 }, this);
+	ghost_invisibility_button->SetVisible(false);
+	ghost_snipermode_button = App->ui->CreateButton("", 553, 358, { 913, 189, 33, 34 }, { 913, 259, 33, 34 }, { 913, 224, 33, 34 }, this);
+	ghost_snipermode_button->SetVisible(false);
 
 	//CREATE EVENT
 	objectives_box = App->ui->CreateImage(SDL_Rect{ 0, 90, 169, 71 }, 470, -5, true);
@@ -798,4 +847,18 @@ bool GameScene::GetFinishedGame()
 bool GameScene::GetTutorialState()
 {
 	return tutorial_finished;
+}
+
+bool GameScene::IsGhostSelected()
+{
+	list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
+	while (f_unit != App->entity->selected_units.end())
+	{
+		if ((*f_unit)->GetType() == GHOST)
+			return true;
+
+		++f_unit;
+	}
+
+	return false;
 }
