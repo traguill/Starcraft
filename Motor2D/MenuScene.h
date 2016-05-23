@@ -48,7 +48,10 @@ private:
 public:
 	UIButton* start;
 	UIButton* quit;
+	UIButton* normal;
+	UIButton* hardcore;
 
+	bool dificulty;
 
 };
 
