@@ -108,8 +108,16 @@ bool j1EntityManager::Update(float dt)
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
 		{
-			Ghost* ghost = (Ghost*)(selected_units.front());
-			ghost->Shoot(mouse.x, mouse.y);
+			list<Unit*>::iterator it = selected_units.begin();
+			while (it != selected_units.end())
+			{
+				if ((*it)->type == GHOST)
+				{
+					Ghost* ghost = (Ghost*)((*it));
+					ghost->Shoot(mouse.x, mouse.y);
+				}
+				it++;
+			}
 		}
 	}
 	else
@@ -1286,19 +1294,20 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 
 void j1EntityManager::ActivateAbilities()
 {
-	//Only activate abilities with 1 unit selected - No multiple units abilities available
-	if (selected_units.size() != 1)
-		return;
-
-	//Use abilities with keys for now - Implement with UI buttons
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
+	list<Unit*>::iterator it = selected_units.begin();
+	while (it != selected_units.end())
 	{
-		(*selected_units.begin())->UseAbility(1);
-	}
+		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP && (*it)->type == GHOST)
+		{
+			(*it)->UseAbility(1);
+		}
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
-	{
-		(*selected_units.begin())->UseAbility(2);
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP && (*it)->type == GHOST)
+		{
+			(*it)->UseAbility(2);
+		}
+
+		it++;
 	}
 }
 

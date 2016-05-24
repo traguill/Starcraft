@@ -510,36 +510,29 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{
 		if ((UIButton*)gui == ghost_invisibility_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			//Treure la comprovació quan es pugui activar abilitats a més d'una unitat seleccionada
-			if (App->entity->selected_units.size() == 1)
+			list<Unit*>::iterator it = App->entity->selected_units.begin();
+			while (it != App->entity->selected_units.end())
 			{
-				list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
-				while (f_unit != App->entity->selected_units.end())
-				{
-					if ((*f_unit)->GetType() == GHOST)
-						(*f_unit)->CastAbility(INVISIBLE);
+				if ((*it)->GetType() == GHOST)
+					(*it)->CastAbility(INVISIBLE);
 
-					++f_unit;
-				}
+				++it;
 			}
 		}
-		if ((UIButton*)gui == ghost_snipermode_button && event == MOUSE_BUTTON_RIGHT_UP)
+
+		else if ((UIButton*)gui == ghost_snipermode_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			//Treure la comprovació quan es pugui activar abilitats a més d'una unitat seleccionada
-			if (App->entity->selected_units.size() == 1)
+			list<Unit*>::iterator it = App->entity->selected_units.begin();
+			while (it != App->entity->selected_units.end())
 			{
-				list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
-				while (f_unit != App->entity->selected_units.end())
-				{
-					if ((*f_unit)->GetType() == GHOST)
-						(*f_unit)->CastAbility(SNIPPER);
+				if ((*it)->GetType() == GHOST)
+					(*it)->CastAbility(SNIPPER);
 
-					++f_unit;
-				}
+				++it;
 			}
-			
 		}
-		if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
+
+		else if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(MENU);
 		}
@@ -549,7 +542,7 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			App->scene_manager->WantToChangeScene(MENU);
 		}
 		
-		if ((UIButton*)gui == skip_button && event == MOUSE_BUTTON_RIGHT_UP)
+		else if ((UIButton*)gui == skip_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			//Animation
 			App->ui->AnimResize(tutorial_window, 0.05f, false, 1.0f);
@@ -570,7 +563,7 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			game_paused = false;
 		}
 
-		if ((UIButton*)gui == tutorial_button && event == MOUSE_BUTTON_RIGHT_UP)
+		else if ((UIButton*)gui == tutorial_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			if (tutorial_text_queue.size() > 0)
 			{
@@ -860,14 +853,16 @@ bool GameScene::GetTutorialState()
 
 bool GameScene::IsGhostSelected()
 {
-	list<Unit*>::iterator f_unit = App->entity->selected_units.begin();
-	while (f_unit != App->entity->selected_units.end())
-	{
-		if ((*f_unit)->GetType() == GHOST)
-			return true;
+	bool ret = false;
 
-		++f_unit;
+	list<Unit*>::iterator it = App->entity->selected_units.begin();
+	while (it != App->entity->selected_units.end())
+	{
+		if ((*it)->GetType() == GHOST)
+			ret = true;
+
+		++it;
 	}
 
-	return false;
+	return ret;
 }
