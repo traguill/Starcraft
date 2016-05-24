@@ -83,6 +83,8 @@ bool GameScene::Start()
 
 	game_finished = false;
 
+	LoadQuitUI();
+
 	LoadTutorial();
 
 	return true;
@@ -107,7 +109,6 @@ bool GameScene::Update(float dt)
 
 	App->map->Draw(map_id);
 
-
 	//Updating timer
 	if (parthfinding_label_timer.ReadSec() >= 3)
 	{
@@ -120,6 +121,15 @@ bool GameScene::Update(float dt)
 		no_ammo->is_visible = false;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && tutorial_finished)
+	{
+		game_paused = true;
+
+		quit_fadeblack->SetVisible(true);
+		//quit_window->SetVisible(true);
+		quit_button->SetVisible(true);
+		resume_button->SetVisible(true);
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
@@ -352,14 +362,12 @@ void GameScene::LoadTutorial()
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
-	//Falta medic
 	tutorial_text_queue.push("Target a friendly unit with your medic, it will heal it.");
 	tutorial_text_queue.push("Press Q to make the ghost INVISIBLE to all enemies.");
 	tutorial_text_queue.push("Press W to activate sniper mode. CLICK RIGHT to shoot.");
 
 	secondary_text_queue.push(" - Firebats have limited range of vision, take advantage of this!");
 	secondary_text_queue.push(" - Marines will be patroling the area.");
-	//Falta medic
 	secondary_text_queue.push(" - Medics aren't combat units, use them for support purposes!");
 	secondary_text_queue.push(" - Using invisibility consumes energy, be careful!");
 	secondary_text_queue.push(" - The squad has limited ammo, don't waste it!");
@@ -511,6 +519,21 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 {
 	if (gui->type == BUTTON)
 	{
+		if ((UIButton*)gui == quit_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->WantToChangeScene(MENU);
+		}
+
+		if ((UIButton*)gui == resume_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			game_paused = false;
+
+			quit_fadeblack->SetVisible(false);
+			//quit_window->SetVisible(false);
+			quit_button->SetVisible(false);
+			resume_button->SetVisible(false);
+		}
+
 		if ((UIButton*)gui == ghost_invisibility_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			list<Unit*>::iterator it = App->entity->selected_units.begin();
@@ -868,4 +891,14 @@ bool GameScene::IsGhostSelected()
 	}
 
 	return ret;
+}
+
+void GameScene::LoadQuitUI()
+{
+	quit_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, false, true);
+	//quit_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false, true);
+	quit_button = App->ui->CreateButton("QUIT", 250, 200, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	quit_button->SetVisible(false);
+	resume_button = App->ui->CreateButton("RESUME", 250, 160, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	resume_button->SetVisible(false);
 }

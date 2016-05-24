@@ -64,6 +64,8 @@ private:
 
 	void LoadHUD();
 
+	void LoadQuitUI();
+
 	void LoadTutorial();
 
 private:
@@ -95,8 +97,13 @@ public:
 	UIImage*				tutorial_fadeblack;
 	queue<SDL_Rect>			tutorial_images_queue;
 	queue<char*>			tutorial_text_queue;
-
 	queue<char*>			secondary_text_queue;
+
+	//Quit Game
+	UIImage*				quit_fadeblack;
+	//UIImage*				quit_window;
+	UIButton*				quit_button;
+	UIButton*				resume_button;
 
 	//UILabel*				life_HUD;
 	j1Timer					pause_timer;
