@@ -51,7 +51,7 @@ public:
 	UIButton* normal;
 	UIButton* hardcore;
 
-	bool dificulty;
+
 
 };
 

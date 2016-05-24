@@ -79,7 +79,6 @@ bool MenuScene::Start()
 
 	App->render->camera.x =  App->render->camera.y = 0;
 
-	dificulty = false;
 	
 
 	return true;
@@ -137,13 +136,14 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	{
 		if ((UIButton*)gui == start && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			start->is_visible = false;
-			quit->is_visible = false;
-			normal->is_visible = true;
-			hardcore->is_visible = true;
+			
+			
+			App->ui->AnimResize(start, 0.1f, false, 0.3f);
+			App->ui->AnimResize(quit, 0.1f, false, 0.3f);
 
-			App->ui->AnimResize(normal, 0.5f, true, 0.3f);
-			App->ui->AnimResize(hardcore, 0.5f, true, 0.3f);
+
+			App->ui->AnimResize(normal, 0.5f, true, 1.0f);
+			App->ui->AnimResize(hardcore, 0.5f, true, 1.0f);
 
 		}
 
@@ -155,13 +155,13 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		else if ((UIButton*)gui == normal && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(GAME);
-			dificulty = false;
+			App->scene_manager->dificulty = false;
 		}
 
 		else if ((UIButton*)gui == hardcore && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(GAME);
-			dificulty = true;
+			App->scene_manager->dificulty = true;
 		}
 	}
 }

@@ -13,7 +13,7 @@
 #include "j1Audio.h"
 #include "Bullet.h"
 #include "GameScene.h"
-#include"MenuScene.h"
+#include"SceneManager.h"
 
 Unit::Unit() : Entity()
 {
@@ -189,7 +189,7 @@ void Unit::Update(float dt)
 			App->entity->RemoveUnit(this);
 			if (this->is_enemy == false)
 			{
-				if (App->menu->dificulty == true)
+				if (App->scene_manager->dificulty == true)
 					App->game_scene->LoseGame();
 			}
 		}
