@@ -409,10 +409,10 @@ void GameScene::LoadLevel(const char* path)
 		bomb_pos.push_back(bomb_position);
 	}
 	bomb_zone.x = level.child("bomb_zone").attribute("x").as_int();
-bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
-pugi::xml_node unit_f;
-for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
-{
+	bomb_zone.y = level.child("bomb_zone").attribute("y").as_int();
+	pugi::xml_node unit_f;
+	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
+	{
 	UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_f.child("type").attribute("value").as_string());
 	iPoint pos;
 	pos.x = unit_f.child("position").attribute("x").as_int();
@@ -429,11 +429,11 @@ for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling
 	Unit* u = App->entity->friendly_units.back();
 	u->direction.x = unit_f.child("direction").attribute("x").as_int();
 	u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
-}
+	}
 
-pugi::xml_node unit_e;
-for (unit_e = level.child("enemy_unit"); unit_e; unit_e = unit_e.next_sibling("enemy_unit"))
-{
+	pugi::xml_node unit_e;
+	for (unit_e = level.child("enemy_unit"); unit_e; unit_e = unit_e.next_sibling("enemy_unit"))
+	{
 	UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_e.child("type").attribute("value").as_string());
 	iPoint pos;
 	pos.x = unit_e.child("position").attribute("x").as_int();
@@ -451,7 +451,7 @@ for (unit_e = level.child("enemy_unit"); unit_e; unit_e = unit_e.next_sibling("e
 	u->direction.x = unit_e.child("direction").attribute("x").as_int();
 	u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
 	u->original_direction = u->direction;
-}
+	}
 }
 
 void GameScene::SaveLevelDesign(const char* path)

@@ -187,7 +187,7 @@ void Unit::Update(float dt)
 		if (death.finished())
 		{
 			App->entity->RemoveUnit(this);
-			if (this->is_enemy == false)
+			if (is_enemy == false)
 			{
 				if (App->scene_manager->dificulty == true)
 					App->game_scene->LoseGame();
