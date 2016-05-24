@@ -109,8 +109,8 @@ private:
 	void GetMouseInput(); //Get input of mouse to drag windows/elements
 	void SetNextFocus(); //Sets the focus to the next element
 	void ShowIndividualWireframe();
-	void ShowMiniWireframes();
-	void ShowMiniWireframe(const char* mw_key, uint pos);
+	void ShowMiniWireframes(float dt);
+	void ShowMiniWireframe(const char* mw_key, uint pos, float dt);
 	void RectangleSelection();
 
 	bool LoadUiInfo();

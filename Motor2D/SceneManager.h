@@ -61,7 +61,8 @@ private:
 public:
 
 	bool changing_scene = false;
-	bool dificulty;
+	bool dificulty = false;
+	bool pro = false;
 	bool in_game = false;
 
 private:

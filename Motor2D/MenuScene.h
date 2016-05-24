@@ -50,6 +50,7 @@ public:
 	UIButton* quit;
 	UIButton* normal;
 	UIButton* hardcore;
+	UIButton* pro;
 
 
 

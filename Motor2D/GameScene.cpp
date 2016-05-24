@@ -413,22 +413,25 @@ void GameScene::LoadLevel(const char* path)
 	pugi::xml_node unit_f;
 	for (unit_f = level.child("friendly_unit"); unit_f; unit_f = unit_f.next_sibling("friendly_unit"))
 	{
-	UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_f.child("type").attribute("value").as_string());
-	iPoint pos;
-	pos.x = unit_f.child("position").attribute("x").as_int();
-	pos.y = unit_f.child("position").next_sibling("position").attribute("y").as_int();
-	bool is_enemy = unit_f.child("is_enemy").attribute("value").as_bool();
-	bool patrolling = unit_f.child("patrol").attribute("value").as_bool();
-	vector<iPoint> point_path;
-	for (pugi::xml_node point = unit_f.child("patrol").child("point"); point; point = point.next_sibling("point"))
-	{
-		point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
-	}
-	App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
+		UNIT_TYPE type = App->entity->UnitTypeToEnum(unit_f.child("type").attribute("value").as_string());
+		if (App->scene_manager->pro == false || (App->scene_manager->pro == true && type == GHOST))
+		{
+			iPoint pos;
+			pos.x = unit_f.child("position").attribute("x").as_int();
+			pos.y = unit_f.child("position").next_sibling("position").attribute("y").as_int();
+			bool is_enemy = unit_f.child("is_enemy").attribute("value").as_bool();
+			bool patrolling = unit_f.child("patrol").attribute("value").as_bool();
+			vector<iPoint> point_path;
+			for (pugi::xml_node point = unit_f.child("patrol").child("point"); point; point = point.next_sibling("point"))
+			{
+				point_path.push_back({ point.attribute("tile_x").as_int(), point.attribute("tile_y").as_int() });
+			}
+			App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 
-	Unit* u = App->entity->friendly_units.back();
-	u->direction.x = unit_f.child("direction").attribute("x").as_int();
-	u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
+			Unit* u = App->entity->friendly_units.back();
+			u->direction.x = unit_f.child("direction").attribute("x").as_int();
+			u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
+		}
 	}
 
 	pugi::xml_node unit_e;

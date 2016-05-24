@@ -44,10 +44,12 @@ bool MenuScene::Start()
 	start = App->ui->CreateButton(" START", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	quit = App->ui->CreateButton(" QUIT", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	normal = App->ui->CreateButton("NORMAL", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
-	hardcore = App->ui->CreateButton(" HARD", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	hardcore = App->ui->CreateButton(" HARD", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	pro = App->ui->CreateButton("  PRO", 400, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 
 	normal->is_visible = false;
 	hardcore->is_visible = false;
+	pro->is_visible = false;
 
 	//Animation
 	App->ui->AnimFade(logo, 2, true, 2);
@@ -135,15 +137,12 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 	if (gui->type == BUTTON)
 	{
 		if ((UIButton*)gui == start && event == MOUSE_BUTTON_RIGHT_UP)
-		{
-			
-			
+		{			
 			App->ui->AnimResize(start, 0.1f, false, 0.3f);
-			App->ui->AnimResize(quit, 0.1f, false, 0.3f);
-
 
 			App->ui->AnimResize(normal, 0.5f, true, 1.0f);
 			App->ui->AnimResize(hardcore, 0.5f, true, 1.0f);
+			App->ui->AnimResize(pro, 0.5f, true, 1.0f);
 
 		}
 
@@ -156,12 +155,20 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			App->scene_manager->WantToChangeScene(GAME);
 			App->scene_manager->dificulty = false;
+			App->scene_manager->pro = false;
 		}
 
 		else if ((UIButton*)gui == hardcore && event == MOUSE_BUTTON_RIGHT_UP)
 		{
 			App->scene_manager->WantToChangeScene(GAME);
 			App->scene_manager->dificulty = true;
+			App->scene_manager->pro = false;
+		}
+
+		else if ((UIButton*)gui == pro && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->WantToChangeScene(GAME);
+			App->scene_manager->pro = true;
 		}
 	}
 }

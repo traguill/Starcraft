@@ -212,7 +212,7 @@ bool j1UIManager::Update(float dt)
 	}
 
 	if (App->entity->selected_units.size() > 1)
-		ShowMiniWireframes();
+		ShowMiniWireframes(dt);
 	
 	else if (App->entity->selected_units.size() == 1)
 		ShowIndividualWireframe();
@@ -557,7 +557,7 @@ void j1UIManager::OcultWireframes()
 	App->game_scene->medic_wireframe->is_visible = false;
 }
 
-void j1UIManager::ShowMiniWireframes()
+void j1UIManager::ShowMiniWireframes(float dt)
 {
 	uint i = 0;
 	for (list<Unit*>::iterator it = App->entity->selected_units.begin(); it != App->entity->selected_units.end(); it++, i++)
@@ -565,29 +565,29 @@ void j1UIManager::ShowMiniWireframes()
 		switch ((*it)->GetType())
 		{
 		case(MARINE) :
-			ShowMiniWireframe("MARINE", i);
+			ShowMiniWireframe("MARINE", i, dt);
 			break;
 
 		case(FIREBAT) :
-			ShowMiniWireframe("FIREBAT", i);
+			ShowMiniWireframe("FIREBAT", i, dt);
 			break;
 
 		case(GHOST) :
-			ShowMiniWireframe("GHOST", i);
+			ShowMiniWireframe("GHOST", i, dt);
 			break;
 
 		case(MEDIC) :
-			ShowMiniWireframe("MEDIC", i);
+			ShowMiniWireframe("MEDIC", i, dt);
 			break;
 
 		case(OBSERVER) :
-			ShowMiniWireframe("OBSERVER", i);
+			ShowMiniWireframe("OBSERVER", i, dt);
 			break;
 		}
 	}
 }
 
-void j1UIManager::ShowMiniWireframe(const char* mw_key, uint pos)
+void j1UIManager::ShowMiniWireframe(const char* mw_key, uint pos, float dt)
 {
 	UIImage* mini_wireframe = (UIImage*)gui_database.find(mw_key)->second;
 	int x, y;
@@ -599,7 +599,7 @@ void j1UIManager::ShowMiniWireframe(const char* mw_key, uint pos)
 	else if (pos < 12)
 		mini_wireframe->SetLocalPos(x + (pos - 6) * mw_width, y + mw_height);
 
-	mini_wireframe->Draw();
+	mini_wireframe->Update(dt);
 	mini_wireframe->SetLocalPos(x, y);
 }
 

@@ -40,7 +40,6 @@ bool SceneManager::Awake(pugi::xml_node& conf)
 bool SceneManager::Start()
 {
 	actual_scene = MENU;
-	dificulty = false;
 
 	return true;
 }

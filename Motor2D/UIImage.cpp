@@ -53,8 +53,6 @@ bool UIImage::Update(float dt)
 //For images that make more than one blit
 bool UIImage::Draw()
 {
-	//iPoint cam_pos(App->render->camera.x, App->render->camera.y);
-	
 	ui_sprite.position.x =  rect.x;
 	ui_sprite.position.y =  rect.y;
 
