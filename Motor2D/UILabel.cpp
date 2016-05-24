@@ -47,9 +47,11 @@ bool UILabel::Update(float dt)
 	if (ui_sprite.texture != NULL)
 	{
 		iPoint cam_pos(App->render->camera.x, App->render->camera.y);
+		rect.x = init_pos.x - cam_pos.x;
+		rect.y = init_pos.y - cam_pos.y;
 
-		ui_sprite.position.x = init_pos.x - cam_pos.x;
-		ui_sprite.position.y = init_pos.y - cam_pos.y;
+		ui_sprite.position.x = rect.x;
+		ui_sprite.position.y = rect.y;
 
 		App->render->BlitUI(ui_sprite);
 	}

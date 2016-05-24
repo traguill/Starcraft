@@ -57,6 +57,9 @@ bool UIButton::Update(float dt)
 	ui_sprite.position.x = init_pos.x - cam.x;
 	ui_sprite.position.y = init_pos.y - cam.y;
 
+	rect.x = ui_sprite.position.x;
+	rect.y = ui_sprite.position.y;
+
 	if (state == IDLE)
 		ui_sprite.rect = idle;
 	if (state == PRESSED)						
@@ -65,6 +68,7 @@ bool UIButton::Update(float dt)
 		ui_sprite.rect = hover;
 
 	App->render->BlitUI(ui_sprite);
+
 
 	//Update text properties
 	Sprite* text_sprite = text->GetSprite();
@@ -110,19 +114,19 @@ void UIButton::GetScreenPos(int &x, int &y)const
 {
 	x = y = 0;
 
-	x += ui_sprite.position.x;
-	y += ui_sprite.position.y;
+	x += rect.x;
+	y += rect.y;
 }
 
 void UIButton::GetLocalPos(int &x, int &y)const
 {
-	x = ui_sprite.position.x;
-	y = ui_sprite.position.y;
+	x = rect.x;
+	y = rect.y;
 }
 
 SDL_Rect UIButton::GetScreenRect()const
 {
-	SDL_Rect ret = ui_sprite.rect;
+	SDL_Rect ret = rect;
 	GetScreenPos(ret.x, ret.y);
 
 	return ret;
@@ -130,11 +134,11 @@ SDL_Rect UIButton::GetScreenRect()const
 
 SDL_Rect UIButton::GetLocalRect()const
 {
-	return ui_sprite.rect;;
+	return rect;
 }
 
 void UIButton::SetLocalPos(int x, int y)
 {
-	ui_sprite.position.x = ui_sprite.rect.x = x;
-	ui_sprite.position.y = ui_sprite.rect.y = y;
+	ui_sprite.position.x = ui_sprite.rect.x = rect.x = x;
+	ui_sprite.position.y = ui_sprite.rect.y = rect.y = y;
 }

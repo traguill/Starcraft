@@ -95,14 +95,19 @@ bool UIMiniMap::Update(float dt)
 
 	iPoint cam(App->render->camera.x, App->render->camera.y);
 
-	ui_sprite.position.x = init_pos.x - cam.x;
-	ui_sprite.position.y = init_pos.y - cam.y + 3;
+	rect.x = init_pos.x - cam.x;
+	rect.y = init_pos.y - cam.y + 3;
+
+	ui_sprite.position.x = rect.x;
+	ui_sprite.position.y = rect.y;
 
 	App->render->BlitUI(ui_sprite);
 	
 	GetState();
 	UpdateUnitsMiniMap();
 	
+
+	white_rect.position = WhiteRectUpdatedPos();
 
 	App->render->BlitUI(white_rect);
 
@@ -120,8 +125,8 @@ iPoint UIMiniMap::WhiteRectUpdatedPos()
 {
 	iPoint tmp(App->render->camera.x, App->render->camera.y);
 	
-	tmp.x = (-tmp.x / div_x) + ui_sprite.position.x;
-	tmp.y = (-tmp.y / div_y) + ui_sprite.position.y;
+	tmp.x = (-tmp.x / div_x) + rect.x;
+	tmp.y = (-tmp.y / div_y) + rect.y;
 
 	return (tmp);
 }
@@ -323,19 +328,19 @@ void UIMiniMap::GetScreenPos(int &x, int &y)const
 {
 	x = y = 0;
 
-	x += ui_sprite.position.x;
-	y += ui_sprite.position.y;
+	x += rect.x;
+	y += rect.y;
 }
 
 void UIMiniMap::GetLocalPos(int &x, int &y)const
 {
-	x = ui_sprite.position.x;
-	y = ui_sprite.position.y;
+	x = rect.x;
+	y = rect.y;
 }
 
 SDL_Rect UIMiniMap::GetScreenRect()const
 {
-	SDL_Rect ret = ui_sprite.rect;
+	SDL_Rect ret = rect;
 	GetScreenPos(ret.x, ret.y);
 
 	return ret;
@@ -343,11 +348,11 @@ SDL_Rect UIMiniMap::GetScreenRect()const
 
 SDL_Rect UIMiniMap::GetLocalRect()const
 {
-	return ui_sprite.rect;;
+	return rect;;
 }
 
 void UIMiniMap::SetLocalPos(int x, int y)
 {
-	ui_sprite.position.x = ui_sprite.rect.x = x;
-	ui_sprite.position.y = ui_sprite.rect.y = y;
+	ui_sprite.position.x = ui_sprite.rect.x = rect.x = x;
+	ui_sprite.position.y = ui_sprite.rect.y = rect.y = y;
 }

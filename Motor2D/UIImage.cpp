@@ -41,6 +41,10 @@ bool UIImage::Update(float dt)
 {
 	bool ret = true;
 
+	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
+	rect.x = init_pos.x - cam_pos.x;
+	rect.y = init_pos.y - cam_pos.y;
+
 	Draw();
 
 	return ret;
@@ -49,10 +53,11 @@ bool UIImage::Update(float dt)
 //For images that make more than one blit
 bool UIImage::Draw()
 {
-	iPoint cam_pos(App->render->camera.x, App->render->camera.y);
+	//iPoint cam_pos(App->render->camera.x, App->render->camera.y);
 	
-	ui_sprite.position.x =  -cam_pos.x + init_pos.x ;
-	ui_sprite.position.y =  -cam_pos.y + init_pos.y ;
+	ui_sprite.position.x =  rect.x;
+	ui_sprite.position.y =  rect.y;
+
 
 	App->render->BlitUI(ui_sprite);
 
@@ -69,7 +74,7 @@ bool UIImage::CleanUp()
 void UIImage::SetImageRect(SDL_Rect image_rect)
 {
 	ui_sprite.rect = image_rect;
-
+	rect = image_rect;
 	rect.w = ui_sprite.rect.w;
 	rect.h = ui_sprite.rect.h;
 }
@@ -82,10 +87,10 @@ Sprite* UIImage::GetSprite()
 SDL_Rect UIImage::GetScreenRect()const
 {
 	SDL_Rect ret;
-	ret.x = ui_sprite.position.x;
-	ret.y = ui_sprite.position.y;
-	ret.w = ui_sprite.rect.w;
-	ret.h = ui_sprite.rect.h;
+	ret.x = rect.x;
+	ret.y = rect.y;
+	ret.w = rect.w;
+	ret.h = rect.h;
 
 	return ret;
 }
