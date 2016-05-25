@@ -207,7 +207,7 @@ bool GameScene::Update(float dt)
 		{
 			iPoint pos = (*f_unit)->GetPosition();
 
-			if (pos.x > bomb_zone.x && pos.x < bomb_zone.x + bomb_zone.w && pos.y > bomb_zone.y && pos.y < bomb_zone.y + bomb_zone.w && (*f_unit)->IsVisible())
+			if (pos.PointInRect(bomb_zone.x, bomb_zone.y, bomb_zone.w, bomb_zone.h) && (*f_unit)->IsVisible())
 			{
 				if (game_finished == false)
 				{
