@@ -9,6 +9,7 @@
 #include "j1UIManager.h"
 #include "EventsManager.h"
 #include "DevScene.h"
+#include "CreditScene.h"
 
 SceneManager::SceneManager() : j1Module()
 {
@@ -29,6 +30,9 @@ bool SceneManager::Awake(pugi::xml_node& conf)
 	App->game_scene->DisableModule();
 	App->entity->DisableModule();
 	App->tactical_ai->DisableModule();
+	
+	//Disable credit scene
+	App->credit_scene->DisableModule();
 
 	//Disable dev_scene
 	App->dev_scene->DisableModule();
@@ -106,6 +110,9 @@ void SceneManager::DisableScene(SCENES scene)
 	case DEV:
 		DisableDev();
 		break;
+	case CREDIT:
+		DisableCredit();
+		break;
 	}
 }
 
@@ -121,6 +128,9 @@ void SceneManager::EnableScene(SCENES scene)
 		break;
 	case DEV:
 		EnableDev();
+		break;
+	case CREDIT:
+		EnableCredit();
 		break;
 	}
 }
@@ -194,4 +204,18 @@ void SceneManager::DisableDev()
 	App->dev_scene->CleanUp();
 
 
+}
+
+void SceneManager::EnableCredit()
+{
+	App->credit_scene->EnableModule();
+	App->credit_scene->Start();
+}
+
+void SceneManager::DisableCredit()
+{
+	App->credit_scene->DisableModule();
+
+	App->ui->CleanUpList();
+	App->credit_scene->CleanUp();
 }

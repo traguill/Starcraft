@@ -122,6 +122,9 @@
     <ClCompile Include="Ghost.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="CreditScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h" />
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

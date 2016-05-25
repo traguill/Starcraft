@@ -22,6 +22,7 @@
 #include "MenuScene.h"
 #include "SceneManager.h"
 #include "DevScene.h"
+#include "CreditScene.h"
 
 
 // Constructor
@@ -46,6 +47,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	menu = new MenuScene();
 	scene_manager = new SceneManager();
 	dev_scene = new DevScene();
+	credit_scene = new CreditScene();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -65,6 +67,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(dev_scene);
 	AddModule(game_scene);
 	AddModule(menu);
+	AddModule(credit_scene);
 
 
 	AddModule(entity);

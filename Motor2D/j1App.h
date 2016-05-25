@@ -27,6 +27,7 @@ class EventsManager;
 class MenuScene;
 class SceneManager;
 class DevScene;
+class CreditScene;
 
 class j1App
 {
@@ -108,6 +109,7 @@ public:
 	MenuScene*			menu = NULL;
 	SceneManager*		scene_manager = NULL;
 	DevScene*			dev_scene = NULL;
+	CreditScene*		credit_scene = NULL;
 
 private:
 

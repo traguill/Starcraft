@@ -560,7 +560,7 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 
 		else if ((UIButton*)gui == win_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene(MENU);
+			App->scene_manager->WantToChangeScene(CREDIT);
 		}
 
 		else if ((UIButton*)gui == loose_button && event == MOUSE_BUTTON_RIGHT_UP)

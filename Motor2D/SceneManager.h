@@ -7,6 +7,7 @@ enum SCENES
 {
 	MENU,
 	GAME,
+	CREDIT,
 	DEV
 };
 
@@ -57,6 +58,9 @@ private:
 
 	void EnableDev();
 	void DisableDev();
+
+	void EnableCredit();
+	void DisableCredit();
 
 public:
 
