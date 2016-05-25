@@ -90,8 +90,13 @@ bool CreditScene::Update(float dt)
 			start_credit = true;
 		}
 
+		if (credits_timer.ReadSec() > 5)
+		{
+			list<UIImage*>::iterator it = credits_list.begin();
+			App->ui->AnimFade((*it), 2, false, 2);
+		}
 
-		if (credits_timer.ReadSec() > 6)
+		if (credits_timer.ReadSec() > 7)
 		{
 			list<UIImage*>::iterator it = credits_list.begin();
 
@@ -108,6 +113,9 @@ bool CreditScene::Update(float dt)
 	{
 		credits->SetVisible(true);
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		App->scene_manager->WantToChangeScene(MENU);
 	
 	return true;
 }
