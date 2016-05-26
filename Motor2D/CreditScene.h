@@ -49,6 +49,8 @@ private:
 	list<UIImage*>	credits_list;
 
 	j1Timer			credits_timer;
+	bool			finished_credits = false;
+	bool			fade_in_once = true;
 	bool			start_credit = false;
 
 	bool close_game;

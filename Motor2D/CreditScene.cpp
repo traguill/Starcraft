@@ -11,6 +11,7 @@
 #include "UIImage.h"
 #include "UILabel.h"
 #include "UIButton.h"
+#include "j1Window.h"
 
 CreditScene::CreditScene() : j1Module()
 {
@@ -37,22 +38,23 @@ bool CreditScene::Start()
 
 	close_game = false;
 
-	project = App->ui->CreateImage({1740, 536, 360, 70}, 150, 200, false);
-	sheep_logo = App->ui->CreateImage({ 0, 0, 0, 0 }, 100, 300, false);
+	uint _w, _h;
+	App->win->GetWindowSize(_w, _h);
+
+	project = App->ui->CreateImage({ 1740, 536, 360, 70 }, 150, 200, false);
+	sheep_logo = App->ui->CreateImage({ 2767, 10, 110, 110 }, _w / 2 - 55, _h / 2 - 55, false);
 	upc_logo = App->ui->CreateImage({ 2883, 0, 356, 67 }, 150, 200, false);
 	license_blizzard = App->ui->CreateImage({ 2795, 174, 528, 66 }, 60, 300, false);
 	license_image = App->ui->CreateImage({ 2795, 244, 526, 77 }, 60, 300, false);
 
 	credits_list.push_back(project);
 	credits_list.push_back(upc_logo);
-	//credits_list.push_back(sheep_logo);
 	credits_list.push_back(license_blizzard);
 	credits_list.push_back(license_image);
 
+	credits = App->ui->CreateImage({ 1806, 640, 304, 322 }, 160, _h, false);
 
-	credits = App->ui->CreateImage({ 1806, 640, 304, 322 }, 150, 100, false);
-
-	App->audio->PlayMusic("MenuTheme.wav");
+	App->audio->PlayMusic("StarcraftTerranTheme2.wav");
 
 	App->ui->cursor_state = STANDARD;
 
@@ -100,7 +102,7 @@ bool CreditScene::Update(float dt)
 		{
 			list<UIImage*>::iterator it = credits_list.begin();
 
-			(*it)->SetVisible(false);
+			//(*it)->SetVisible(false);
 
 			credits_list.pop_front();
 
@@ -111,12 +113,52 @@ bool CreditScene::Update(float dt)
 
 	else
 	{
-		credits->SetVisible(true);
+		if (!finished_credits)
+		{
+			credits->SetVisible(true);
+
+			if (start_credit == false)
+			{
+
+				credits_timer.Start();
+				start_credit = true;
+
+			}
+
+			if (credits_timer.Read() > 1)
+			{
+				int _x, _y;
+				credits->GetLocalPos(_x, _y);
+
+				if (_y + credits->GetScreenRect().h > 0)
+				{
+					_y--;
+					credits->SetLocalPos(_x, _y);
+				}
+				else
+				{
+					finished_credits = true;
+				}
+
+				start_credit = false;
+			}
+		}
+
+		else
+		{
+			if (fade_in_once)
+			{
+
+				App->ui->AnimFade(sheep_logo, 2, true, 3);
+				fade_in_once = false;
+			}
+		}
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		App->scene_manager->WantToChangeScene(MENU);
-	
+
 	return true;
 }
 
@@ -135,10 +177,10 @@ bool CreditScene::PostUpdate()
 bool CreditScene::CleanUp()
 {
 	LOG("Freeing Credit Scene");
-	
+
 
 	credits_list.clear();
-	
+
 	project = NULL;
 	sheep_logo = NULL;
 	upc_logo = NULL;
