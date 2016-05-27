@@ -57,8 +57,8 @@ public:
 
 private:
 
-	void LoadLevel(const char* path);
-	void SaveLevelDesign(const char* path);
+	void LoadGame(const char* path);
+	void SaveGame(const char* path);
 
 	void LoadAudio();
 
@@ -148,6 +148,9 @@ public:
 	//Pathfinding Label
 	UILabel* pathfinding_label;
 	j1Timer parthfinding_label_timer;
+
+	UILabel* game_saved;
+	j1Timer game_saved_timer;
 
 	//Bomb
 	SDL_Texture* bomb;

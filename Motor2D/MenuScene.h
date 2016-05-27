@@ -51,9 +51,7 @@ public:
 	UIButton* normal;
 	UIButton* hardcore;
 	UIButton* pro;
-
-
-
+	UIButton* load_game;
 };
 
 #endif // __GAME_SCENE_H__

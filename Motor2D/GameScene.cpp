@@ -58,7 +58,7 @@ bool GameScene::Start()
 		buffer = NULL;
 	}
 
-	//Ammunition set
+	//Ammunition setLoadGame
 	sniper_ammo = 3;
 	intel_left = 3;
 
@@ -74,12 +74,17 @@ bool GameScene::Start()
 	debug = false;
 	game_paused = false;
 
-	LoadLevel("my_level.xml");
+	if (App->scene_manager->level_saved == false)
+	{
+		LoadGame("my_level.xml");
+		App->render->camera = SDL_Rect{ -700, -1600, App->render->camera.w, App->render->camera.h };
+	}
+	else
+		LoadGame("game_saved.xml");
+
 	LoadAudio();
 
 	App->audio->PlayMusic("StarcraftTerrantheme1.wav");
-
-	App->render->camera = SDL_Rect{ -700, -1600, App->render->camera.w, App->render->camera.h };
 
 	game_finished = false;
 
@@ -115,6 +120,11 @@ bool GameScene::Update(float dt)
 		pathfinding_label->is_visible = false;
 	}
 
+	if (game_saved_timer.ReadSec() >= 2)
+	{
+		game_saved->is_visible = false;
+	}
+
 	if (sniper_ui_timer.ReadSec() >= 3)
 	{
 		no_energy->is_visible = false;
@@ -148,11 +158,19 @@ bool GameScene::Update(float dt)
 
 
 	//Save level designed
-	/*if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
 	{
-		SaveLevelDesign();
-	}*/
+		SaveGame("game_saved.xml");
+		game_saved_timer.Start();
+		game_saved->is_visible = true;
+	}
 
+	else if (App->input->GetKey(SDL_SCANCODE_L) == KEY_UP)
+	{
+		App->entity->CleanUpList();
+		bomb_pos.clear();
+		LoadGame("game_saved.xml");
+	}
 
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
@@ -387,7 +405,7 @@ bool GameScene::GamePaused()const
 	return game_paused;
 }
 
-void GameScene::LoadLevel(const char* path)
+void GameScene::LoadGame(const char* path)
 {
 	pugi::xml_document	level_file;
 	pugi::xml_node		level;
@@ -405,6 +423,13 @@ void GameScene::LoadLevel(const char* path)
 	}
 	else
 		level = level_file.child("level");
+
+	App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
+
+	int camera_x = level.child("camera").attribute("x").as_int();
+	int camera_y = level.child("camera").attribute("y").as_int();
+
+	App->render->camera = SDL_Rect{ camera_x, camera_y, App->render->camera.w, App->render->camera.h };
 
 	pugi::xml_node bomb_root = level.child("bomb");
 	pugi::xml_node bomb_node;
@@ -437,6 +462,18 @@ void GameScene::LoadLevel(const char* path)
 			App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 
 			Unit* u = App->entity->friendly_units.back();
+
+			bool is_selected = unit_f.child("selected").attribute("value").as_bool();
+			if (is_selected == true)
+			{
+				u->Select();
+				App->entity->selected_units.push_back(u);
+			}
+
+			int life = unit_f.child("life").attribute("value").as_int();
+			if (life > 0)
+				u->SetLife(life);
+
 			u->direction.x = unit_f.child("direction").attribute("x").as_int();
 			u->direction.y = unit_f.child("direction").next_sibling("direction").attribute("y").as_int();
 		}
@@ -459,19 +496,54 @@ void GameScene::LoadLevel(const char* path)
 	App->entity->CreateUnit(type, pos.x, pos.y, is_enemy, patrolling, point_path);
 
 	Unit* u = App->entity->enemy_units.back();
+	int life = unit_e.child("life").attribute("value").as_int();
+	if (life > 0)
+		u->SetLife(life);
 	u->direction.x = unit_e.child("direction").attribute("x").as_int();
 	u->direction.y = unit_e.child("direction").next_sibling("direction").attribute("y").as_int();
 	u->original_direction = u->direction;
 	}
 }
 
-void GameScene::SaveLevelDesign(const char* path)
+void GameScene::SaveGame(const char* path)
 {
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
 
 	root = data.append_child("level");
+
+	root.append_child("difficulty").append_attribute("value") = App->scene_manager->dificulty;
+
+	root.append_child("camera").append_attribute("x") = App->render->camera.x;
+	root.child("camera").append_attribute("y") = App->render->camera.y;
+
+	root.append_child("bomb");
+	pugi::xml_node bomb_node = root.child("bomb");
+
+	list<iPoint>::iterator bomb_position = bomb_pos.begin();
+	pugi::xml_node bomb_position_node(NULL);
+
+	while (bomb_position != bomb_pos.end())
+	{
+		bomb_node.append_child("position").append_attribute("x") = (*bomb_position).x;
+
+		if (bomb_position_node == NULL)
+		{
+			bomb_position_node = bomb_node.child("position");
+		}
+		else
+		{
+			bomb_position_node = bomb_position_node.next_sibling("position");
+		}
+
+		bomb_position_node.append_attribute("y") = (*bomb_position).y;
+
+		++bomb_position;
+	}
+
+	root.append_child("bomb_zone").append_attribute("x") = bomb_zone.x;
+	root.child("bomb_zone").append_attribute("y") = bomb_zone.y;
 
 	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
 	while (unit_f != App->entity->friendly_units.end())
@@ -483,6 +555,9 @@ void GameScene::SaveLevelDesign(const char* path)
 		friend_unit.append_child("is_enemy").append_attribute("value") = (*unit_f)->is_enemy;
 		friend_unit.append_child("position").append_attribute("x") = (*unit_f)->GetPosition().x;
 		friend_unit.append_child("position").append_attribute("y") = (*unit_f)->GetPosition().y;
+		int life = (*unit_f)->GetLife();
+		friend_unit.append_child("life").append_attribute("value") = life;
+		friend_unit.append_child("selected").append_attribute("value") = (*unit_f)->IsSelected();
 
 		friend_unit.append_child("direction").append_attribute("x") = (*unit_f)->direction.x;
 		friend_unit.append_child("direction").append_attribute("y") = (*unit_f)->direction.y;
@@ -500,9 +575,38 @@ void GameScene::SaveLevelDesign(const char* path)
 		enemy_unit.append_child("is_enemy").append_attribute("value") = (*unit_e)->is_enemy;
 		enemy_unit.append_child("position").append_attribute("x") = (*unit_e)->GetPosition().x;
 		enemy_unit.append_child("position").append_attribute("y") = (*unit_e)->GetPosition().y;
+		int life = (*unit_e)->GetLife();
+		enemy_unit.append_child("life").append_attribute("value") = life;
 
 		enemy_unit.append_child("direction").append_attribute("x") = (*unit_e)->direction.x;
 		enemy_unit.append_child("direction").append_attribute("y") = (*unit_e)->direction.y;
+
+		//Make sure patrol is activated if patrol path exists
+		if ((*unit_e)->patrol_path.size() > 0)
+			(*unit_e)->patrol = true;
+
+		enemy_unit.append_child("patrol").append_attribute("value") = (*unit_e)->patrol;
+
+		pugi::xml_node patrol = enemy_unit.child("patrol");
+		pugi::xml_node point(NULL);
+
+		if ((*unit_e)->patrol_path.size() > 0)
+		{
+			vector<iPoint>::iterator tile = (*unit_e)->patrol_path.begin();
+			while (tile != (*unit_e)->patrol_path.end())
+			{
+
+				enemy_unit.child("patrol").append_child("point").append_attribute("tile_x") = tile->x;
+
+				if (point == NULL)
+					point = patrol.child("point");
+				else
+					point = point.next_sibling("point");
+
+				point.append_attribute("tile_y") = tile->y;
+				++tile;
+			}
+		}
 
 		++unit_e;
 	}
@@ -512,7 +616,6 @@ void GameScene::SaveLevelDesign(const char* path)
 
 	// we are done, so write data to disk
 	App->fs->Save(path, stream.str().c_str(), stream.str().length());
-
 }
 
 void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
@@ -821,6 +924,9 @@ void GameScene::LoadHUD()
 	//Pathfinding Label
 	pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
 	pathfinding_label->is_visible = false;
+
+	game_saved = App->ui->CreateLabel("Game Saved", 300, 200, true);
+	game_saved->is_visible = false;
 
 	App->events->game_event = INITIAL_STATE;
 

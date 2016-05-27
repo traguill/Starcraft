@@ -1111,6 +1111,16 @@ bool Unit::IsVisible()const
 	return !invisible;
 }
 
+bool Unit::IsSelected()const
+{
+	return selected;
+}
+
+void Unit::Select()
+{
+	selected = true;
+}
+
 void Unit::UseAbility(uint id)
 {
 	if (id > abilities.size())
@@ -1196,6 +1206,11 @@ void Unit::AsignPath(vector<iPoint> main_path)
 int Unit::GetLife()const
 {
 	return life;
+}
+
+void Unit::SetLife(int  new_life)
+{
+	life = new_life;
 }
 
 int Unit::GetMana()const

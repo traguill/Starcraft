@@ -1349,6 +1349,8 @@ void j1EntityManager::CleanUpList()
 
 	friendly_units.clear();
 
+	selected_units.clear();
+
 	list<Unit*>::iterator it = enemy_units.begin();
 
 	while (it != enemy_units.end())

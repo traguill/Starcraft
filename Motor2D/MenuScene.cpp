@@ -10,6 +10,7 @@
 #include "j1Input.h"
 #include "UIImage.h"
 #include "UIButton.h"
+#include "j1FileSystem.h"
 
 MenuScene::MenuScene() : j1Module()
 {
@@ -46,10 +47,12 @@ bool MenuScene::Start()
 	normal = App->ui->CreateButton("NORMAL", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	hardcore = App->ui->CreateButton(" HARD", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	pro = App->ui->CreateButton("  PRO", 400, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	load_game = App->ui->CreateButton("CONTINUE", 250, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 
 	normal->is_visible = false;
 	hardcore->is_visible = false;
 	pro->is_visible = false;
+	load_game->is_visible = false;
 
 	//Animation
 	App->ui->AnimFade(logo, 2, true, 2);
@@ -144,6 +147,10 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			App->ui->AnimResize(hardcore, 0.5f, true, 1.0f);
 			App->ui->AnimResize(pro, 0.5f, true, 1.0f);
 
+			char* buf;
+			int size = App->fs->Load("game_saved.xml", &buf);
+			if (size > 0)
+				App->ui->AnimResize(load_game, 0.5f, true, 1.0f);
 		}
 
 		else if ((UIButton*)gui == quit && event == MOUSE_BUTTON_RIGHT_UP)
@@ -153,22 +160,31 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 
 		else if ((UIButton*)gui == normal && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene(GAME);
+			App->scene_manager->level_saved = false;
 			App->scene_manager->dificulty = false;
 			App->scene_manager->pro = false;
+			App->scene_manager->WantToChangeScene(GAME);
 		}
 
 		else if ((UIButton*)gui == hardcore && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene(GAME);
+			App->scene_manager->level_saved = false;
 			App->scene_manager->dificulty = true;
 			App->scene_manager->pro = false;
+			App->scene_manager->WantToChangeScene(GAME);
 		}
 
 		else if ((UIButton*)gui == pro && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			App->scene_manager->WantToChangeScene(GAME);
+			App->scene_manager->level_saved = false;
 			App->scene_manager->pro = true;
+			App->scene_manager->WantToChangeScene(GAME);
+		}
+
+		else if ((UIButton*)gui == load_game && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->level_saved = true;
+			App->scene_manager->WantToChangeScene(GAME);
 		}
 	}
 }

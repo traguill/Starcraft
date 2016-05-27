@@ -82,9 +82,13 @@ public:
 	void DiscardTarget(); //Stops attacking the target for some reason
 
 	bool IsVisible()const;
+	bool IsSelected()const;
+
+	void Select();
 
 	void ApplyDamage(uint dmg, Unit* source, Bullet* bullet = NULL);
 
+	void SetLife(int new_life);
 	int GetLife()const;
 	int GetMana()const;
 
