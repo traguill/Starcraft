@@ -150,7 +150,12 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			char* buf;
 			int size = App->fs->Load("game_saved.xml", &buf);
 			if (size > 0)
+			{
 				App->ui->AnimResize(load_game, 0.5f, true, 1.0f);
+
+				delete[] buf;
+				buf = NULL;
+			}
 		}
 
 		else if ((UIButton*)gui == quit && event == MOUSE_BUTTON_RIGHT_UP)

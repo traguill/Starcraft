@@ -167,9 +167,17 @@ bool GameScene::Update(float dt)
 
 	else if (App->input->GetKey(SDL_SCANCODE_L) == KEY_UP)
 	{
-		App->entity->CleanUpList();
-		bomb_pos.clear();
-		LoadGame("game_saved.xml");
+		char* buf;
+		int size = App->fs->Load("game_saved.xml", &buf);
+		if (size > 0)
+		{
+			App->entity->CleanUpList();
+			bomb_pos.clear();
+			LoadGame("game_saved.xml");
+
+			delete[] buf;
+			buf = NULL;
+		}
 	}
 
 	//Check win or lose
