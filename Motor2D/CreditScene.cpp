@@ -146,11 +146,24 @@ bool CreditScene::Update(float dt)
 
 		else
 		{
+			if (start_credit == false)
+			{
+
+				credits_timer.Start();
+				start_credit = true;
+
+			}
+
 			if (fade_in_once)
 			{
 
-				App->ui->AnimFade(sheep_logo, 2, true, 3);
+				App->ui->AnimFade(sheep_logo, 2, true, 1);
 				fade_in_once = false;
+			}
+
+			if (credits_timer.ReadSec() > 6)
+			{
+				App->scene_manager->WantToChangeScene(MENU);
 			}
 		}
 
