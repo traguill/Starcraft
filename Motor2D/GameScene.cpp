@@ -218,7 +218,7 @@ bool GameScene::Update(float dt)
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
 	{
-		LoseGame();
+		LoseGameKilled();
 	}
 
 	if (bomb_pos.size() > 0)
@@ -389,7 +389,9 @@ bool GameScene::CleanUp()
 	win_background = NULL;
 	win_button = NULL;
 
-	loose_background = NULL;
+	loose_background_detected = NULL;
+	loose_background_killed = NULL;
+	loose_background_hard = NULL;
 	loose_button = NULL;
 
 	tutorial_text = NULL;
@@ -994,25 +996,58 @@ void GameScene::LoadHUD()
 	win_button->SetVisible(false);
 
 	//Loose image & button
-	loose_background = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
+	loose_background_detected = App->ui->CreateImage({ 1073, 1, 221, 108 }, 220, 150, false, true);
+	loose_background_killed = App->ui->CreateImage({ 1835, 966, 221, 108 }, 220, 150, false, true);
+	loose_background_hard = App->ui->CreateImage({ 2081, 963, 221, 108 }, 220, 150, false, true);
 	loose_button = App->ui->CreateButton("", 304, 246, { 902, 137, 53, 23 }, { 902, 163, 53, 23 }, { 902, 111, 53, 23 }, this);
 	
-	//loose_button->SetParent(loose_background);
+	//loose_button->SetParent(loose_background_detected);
 	loose_button->SetVisible(false);
 }
 
-void GameScene::LoseGame()
+void GameScene::LoseGameDetected()
 {
 	if (game_finished == false)
 	{
-		loose_background->is_visible = true;
+		loose_background_detected->is_visible = true;
 		loose_button->is_visible = true;
 		game_paused = true;
 
 		game_finished = true;
 
-		App->ui->AnimResize(loose_background, 0.5f, true);
+		App->ui->AnimResize(loose_background_detected, 0.5f, true);
 		App->ui->AnimResize(loose_button, 0.25f, true, 0.3f);
+	}
+}
+void GameScene::LoseGameKilled()
+{
+
+	if (game_finished == false)
+	{
+		if (App->scene_manager->dificulty == false)
+		{
+			loose_background_killed->is_visible = true;
+			loose_button->is_visible = true;
+			game_paused = true;
+
+			game_finished = true;
+
+			App->ui->AnimResize(loose_background_killed, 0.5f, true);
+			App->ui->AnimResize(loose_button, 0.25f, true, 0.3f);
+		}
+
+		else
+		{
+			loose_background_hard->is_visible = true;
+			loose_button->is_visible = true;
+			game_paused = true;
+
+			game_finished = true;
+
+			App->ui->AnimResize(loose_background_hard, 0.5f, true);
+			App->ui->AnimResize(loose_button, 0.25f, true, 0.3f);
+		}
+		
 	}
 }
 

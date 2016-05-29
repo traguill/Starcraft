@@ -51,7 +51,9 @@ public:
 	bool GetTutorialState();
 	bool GetFinishedGame();
 
-	void LoseGame();
+	void LoseGameDetected();
+	void LoseGameKilled();
+
 
 	bool IsGhostSelected();
 
@@ -166,7 +168,9 @@ public:
 	UIButton* win_button;
 
 	//Loose UI
-	UIImage* loose_background;
+	UIImage* loose_background_detected;
+	UIImage* loose_background_killed;
+	UIImage* loose_background_hard;
 	UIButton* loose_button;
 
 	// SOUNDS FX

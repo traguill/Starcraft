@@ -507,7 +507,7 @@ void TacticalAI::Vision()
 								
 								if ((*unit_e)->type == FIREBAT)
 								{
-									App->game_scene->LoseGame();
+									App->game_scene->LoseGameDetected();
 									return;
 								}
 								
