@@ -42,4 +42,8 @@
     <units_path value="units_data.xml"/>
   </entity_manager>
 
+  <input_manager>
+    <shortcuts_path value="inputs_data.xml"/>
+  </input_manager>
+  
 </config>

@@ -50,134 +50,169 @@ bool j1Input::PreUpdate()
 {
 	mouse_motion_x = mouse_motion_y = 0;
 	static SDL_Event event;
-	
+
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-	for(int i = 0; i < MAX_KEYS; ++i)
+	//TODO: clean queues
+	while (!down_queue.empty())
 	{
-		if(keys[i] == 1)
+		down_queue.pop();
+	}
+	while (!up_queue.empty())
+	{
+		up_queue.pop();
+	}
+	while (!repeat_queue.empty())
+	{
+		repeat_queue.pop();
+	}
+
+	//TODO: store keys state
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		//Translate key number to scancode
+		SDL_Scancode code = (SDL_Scancode)i;
+
+		if (keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
+			{
 				keyboard[i] = KEY_DOWN;
+				//Translate scancode to const char*
+				down_queue.push(SDL_GetScancodeName(code));
+			}
 			else
+			{
 				keyboard[i] = KEY_REPEAT;
+
+				repeat_queue.push(SDL_GetScancodeName(code));
+			}
+
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
 				keyboard[i] = KEY_UP;
+
+				up_queue.push(SDL_GetScancodeName(code));
+			}
+
 			else
+			{
 				keyboard[i] = KEY_IDLE;
+			}
+
 		}
 	}
 
-	for(int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
+	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
 	{
-		if(mouse_buttons[i] == KEY_DOWN)
+		if (mouse_buttons[i] == KEY_DOWN)
 			mouse_buttons[i] = KEY_REPEAT;
 
-		if(mouse_buttons[i] == KEY_UP)
+		if (mouse_buttons[i] == KEY_UP)
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
-	while(SDL_PollEvent(&event) != 0)
+	while (SDL_PollEvent(&event) != 0)
 	{
-		switch(event.type)
+		switch (event.type)
 		{
-			case SDL_TEXTINPUT:
-				text_input.insert(cursor_position, event.text.text);
-				cursor_position += strlen(event.text.text);
+		case SDL_TEXTINPUT:
+			text_input.insert(cursor_position, event.text.text);
+			cursor_position += strlen(event.text.text);
 			break;
 
-			case SDL_QUIT:
-				windowEvents[WE_QUIT] = true;
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
 
-			case SDL_WINDOWEVENT:
-				switch(event.window.event)
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
+
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			}
+			break;
+
+		case SDL_KEYDOWN:
+
+			if (is_writting)
+			{
+				switch (event.key.keysym.sym)
 				{
-					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
-					break;
+				case SDLK_BACKSPACE:
 
-					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
-					break;
-				}
-			break;
-
-			case SDL_KEYDOWN:
-
-				if (is_writting)
-				{
-					switch (event.key.keysym.sym)
+					if (cursor_position > 0)
 					{
-					case SDLK_BACKSPACE:
-						
-						if (cursor_position > 0)
-						{
-							text_input.erase(cursor_position - 1, 1);
-							cursor_position--;
-						}
-						else
-						{
-							text_input.erase(cursor_position, 1);
-						}
-
-						break;
-					case SDLK_LEFT:
-						if (cursor_position > 0)
-						{
-							cursor_position--;
-						}
-						break;
-					case SDLK_RIGHT:
-						if (cursor_position < strlen(text_input.data()))
-						{
-							cursor_position++;
-						}
-						break;
-					case SDLK_HOME:
-						cursor_position = 0;
-						break;
-					case SDLK_END:
-						cursor_position = text_input.length();
-						break;
-					case SDLK_DELETE:
-						if (cursor_position < text_input.length())
-							text_input.erase(cursor_position, 1);
-						break;
+						text_input.erase(cursor_position - 1, 1);
+						cursor_position--;
 					}
+					else
+					{
+						text_input.erase(cursor_position, 1);
+					}
+
+					break;
+				case SDLK_LEFT:
+					if (cursor_position > 0)
+					{
+						cursor_position--;
+					}
+					break;
+				case SDLK_RIGHT:
+					if (cursor_position < strlen(text_input.data()))
+					{
+						cursor_position++;
+					}
+					break;
+				case SDLK_HOME:
+					cursor_position = 0;
+					break;
+				case SDLK_END:
+					cursor_position = text_input.length();
+					break;
+				case SDLK_DELETE:
+					if (cursor_position < text_input.length())
+						text_input.erase(cursor_position, 1);
+					break;
 				}
+			}
 
 			break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_buttons[event.button.button - 1] = KEY_DOWN;
-				//LOG("Mouse button %d down", event.button.button-1);
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[event.button.button - 1] = KEY_DOWN;
+			//LOG("Mouse button %d down", event.button.button-1);
 			break;
 
-			case SDL_MOUSEBUTTONUP:
-				mouse_buttons[event.button.button - 1] = KEY_UP;
-				//LOG("Mouse button %d up", event.button.button-1);
+		case SDL_MOUSEBUTTONUP:
+			mouse_buttons[event.button.button - 1] = KEY_UP;
+			//LOG("Mouse button %d up", event.button.button-1);
 			break;
 
-			case SDL_MOUSEMOTION:
-				int scale = App->win->GetScale();
-				mouse_motion_x = event.motion.xrel / scale;
-				mouse_motion_y = event.motion.yrel / scale;
-				mouse_x = event.motion.x / scale;
-				mouse_y = event.motion.y / scale;
-				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
+		case SDL_MOUSEMOTION:
+			int scale = App->win->GetScale();
+			mouse_motion_x = event.motion.xrel / scale;
+			mouse_motion_y = event.motion.yrel / scale;
+			mouse_x = event.motion.x / scale;
+			mouse_y = event.motion.y / scale;
+			//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
 			break;
-			
+
 		}
 	}
 

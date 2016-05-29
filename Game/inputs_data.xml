@@ -1,0 +1,29 @@
+<inputs_data>
+
+  <!-- COMMANDS MUST BE CAPS -->
+  
+  <shortcut>
+    <TYPE value = "UP"/>
+    <name value ="Invisibility"/>
+    <command value ="Q"/>
+  </shortcut>
+
+  <shortcut>
+    <TYPE value = "UP"/>
+    <name value ="Snipermode"/>
+    <command value ="W"/>
+  </shortcut>
+
+  <shortcut>
+    <TYPE value = "UP"/>
+    <name value ="Pause"/>
+    <command value ="R"/>
+  </shortcut>
+
+  <shortcut>
+    <TYPE value = "UP"/>
+    <name value ="Shortcuts"/>
+    <command value ="P"/>
+  </shortcut>
+
+</inputs_data>

@@ -108,3 +108,14 @@ Sprite* UILabel::GetSprite()
 {
 	return &ui_sprite;
 }
+
+void UILabel::SetText(const char* text)
+{
+	if (ui_sprite.texture != nullptr)
+		SDL_DestroyTexture(ui_sprite.texture);
+
+	ui_sprite.texture = App->font->Print(text);
+	//int w, h;
+	//App->tex->GetSize(ui_sprite.texture, (uint&)w, (uint&)h);
+	//SetSize(w, h);
+}

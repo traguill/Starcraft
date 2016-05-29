@@ -17,6 +17,7 @@
 #include "Firebat.h"
 #include "Ghost.h"
 #include "SceneManager.h"
+#include "InputManager.h"
 
 j1EntityManager::j1EntityManager() : j1Module()
 {
@@ -1297,14 +1298,16 @@ void j1EntityManager::ActivateAbilities()
 	list<Unit*>::iterator it = selected_units.begin();
 	while (it != selected_units.end())
 	{
-		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP && (*it)->type == GHOST)
+		list<ShortCut*>::iterator sc = App->input_manager->shortcuts_list.begin();
+		while (sc != App->input_manager->shortcuts_list.end())
 		{
-			(*it)->UseAbility(1);
-		}
+			if ((*sc)->name == "Invisibility" && (*sc)->active)
+				(*it)->UseAbility(1);
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP && (*it)->type == GHOST)
-		{
-			(*it)->UseAbility(2);
+			if ((*sc)->name == "Snipermode" && (*sc)->active)
+				(*it)->UseAbility(2);
+
+			sc++;
 		}
 
 		it++;

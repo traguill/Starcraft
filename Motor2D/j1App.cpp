@@ -23,6 +23,7 @@
 #include "SceneManager.h"
 #include "DevScene.h"
 #include "CreditScene.h"
+#include "InputManager.h"
 
 
 // Constructor
@@ -48,6 +49,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene_manager = new SceneManager();
 	dev_scene = new DevScene();
 	credit_scene = new CreditScene();
+	input_manager = new InputManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -60,6 +62,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(font);
 	AddModule(ui);
+	AddModule(input_manager);
 	
 	AddModule(scene_manager);
 

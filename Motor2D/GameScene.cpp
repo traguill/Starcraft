@@ -15,6 +15,7 @@
 #include "EventsManager.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
+#include "InputManager.h"
 
 GameScene::GameScene() : j1Module()
 {
@@ -145,17 +146,51 @@ bool GameScene::Update(float dt)
 		debug = !debug;
 	if (debug)
 		App->map->Draw(collider_id);
-
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	
+	//Check shortcuts
+	list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+	while (it != App->input_manager->shortcuts_list.end())
 	{
-		game_paused = !game_paused;
-		if (game_paused)
-			App->ui->AnimResize(pause_mark, 0.1f, true);
-		else
-			App->ui->AnimResize(run_mark, 0.1f, true);
-	}
-		
+		if ((*it)->name == "Pause" && (*it)->active)
+		{
+			game_paused = !game_paused;
+			if (game_paused)
+				App->ui->AnimResize(pause_mark, 0.1f, true);
+			else
+				App->ui->AnimResize(run_mark, 0.1f, true);
+		}
+		if((*it)->name == "Shortcuts" && (*it)->active)
+		{
+			if (!App->input_manager->pop_up->IsVisible())
+			{
+				App->input_manager->pop_up->SetVisible(true);
 
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(true);
+					(*it)->shortcut_label->SetVisible(true);
+
+					it++;
+				}
+			}
+			else
+			{
+				App->input_manager->pop_up->SetVisible(false);
+
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(false);
+					(*it)->shortcut_label->SetVisible(false);
+
+					it++;
+				}
+			}
+		}
+
+			it++;
+	}
 
 	//Save level designed
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)

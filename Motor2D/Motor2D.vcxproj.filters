@@ -125,6 +125,9 @@
     <ClCompile Include="CreditScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h" />
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="CreditScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

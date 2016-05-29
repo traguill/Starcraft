@@ -2,6 +2,7 @@
 #define __j1INPUT_H__
 
 #include "j1Module.h"
+#include <queue>
 
 //#define NUM_KEYS 352
 #define NUM_MOUSE_BUTTONS 5
@@ -92,6 +93,10 @@ public:
 	{
 		return cursor_position;
 	}
+
+	queue<const char*>		down_queue;
+	queue<const char*>		up_queue;
+	queue<const char*>		repeat_queue;
 
 private:
 	bool		windowEvents[WE_COUNT];

@@ -29,6 +29,8 @@ public:
 
 	Sprite* GetSprite();
 
+	void SetText(const char* text);
+
 private:
 
 	string	text;
