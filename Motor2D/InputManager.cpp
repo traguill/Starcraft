@@ -160,7 +160,7 @@ bool InputManager::LoadShortcutsInfo()
 	char* buf;
 	int size = App->fs->Load(inputs_file_path.c_str(), &buf);
 	pugi::xml_parse_result result = inputs_data.load_buffer(buf, size);
-	RELEASE(buf);
+	delete[] buf;
 
 	if (result == NULL)
 	{
