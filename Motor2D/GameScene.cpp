@@ -180,7 +180,7 @@ bool GameScene::Update(float dt)
 		game_saved_timer.Start();
 		game_saved->is_visible = true;
 	}
-
+	/*----------------------------------------------------------LOAD IN_GAME IS A DEBUG TOOL
 	else if (App->input->GetKey(SDL_SCANCODE_L) == KEY_UP)
 	{
 		char* buf;
@@ -194,7 +194,7 @@ bool GameScene::Update(float dt)
 			delete[] buf;
 			buf = NULL;
 		}
-	}
+	}*/
 
 	//Check win or lose
 	if (App->entity->friendly_units.size() == 0)
