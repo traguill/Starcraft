@@ -37,6 +37,8 @@ public:
 
 	void OnGUI(UIEntity* gui, GUI_EVENTS event);
 
+	void CreateShortcutsUI();
+
 private:
 
 	UIImage* background;
@@ -52,6 +54,8 @@ public:
 	UIButton* hardcore;
 	UIButton* pro;
 	UIButton* load_game;
+	UIImage*  pop_up;
+	UIButton* shortcuts_button;
 };
 
 #endif // __GAME_SCENE_H__

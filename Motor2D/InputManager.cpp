@@ -33,7 +33,6 @@ bool InputManager::Start()
 
 	shortcuts_list.clear();
 
-	pop_up = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false, App->input_manager);
 	LoadShortcutsInfo();
 
 	return ret;
@@ -170,10 +169,6 @@ bool InputManager::LoadShortcutsInfo()
 	else
 		node = inputs_data.child("inputs_data");
 
-	//Pop-up position
-	int pos_x = 320;
-	int pos_y = 150;
-
 	for (node = node.child("shortcut"); node && ret; node = node.next_sibling("shortcut"))
 	{
 		ShortCut* shortcut = new ShortCut();
@@ -188,15 +183,6 @@ bool InputManager::LoadShortcutsInfo()
 
 		shortcut->name = node.child("name").attribute("value").as_string();
 		shortcut->command = node.child("command").attribute("value").as_string();
-
-		shortcut->command_label = App->ui->CreateLabel(shortcut->command.data(), pos_x, pos_y += 30, true, this);
-		//shortcut->command_label->SetParent((UIEntity*)pop_up);
-		shortcut->command_label->SetVisible(false);
-
-		shortcut->shortcut_label = App->ui->CreateLabel(shortcut->name.data(), pos_x - 140, pos_y, true, this);
-		//shortcut->shortcut_label->SetParent((UIEntity*)pop_up);
-		shortcut->shortcut_label->focusable = false;
-		shortcut->shortcut_label->SetVisible(false);
 
 		shortcut->active = false;
 

@@ -72,8 +72,6 @@ public:
 
 	string					inputs_file_path;
 
-	UIImage*				pop_up;
-
 	void OnGUI(UIEntity* gui, GUI_EVENTS event);
 };
 

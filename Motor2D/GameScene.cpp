@@ -159,35 +159,6 @@ bool GameScene::Update(float dt)
 			else
 				App->ui->AnimResize(run_mark, 0.1f, true);
 		}
-		if((*it)->name == "Shortcuts" && (*it)->active)
-		{
-			if (!App->input_manager->pop_up->IsVisible())
-			{
-				App->input_manager->pop_up->SetVisible(true);
-
-				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
-				while (it != App->input_manager->shortcuts_list.end())
-				{
-					(*it)->command_label->SetVisible(true);
-					(*it)->shortcut_label->SetVisible(true);
-
-					it++;
-				}
-			}
-			else
-			{
-				App->input_manager->pop_up->SetVisible(false);
-
-				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
-				while (it != App->input_manager->shortcuts_list.end())
-				{
-					(*it)->command_label->SetVisible(false);
-					(*it)->shortcut_label->SetVisible(false);
-
-					it++;
-				}
-			}
-		}
 
 			it++;
 	}
@@ -442,7 +413,7 @@ void GameScene::LoadTutorial()
 	secondary_text_queue.push(" - Using invisibility consumes energy, be careful!");
 	secondary_text_queue.push(" - The squad has limited ammo, don't waste it!");
 
-	tutorial_images_queue.push({1435, 500, 345, 281});
+	tutorial_images_queue.push({1435, 500, 300, 281});
 	tutorial_images_queue.push({ 1400, 880, 62, 78 });
 	tutorial_images_queue.push({1512, 969, 68, 78});
 	tutorial_images_queue.push({1403, 968, 96, 79});

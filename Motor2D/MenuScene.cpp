@@ -11,6 +11,7 @@
 #include "UIImage.h"
 #include "UIButton.h"
 #include "j1FileSystem.h"
+#include "InputManager.h"
 
 MenuScene::MenuScene() : j1Module()
 {
@@ -84,7 +85,7 @@ bool MenuScene::Start()
 
 	App->render->camera.x =  App->render->camera.y = 0;
 
-	
+	CreateShortcutsUI();
 
 	return true;
 }
@@ -103,6 +104,42 @@ bool MenuScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_UP)
 	{
 		App->scene_manager->WantToChangeScene(DEV);
+	}
+
+	list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+	while (it != App->input_manager->shortcuts_list.end())
+	{
+		if ((*it)->name == "Controls" && (*it)->active)
+		{
+			if (!pop_up->IsVisible())
+			{
+				pop_up->SetVisible(true);
+
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(true);
+					(*it)->shortcut_label->SetVisible(true);
+
+					it++;
+				}
+			}
+			else
+			{
+				pop_up->SetVisible(false);
+
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(false);
+					(*it)->shortcut_label->SetVisible(false);
+
+					it++;
+				}
+			}
+		}
+
+		it++;
 	}
 
 	App->render->Blit(App->ui->GetAtlas(), 0, 0, &background_anim.getCurrentFrame());
@@ -191,5 +228,60 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			App->scene_manager->level_saved = true;
 			App->scene_manager->WantToChangeScene(GAME);
 		}
+
+
+		else if ((UIButton*)gui == shortcuts_button && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			if (!pop_up->IsVisible())
+			{
+				pop_up->SetVisible(true);
+
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(true);
+					(*it)->shortcut_label->SetVisible(true);
+
+					it++;
+				}
+			}
+			else
+			{
+				pop_up->SetVisible(false);
+
+				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+				while (it != App->input_manager->shortcuts_list.end())
+				{
+					(*it)->command_label->SetVisible(false);
+					(*it)->shortcut_label->SetVisible(false);
+
+					it++;
+				}
+			}
+		}
+	}
+}
+
+void MenuScene::CreateShortcutsUI()
+{
+	shortcuts_button = App->ui->CreateButton("CONTROLS", 100, 360, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	App->ui->AnimResize(shortcuts_button, 0.5f, true, 4.4f);
+
+	pop_up = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false);
+
+	int pos_x = 350;
+	int pos_y = 150;
+
+	list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
+	while (it != App->input_manager->shortcuts_list.end())
+	{
+		(*it)->command_label = App->ui->CreateLabel((*it)->command.data(), pos_x, pos_y += 30, true, App->input_manager);
+		(*it)->command_label->SetVisible(false);
+
+		(*it)->shortcut_label = App->ui->CreateLabel((*it)->name.data(), pos_x - 140, pos_y, true, App->input_manager);
+		(*it)->shortcut_label->focusable = false;
+		(*it)->shortcut_label->SetVisible(false);
+
+		it++;
 	}
 }

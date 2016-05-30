@@ -158,7 +158,6 @@ void SceneManager::EnableGame()
 	App->events->EnableModule();
 
 	App->ui->StartGameUI();
-	App->input_manager->Start();
 
 	App->entity->Start();
 	App->game_scene->Start();

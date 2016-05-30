@@ -22,7 +22,7 @@
 
   <shortcut>
     <TYPE value = "UP"/>
-    <name value ="Shortcuts"/>
+    <name value ="Controls"/>
     <command value ="P"/>
   </shortcut>
 
