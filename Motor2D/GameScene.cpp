@@ -40,8 +40,6 @@ bool GameScene::Start()
 {
 	LOG("Starting GameScene");
 
-	tutorial_finished = false;
-
 	LoadAudio();
 
 	//Load Map
@@ -89,7 +87,11 @@ bool GameScene::Start()
 
 	LoadQuitUI();
 
-	LoadTutorial();
+	if (App->scene_manager->level_saved != true)
+		LoadTutorial();
+
+	else
+		tutorial_finished = true;
 
 	return true;
 }
@@ -410,6 +412,8 @@ bool GameScene::ExtractionPoint()
 
 void GameScene::LoadTutorial()
 {
+	tutorial_finished = false;
+
 	tutorial_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, true);
 	tutorial_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, true);
 	tutorial_button = App->ui->CreateButton("", 275, 360, { 847, 137, 53, 23 }, { 847, 163, 53, 23 }, { 847, 111, 53, 23 }, this);
