@@ -134,12 +134,22 @@ bool GameScene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && tutorial_finished)
 	{
-		game_paused = true;
+		if (menu_ingame == false)
+		{
+			menu_ingame = true;
 
-		quit_fadeblack->SetVisible(true);
-		//quit_window->SetVisible(true);
-		quit_button->SetVisible(true);
-		resume_button->SetVisible(true);
+			quit_fadeblack->SetVisible(true);
+			App->ui->AnimResize(quit_button, 0.5f, true, 0.0f);
+			App->ui->AnimResize(resume_button, 0.5f, true, 0.0f);
+			quit_button->SetVisible(true);
+			resume_button->SetVisible(true);
+		}
+
+		else
+		{
+			menu_ingame = false;
+			DisableMenu();
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -647,6 +657,17 @@ void GameScene::SaveGame(const char* path)
 	App->fs->Save(path, stream.str().c_str(), stream.str().length());
 }
 
+void GameScene::DisableMenu()
+{
+	game_paused = false;
+
+	App->ui->AnimResize(quit_button, 0.05f, false);
+	App->ui->AnimResize(resume_button, 0.05f, false);
+	quit_fadeblack->SetVisible(false);
+	quit_button->SetVisible(false);
+	resume_button->SetVisible(false);
+}
+
 void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 {
 	if (gui->type == BUTTON)
@@ -658,12 +679,8 @@ void GameScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 
 		if ((UIButton*)gui == resume_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
-			game_paused = false;
-
-			quit_fadeblack->SetVisible(false);
-			//quit_window->SetVisible(false);
-			quit_button->SetVisible(false);
-			resume_button->SetVisible(false);
+			DisableMenu();
+			menu_ingame = false;
 		}
 
 		if ((UIButton*)gui == ghost_invisibility_button && event == MOUSE_BUTTON_RIGHT_UP)
@@ -1071,8 +1088,8 @@ void GameScene::LoadQuitUI()
 {
 	quit_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, false, true);
 	//quit_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false, true);
-	quit_button = App->ui->CreateButton("QUIT", 250, 200, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	quit_button = App->ui->CreateButton("QUIT", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	quit_button->SetVisible(false);
-	resume_button = App->ui->CreateButton("RESUME", 250, 160, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	resume_button = App->ui->CreateButton("RESUME", 250, 180, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	resume_button->SetVisible(false);
 }

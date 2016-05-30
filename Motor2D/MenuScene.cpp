@@ -40,11 +40,11 @@ bool MenuScene::Start()
 	LOG("Starting MenuScene");
 
 	//background = App->ui->CreateImage({ 663, 590, 735, 494 }, 0, 0, true);
-	logo = App->ui->CreateImage({ 0, 199, 569, 150 }, 0, 50, true);
+	logo = App->ui->CreateImage({ 0, 199, 540, 150 }, 0, 50, true);
 
 	
 	start = App->ui->CreateButton(" START", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
-	quit = App->ui->CreateButton(" QUIT", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	quit = App->ui->CreateButton(" QUIT", 470, 420, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	normal = App->ui->CreateButton("NORMAL", 100, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	hardcore = App->ui->CreateButton(" HARD", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	pro = App->ui->CreateButton("  PRO", 400, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
@@ -104,6 +104,11 @@ bool MenuScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_UP)
 	{
 		App->scene_manager->WantToChangeScene(DEV);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP)
+	{
+		close_game = true;
 	}
 
 	App->render->Blit(App->ui->GetAtlas(), 0, 0, &background_anim.getCurrentFrame());
@@ -198,26 +203,26 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 		{
 			if (!pop_up->IsVisible())
 			{
-				pop_up->SetVisible(true);
+				App->ui->AnimResize(pop_up, 0.5f, true);
 
 				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
 				while (it != App->input_manager->shortcuts_list.end())
 				{
-					(*it)->command_label->SetVisible(true);
-					(*it)->shortcut_label->SetVisible(true);
+					App->ui->AnimFade((*it)->command_label, 0.5, true);
+					App->ui->AnimFade((*it)->shortcut_label, 0.5, true);
 
 					it++;
 				}
 			}
 			else
 			{
-				pop_up->SetVisible(false);
+				App->ui->AnimResize(pop_up, 0.05f, false);
 
 				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
 				while (it != App->input_manager->shortcuts_list.end())
 				{
-					(*it)->command_label->SetVisible(false);
-					(*it)->shortcut_label->SetVisible(false);
+					App->ui->AnimFade((*it)->command_label, 0.2, false);
+					App->ui->AnimFade((*it)->shortcut_label, 0.2, false);
 
 					it++;
 				}
@@ -228,12 +233,12 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 
 void MenuScene::CreateShortcutsUI()
 {
-	shortcuts_button = App->ui->CreateButton("CONTROLS", 100, 360, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	shortcuts_button = App->ui->CreateButton("CONTROLS", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	App->ui->AnimResize(shortcuts_button, 0.5f, true, 4.4f);
 
-	pop_up = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false);
+	pop_up = App->ui->CreateImage({ 542, 216, 167, 205 }, 352, 125, false);
 
-	int pos_x = 350;
+	int pos_x = 500;
 	int pos_y = 150;
 
 	list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();

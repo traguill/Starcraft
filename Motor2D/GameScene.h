@@ -72,12 +72,15 @@ private:
 
 	bool ExtractionPoint();
 
+	void DisableMenu();
+
 private:
 
 	uint map_id; //Drawable map
 	uint collider_id;
 
 	bool game_paused;
+	bool menu_ingame;
 
 	bool debug;
 
