@@ -59,10 +59,6 @@ bool GameScene::Start()
 		buffer = NULL;
 	}
 
-	//Ammunition setLoadGame
-	sniper_ammo = 3;
-	intel_left = 3;
-
 	LoadHUD();
 
 	//Bomb
@@ -77,6 +73,8 @@ bool GameScene::Start()
 
 	if (App->scene_manager->level_saved == false)
 	{
+		sniper_ammo = 3;
+		intel_left = 3;
 		LoadGame("my_level.xml");
 		App->render->camera = SDL_Rect{ -700, -1600, App->render->camera.w, App->render->camera.h };
 	}
@@ -475,7 +473,10 @@ void GameScene::LoadGame(const char* path)
 		level = level_file.child("level");
 
 	if (path == "game_saved.xml")
+	{
 		App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
+		sniper_ammo = level.child("sniper_ammo").attribute("value").as_int();
+	}
 
 	int camera_x = level.child("camera").attribute("x").as_int();
 	int camera_y = level.child("camera").attribute("y").as_int();
@@ -565,6 +566,8 @@ void GameScene::SaveGame(const char* path)
 	root = data.append_child("level");
 
 	root.append_child("difficulty").append_attribute("value") = App->scene_manager->dificulty;
+
+	root.append_child("sniper_ammo").append_attribute("value") = sniper_ammo;
 
 	root.append_child("camera").append_attribute("x") = App->render->camera.x;
 	root.child("camera").append_attribute("y") = App->render->camera.y;
@@ -970,6 +973,12 @@ void GameScene::LoadHUD()
 	pause_mark = App->ui->CreateImage(SDL_Rect{ 66, 162, 56, 38 }, 470 - 56, 0, false);
 	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 	sniper_ammo_label = App->ui->CreateLabel("Cal. 50 bullets: 3", 485, 7);
+	if (App->scene_manager->level_saved == true)
+	{
+		char ui_sniper_ammo[20];
+		sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
+		sniper_ammo_label->Print(ui_sniper_ammo, false);
+	}
 	grenade_ammo_label = App->ui->CreateLabel("Bombs left: 3", 485, 22);
 
 	//Pathfinding Label
