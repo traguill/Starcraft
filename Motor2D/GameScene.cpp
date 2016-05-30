@@ -57,8 +57,6 @@ bool GameScene::Start()
 		buffer = NULL;
 	}
 
-	LoadHUD();
-
 	//Bomb
 	bomb = App->tex->Load("sprites/Bomb.png");
 	bzone = App->tex->Load("sprites/extraction.png");
@@ -79,6 +77,8 @@ bool GameScene::Start()
 	}
 	else
 		LoadGame("game_saved.xml");
+
+	LoadHUD();
 
 	LoadAudio();
 
@@ -478,11 +478,7 @@ void GameScene::LoadGame(const char* path)
 	else
 		level = level_file.child("level");
 
-	if (path == "game_saved.xml")
-	{
-		App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
-		sniper_ammo = level.child("sniper_ammo").attribute("value").as_int();
-	}
+	
 
 	int camera_x = level.child("camera").attribute("x").as_int();
 	int camera_y = level.child("camera").attribute("y").as_int();
@@ -491,6 +487,14 @@ void GameScene::LoadGame(const char* path)
 
 	pugi::xml_node bomb_root = level.child("bomb");
 	pugi::xml_node bomb_node;
+	
+	if (path == "game_saved.xml")
+	{
+		App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
+		sniper_ammo = level.child("sniper_ammo").attribute("value").as_int();
+		intel_left = bomb_root.child("bombs_left").attribute("value").as_int();
+	}
+
 	for (bomb_node = bomb_root.child("position"); bomb_node; bomb_node = bomb_node.next_sibling("position"))
 	{
 		iPoint bomb_position;
@@ -580,6 +584,8 @@ void GameScene::SaveGame(const char* path)
 
 	root.append_child("bomb");
 	pugi::xml_node bomb_node = root.child("bomb");
+
+	bomb_node.append_child("bombs_left").append_attribute("value") = intel_left;
 
 	list<iPoint>::iterator bomb_position = bomb_pos.begin();
 	pugi::xml_node bomb_position_node(NULL);
@@ -990,13 +996,15 @@ void GameScene::LoadHUD()
 	pause_mark = App->ui->CreateImage(SDL_Rect{ 66, 162, 56, 38 }, 470 - 56, 0, false);
 	run_mark = App->ui->CreateImage(SDL_Rect{ 0, 162, 56, 38 }, 470 - 56, 0, true);
 	sniper_ammo_label = App->ui->CreateLabel("Cal. 50 bullets: 3", 485, 7);
+	grenade_ammo_label = App->ui->CreateLabel("Bombs left: 3", 485, 22);
 	if (App->scene_manager->level_saved == true)
 	{
 		char ui_sniper_ammo[20];
 		sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Cal. 50 bullets: %d", sniper_ammo);
 		sniper_ammo_label->Print(ui_sniper_ammo, false);
+		sprintf_s(ui_sniper_ammo, sizeof(ui_sniper_ammo), "Bombs left: %d", intel_left);
+		grenade_ammo_label->Print(ui_sniper_ammo, false);
 	}
-	grenade_ammo_label = App->ui->CreateLabel("Bombs left: 3", 485, 22);
 
 	//Pathfinding Label
 	pathfinding_label = App->ui->CreateLabel("I can't go there Sir!", 100, 50, true);
