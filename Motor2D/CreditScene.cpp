@@ -42,7 +42,7 @@ bool CreditScene::Start()
 	App->win->GetWindowSize(_w, _h);
 
 	project = App->ui->CreateImage({ 1740, 536, 360, 70 }, 150, 200, false);
-	sheep_logo = App->ui->CreateImage({3420, 2, 300, 300 }, _w / 2 - 150, _h / 2 - 150, false);
+	sheep_logo = App->ui->CreateImage({ 2767, 10, 110, 110 }, _w / 2 - 55, _h / 2 - 55, false);
 	upc_logo = App->ui->CreateImage({ 2883, 0, 356, 67 }, 150, 200, false);
 	license_blizzard = App->ui->CreateImage({ 2795, 174, 528, 66 }, 60, 300, false);
 	license_image = App->ui->CreateImage({ 2795, 244, 526, 77 }, 60, 300, false);
