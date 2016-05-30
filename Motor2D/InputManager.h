@@ -72,6 +72,12 @@ public:
 
 	string					inputs_file_path;
 
+	const char*				new_command;
+
+	list<string>		used_keys;
+
+	bool					changing_command;
+
 	void OnGUI(UIEntity* gui, GUI_EVENTS event);
 };
 

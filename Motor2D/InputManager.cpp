@@ -99,16 +99,42 @@ bool InputManager::Update(float dt)
 	{
 		if ((*it)->ready_to_change)
 		{
-			static SDL_Event event;
-
-			SDL_WaitEvent(&event);
-
-			if (event.type == SDL_KEYDOWN)
+			if (new_command != NULL)
 			{
-				//NO ES COMPROBA SI M'ÉS D'UN SHORTCUT TENEN EL MATEIX COMMAND!!
-				(*it)->command = SDL_GetScancodeName(event.key.keysym.scancode);
-				ChangeShortcutCommand((*it));
-				(*it)->ready_to_change = false;
+				bool can_change = true;
+
+				list<ShortCut*>::iterator it2 = shortcuts_list.begin();
+				while (it2 != shortcuts_list.end())
+				{
+					if ((*it2)->command == new_command)
+					{
+						can_change = false;
+						break;
+					}
+					
+					it2++;
+				}
+
+				list<string>::iterator it3 = used_keys.begin();
+				while (it3 != used_keys.end())
+				{
+					if ((*it3) == new_command)
+					{
+						can_change = false;
+						break;
+					}
+
+					it3++;
+				}
+
+				if (can_change)
+				{
+					(*it)->command = new_command;
+					ChangeShortcutCommand((*it));
+					(*it)->ready_to_change = false;
+					changing_command = false;
+					new_command = NULL;
+				}
 			}
 		}
 
@@ -143,6 +169,7 @@ bool InputManager::CleanUp()
 	bool ret = true;
 
 	shortcuts_list.clear();
+	used_keys.clear();
 
 	return ret;
 }
@@ -188,6 +215,16 @@ bool InputManager::LoadShortcutsInfo()
 
 		shortcuts_list.push_back(shortcut);
 	}
+	
+	used_keys.push_back("S");
+	used_keys.push_back("Escape");
+	used_keys.push_back("Space");
+	used_keys.push_back("Tab");
+	used_keys.push_back("Right");
+	used_keys.push_back("Up");
+	used_keys.push_back("Down");
+	used_keys.push_back("Left");
+
 
 	return ret;
 }
@@ -203,6 +240,7 @@ void InputManager::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			if (gui == (*it)->command_label && event == MOUSE_BUTTON_RIGHT_UP)
 			{
 				(*it)->ready_to_change = true;
+				changing_command = true;
 			}
 			++it;
 		}

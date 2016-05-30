@@ -106,42 +106,6 @@ bool MenuScene::Update(float dt)
 		App->scene_manager->WantToChangeScene(DEV);
 	}
 
-	list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
-	while (it != App->input_manager->shortcuts_list.end())
-	{
-		if ((*it)->name == "Controls" && (*it)->active)
-		{
-			if (!pop_up->IsVisible())
-			{
-				pop_up->SetVisible(true);
-
-				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
-				while (it != App->input_manager->shortcuts_list.end())
-				{
-					(*it)->command_label->SetVisible(true);
-					(*it)->shortcut_label->SetVisible(true);
-
-					it++;
-				}
-			}
-			else
-			{
-				pop_up->SetVisible(false);
-
-				list<ShortCut*>::iterator it = App->input_manager->shortcuts_list.begin();
-				while (it != App->input_manager->shortcuts_list.end())
-				{
-					(*it)->command_label->SetVisible(false);
-					(*it)->shortcut_label->SetVisible(false);
-
-					it++;
-				}
-			}
-		}
-
-		it++;
-	}
-
 	App->render->Blit(App->ui->GetAtlas(), 0, 0, &background_anim.getCurrentFrame());
 
 	return true;

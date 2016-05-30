@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Render.h"
+#include "InputManager.h"
 
 #define MAX_KEYS 300
 
@@ -190,6 +191,10 @@ bool j1Input::PreUpdate()
 						text_input.erase(cursor_position, 1);
 					break;
 				}
+			}
+			else if (App->input_manager->changing_command)
+			{
+				App->input_manager->new_command = (SDL_GetScancodeName(event.key.keysym.scancode));
 			}
 
 			break;

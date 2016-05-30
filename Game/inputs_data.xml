@@ -20,10 +20,4 @@
     <command value ="R"/>
   </shortcut>
 
-  <shortcut>
-    <TYPE value = "UP"/>
-    <name value ="Controls"/>
-    <command value ="P"/>
-  </shortcut>
-
 </inputs_data>
