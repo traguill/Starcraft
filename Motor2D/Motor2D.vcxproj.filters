@@ -278,6 +278,7 @@
     <ClInclude Include="InputManager.h">
       <Filter>Module</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
@@ -306,5 +307,11 @@
     <Xml Include="IterateList.snippet">
       <Filter>Snippets</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Starcraft Commandos.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

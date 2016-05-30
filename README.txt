@@ -62,12 +62,12 @@ Changelog
 ---------------------------------------------------------------
 To watch the changelog of all the Starcraft Commandos versions click the link below:
 
-	https://github.com/traguill/Starcraft/releases
+	https://github.com/traguill/Starcraft-Commandos/releases
 
 Github
 ----------------------------------------------------------------
 
-https://github.com/traguill/Starcraft
+https://github.com/traguill/Starcraft-Commandos
 
 Facebook
 ----------------------------------------------------------------
