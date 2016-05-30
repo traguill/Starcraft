@@ -80,7 +80,7 @@ private:
 	uint collider_id;
 
 	bool game_paused;
-	bool menu_ingame;
+	bool menu_ingame = false;
 
 	bool debug;
 

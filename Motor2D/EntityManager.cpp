@@ -1292,6 +1292,29 @@ void j1EntityManager::CreateUnit(UNIT_TYPE type, int x, int y, bool is_enemy, bo
 		return; //Unit type not found
 }
 
+bool j1EntityManager::UnitsAttacking()
+{
+	list<Unit*>::iterator ally = friendly_units.begin();
+	while (ally != friendly_units.end())
+	{
+		if ((*ally)->target != NULL || (*ally)->state == UNIT_ATTACK)
+			return true;
+
+		ally++;
+	}
+
+	list<Unit*>::iterator enemy = enemy_units.begin();
+	while (enemy != enemy_units.end())
+	{
+		if ((*enemy)->target != NULL || (*enemy)->state == UNIT_ATTACK)
+			return true;
+
+		enemy++;
+	}
+
+	return false;
+}
+
 
 void j1EntityManager::ActivateAbilities()
 {

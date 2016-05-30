@@ -48,6 +48,8 @@ public:
 
 	void CleanUpList();
 
+	bool UnitsAttacking();
+
 	string UnitTypeToString(UNIT_TYPE type)const;
 	UNIT_TYPE UnitTypeToEnum(string type)const;
 

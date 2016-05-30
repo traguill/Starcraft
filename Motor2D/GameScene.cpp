@@ -174,7 +174,7 @@ bool GameScene::Update(float dt)
 	}
 
 	//Save level designed
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP && App->entity->UnitsAttacking() == false)
 	{
 		SaveGame("game_saved.xml");
 		game_saved_timer.Start();
@@ -404,12 +404,12 @@ void GameScene::LoadTutorial()
 	tutorial_image = App->ui->CreateImage({ 1300, 475, 69, 63 }, 275, 175, true);
 
 	//Animation
-	App->ui->AnimResize(tutorial_window, 0.5f, true, 5);
-	App->ui->AnimFade(tutorial_image, 1, true, 6);
-	App->ui->AnimFade(tutorial_text, 1, true, 6);
-	App->ui->AnimFade(secondary_text, 1, true, 6);
-	App->ui->AnimResize(tutorial_button, 0.5f, true, 6.5f);
-	App->ui->AnimResize(skip_button, 0.1f, true, 6.5f);
+	App->ui->AnimResize(tutorial_window, 0.5f, true, 2);
+	App->ui->AnimFade(tutorial_image, 1, true, 3);
+	App->ui->AnimFade(tutorial_text, 1, true, 3);
+	App->ui->AnimFade(secondary_text, 1, true, 3);
+	App->ui->AnimResize(tutorial_button, 0.5f, true, 3.5f);
+	App->ui->AnimResize(skip_button, 0.1f, true, 3.5f);
 
 	tutorial_text_queue.push("If firebats NOTICE you, the mission is FAILED.");
 	tutorial_text_queue.push("You can eliminate enemy marines. They won't make the call.");
