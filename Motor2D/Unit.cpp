@@ -190,7 +190,7 @@ void Unit::Update(float dt)
 			if (is_enemy == false)
 			{
 				if (App->scene_manager->dificulty == true)
-					App->game_scene->LoseGameDetected();
+					App->game_scene->LoseGameKilled();
 			}
 		}
 			
