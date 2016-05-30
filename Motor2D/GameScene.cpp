@@ -194,7 +194,7 @@ bool GameScene::Update(float dt)
 		else
 		{
 			char save_label[60];
-			sprintf_s(save_label, sizeof(save_label), "You can not save if your units are in dangerous");
+			sprintf_s(save_label, sizeof(save_label), "You can not save if your units are in danger");
 			game_saved->Print(save_label, false);
 
 			game_saved_timer.Start();
