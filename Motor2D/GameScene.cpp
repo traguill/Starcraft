@@ -474,7 +474,8 @@ void GameScene::LoadGame(const char* path)
 	else
 		level = level_file.child("level");
 
-	App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
+	if (path == "game_saved.xml")
+		App->scene_manager->dificulty = level.child("difficulty").attribute("value").as_bool();
 
 	int camera_x = level.child("camera").attribute("x").as_int();
 	int camera_y = level.child("camera").attribute("y").as_int();
