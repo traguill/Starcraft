@@ -68,6 +68,7 @@ bool GameScene::Start()
 
 	debug = false;
 	game_paused = false;
+	menu_ingame = false;
 
 	if (App->scene_manager->level_saved == false)
 	{
@@ -137,6 +138,7 @@ bool GameScene::Update(float dt)
 		if (menu_ingame == false)
 		{
 			menu_ingame = true;
+			game_paused = true;
 
 			quit_fadeblack->SetVisible(true);
 			App->ui->AnimResize(quit_button, 0.5f, true, 0.0f);
@@ -148,6 +150,7 @@ bool GameScene::Update(float dt)
 		else
 		{
 			menu_ingame = false;
+			game_paused = false;
 			DisableMenu();
 		}
 	}
@@ -174,11 +177,29 @@ bool GameScene::Update(float dt)
 	}
 
 	//Save level designed
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP && App->entity->UnitsAttacking() == false)
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
 	{
-		SaveGame("game_saved.xml");
-		game_saved_timer.Start();
-		game_saved->is_visible = true;
+		if (App->entity->UnitsAttacking() == false)
+		{
+			SaveGame("game_saved.xml");
+
+			char save_label[15];
+			sprintf_s(save_label, sizeof(save_label), "Game Saved");
+			game_saved->Print(save_label, false);
+
+			game_saved_timer.Start();
+			game_saved->is_visible = true;
+		}
+
+		else
+		{
+			char save_label[60];
+			sprintf_s(save_label, sizeof(save_label), "You can not save if your units are in dangerous");
+			game_saved->Print(save_label, false);
+
+			game_saved_timer.Start();
+			game_saved->is_visible = true;
+		}
 	}
 	/*----------------------------------------------------------LOAD IN_GAME IS A DEBUG TOOL
 	else if (App->input->GetKey(SDL_SCANCODE_L) == KEY_UP)
@@ -587,66 +608,70 @@ void GameScene::SaveGame(const char* path)
 	list<Unit*>::iterator unit_f = App->entity->friendly_units.begin();
 	while (unit_f != App->entity->friendly_units.end())
 	{
-		pugi::xml_node friend_unit;
-		friend_unit = root.append_child("friendly_unit");
+		if ((*unit_f)->state != UNIT_DIE)
+		{
+			pugi::xml_node friend_unit;
+			friend_unit = root.append_child("friendly_unit");
 
-		friend_unit.append_child("type").append_attribute("value") = App->entity->UnitTypeToString((*unit_f)->GetType()).c_str();
-		friend_unit.append_child("is_enemy").append_attribute("value") = (*unit_f)->is_enemy;
-		friend_unit.append_child("position").append_attribute("x") = (*unit_f)->GetPosition().x;
-		friend_unit.append_child("position").append_attribute("y") = (*unit_f)->GetPosition().y;
-		int life = (*unit_f)->GetLife();
-		friend_unit.append_child("life").append_attribute("value") = life;
-		friend_unit.append_child("selected").append_attribute("value") = (*unit_f)->IsSelected();
+			friend_unit.append_child("type").append_attribute("value") = App->entity->UnitTypeToString((*unit_f)->GetType()).c_str();
+			friend_unit.append_child("is_enemy").append_attribute("value") = (*unit_f)->is_enemy;
+			friend_unit.append_child("position").append_attribute("x") = (*unit_f)->GetPosition().x;
+			friend_unit.append_child("position").append_attribute("y") = (*unit_f)->GetPosition().y;
+			int life = (*unit_f)->GetLife();
+			friend_unit.append_child("life").append_attribute("value") = life;
+			friend_unit.append_child("selected").append_attribute("value") = (*unit_f)->IsSelected();
 
-		friend_unit.append_child("direction").append_attribute("x") = (*unit_f)->direction.x;
-		friend_unit.append_child("direction").append_attribute("y") = (*unit_f)->direction.y;
-
+			friend_unit.append_child("direction").append_attribute("x") = (*unit_f)->direction.x;
+			friend_unit.append_child("direction").append_attribute("y") = (*unit_f)->direction.y;			
+		}
 		++unit_f;
 	}
 
 	list<Unit*>::iterator unit_e = App->entity->enemy_units.begin();
 	while (unit_e != App->entity->enemy_units.end())
 	{
-		pugi::xml_node enemy_unit;
-		enemy_unit = root.append_child("enemy_unit");
-
-		enemy_unit.append_child("type").append_attribute("value") = App->entity->UnitTypeToString((*unit_e)->GetType()).c_str();
-		enemy_unit.append_child("is_enemy").append_attribute("value") = (*unit_e)->is_enemy;
-		enemy_unit.append_child("position").append_attribute("x") = (*unit_e)->GetPosition().x;
-		enemy_unit.append_child("position").append_attribute("y") = (*unit_e)->GetPosition().y;
-		int life = (*unit_e)->GetLife();
-		enemy_unit.append_child("life").append_attribute("value") = life;
-
-		enemy_unit.append_child("direction").append_attribute("x") = (*unit_e)->direction.x;
-		enemy_unit.append_child("direction").append_attribute("y") = (*unit_e)->direction.y;
-
-		//Make sure patrol is activated if patrol path exists
-		if ((*unit_e)->patrol_path.size() > 0)
-			(*unit_e)->patrol = true;
-
-		enemy_unit.append_child("patrol").append_attribute("value") = (*unit_e)->patrol;
-
-		pugi::xml_node patrol = enemy_unit.child("patrol");
-		pugi::xml_node point(NULL);
-
-		if ((*unit_e)->patrol_path.size() > 0)
+		if ((*unit_e)->state != UNIT_DIE)
 		{
-			vector<iPoint>::iterator tile = (*unit_e)->patrol_path.begin();
-			while (tile != (*unit_e)->patrol_path.end())
+			pugi::xml_node enemy_unit;
+			enemy_unit = root.append_child("enemy_unit");
+
+			enemy_unit.append_child("type").append_attribute("value") = App->entity->UnitTypeToString((*unit_e)->GetType()).c_str();
+			enemy_unit.append_child("is_enemy").append_attribute("value") = (*unit_e)->is_enemy;
+			enemy_unit.append_child("position").append_attribute("x") = (*unit_e)->GetPosition().x;
+			enemy_unit.append_child("position").append_attribute("y") = (*unit_e)->GetPosition().y;
+			int life = (*unit_e)->GetLife();
+			enemy_unit.append_child("life").append_attribute("value") = life;
+
+			enemy_unit.append_child("direction").append_attribute("x") = (*unit_e)->direction.x;
+			enemy_unit.append_child("direction").append_attribute("y") = (*unit_e)->direction.y;
+
+			//Make sure patrol is activated if patrol path exists
+			if ((*unit_e)->patrol_path.size() > 0)
+				(*unit_e)->patrol = true;
+
+			enemy_unit.append_child("patrol").append_attribute("value") = (*unit_e)->patrol;
+
+			pugi::xml_node patrol = enemy_unit.child("patrol");
+			pugi::xml_node point(NULL);
+
+			if ((*unit_e)->patrol_path.size() > 0)
 			{
+				vector<iPoint>::iterator tile = (*unit_e)->patrol_path.begin();
+				while (tile != (*unit_e)->patrol_path.end())
+				{
 
-				enemy_unit.child("patrol").append_child("point").append_attribute("tile_x") = tile->x;
+					enemy_unit.child("patrol").append_child("point").append_attribute("tile_x") = tile->x;
 
-				if (point == NULL)
-					point = patrol.child("point");
-				else
-					point = point.next_sibling("point");
+					if (point == NULL)
+						point = patrol.child("point");
+					else
+						point = point.next_sibling("point");
 
-				point.append_attribute("tile_y") = tile->y;
-				++tile;
+					point.append_attribute("tile_y") = tile->y;
+					++tile;
+				}
 			}
 		}
-
 		++unit_e;
 	}
 
@@ -929,7 +954,7 @@ void GameScene::LoadHUD()
 	ghost_weapon_icon = App->ui->CreateImage(s_weaponG, 275, 440, false);
 
 
-	SDL_Rect s_wireframeG{ 706, 206, 54, 71 };
+	SDL_Rect s_wireframeG{ 710, 206, 54, 71 };
 	ghost_wireframe = App->ui->CreateImage(s_wireframeG, 180, 390, false);
 
 
