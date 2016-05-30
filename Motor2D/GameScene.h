@@ -70,6 +70,8 @@ private:
 
 	void LoadTutorial();
 
+	bool ExtractionPoint();
+
 private:
 
 	uint map_id; //Drawable map

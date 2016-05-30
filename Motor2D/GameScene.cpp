@@ -261,29 +261,15 @@ bool GameScene::Update(float dt)
 			++f_unit;
 		}
 	}
-	else
+	else if(game_finished == false && ExtractionPoint() == true)
 	{
-		list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
-		while (f_unit != App->entity->friendly_units.end())
-		{
-			iPoint pos = (*f_unit)->GetPosition();
+		win_background->is_visible = true;
+		win_button->is_visible = true;
+		game_paused = true;
+		game_finished = true;
 
-			if (pos.PointInRect(bomb_zone.x, bomb_zone.y, bomb_zone.w, bomb_zone.h) && (*f_unit)->IsVisible())
-			{
-				if (game_finished == false)
-				{
-					win_background->is_visible = true;
-					win_button->is_visible = true;
-					game_paused = true;
-					game_finished = true;
-
-					App->ui->AnimResize(win_background, 0.5f, true);
-					App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
-				}
-			}
-
-			++f_unit;
-		}
+		App->ui->AnimResize(win_background, 0.5f, true);
+		App->ui->AnimResize(win_button, 0.25f, true, 0.3f);
 	}
 
 	if (bomb_pos.size() > 0)
@@ -402,6 +388,25 @@ bool GameScene::CleanUp()
 	tutorial_fadeblack = NULL;
 
 	bomb_pos.clear();
+	return true;
+}
+
+bool GameScene::ExtractionPoint()
+{
+	list<Unit*>::iterator f_unit = App->entity->friendly_units.begin();
+	while (f_unit != App->entity->friendly_units.end())
+	{
+		iPoint pos = (*f_unit)->GetPosition();
+
+		if (pos.PointInRect(bomb_zone.x, bomb_zone.y, bomb_zone.w, bomb_zone.h) && (*f_unit)->IsVisible())
+		{}
+
+		else
+			return false;
+
+		++f_unit;
+	}
+
 	return true;
 }
 
