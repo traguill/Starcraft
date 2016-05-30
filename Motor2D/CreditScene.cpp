@@ -169,7 +169,7 @@ bool CreditScene::Update(float dt)
 
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		App->scene_manager->WantToChangeScene(MENU);
 
 	return true;

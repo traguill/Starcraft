@@ -56,6 +56,7 @@ public:
 	UIButton* load_game;
 	UIImage*  pop_up;
 	UIButton* shortcuts_button;
+	UIButton* credits;
 };
 
 #endif // __GAME_SCENE_H__

@@ -49,6 +49,7 @@ bool MenuScene::Start()
 	hardcore = App->ui->CreateButton(" HARD", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	pro = App->ui->CreateButton("  PRO", 400, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	load_game = App->ui->CreateButton("CONTINUE", 250, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	credits = App->ui->CreateButton("CREDITS", 100, 360, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 
 	normal->is_visible = false;
 	hardcore->is_visible = false;
@@ -58,7 +59,8 @@ bool MenuScene::Start()
 	//Animation
 	App->ui->AnimFade(logo, 2, true, 2);
 	App->ui->AnimResize(start, 0.5f, true, 4);
-	App->ui->AnimResize(quit, 0.5f, true, 4.2f);
+	App->ui->AnimResize(quit, 0.5f, true, 4.6f);
+	App->ui->AnimResize(credits, 0.5f, true, 4.4f);
 	
 	
 	close_game = false;
@@ -198,6 +200,10 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 			App->scene_manager->WantToChangeScene(GAME);
 		}
 
+		else if ((UIButton*)gui == credits && event == MOUSE_BUTTON_RIGHT_UP)
+		{
+			App->scene_manager->WantToChangeScene(CREDIT);
+		}
 
 		else if ((UIButton*)gui == shortcuts_button && event == MOUSE_BUTTON_RIGHT_UP)
 		{
@@ -234,7 +240,7 @@ void MenuScene::OnGUI(UIEntity* gui, GUI_EVENTS event)
 void MenuScene::CreateShortcutsUI()
 {
 	shortcuts_button = App->ui->CreateButton("CONTROLS", 100, 305, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
-	App->ui->AnimResize(shortcuts_button, 0.5f, true, 4.4f);
+	App->ui->AnimResize(shortcuts_button, 0.5f, true, 4.2f);
 
 	pop_up = App->ui->CreateImage({ 542, 216, 167, 205 }, 352, 125, false);
 
