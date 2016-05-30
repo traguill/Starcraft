@@ -138,6 +138,12 @@ bool MenuScene::CleanUp()
 	quit = NULL;
 	background = NULL;
 	logo = NULL;
+	hardcore = NULL;
+	pro = NULL;
+	load_game = NULL;
+	pop_up = NULL;
+	shortcuts_button = NULL;
+	credits = NULL;
 	background_anim.frames.clear();
 
 	return true;
