@@ -137,7 +137,8 @@ bool GameScene::Update(float dt)
 		game_paused = true;
 
 		quit_fadeblack->SetVisible(true);
-		//quit_window->SetVisible(true);
+		App->ui->AnimResize(quit_button, 0.5f, true, 0.0f);
+		App->ui->AnimResize(resume_button, 0.5f, true, 0.0f);
 		quit_button->SetVisible(true);
 		resume_button->SetVisible(true);
 	}
@@ -1071,8 +1072,8 @@ void GameScene::LoadQuitUI()
 {
 	quit_fadeblack = App->ui->CreateImage({ 662, 589, 640, 480 }, 0, 0, false, true);
 	//quit_window = App->ui->CreateImage({ 1022, 125, 412, 292 }, 102, 85, false, true);
-	quit_button = App->ui->CreateButton("QUIT", 250, 200, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	quit_button = App->ui->CreateButton("QUIT", 250, 250, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	quit_button->SetVisible(false);
-	resume_button = App->ui->CreateButton("RESUME", 250, 160, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
+	resume_button = App->ui->CreateButton("RESUME", 250, 180, { 348, 109, 125, 26 }, { 348, 161, 125, 26 }, { 348, 135, 125, 26 }, this);
 	resume_button->SetVisible(false);
 }
